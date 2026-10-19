@@ -1,4 +1,4 @@
-# Engine reference — `engine/sd-graph.js` v2.58
+# Engine reference — `engine/sd-graph.js` v2.59
 
 Written from the engine source. The conversion prompt carries a shorter version
 of this in its own "Engine reference" section; that one is what the model needs
@@ -220,6 +220,43 @@ or `"down"`, with its text beside it; a `span` runs between the tops of two
 change arrows (or just above the boxes where there are none, which is how
 the DOL/DFL/DCL triangle is drawn as a row). `check_file.py` counts nodes,
 links, changes and spans as what a step can change.
+
+**v2.59**, from the UCF macro chapters: a link takes `back` for a second
+arrow running the other way, named under it (the Fed sends `$$$`, the bank
+sends back `U.S. Treasury Securities`), `gap` for the room the pair and their
+names need (150 for that figure, against the default 34), and `arrow: false`
+for a plain space; a node takes `plain: true` to be text with no box (the
+three outcomes listed beside the bank, one per line) and `w` for its share
+of the width (the boxes 0.9 each, the list 1.3).
+
+```json
+{"flow": {"nodes": [{"text": "FED", "w": 0.9}, {"text": "Bank", "w": 0.9},
+                    {"text": "↑ Money Supply\n↓ Interest Rates\n↑ GDP", "plain": true, "w": 1.3, "at": 2}],
+          "links": [{"text": "$$$", "back": "U.S. Treasury Securities", "gap": 150, "at": 1}, {"arrow": false}]}}
+```
+
+And `cycle: true` lays four nodes out as a ring, the circular flow of
+income: `nodes` are top, right, bottom, left (the two markets top and
+bottom, the two actors at the sides, drawn black as the artwork does), and
+each of `loops` is four elbow arrows between neighbours, named at their
+corners. A loop's `labels` are in arrow order starting from the top node:
+`dir: "cw"` runs top → right → bottom → left → top, `"ccw"` the other way.
+An `outer` loop's names sit outside its corners and an `inner` loop's
+inside, against the vertical leg. Each loop takes `at`/`until`, which is
+what a step changes (`check_file.py` counts `loops`).
+
+```json
+{"flow": {"cycle": true,
+          "nodes": ["Product Market", "HOUSEHOLDS", "Resource Market", "FIRMS"],
+          "loops": [{"side": "inner", "dir": "cw", "at": 1,
+                     "labels": ["Goods and\nservices bought", "Labor, land,\ncapital", "Factors of\nproduction", "Goods and\nservices sold"]},
+                    {"side": "outer", "dir": "ccw", "at": 2,
+                     "labels": ["Revenue", "Wages, Rent,\nProfit (Income)", "Income", "Consumption\nExpenditures"]}]}}
+```
+
+The ring is a fixed 420 × 322 layout: four boxes, two legs a side, and a
+label of up to four short lines at each corner. A fifth node or a third loop
+is a new feature, not a config.
 
 ### `axes`
 
@@ -584,6 +621,19 @@ quantity to its second — the per-row shift arrows.
 
 **Hovering a table row highlights its dots on the graph**, and vice versa. That
 interaction is the point of putting the schedule next to the curve.
+
+`plain: true` (**v2.59**) sets the table as written and plots nothing from
+it: any first column, cells as given, no hover. It is for a figure whose own
+table is not a schedule -- the MB = MC figure's `Q, MB, MC, TB, TC, WB`
+table, which the prose reads from ("the table to the right of the graph").
+`side: "right"` puts the table after the plot, where that figure prints it;
+the default is before. On a phone both collapse under the plot.
+
+```json
+{"table": {"plain": true, "side": "right",
+           "cols": ["Q", "MB", "MC", "TB", "TC", "WB"],
+           "rows": [[0, 0, 0, 0, 0, 0], [1, 9, 1, 9, 1, 8], [2, 8, 2, 17, 3, 14]]}}
+```
 
 ## Colours
 

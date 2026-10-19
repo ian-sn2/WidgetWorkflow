@@ -34,7 +34,9 @@ MAP.json:
      "anchors": [{"after": "<b>Binding price ceiling</b>",
                   "image": "eco2023-market-equilibrium-04-price-ceiling-diagram.png"}]}
 
-An image entry is a widget config, `{"keep": why}`, or a **calculator widget**
+An image entry is a widget config, `{"keep": why}`, `{"html": block}` (plain
+HTML in place of a picture of a formula or a calculation, with no script and
+no widget in it; 2026-10-19), or a **calculator widget**
 for the FIN3403 set (2026-10-16): `{"hp": "tvm"|"cf"|"amort"|"stat"|"keys",
 ...attributes}`. Each remaining key becomes a `data-` attribute on a
 `<div class="hp10bii…">` (`alt` is JSON-encoded into `data-alt`), the engine
@@ -181,6 +183,15 @@ def apply(src, m, name, use_anchors=False, toc=False):
             # the tag has left the source and come back inside the inserted snippet
             removed.append(match.span())
             inserted.append(hp_html(entry, tag))
+            return inserted[-1]
+        if isinstance(entry, dict) and "html" in entry:
+            # a picture of a calculation becomes the calculation, set in HTML
+            # (the midpoint-formula callout, 2026-10-19): no script, no widget
+            if "</script" in entry["html"].lower() or '<div class="sdg"' in entry["html"]:
+                problems.append("an html image entry may not carry a script or a widget: %s" % base)
+                return tag
+            removed.append(match.span())
+            inserted.append(entry["html"].strip())
             return inserted[-1]
         removed.append(match.span())
         inserted.append(widget_html(entry))

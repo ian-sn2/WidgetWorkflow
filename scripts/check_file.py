@@ -264,7 +264,8 @@ MATRIX_STEPPABLE = ("marks",)
 PLAYS_STEPPABLE = ("years", "arrows", "total")
 # A flow chart's steps bring in a change arrow or a multiplier arrow, and a
 # box or a link may arrive late too (engine v2.57).
-FLOW_STEPPABLE = ("nodes", "links", "changes", "spans")
+# A circular flow's loops arrive one at a time (v2.59).
+FLOW_STEPPABLE = ("nodes", "links", "changes", "spans", "loops")
 
 
 def check_steps(cfgs, r):

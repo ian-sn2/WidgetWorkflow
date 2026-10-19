@@ -884,3 +884,46 @@ example came out); and a page's own `<style>` can restyle the plot's short
 class names -- `.brace { transform: scaleX(.65) }` in the risk chapter
 squeezed every upright brace into the margin with every check passing, so
 the engine's CSS now pins those properties.
+
+## 2026-10-19 -- the UCF ECO sets after the "anything drawable" rule (v2.59)
+
+Ian's 2026-10-16 rule (every chart or graph the engine can draw becomes an
+sd-graph figure, static or not) came after the UCF ECO2013/ECO2023 sets had
+shipped, so the nine images still in those 24 chapters were reviewed against
+it. Seven were redone, in five chapters; the population hierarchy (a tree)
+and nothing else stays an image.
+
+* **Three circular flows (two artworks) are a `flow` widget with
+  `cycle: true`** -- four boxes round a ring, the goods-and-factors loop
+  clockwise inside and the money loop counter-clockwise outside, each loop
+  arriving on its own step. The chain layout of v2.57 could not draw a ring,
+  and the rule for a figure the schema cannot express is an engine feature,
+  not hand-written SVG in a notes file. The ThinkingLikeAnEconomist figure
+  and the PPF/Exam 1 Review figure name their markets and flows differently,
+  and each widget follows its own artwork.
+* **The two open-market diagrams are chain `flow` widgets** with a two-way
+  link (`back`), a wider `gap`, a `plain` node for the three outcomes and
+  `w` weights. Two widgets rather than one with buttons: the source puts a
+  paragraph between them and each sits beside its own.
+* **The MB = MC graph is a plot with its own table beside it** (`table.plain`,
+  `side: "right"`): the one real plot still an image, kept in October because
+  the engine's `table` was a price schedule. The dot is on the figure from
+  the start and its name arrives on step 1; the Q axis drops its 5 tick for
+  the point's own reading and the price axis keeps the even ticks, because
+  eleven `$` ticks crowd a 268px panel (check_file's rule either way).
+* **The midpoint-formula picture is the calculation it shows, in HTML**: two
+  MathJax lines with `\bbox` round the midpoint denominators and the callout
+  as a bordered paragraph. `apply_widgets.py` takes `{"html": block}` as an
+  image entry for this. It prints −66.67% where the picture rounds to −67%,
+  because the prose beside it does (rule 3). Not verified typeset here: the
+  MathJax CDN is unreachable from this container, so the `\bbox` lines were
+  checked by eye against MathJax 3's syntax only.
+* **Concise editions**: the circular flow goes in where the Concise has its
+  own Circular Flow section (ThinkingLikeAnEconomist, PPF, Exam 1 Review);
+  the Money Concise names open-market operations in one cell of a five-tool
+  table and gets nothing; the Elasticity Concise already carries the
+  midpoint formulas.
+
+The phone check reports the same sideways scroll on these files as before
+(source tables and a source `<div>`), and the PPF Full's untappable buttons
+at 320px are in the delivered file from October too.

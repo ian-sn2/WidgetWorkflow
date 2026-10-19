@@ -22,7 +22,7 @@
      .sdg-body.two, so without repeating it here a two-panel widget with
      link:false never stacked on a phone -- it stayed side by side and shrank
      each panel to about a third of the screen. */
-  .sdg .sdg-body.has-table, .sdg .sdg-body.two,
+  .sdg .sdg-body.has-table, .sdg .sdg-body.has-table.table-right, .sdg .sdg-body.two,
   .sdg .sdg-body.two:not(:has(.sdg-between)) { grid-template-columns:1fr; }
   .sdg .sdg-between svg { transform:rotate(90deg); margin:0 auto; }
   .sdg .sdg-ctrl button, .sdg .sdg-scen button { min-height:44px; }
@@ -325,3 +325,15 @@
 .sdg .fl-step { opacity:0; transition:opacity .45s ease; }
 .sdg .fl-step.shown { opacity:1; }
 .sdg .sdg-flow .sub { font-size:70%; font-weight:600; }
+.sdg .fl-arrow { fill:none; stroke:#111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.sdg .fl-twlabel { font-size:11px; font-weight:800; fill:var(--navy, #1f2a3a); }
+.sdg .fl-plainlabel { font-size:11.5px; font-weight:800; fill:var(--navy, #1f2a3a); }
+.sdg .sdg-cyclefig { max-width:440px; }
+.sdg .sdg-cycle .fl-node rect { fill:#e3f7e0; stroke:#2b2b2b; stroke-width:1.6; }
+.sdg .sdg-cycle .fl-bottom rect { fill:#dff6fb; }
+.sdg .sdg-cycle .fl-actor rect { fill:#111; stroke:#111; }
+.sdg .sdg-cycle .fl-actor .fl-nodelabel { fill:#fff; font-size:13px; }
+.sdg .fl-cycline { fill:none; stroke:#111; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+.sdg .fl-cychead { fill:none; stroke:#111; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+.sdg .fl-cyclabel { font-size:10.5px; font-weight:800; fill:var(--navy, #1f2a3a); }
+.sdg .sdg-body.has-table.table-right { grid-template-columns:2.2fr minmax(150px,1fr); }

@@ -605,6 +605,13 @@ economics instead of label placement.
   two-panel table; Ian's call (2026-10-12) is that people, goods and numbers
   are exactly what changes, so they are two panels with the totals as a
   `calcs` block under the plots.
+* **A circular flow is a `flow` widget with `cycle: true`, an open-market
+  diagram a chain `flow` with a two-way link, and a figure's own table a
+  `table.plain` beside the plot** (2026-10-19, redoing the seven UCF ECO
+  images left as pictures before the 2026-10-16 "anything drawable" rule).
+  A picture of a calculation (the midpoint formula) becomes the calculation
+  in HTML through `apply_widgets.py`'s `{"html": block}` entry. What still
+  stays an image: a tree diagram (the population hierarchy).
 * **An image that stays an image says why.** `<!-- KEEP: why -->` immediately
   before the `<img>`, declared the way a point declares `divider` or `boxed`,
   and `check_file.py` stops reporting it as a graph. The macro chapters are
@@ -724,7 +731,7 @@ not enough to reproduce an implementation.
   `embed_engine.py`'s paths reproduce the delivered file byte-for-byte; all 20
   prototype widgets render with no engine errors; `check_file.py` runs the
   geometric label test over 74 labels in the 263 file with no overlaps.
-* **Engine is v2.58** (a `flow` chain-of-boxes widget, a shield against the host page's own CSS, and `axes.cross` for axes that meet inside the plot, all from the FIN3403 set; the rest below is unchanged). Since v2.6: `areas` shade a polygon (v2.11) with
+* **Engine is v2.59** (a `flow` chain-of-boxes widget, a shield against the host page's own CSS, and `axes.cross` for axes that meet inside the plot, all from the FIN3403 set, v2.57/v2.58; then `flow.cycle` for the circular flow of income, two-way and arrowless links with `plain` nodes for the open-market diagrams, and `table.plain` for a figure's own non-schedule table beside its plot, from the UCF ECO redo of 2026-10-19; the rest below is unchanged). Since v2.6: `areas` shade a polygon (v2.11) with
   `edge` to outline it (v2.18) and labels centred on their anchor (v2.13);
   `dot:false` drops a marker but keeps the axis label (v2.12); points take
   `guides:"p"`/`"q"` for one leg of the elbow (v2.14); braces take

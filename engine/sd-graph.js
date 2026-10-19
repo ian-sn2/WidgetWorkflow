@@ -1,4 +1,4 @@
-/* ===== sd-graph.js v2.58 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.59 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)
@@ -33,6 +33,7 @@
         plot and the tick numbers, with its label running up the axis, and widens the left margin to fit.
         Without left it sits inside the plot at quantity q, opening right unless side:'left'.
      table:    {cols[], series[], rows[[price,q,...]], arrows}    schedule beside the graph; arrows draws row shift arrows
+               plain:true sets the rows as given (any first column, nothing plotted) and side:'right' puts the table after the plot (v2.59)
      matrix:   {rows:{player,labels[]}, cols:{player,labels[]}, cells[[[aPayoff,bPayoff],...],...], marks[]}
         A payoff matrix instead of a plot. A mark names {row|col|cell}, optionally who:'a'|'b' for one
         player's line inside it, and pick:true for the one a comparison lands on. Marks take at/until.
@@ -653,7 +654,7 @@
     });
 
     var rowHooks = [];
-    if (cfg.table) {
+    if (cfg.table && !cfg.table.plain) {
       var t = cfg.table;
       t.rows.forEach(function (row) {
         var dots = [], p = row[0];
@@ -710,12 +711,18 @@
       var tbody = h('tbody'), hooks = this.panels[0].rowHooks;
       t.rows.forEach(function (row, ri) {
         var r = h('tr');
-        row.forEach(function (v, i) { r.appendChild(h('td', null, i === 0 ? fmtP(v, ax) : fmtQ(v, ax))); });
-        r.addEventListener('mouseenter', function () { r.classList.add('hi'); hooks[ri].forEach(function (d) { d.classList.add('hi'); }); });
-        r.addEventListener('mouseleave', function () { r.classList.remove('hi'); hooks[ri].forEach(function (d) { d.classList.remove('hi'); }); });
+        // A plain table (v2.59) is the figure's own table set beside it as
+        // written -- a quantity-first table with derived columns, which is
+        // not a schedule and plots nothing; its cells are text, not prices.
+        row.forEach(function (v, i) { r.appendChild(h('td', null, t.plain ? String(v) : (i === 0 ? fmtP(v, ax) : fmtQ(v, ax)))); });
+        if (!t.plain) {
+          r.addEventListener('mouseenter', function () { r.classList.add('hi'); hooks[ri].forEach(function (d) { d.classList.add('hi'); }); });
+          r.addEventListener('mouseleave', function () { r.classList.remove('hi'); hooks[ri].forEach(function (d) { d.classList.remove('hi'); }); });
+        }
         tbody.appendChild(r);
       });
-      tbl.appendChild(tbody); var wrap = h('div', 'sdg-tablewrap'); wrap.appendChild(tbl); body.insertBefore(wrap, body.firstChild);
+      tbl.appendChild(tbody); var wrap = h('div', 'sdg-tablewrap'); wrap.appendChild(tbl);
+      if (t.side === 'right') { body.classList.add('table-right'); body.appendChild(wrap); } else body.insertBefore(wrap, body.firstChild);
     }
     // The plot and its working share a row when the widget is wide enough for
     // both, and the working wraps underneath when it is not. Set under the
@@ -928,17 +935,33 @@
   //
   // nodes and links are strings or {text, at, until}; changes and spans take
   // at/until like anything else, and those are what a step changes.
+  //
+  // v2.59, from the UCF macro chapters: a link takes `back` for a second
+  // arrow running the other way (the Fed pays the bank and the bank hands
+  // over the security), `gap` for the room those two arrows and their names
+  // need, and `arrow:false` for a plain space; a node takes `plain:true` to
+  // be text with no box (the three outcomes listed beside the bank) and `w`
+  // for its share of the width. And `cycle:true` lays four nodes out as a
+  // ring with two loops of elbow arrows -- the circular flow of income --
+  // see buildCycle below.
   Widget.prototype.buildFlow = function () {
+    if (this.cfg.flow.cycle) return this.buildCycle();
     var self = this, f = this.cfg.flow, host = this.host;
     var nodes = (f.nodes || []).map(function (n) { return typeof n === 'string' ? {text: n} : n; });
     var links = (f.links || []).map(function (l) { return typeof l === 'string' ? {text: l} : l; });
     var changes = f.changes || [], spans = f.spans || [];
     var W = 372, M = 6, GAP = 34, NH = 40, n = nodes.length;
-    var NW = (W - 2 * M - (n - 1) * GAP) / n;
+    var gaps = nodes.map(function (nd, i) { return i < n - 1 ? ((links[i] && links[i].gap) || GAP) : 0; });
+    var sumGap = gaps.reduce(function (a, b) { return a + b; }, 0);
+    var sumW = nodes.reduce(function (a, nd) { return a + (nd.w || 1); }, 0);
+    var widths = nodes.map(function (nd) { return (W - 2 * M - sumGap) * (nd.w || 1) / sumW; });
+    var xs = []; nodes.forEach(function (nd, i) { xs.push(i ? xs[i - 1] + widths[i - 1] + gaps[i - 1] : M); });
+    var NW = widths[0];
     var top = 10 + (spans.length ? 22 : 0) + (changes.length ? 52 : 0);
-    var H = top + NH + (links.some(function (l) { return l.text; }) ? 34 : 10);
+    var twoWay = links.some(function (l) { return l.back; });
+    var H = top + NH + (links.some(function (l) { return l.text || l.back; }) ? (twoWay ? 38 : 34) : 10);
     var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, role: 'img', class: 'sdg-flow', 'aria-label': this.cfg.title || 'Flow chart'});
-    function cx(i) { return M + i * (NW + GAP) + NW / 2; }
+    function cx(i) { return xs[i] + widths[i] / 2; }
     function lines(t) { return String(t).split('\n'); }
     function text(x, y, t, cls, dy, anchor) {
       var e = el('text', {x: x, y: y, class: cls, 'text-anchor': anchor || 'middle'});
@@ -948,18 +971,27 @@
     function part(g, spec) { if (spec && (spec.at || spec.until != null)) { g.classList.add('fl-step'); self.mparts.push({node: g, spec: spec, cls: 'shown'}); } }
     // links first, so the boxes sit over their ends
     links.forEach(function (l, i) {
-      if (i >= n - 1) return;
-      var g = el('g', {class: 'fl-link'}), x1 = M + (i + 1) * NW + i * GAP, x2 = x1 + GAP, y = top + NH / 2;
-      g.appendChild(el('line', {x1: x1, y1: y, x2: x2, y2: y}));
-      [0.25, 0.5, 0.75].forEach(function (t) { g.appendChild(el('rect', {x: x1 + GAP * t - 4.5, y: y - 2.6, width: 9, height: 5.2, rx: 2.6})); });
-      if (l.text) g.appendChild(text((x1 + x2) / 2, top + NH + 13, l.text, 'fl-linklabel', 10.5));
+      if (i >= n - 1 || l.arrow === false) return;
+      var g = el('g', {class: 'fl-link'}), x1 = xs[i] + widths[i], x2 = x1 + gaps[i], gap = gaps[i], y = top + NH / 2;
+      if (l.back) {
+        // two arrows, one each way, each named on its outer side: the way the
+        // open-market figure draws what the Fed sends and what comes back
+        g.appendChild(el('path', {d: headed(x1 + 3, y - 7, x2 - 3, y - 7), class: 'fl-arrow'}));
+        g.appendChild(el('path', {d: headed(x2 - 3, y + 7, x1 + 3, y + 7), class: 'fl-arrow'}));
+        if (l.text) g.appendChild(text((x1 + x2) / 2, y - 13, l.text, 'fl-twlabel', 11));
+        if (l.back !== true) g.appendChild(text((x1 + x2) / 2, y + 21, l.back, 'fl-twlabel', 11));
+      } else {
+        g.appendChild(el('line', {x1: x1, y1: y, x2: x2, y2: y}));
+        [0.25, 0.5, 0.75].forEach(function (t) { g.appendChild(el('rect', {x: x1 + gap * t - 4.5, y: y - 2.6, width: 9, height: 5.2, rx: 2.6})); });
+        if (l.text) g.appendChild(text((x1 + x2) / 2, top + NH + 13, l.text, 'fl-linklabel', 10.5));
+      }
       part(g, l); svg.appendChild(g);
     });
     nodes.forEach(function (nd, i) {
-      var g = el('g', {class: 'fl-node'}), x = M + i * (NW + GAP);
-      g.appendChild(el('rect', {x: x, y: top, width: NW, height: NH, rx: 6}));
-      var rows = lines(nd.text), y0 = top + NH / 2 + 4.5 - (rows.length - 1) * 7;
-      g.appendChild(text(cx(i), y0, nd.text, 'fl-nodelabel', 14));
+      var g = el('g', {class: nd.plain ? 'fl-plain' : 'fl-node'}), x = xs[i];
+      if (!nd.plain) g.appendChild(el('rect', {x: x, y: top, width: widths[i], height: NH, rx: 6}));
+      var rows = lines(nd.text), lh = nd.plain ? 15 : 14, y0 = top + NH / 2 + 4.5 - (rows.length - 1) * lh / 2;
+      g.appendChild(text(cx(i), y0, nd.text, nd.plain ? 'fl-plainlabel' : 'fl-nodelabel', lh));
       part(g, nd); svg.appendChild(g);
     });
     var tips = {};
@@ -981,6 +1013,93 @@
       part(g, sp); svg.appendChild(g);
     });
     var fig = h('figure', 'sdg-flowfig'); fig.appendChild(svg);
+    var body = h('div', 'sdg-body'); body.appendChild(fig);
+    var main = h('div', 'sdg-main'); main.appendChild(body); host.appendChild(main); this.main = main;
+  };
+
+  // The circular flow (v2.59): four boxes round a ring -- top, right, bottom,
+  // left -- and loops of elbow arrows between neighbours, each arrow named at
+  // its corner. The printed figure runs the money round one way outside and
+  // the goods and factors the other way inside, and states both at once; a
+  // step can bring each loop in on its own.
+  //
+  //   flow: {cycle: true,
+  //          nodes: ["Product Market", "HOUSEHOLDS", "Resource Market", "FIRMS"],
+  //          loops: [{side: "inner", dir: "cw", at: 1,
+  //                   labels: ["Goods and\nservices bought", "Labor, land,\ncapital", "Factors of\nproduction", "Goods and\nservices sold"]},
+  //                  {side: "outer", dir: "ccw", at: 2,
+  //                   labels: ["Revenue", "Wages, Rent,\nProfit (Income)", "Income", "Spending"]}]}
+  //
+  // A loop's four labels are in arrow order starting from the top node: cw is
+  // top->right->bottom->left->top, ccw is top->left->bottom->right->top. An
+  // outer loop's names sit outside its corners, an inner loop's inside them,
+  // against the vertical leg, which is where the artwork puts them.
+  Widget.prototype.buildCycle = function () {
+    var self = this, f = this.cfg.flow, host = this.host;
+    var nodes = (f.nodes || []).map(function (n) { return typeof n === 'string' ? {text: n} : n; });
+    var loops = f.loops || [];
+    var W = 420, H = 322;
+    var box = {
+      top:    {x: 135, y: 16,  w: 150, h: 40},
+      bottom: {x: 135, y: 262, w: 150, h: 40},
+      left:   {x: 6,   y: 136, w: 110, h: 36},
+      right:  {x: 304, y: 136, w: 110, h: 36}
+    };
+    var order = ['top', 'right', 'bottom', 'left'];
+    var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, role: 'img', class: 'sdg-flow sdg-cycle', 'aria-label': this.cfg.title || 'Circular flow'});
+    function lines(t) { return String(t).split('\n'); }
+    function text(x, y, t, cls, dy, anchor) {
+      var e = el('text', {x: x, y: y, class: cls, 'text-anchor': anchor || 'middle'});
+      lines(t).forEach(function (row, i) { var sp = el('tspan', {x: x, dy: i ? dy : 0}); setLabel(sp, row); e.appendChild(sp); });
+      return e;
+    }
+    function part(g, spec) { if (spec && (spec.at || spec.until != null)) { g.classList.add('fl-step'); self.mparts.push({node: g, spec: spec, cls: 'shown'}); } }
+    function edge(b, side) { return side === 'left' ? b.x : side === 'right' ? b.x + b.w : side === 'top' ? b.y : b.y + b.h; }
+    function cxOf(b) { return b.x + b.w / 2; }
+    function cyOf(b) { return b.y + b.h / 2; }
+    // One elbow between a market (top or bottom) and an actor (left or right).
+    // `outer` picks which of the two parallel legs this loop runs on.
+    function elbow(g, mk, ac, outer, toActor, label, LH) {
+      var m = box[mk], a = box[ac], up = mk === 'top', lft = ac === 'left';
+      var y = cyOf(m) + (up ? (outer ? -8 : 8) : (outer ? 8 : -8));
+      var xv = cxOf(a) + (lft ? (outer ? -30 : 30) : (outer ? 30 : -30));
+      var xm = edge(m, lft ? 'left' : 'right');            // where the horizontal meets the market box
+      var ya = edge(a, up ? 'top' : 'bottom');             // where the vertical meets the actor box
+      var d = toActor ? 'M' + xm + ' ' + y + ' L' + xv + ' ' + y + ' L' + xv + ' ' + ya
+                      : 'M' + xv + ' ' + ya + ' L' + xv + ' ' + y + ' L' + xm + ' ' + y;
+      g.appendChild(el('path', {d: d, class: 'fl-cycline'}));
+      // the head on the last leg
+      var hx = toActor ? xv : xm, hy = toActor ? ya : y, fx = toActor ? xv : xv, fy = toActor ? y : y;
+      g.appendChild(el('path', {d: headed(fx, fy, hx, hy), class: 'fl-cychead'}));
+      if (!label) return;
+      var rows = lines(label), n = rows.length;
+      if (outer) {
+        var hx0 = (xm + xv) / 2;
+        var y0 = up ? y - 6 - LH * (n - 1) : y + 13;
+        g.appendChild(text(hx0, y0, label, 'fl-cyclabel', LH));
+      } else {
+        var y1 = up ? y + 20 : y - 13 - LH * (n - 1);
+        g.appendChild(text(lft ? xv + 5 : xv - 5, y1, label, 'fl-cyclabel', LH, lft ? 'start' : 'end'));
+      }
+    }
+    loops.forEach(function (lp) {
+      var g = el('g', {class: 'fl-loop'}), outer = lp.side !== 'inner', cw = lp.dir !== 'ccw', LH = 12;
+      var seq = cw ? ['top', 'right', 'bottom', 'left', 'top'] : ['top', 'left', 'bottom', 'right', 'top'];
+      for (var i = 0; i < 4; i++) {
+        var from = seq[i], to = seq[i + 1], lab = (lp.labels || [])[i];
+        var mk = (from === 'top' || from === 'bottom') ? from : to, ac = mk === from ? to : from;
+        elbow(g, mk, ac, outer, mk === from, lab, LH);
+      }
+      part(g, lp); svg.appendChild(g);
+    });
+    order.forEach(function (k, i) {
+      var nd = nodes[i] || {text: ''}, b = box[k], g = el('g', {class: 'fl-node fl-' + k + (k === 'left' || k === 'right' ? ' fl-actor' : '')});
+      g.appendChild(el('rect', {x: b.x, y: b.y, width: b.w, height: b.h, rx: 6}));
+      var rows = lines(nd.text), y0 = cyOf(b) + 4.5 - (rows.length - 1) * 7;
+      g.appendChild(text(cxOf(b), y0, nd.text, 'fl-nodelabel', 14));
+      part(g, nd); svg.appendChild(g);
+    });
+    var fig = h('figure', 'sdg-flowfig sdg-cyclefig'); fig.appendChild(svg);
     var body = h('div', 'sdg-body'); body.appendChild(fig);
     var main = h('div', 'sdg-main'); main.appendChild(body); host.appendChild(main); this.main = main;
   };
