@@ -200,7 +200,7 @@ def lobe(x0, y0, spread=20, half=20, reach=14):
     return pts
 def line_y(x): return 30 + 0.5 * x
 err_curves, err_areas, err_pts, err_moves = [], [], [], []
-for x0, name, tail in ((28, "$30", [72, 29]), (62, "$50", [75, 35])):
+for x0, name, tail in ((28, "$30", [72, 29]), (62, "$50", [74, 33])):
     y0 = line_y(x0); L = lobe(x0, y0)
     err_moves.append({"from": tail, "to": [x0 + 8, y0 - 9], "color": "ink", "offset": 0})
     err_curves.append({"id": "stem%d" % x0, "label": "", "pts": [[x0, y0 - 22], [x0, y0 + 22]], "thin": True})
@@ -212,7 +212,7 @@ error_dist = {"title": "Error Probability Distributions",
               "curves": [{"id": "line", "label": "", "pts": [[8, line_y(8)], [92, line_y(92)]], "color": "gold"}] + err_curves,
               "areas": err_areas,
               "moves": err_moves,
-              "points": err_pts + [{"q": 73, "p": 30, "dot": False, "label": "Error probability\ndistributions", "dx": 2, "dy": 2, **NOPT}],
+              "points": err_pts + [{"q": 73, "p": 30, "dot": False, "label": "Error probability\ndistributions", "dx": 4, "dy": 10, **NOPT}],
               "caption": cap("At every income the actual revenue scatters around the line's value, with the same bell-shaped spread and a mean of zero.")}
 
 # ---------------------------------------------------------------- GRE
