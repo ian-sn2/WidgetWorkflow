@@ -693,6 +693,8 @@ def geom(pn, ax):
         left += 30.0
     xmax = float(ax.get("xmax") or 1)
     ymax = float(ax.get("ymax") or 1)
+    xmin = float(ax.get("xmin") or 0)   # v2.63: the plot's corner need not be 0
+    ymin = float(ax.get("ymin") or 0)
     # Engine v2.28 sizes the right margin to the curve labels, the same way
     # v2.27 sizes the left to the price labels, and for the same reason: a
     # label anchored at a curve's end had nowhere to go and was drawn cut off.
@@ -710,7 +712,7 @@ def geom(pn, ax):
             text = c.get("label")
             text = c.get("id") if text is None else text
             chars = max(label_len(row) for row in str(text).split("\n"))
-            ends = left + (lp[0] / xmax) * pw_try + (6 if c.get("ldx") is None
+            ends = left + ((lp[0] - xmin) / (xmax - xmin)) * pw_try + (6 if c.get("ldx") is None
                                                      else c.get("ldx"))
             over = ends + 13.0 * chars + 4 - W
             if over > 0:
@@ -721,8 +723,8 @@ def geom(pn, ax):
     right = min(right, W - left - 120.0)
     ox, oy = left, 205.0
     pw, ph = W - left - right, 178.0
-    return (lambda q: ox + (q / xmax) * pw,
-            lambda p: oy - (p / ymax) * ph, ox, oy)
+    return (lambda q: ox + ((q - xmin) / (xmax - xmin)) * pw,
+            lambda p: oy - ((p - ymin) / (ymax - ymin)) * ph, ox, oy)
 
 
 def fmt_p(v, ax):

@@ -954,3 +954,18 @@ Left as they are, and flagged: the source's `<u>` on the BOPUS/BORIS
 letters, the checker's "recording" hit on "a ledger for recording
 transactions" (a word, not a source), and the franchising table that
 scrolls a phone sideways.
+
+## 2026-10-21 — QMB3200 (UCF statistics): engine v2.63, `axes.xmin`/`ymin`
+
+The QMB3200 set (Exam 1 and Exam 2, Parts 1–3, three editions each) is the
+first statistics course through the pipeline. Its 26 images are bells,
+shaded tails, scatterplots, two Excel charts and nine Excel screenshots.
+Everything drew on the existing engine except two plots that do not start
+at the origin: the GRE scatter (GPA 2.8–4.0 against 240–325 points) and the
+profit parabola (profit −30 to 28). `axes.xmin` and `axes.ymin` (v2.63) let
+a panel clip its axes to the region the figure uses, the same rule the
+guide already gave for `xmax`; `check_file.py`'s `geom()` carries the same
+two numbers. The Excel screenshots became HTML tables in Excel's layout
+(class `financial`, the highlighted cells outlined in the screenshot's
+colours, the annotations as small notes beside the value), a shape worth
+reusing for any regression-output image. Build: `scripts/qmb3200/`.

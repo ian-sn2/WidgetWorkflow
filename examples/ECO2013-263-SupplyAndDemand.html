@@ -358,7 +358,7 @@
 .sdg .fl-chainhead { fill:#6f6f6f; stroke:#6f6f6f; stroke-width:1; stroke-linejoin:round; }
 </style>
 <script>
-/* ===== sd-graph.js v2.62 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.63 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)
@@ -367,7 +367,8 @@
      panels: [panelCfg, panelCfg]  two side-by-side graphs (two-market). Otherwise the panel keys live at top level.
    Panel config:
      heading                      title above the panel (two-market only)
-     axes: {x, y, xmax, ymax, xticks[], yticks[], money, cents, pct, k, grid, bg:false}
+     axes: {x, y, xmin, xmax, ymin, ymax, xticks[], yticks[], money, cents, pct, k, grid, bg:false, cross:[q,p]}
+        xmin/ymin (v2.63) put the plot's corner somewhere other than 0: a scatter of GPAs from 2.9 to 3.9, a profit that goes negative
         x, y = axis titles, default 'Q' and 'P'. A word or two fits; they are never wrapped.
      curves[]: {id, label, pts:[[q,p],...], color, at, until, from, arrowP, shiftArrow, curved, thin, leader, dashed, lstart, ldx, ldy}
      areas[]:  {pts:[[q,p],...], label, boxed, color, edge, lp, ldx, ldy, at, until}   a shaded polygon under the curves (CS, PS, deadweight loss)
@@ -554,7 +555,7 @@
         var pts = c.pts || [];
         if (!pts.length || c.label === '') return;
         var lp = c.lstart ? pts[0] : pts[pts.length - 1];
-        var endsAt = left + (lp[0] / ax.xmax) * pw + (c.ldx || 6);
+        var endsAt = left + ((lp[0] - (ax.xmin || 0)) / (ax.xmax - (ax.xmin || 0))) * pw + (c.ldx || 6);
         var overflow = endsAt + 13 * labelChars(c) + 4 - W;
         if (overflow > 0) want = Math.max(want, right + overflow);
       });
@@ -564,7 +565,8 @@
     right = Math.min(right, W - left - 120);   // never starve the plot
 
     var O = {x: left, y: 205}, PW = W - left - right, PH = 178;
-    var X = function (q) { return O.x + (q / ax.xmax) * PW; }, Y = function (p) { return O.y - (p / ax.ymax) * PH; };
+    var XMIN = ax.xmin || 0, YMIN = ax.ymin || 0;
+    var X = function (q) { return O.x + ((q - XMIN) / (ax.xmax - XMIN)) * PW; }, Y = function (p) { return O.y - ((p - YMIN) / (ax.ymax - YMIN)) * PH; };
     var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': cfg.heading || cfg.title || 'Supply and demand graph'});
     var g = el('g', {}); svg.appendChild(g);
     var parts = [], byId = {};

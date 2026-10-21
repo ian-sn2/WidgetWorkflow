@@ -1,4 +1,4 @@
-# Engine reference — `engine/sd-graph.js` v2.62
+# Engine reference — `engine/sd-graph.js` v2.63
 
 Written from the engine source. The conversion prompt carries a shorter version
 of this in its own "Engine reference" section; that one is what the model needs
@@ -301,6 +301,12 @@ returns against the market's has four quadrants and its axes meet at the
 origin in the middle. Pick a scale with the origin at the centre (`[55, 55]`
 on a 110 axis) and leave the ticks out. `check_file.py` tests labels against
 the lines where they are drawn.
+
+`xmin` and `ymin` (**v2.63**) put the plot's corner somewhere other than 0:
+a scatter of GPAs from 2.9 to 3.9 on an axis from 0 is a smear in one corner,
+and a profit that goes negative needs the axis to go below 0 (with
+`cross: [0, 0]` to draw the axis lines through the origin, the way Excel
+does). Ticks, points, guides and the checker's geometry all honour them.
 
 `x` and `y` are the axis **titles**, defaulting to `P` and `Q`, which is what
 the printed artwork uses. A production possibilities frontier names its axes with
