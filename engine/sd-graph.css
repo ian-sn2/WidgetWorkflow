@@ -337,3 +337,6 @@
 .sdg .fl-cychead { fill:none; stroke:#111; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
 .sdg .fl-cyclabel { font-size:10.5px; font-weight:800; fill:var(--navy, #1f2a3a); }
 .sdg .sdg-body.has-table.table-right { grid-template-columns:2.2fr minmax(150px,1fr); }
+.sdg .fl-brace { fill:none; stroke:#333; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.sdg .fl-bracelabel { font-size:12px; font-weight:800; fill:var(--navy, #1f2a3a); }
+.sdg .sdg-vflow .fl-linklabel { font-size:10.5px; font-style:normal; font-weight:700; fill:#444; }

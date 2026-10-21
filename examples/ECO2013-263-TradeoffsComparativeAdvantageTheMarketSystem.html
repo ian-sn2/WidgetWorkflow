@@ -348,9 +348,12 @@
 .sdg .fl-cychead { fill:none; stroke:#111; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
 .sdg .fl-cyclabel { font-size:10.5px; font-weight:800; fill:var(--navy, #1f2a3a); }
 .sdg .sdg-body.has-table.table-right { grid-template-columns:2.2fr minmax(150px,1fr); }
+.sdg .fl-brace { fill:none; stroke:#333; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.sdg .fl-bracelabel { font-size:12px; font-weight:800; fill:var(--navy, #1f2a3a); }
+.sdg .sdg-vflow .fl-linklabel { font-size:10.5px; font-style:normal; font-weight:700; fill:#444; }
 </style>
 <script>
-/* ===== sd-graph.js v2.59 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.60 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)
@@ -1298,6 +1301,7 @@
   // see buildCycle below.
   Widget.prototype.buildFlow = function () {
     if (this.cfg.flow.cycle) return this.buildCycle();
+    if (this.cfg.flow.vertical) return this.buildFlowVertical();
     var self = this, f = this.cfg.flow, host = this.host;
     var nodes = (f.nodes || []).map(function (n) { return typeof n === 'string' ? {text: n} : n; });
     var links = (f.links || []).map(function (l) { return typeof l === 'string' ? {text: l} : l; });
@@ -1309,7 +1313,8 @@
     var widths = nodes.map(function (nd) { return (W - 2 * M - sumGap) * (nd.w || 1) / sumW; });
     var xs = []; nodes.forEach(function (nd, i) { xs.push(i ? xs[i - 1] + widths[i - 1] + gaps[i - 1] : M); });
     var NW = widths[0];
-    var top = 10 + (spans.length ? 22 : 0) + (changes.length ? 52 : 0);
+    var braceRows = spans.reduce(function (m, sp) { return sp.brace ? Math.max(m, (sp.row || 0) + 1) : m; }, 0);
+    var top = 10 + (spans.length ? 22 : 0) + (changes.length ? 52 : 0) + braceRows * 26;
     var twoWay = links.some(function (l) { return l.back; });
     var H = top + NH + (links.some(function (l) { return l.text || l.back; }) ? (twoWay ? 38 : 34) : 10);
     var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, role: 'img', class: 'sdg-flow', 'aria-label': this.cfg.title || 'Flow chart'});
@@ -1321,6 +1326,13 @@
       return e;
     }
     function part(g, spec) { if (spec && (spec.at || spec.until != null)) { g.classList.add('fl-step'); self.mparts.push({node: g, spec: spec, cls: 'shown'}); } }
+    // a link's name; `size` sets it larger (v2.60: the "+" the value-added
+    // chain prints between its links is a 14px sign, not a 9.5px caption)
+    function linkLabel(l, x, y) {
+      var e = text(x, y, l.text, 'fl-linklabel', 10.5);
+      if (l.size) { e.style.fontSize = l.size + 'px'; e.style.fontStyle = 'normal'; }
+      return e;
+    }
     // links first, so the boxes sit over their ends
     links.forEach(function (l, i) {
       if (i >= n - 1 || l.arrow === false) return;
@@ -1332,10 +1344,15 @@
         g.appendChild(el('path', {d: headed(x2 - 3, y + 7, x1 + 3, y + 7), class: 'fl-arrow'}));
         if (l.text) g.appendChild(text((x1 + x2) / 2, y - 13, l.text, 'fl-twlabel', 11));
         if (l.back !== true) g.appendChild(text((x1 + x2) / 2, y + 21, l.back, 'fl-twlabel', 11));
+      } else if (l.style === 'arrow') {
+        // a plain arrow (v2.60): the old "pipeline" view of a channel, where
+        // the chain motif would say the opposite of what the figure says
+        g.appendChild(el('path', {d: headed(x1 + 2, y, x2 - 2, y), class: 'fl-arrow'}));
+        if (l.text) g.appendChild(linkLabel(l, (x1 + x2) / 2, top + NH + 13));
       } else {
         g.appendChild(el('line', {x1: x1, y1: y, x2: x2, y2: y}));
         [0.25, 0.5, 0.75].forEach(function (t) { g.appendChild(el('rect', {x: x1 + gap * t - 4.5, y: y - 2.6, width: 9, height: 5.2, rx: 2.6})); });
-        if (l.text) g.appendChild(text((x1 + x2) / 2, top + NH + 13, l.text, 'fl-linklabel', 10.5));
+        if (l.text) g.appendChild(linkLabel(l, (x1 + x2) / 2, top + NH + 13));
       }
       part(g, l); svg.appendChild(g);
     });
@@ -1343,7 +1360,15 @@
       var g = el('g', {class: nd.plain ? 'fl-plain' : 'fl-node'}), x = xs[i];
       if (!nd.plain) g.appendChild(el('rect', {x: x, y: top, width: widths[i], height: NH, rx: 6}));
       var rows = lines(nd.text), lh = nd.plain ? 15 : 14, y0 = top + NH / 2 + 4.5 - (rows.length - 1) * lh / 2;
-      g.appendChild(text(cx(i), y0, nd.text, nd.plain ? 'fl-plainlabel' : 'fl-nodelabel', lh));
+      var t = text(cx(i), y0, nd.text, nd.plain ? 'fl-plainlabel' : 'fl-nodelabel', lh);
+      // a name wider than its box is set smaller, never clipped (v2.60):
+      // "Manufacturer" in a four-box chain is wider than a quarter of the row
+      if (!nd.plain) {
+        var widest = rows.reduce(function (m, r) { return Math.max(m, emw(r.replace(/_\{([^}]*)\}/g, '$1'))); }, 0) * 12.5;
+        // an inline style, because the stylesheet's own font-size outranks a presentation attribute
+        if (widest > widths[i] - 14) t.style.fontSize = Math.max(9, 12.5 * (widths[i] - 14) / widest).toFixed(1) + 'px';
+      }
+      g.appendChild(t);
       part(g, nd); svg.appendChild(g);
     });
     var tips = {};
@@ -1358,10 +1383,81 @@
     });
     spans.forEach(function (sp) {
       var g = el('g', {class: 'fl-span'}), xa = cx(sp.from), xb = cx(sp.to);
+      if (sp.brace) {
+        // a bracket over a run of boxes, named above it (v2.60): "Marketing
+        // channel" over the boxes it groups; rows stack outward
+        var yb0 = top - 14 - (sp.row || 0) * 26, xl = xs[sp.from], xr = xs[sp.to] + widths[sp.to];
+        g.appendChild(el('path', {d: 'M' + xl + ' ' + (yb0 + 6) + ' V' + yb0 + ' H' + xr + ' V' + (yb0 + 6) + ' M' + ((xl + xr) / 2) + ' ' + yb0 + ' v-5', class: 'fl-brace'}));
+        if (sp.label) g.appendChild(text((xl + xr) / 2, yb0 - 9, sp.label, 'fl-bracelabel', 12));
+        part(g, sp); svg.appendChild(g); return;
+      }
       var ya = tips[sp.from] != null ? tips[sp.from] - 2 : top - 10, yb = tips[sp.to] != null ? tips[sp.to] - 2 : top - 10;
       if (tips[sp.from] == null && tips[sp.to] == null) { ya = yb = top - 12; }
       g.appendChild(el('path', {d: headed(xa, ya, xb, yb), class: 'arrow'}));
       if (sp.label) g.appendChild(text((xa + xb) / 2, Math.min(ya, yb) - 7, sp.label, 'fl-spanlabel', 12));
+      part(g, sp); svg.appendChild(g);
+    });
+    var fig = h('figure', 'sdg-flowfig'); fig.appendChild(svg);
+    var body = h('div', 'sdg-body'); body.appendChild(fig);
+    var main = h('div', 'sdg-main'); main.appendChild(body); host.appendChild(main); this.main = main;
+  };
+
+  // A vertical chain (v2.60): the marketing-channel figures run top to
+  // bottom -- "upstream" is toward the manufacturer and "downstream" toward
+  // the consumer, and the prose beside them says so -- so a horizontal chain
+  // would contradict the page. Boxes stacked down the middle, a link's name
+  // to the left of its arrow, and spans as braces down the right, named
+  // beside them, stacking outward by `row`:
+  //
+  //   flow: {vertical: true, nodes: ["Supplier", "Manufacturer", "Consumer"],
+  //          links: ["Raw\nmaterials/parts", "Finished\nproducts"],
+  //          spans: [{from: 0, to: 1, label: "Supplier\nnetwork"},
+  //                  {from: 1, to: 2, label: "Marketing\nchannel"},
+  //                  {from: 0, to: 2, label: "Supply\nChain", row: 1}]}
+  //
+  // changes are not drawn in this layout.
+  Widget.prototype.buildFlowVertical = function () {
+    var self = this, f = this.cfg.flow, host = this.host;
+    var nodes = (f.nodes || []).map(function (n) { return typeof n === 'string' ? {text: n} : n; });
+    var links = (f.links || []).map(function (l) { return typeof l === 'string' ? {text: l} : l; });
+    var spans = f.spans || [];
+    var W = 372, NW = f.spans && f.spans.length ? 190 : 230, NH = 36, GAP = 40, n = nodes.length;
+    var hasLink = links.some(function (l) { return l.text; });
+    var X0 = spans.length ? 16 : (hasLink ? 110 : (W - NW) / 2), CX = X0 + NW / 2;
+    var H = 10 + n * NH + (n - 1) * GAP + 10;
+    var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, role: 'img', class: 'sdg-flow sdg-vflow', 'aria-label': this.cfg.title || 'Flow chart'});
+    function ytop(i) { return 10 + i * (NH + GAP); }
+    function lines(t) { return String(t).split('\n'); }
+    function text(x, y, t, cls, dy, anchor) {
+      var e = el('text', {x: x, y: y, class: cls, 'text-anchor': anchor || 'middle'});
+      lines(t).forEach(function (row, i) { var sp = el('tspan', {x: x, dy: i ? dy : 0}); setLabel(sp, row); e.appendChild(sp); });
+      return e;
+    }
+    function part(g, spec) { if (spec && (spec.at || spec.until != null)) { g.classList.add('fl-step'); self.mparts.push({node: g, spec: spec, cls: 'shown'}); } }
+    links.forEach(function (l, i) {
+      if (i >= n - 1 || l.arrow === false) return;
+      var g = el('g', {class: 'fl-link'}), y1 = ytop(i) + NH, y2 = ytop(i + 1);
+      if (l.style === 'arrow') {
+        g.appendChild(el('path', {d: headed(CX, y1 + 2, CX, y2 - 2), class: 'fl-arrow'}));
+      } else {
+        g.appendChild(el('line', {x1: CX, y1: y1, x2: CX, y2: y2}));
+        [0.25, 0.5, 0.75].forEach(function (t) { g.appendChild(el('rect', {x: CX - 2.6, y: y1 + GAP * t - 4.5, width: 5.2, height: 9, rx: 2.6})); });
+      }
+      if (l.text) { var rows = lines(l.text); g.appendChild(text(CX - 14, (y1 + y2) / 2 + 4 - (rows.length - 1) * 5.5, l.text, 'fl-linklabel', 11, 'end')); }
+      part(g, l); svg.appendChild(g);
+    });
+    nodes.forEach(function (nd, i) {
+      var g = el('g', {class: 'fl-node'}), y = ytop(i);
+      g.appendChild(el('rect', {x: X0, y: y, width: NW, height: NH, rx: 6}));
+      var rows = lines(nd.text), y0 = y + NH / 2 + 4.5 - (rows.length - 1) * 7;
+      g.appendChild(text(CX, y0, nd.text, 'fl-nodelabel', 14));
+      part(g, nd); svg.appendChild(g);
+    });
+    spans.forEach(function (sp) {
+      var g = el('g', {class: 'fl-span'}), row = sp.row || 0, x = X0 + NW + 12 + row * 82;
+      var ya = ytop(sp.from), yb = ytop(sp.to) + NH, ym = (ya + yb) / 2;
+      g.appendChild(el('path', {d: 'M' + (x - 6) + ' ' + ya + ' H' + x + ' V' + yb + ' H' + (x - 6) + ' M' + x + ' ' + ym + ' h5', class: 'fl-brace'}));
+      if (sp.label) { var rows = lines(sp.label); g.appendChild(text(x + 10, ym + 4 - (rows.length - 1) * 6.5, sp.label, 'fl-bracelabel', 13, 'start')); }
       part(g, sp); svg.appendChild(g);
     });
     var fig = h('figure', 'sdg-flowfig'); fig.appendChild(svg);

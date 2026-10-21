@@ -1,4 +1,4 @@
-# Engine reference — `engine/sd-graph.js` v2.59
+# Engine reference — `engine/sd-graph.js` v2.60
 
 Written from the engine source. The conversion prompt carries a shorter version
 of this in its own "Engine reference" section; that one is what the model needs
@@ -257,6 +257,27 @@ what a step changes (`check_file.py` counts `loops`).
 The ring is a fixed 420 × 322 layout: four boxes, two legs a side, and a
 label of up to four short lines at each corner. A fifth node or a third loop
 is a new feature, not a config.
+
+**v2.60**, from the MAR3023 channels chapter: `vertical: true` stacks the
+chain top to bottom -- the marketing-channel figures run that way, and the
+prose beside them says "upstream" and "downstream" -- with a link's name to
+the left of its arrow and `spans` drawn as braces down the right, named
+beside them and stacking outward by `row` ("Supplier network" and
+"Marketing channel" in row 0, "Supply Chain" over both in row 1). `changes`
+are not drawn in this layout. In the horizontal chain a span takes
+`brace: true` for the same bracket drawn over a run of boxes, a link takes
+`style: "arrow"` for a plain arrow where the chain motif would say the
+wrong thing (the old "pipeline" view of a channel) and `size` to set its
+name larger (the `+` between a value-added chain's links), and a node's
+name wider than its box is set smaller rather than clipped.
+
+```json
+{"flow": {"vertical": true, "nodes": ["Supplier", "Manufacturer", "Consumer"],
+          "links": ["Raw\nmaterials/parts", "Finished\nproducts"],
+          "spans": [{"from": 0, "to": 1, "label": "Supplier\nnetwork", "at": 1},
+                    {"from": 1, "to": 2, "label": "Marketing\nchannel", "at": 2},
+                    {"from": 0, "to": 2, "label": "Supply\nChain", "row": 1, "at": 3}]}}
+```
 
 ### `axes`
 

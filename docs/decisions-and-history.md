@@ -927,3 +927,30 @@ and nothing else stays an image.
 The phone check reports the same sideways scroll on these files as before
 (source tables and a source `<div>`), and the PPF Full's untappable buttons
 at 320px are in the delivered file from October too.
+
+## 2026-10-21 -- MAR3023 chapter 15 (channels): ten images, none left (v2.60)
+
+Ian asked for the chapter's images "as html / sdg" and the TOC fixed. Five
+of the ten are chain diagrams and became `flow` widgets; the engine grew a
+vertical layout for them, because the figures run top to bottom and the
+prose beside them says "upstream" and "downstream" -- a horizontal chain
+would have contradicted the page. The supply-chain figure's three braces
+are `spans` drawn as brackets, arriving one per step. The old "pipeline"
+view takes plain-arrow links and the value-added chain the chain motif with
+a `+` between links, which is the figure's own argument.
+
+The other five are not chains and are static HTML: the old-system /
+cross-docking pair as two inline SVG panels drawn on the prose's own
+numbers (four manufacturers and three stores, twelve routes against seven;
+the picture shows three and three), the coverage spectrum as one SVG
+arrow, the wholesaler matrix as a table, and the channel-conflict tree as
+an SVG. These are drawings rather than widgets, placed through
+`apply_widgets.py`'s `{"html": block}` entries with their stylesheet riding
+in the first block, the way the chapter's own video section carries its
+`<style>` in the body. The head's `content/sn25-v5.js` became the live
+`studyguide/sn25-v2.js` (the TOC).
+
+Left as they are, and flagged: the source's `<u>` on the BOPUS/BORIS
+letters, the checker's "recording" hit on "a ledger for recording
+transactions" (a word, not a source), and the franchising table that
+scrolls a phone sideways.
