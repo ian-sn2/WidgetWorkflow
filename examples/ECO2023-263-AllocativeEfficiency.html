@@ -17,7 +17,7 @@
     <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>
 <style>
-.sdg { --navy:#002060; --ink:#1c2a44; --red:#d62828; --teal:#1a8a8a; --orange:#d8641c; --grey:#8a94a6; --rule:#c9d2e3; --paper:#f6f8fc; --plot:#eef3fd; --fig:580px;
+.sdg { --navy:#002060; --ink:#1c2a44; --red:#d62828; --teal:#1a8a8a; --orange:#d8641c; --grey:#8a94a6; --gold:#c9a633; --rule:#c9d2e3; --paper:#f6f8fc; --plot:#eef3fd; --fig:580px;
   font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; color:var(--ink);
   border:1px solid var(--navy); background:var(--paper); padding:18px 20px 16px; width:80%; margin:24px auto;
   container:sdg / inline-size; }
@@ -365,7 +365,7 @@
 .sdg .fl-chainhead { fill:#6f6f6f; stroke:#6f6f6f; stroke-width:1; stroke-linejoin:round; }
 </style>
 <script>
-/* ===== sd-graph.js v2.63 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.64 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)
@@ -378,7 +378,8 @@
         xmin/ymin (v2.63) put the plot's corner somewhere other than 0: a scatter of GPAs from 2.9 to 3.9, a profit that goes negative
         x, y = axis titles, default 'Q' and 'P'. A word or two fits; they are never wrapped.
      curves[]: {id, label, pts:[[q,p],...], color, at, until, from, arrowP, shiftArrow, curved, thin, leader, dashed, lstart, ldx, ldy}
-     areas[]:  {pts:[[q,p],...], label, boxed, color, edge, lp, ldx, ldy, at, until}   a shaded polygon under the curves (CS, PS, deadweight loss)
+     areas[]:  {pts:[[q,p],...], label, boxed, color, edge, opacity, lp, ldx, ldy, at, until}   a shaded polygon under the curves (CS, PS, deadweight loss)
+        opacity (v2.64) overrides the .18 wash, for a body the source prints solid; color 'gold' (v2.64) is the UCF theme's; a move's color is honoured (v2.64)
         label wraps on \n; boxed:true gives it a white box so it can be read over the curves crossing its shape
         lstart = put the curve label at the first point instead of the last; ldx/ldy nudge it
         label:"" draws no label at all (a lone PPF needs none); omitting label falls back to the id
@@ -421,7 +422,7 @@
 */
 (function () {
   var NS = 'http://www.w3.org/2000/svg';
-  var C = {ink: 'var(--ink)', red: 'var(--red)', teal: 'var(--teal)', orange: 'var(--orange)', grey: 'var(--grey)', navy: 'var(--navy)'};
+  var C = {ink: 'var(--ink)', red: 'var(--red)', teal: 'var(--teal)', orange: 'var(--orange)', grey: 'var(--grey)', navy: 'var(--navy)', gold: 'var(--gold)'};
   function col(c) { return C[c || 'ink']; }
   function el(tag, a, text) { var e = document.createElementNS(NS, tag); for (var k in a) if (a[k] != null) e.setAttribute(k, a[k]); if (text != null) e.textContent = text; return e; }
   // A word subscript -- S_{Market}, d_{Firm} = MR -- set smaller and lighter
@@ -642,8 +643,11 @@
       // the same wash and read as a single blob without a line between them.
       // The stroke goes in a style attribute because the sheet sets
       // stroke:none on .area, and a rule beats a presentation attribute.
+      // opacity (v2.64): a body the source prints solid -- the UCF gold
+      // bell with its white tails -- is a wash at .18 and reads as nothing.
       grp.appendChild(el('polygon', {class: 'area', fill: cc,
-        style: a.edge ? 'stroke:' + cc + ';stroke-width:1.6;stroke-opacity:1' : null,
+        style: ((a.edge ? 'stroke:' + cc + ';stroke-width:1.6;stroke-opacity:1;' : '') +
+                (a.opacity != null ? 'opacity:' + a.opacity : '')) || null,
         points: a.pts.map(function (p) { return X(p[0]) + ',' + Y(p[1]); }).join(' ')}));
       if (a.label) {
         var lgrp = el('g', {class: 'area-g'});
@@ -939,6 +943,9 @@
       var x1 = X(m.from[0]), y1 = Y(m.from[1]), x2 = X(m.to[0]), y2 = Y(m.to[1]);
       var off = m.offset != null ? m.offset : 14, len = Math.hypot(x2 - x1, y2 - y1), nx = -(y2 - y1) / len * off, ny = (x2 - x1) / len * off;
       var a = arrow(x1 + nx, y1 + ny, x2 + nx, y2 + ny, col(m.color), 'mv');
+      // The sheet paints every movement arrow red; a colour the config names
+      // has to beat that rule (v2.64), for a leader drawn in the theme's ink.
+      if (m.color) a.setAttribute('style', 'stroke:' + col(m.color));
       g.appendChild(a); reg(a, m);
     });
 

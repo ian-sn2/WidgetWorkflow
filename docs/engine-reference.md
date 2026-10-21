@@ -1,4 +1,4 @@
-# Engine reference — `engine/sd-graph.js` v2.63
+# Engine reference — `engine/sd-graph.js` v2.64
 
 Written from the engine source. The conversion prompt carries a shorter version
 of this in its own "Engine reference" section; that one is what the model needs
@@ -458,6 +458,12 @@ pixel apart. `scripts/check_file.py` tests for this.
   a schedule row already highlighted its dots.
 
 ### `areas`
+
+**v2.64:** `opacity` on an area overrides the sheet's .18 wash (a body the
+source prints solid, such as the UCF gold bell whose tails are left pale);
+`color: "gold"` is the UCF theme's gold (`--gold`, #c9a633), usable on
+areas, curves, points and moves; and a `moves[]` arrow with a `color`
+is drawn in it, where the sheet used to paint every movement arrow red.
 
 ```json
 {"pts": [[0,11],[0,21],[8,11]], "label": "CS", "color": "teal", "at": 2}

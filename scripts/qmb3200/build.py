@@ -41,8 +41,8 @@ bell_mu_sigma = {
     "title": "The Normal Distribution",
     "axes": BELL_AX,
     "curves": [{"id": "f", "label": "", "pts": B, "curved": True}],
-    "areas": [{"pts": under(B), "color": "orange", "label": ""}],
-    "moves": [{"from": [MU - 1, 61], "to": [MU - SIG + 1, 61], "color": "ink", "offset": 0}, {"from": [MU + 1, 61], "to": [MU + SIG - 1, 61], "color": "ink", "offset": 0}],
+    "areas": [{"pts": under(B), "color": "gold", "opacity": 0.55, "label": ""}],
+    "moves": [{"from": [MU - 1, 61], "to": [MU - SIG + 2.5, 61], "color": "ink", "offset": 0}, {"from": [MU + 1, 61], "to": [MU + SIG - 2.5, 61], "color": "ink", "offset": 0}],
     "points": [{"q": MU, "p": 0, "dot": False, "guides": False, "showP": False, "ql": "μ"},
                {"q": MU, "p": 66, "dot": False, "label": "σ", "dx": -4, "dy": 0, **NOPT}],
     "caption": cap("The curve is symmetric about its mean μ, and its width is set by the standard deviation σ. The total area under it is 1."),
@@ -54,7 +54,7 @@ def sd_labels():
     return out
 def band(k, y, text, at):
     x1, x2 = MU - k * SIG, MU + k * SIG
-    return ({"pts": under(B, x1, x2), "color": "orange", "label": "", "at": at},
+    return ({"pts": under(B, x1, x2), "color": "gold", "opacity": 0.22, "label": "", "at": at},
             [{"from": [MU - 3, y], "to": [x1 + 1, y], "color": "ink", "offset": 0, "at": at},
              {"from": [MU + 3, y], "to": [x2 - 1, y], "color": "ink", "offset": 0, "at": at}],
             {"q": MU, "p": y, "dot": False, "label": text, "dx": -17, "dy": -7, "boxed": True, "at": at, **NOPT})
@@ -74,11 +74,11 @@ empirical = {
 def three_curves(labels, title, caption):
     return {"title": title, "axes": BELL_AX,
             "curves": [{"id": "inf", "label": "", "pts": bell(sig=10, peak=100), "curved": True},
-                       {"id": "ten", "label": "", "pts": bell(sig=13, peak=77), "curved": True, "color": "teal"},
-                       {"id": "four", "label": "", "pts": bell(sig=17, peak=59), "curved": True, "color": "orange"}],
+                       {"id": "ten", "label": "", "pts": bell(sig=13, peak=77), "curved": True, "color": "gold"},
+                       {"id": "four", "label": "", "pts": bell(sig=17, peak=59), "curved": True, "color": "grey"}],
             "points": [{"q": 84, "p": 100, "dot": False, "label": labels[0], **NOPT},
-                       {"q": 84, "p": 88, "dot": False, "label": labels[1], "color": "teal", **NOPT},
-                       {"q": 84, "p": 76, "dot": False, "label": labels[2], "color": "orange", **NOPT}],
+                       {"q": 84, "p": 88, "dot": False, "label": labels[1], "color": "gold", **NOPT},
+                       {"q": 84, "p": 76, "dot": False, "label": labels[2], "color": "grey", **NOPT}],
             "caption": cap(caption)}
 sampling = three_curves(["n = ∞ (n > 30)", "n = 10", "n = 4"], "Sampling Distributions of the Sample Mean",
                         "The larger the sample, the tighter the sampling distribution of the sample mean around μ and the closer it comes to the normal curve.")
@@ -89,9 +89,9 @@ ci = {
     "title": "A 95% Confidence Interval",
     "axes": {"x": " ", "y": " ", "xmax": 110, "ymax": 112, "bg": False},
     "curves": [{"id": "f", "label": "", "pts": B, "curved": True}],
-    "areas": [{"pts": under(B, MU - Z * SIG, MU + Z * SIG), "color": "orange", "label": ".9500", "lp": [MU, 40]},
-              {"pts": under(B, None, MU - Z * SIG), "color": "teal", "label": ""},
-              {"pts": under(B, MU + Z * SIG, None), "color": "teal", "label": ""}],
+    "areas": [{"pts": under(B, MU - Z * SIG, MU + Z * SIG), "color": "gold", "opacity": 0.55, "label": ".9500", "lp": [MU, 40]},
+              {"pts": under(B, None, MU - Z * SIG), "color": "gold", "opacity": 0.22, "label": ""},
+              {"pts": under(B, MU + Z * SIG, None), "color": "gold", "opacity": 0.22, "label": ""}],
     "points": [{"q": MU - Z * SIG, "p": 0, "dot": False, "guides": False, "showP": False, "ql": "−z_{α/2}"},
                {"q": MU + Z * SIG, "p": 0, "dot": False, "guides": False, "showP": False, "ql": "z_{α/2}"},
                {"q": MU, "p": 0, "dot": False, "guides": False, "showP": False, "ql": "p\u0305"},
@@ -103,19 +103,22 @@ def rejection(title, tails, caption):
     """tails: list of (side, label) with side 'lo' or 'hi'"""
     zc = 1.645 if len(tails) == 1 else Z
     areas, pts = [], [{"q": MU, "p": 106, "dot": False, "guides": "q", "showP": False, "ql": "μ₀"}]
+    moves = []
     lo, hi = None, None
     for side, lab in tails:
         if side == "lo":
             lo = MU - zc * SIG
-            areas.append({"pts": under(B, None, lo), "color": "red", "label": ""})
-            pts.append({"q": MU - 3.4 * SIG, "p": 40, "dot": False, "label": lab, "dx": 0, "dy": 0, **NOPT})
+            areas.append({"pts": under(B, None, lo), "color": "gold", "opacity": 0.22, "label": ""})
+            pts.append({"q": MU - 3.4 * SIG, "p": 44, "dot": False, "label": lab, "dx": 0, "dy": 0, **NOPT})
+            moves.append({"from": [MU - 3.0 * SIG, 34], "to": [MU - 2.5 * SIG, 10], "color": "ink", "offset": 0})
         else:
             hi = MU + zc * SIG
-            areas.append({"pts": under(B, hi, None), "color": "red", "label": ""})
-            pts.append({"q": MU + 1.9 * SIG, "p": 40, "dot": False, "label": lab, "dx": 0, "dy": 0, **NOPT})
-    areas.insert(0, {"pts": under(B, lo, hi), "color": "orange", "label": ""})
+            areas.append({"pts": under(B, hi, None), "color": "gold", "opacity": 0.22, "label": ""})
+            pts.append({"q": MU + 1.9 * SIG, "p": 44, "dot": False, "label": lab, "dx": 0, "dy": 0, **NOPT})
+            moves.append({"from": [MU + 2.6 * SIG, 34], "to": [MU + 2.25 * SIG, 11], "color": "ink", "offset": 0})
+    areas.insert(0, {"pts": under(B, lo, hi), "color": "gold", "opacity": 0.55, "label": ""})
     return {"title": title, "axes": {"x": "hypothesized\nmean", "y": " ", "xmax": 110, "ymax": 112, "bg": False},
-            "curves": [{"id": "f", "label": "", "pts": B, "curved": True}], "areas": areas, "points": pts, "caption": cap(caption)}
+            "curves": [{"id": "f", "label": "", "pts": B, "curved": True}], "areas": areas, "points": pts, "moves": moves, "caption": cap(caption)}
 reject_two = rejection("A Two-Tailed Test", [("lo", "rejection\nregion α/2"), ("hi", "rejection\nregion α/2")],
                        "H₀ is rejected if the sample value falls in either tail; each rejection region holds α/2 of the distribution.")
 reject_lower = rejection("A Lower-Tail Test", [("lo", "rejection\nregion α")],
@@ -123,7 +126,7 @@ reject_lower = rejection("A Lower-Tail Test", [("lo", "rejection\nregion α")],
 reject_upper = rejection("An Upper-Tail Test", [("hi", "rejection\nregion α")],
                          "The whole of α sits in the upper tail, so the critical value is less extreme than a two-tailed test's.")
 def scen(w, label):
-    sc = {k: w[k] for k in ("areas", "points", "caption")}; sc["label"] = label; return sc
+    sc = {k: w[k] for k in ("areas", "points", "moves", "caption")}; sc["label"] = label; return sc
 reject_scen = {"title": "Rejection Regions", "lede": "Pick the form of the alternative hypothesis.",
                "axes": reject_two["axes"], "curves": reject_two["curves"],
                "scenarios": {"two": scen(reject_two, "Two-Tailed"), "lower": scen(reject_lower, "Lower-Tail"), "upper": scen(reject_upper, "Upper-Tail")}}
@@ -171,12 +174,12 @@ def yhat(x_thousands): return B1 * x_thousands * 1000 + B0
 assert round(yhat(55.75), 2) == 143.79
 HR_AX = {"x": "\nMedian Annual Income ($ thousands)", "y": "Monthly Revenue ($ millions)", "xmax": 90, "ymax": 200,
          "xticks": [10, 20, 30, 40, 50, 60, 70, 80, 90], "yticks": [50, 100, 150, 200], "grid": True, "bg": False}
-hr_line = {"id": "fit", "label": "", "pts": [[10, round(yhat(10), 2)], [85, round(yhat(85), 2)]], "dashed": True, "thin": True, "color": "teal"}
+hr_line = {"id": "fit", "label": "", "pts": [[10, round(yhat(10), 2)], [85, round(yhat(85), 2)]], "dashed": True, "thin": True, "color": "gold"}
 hardrock = {"title": "Median Annual Income and Monthly Revenue at 10 Hard Rock Cafe Locations",
-            "axes": HR_AX, "curves": [hr_line], "points": dots([(x, y) for _, x, y in HR], "teal"),
+            "axes": HR_AX, "curves": [hr_line], "points": dots([(x, y) for _, x, y in HR]),
             "caption": cap("Each dot is one location; the dotted line is the least-squares line through them, rising with income.")}
 hardrock_pred = {"title": "A Predicted Value on the Line", "axes": HR_AX, "curves": [hr_line],
-                 "points": dots([(x, y) for _, x, y in HR], "teal") + [{"q": 55.75, "p": 143.79, "color": "red", "guides": False, "showP": False, "showQ": False,
+                 "points": dots([(x, y) for _, x, y in HR]) + [{"q": 55.75, "p": 143.79, "color": "red", "guides": False, "showP": False, "showQ": False,
                                                                        "label": "($55,750,\n$143.79 million)", "dx": 10, "dy": 18, "at": 1}],
                  "steps": [cap("The ten locations and the fitted line ŷ = 0.00189x + 38.4233."),
                            cap("At a median income of $55,750 the line predicts $143.79 million, so the predicted point sits exactly on it.")]}
@@ -193,11 +196,11 @@ for x0 in (30, 50):
     y0 = line_y(x0); L = lobe(x0, y0)
     err_curves.append({"id": "stem%d" % x0, "label": "", "pts": [[x0, y0 - 24], [x0, y0 + 24]], "thin": True})
     err_curves.append({"id": "lobe%d" % x0, "label": "", "pts": L, "curved": True, "thin": True})
-    err_areas.append({"pts": [[x0, y0]] + [p for p in L if p[1] <= y0 + 1e-9][::-1] + [[x0, y0 - 22]], "color": "orange", "label": ""})
+    err_areas.append({"pts": [[x0, y0]] + [p for p in L if p[1] <= y0 + 1e-9][::-1] + [[x0, y0 - 22]], "color": "gold", "opacity": 0.45, "label": ""})
     err_pts.append({"q": x0, "p": y0, "guides": False, "showP": False, "ql": "$%d" % x0})
 error_dist = {"title": "Error Probability Distributions",
               "axes": {"x": "\nMedian Annual Income ($ thousands)", "y": "Monthly Revenue ($ millions)", "xmax": 100, "ymax": 100, "bg": False},
-              "curves": [{"id": "line", "label": "", "pts": [[8, line_y(8)], [92, line_y(92)]], "color": "orange"}] + err_curves,
+              "curves": [{"id": "line", "label": "", "pts": [[8, line_y(8)], [92, line_y(92)]], "color": "gold"}] + err_curves,
               "areas": err_areas,
               "points": err_pts + [{"q": 62, "p": 22, "dot": False, "label": "Error probability\ndistributions", "dx": 0, "dy": 0, **NOPT}],
               "caption": cap("At every income the actual revenue scatters around the line's value, with the same bell-shaped spread and a mean of zero.")}
@@ -210,10 +213,10 @@ assert len(GRE) == 30
 gre_two = {"title": "GRE Score Against Each Predictor", "link": False,
            "panels": [{"heading": "GPA", "axes": {"x": "GPA", "y": "GRE Score", "xmin": 2.8, "xmax": 4.0, "ymin": 240, "ymax": 325,
                                                    "xticks": [3.0, 3.2, 3.4, 3.6, 3.8], "yticks": [260, 280, 300, 320], "bg": False},
-                       "points": dots([(g, s) for g, h, s in GRE], "teal")},
+                       "points": dots([(g, s) for g, h, s in GRE])},
                       {"heading": "Cumulative Study Hours", "axes": {"x": "Study Hours", "y": "GRE Score", "xmin": 50, "xmax": 105, "ymin": 240, "ymax": 325,
                                                                       "xticks": [60, 70, 80, 90], "yticks": [260, 280, 300, 320], "bg": False},
-                       "points": dots([(h, s) for g, h, s in GRE], "teal")}],
+                       "points": dots([(h, s) for g, h, s in GRE])}],
            "caption": cap("The hours plot is the tighter of the two, which is why study hours turns out the stronger predictor.")}
 
 # ---------------------------------------------------------------- Part 3
@@ -222,21 +225,21 @@ def quad(x): return -1.0443 * x * x + 12.952 * x - 26.483
 QC = [[round(x / 4, 2), round(quad(x / 4), 2)] for x in range(0, 42)]
 parabola = {"title": "Output and Profit", "axes": {"x": "\nOutput (1000s)", "y": "Profit (1000s)", "xmax": 12, "ymin": -30, "ymax": 28, "cross": [0, 0],
                                                    "xticks": [2, 4, 6, 8, 10, 12], "yticks": [-30, -20, -10, 10, 20], "bg": False},
-            "curves": [{"id": "q", "label": "", "pts": QC, "curved": True, "color": "teal"}],
-            "points": dots(PROFIT, "teal") + [{"q": 5.2, "p": 25, "dot": False, "label": "y = −1.0443x² + 12.952x − 26.483", "dx": 0, "dy": 0, **NOPT}],
+            "curves": [{"id": "q", "label": "", "pts": QC, "curved": True, "color": "gold"}],
+            "points": dots(PROFIT) + [{"q": 5.2, "p": 25, "dot": False, "label": "y = −1.0443x² + 12.952x − 26.483", "dx": 0, "dy": 0, **NOPT}],
             "caption": cap("Profit rises with output, peaks near 6,000 units and falls again, so a downward-opening parabola fits where a line cannot.")}
 CUST = [(1, 520.2), (2, 540.3), (3, 550.6), (4, 570.1), (5, 600.55), (6, 608.52)]
 C_AX = {"x": "\nPeriod", "y": "Customers (thousands)", "xmin": 0.5, "xmax": 7.5, "ymin": 500, "ymax": 620, "xticks": [1, 2, 3, 4, 5, 6, 7],
         "yticks": [500, 520, 540, 560, 580, 600, 620], "grid": True, "bg": False}
 customers = {"title": "Number of Customers Over Time", "axes": C_AX,
-             "curves": [{"id": "c", "label": "", "pts": [list(p) for p in CUST], "curved": True, "color": "teal"}],
-             "points": dots(CUST, "teal"),
+             "curves": [{"id": "c", "label": "", "pts": [list(p) for p in CUST], "curved": True, "color": "gold"}],
+             "points": dots(CUST),
              "caption": cap("Customers rose every period from 520,200 in period 1 to 608,520 in period 6, an upward trend a line can summarise.")}
 def trend(x): return 18.339 * x + 500.86
 customers_trend = {"title": "Number of Customers Over Time, With a Trendline", "axes": C_AX,
-                   "curves": [{"id": "c", "label": "", "pts": [list(p) for p in CUST], "curved": True, "color": "teal"},
+                   "curves": [{"id": "c", "label": "", "pts": [list(p) for p in CUST], "curved": True, "color": "gold"},
                               {"id": "t", "label": "", "pts": [[1, round(trend(1), 2)], [6, round(trend(6), 2)]], "dashed": True, "color": "red", "at": 1}],
-                   "points": dots(CUST, "teal") + [{"q": 4.3, "p": 548, "dot": False, "label": "y = 18339x + 500860", "dx": 0, "dy": 0, "color": "red", "at": 1, **NOPT}],
+                   "points": dots(CUST) + [{"q": 4.3, "p": 548, "dot": False, "label": "y = 18339x + 500860", "dx": 0, "dy": 0, "color": "red", "at": 1, **NOPT}],
                    "steps": [cap("The six periods of customer counts, joined in order."),
                              cap("The fitted trendline y = 18339x + 500860 tracks the series closely, with small period-to-period variations either side of it.")]}
 

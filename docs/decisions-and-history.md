@@ -969,3 +969,12 @@ two numbers. The Excel screenshots became HTML tables in Excel's layout
 (class `financial`, the highlighted cells outlined in the screenshot's
 colours, the annotations as small notes beside the value), a shape worth
 reusing for any regression-output image. Build: `scripts/qmb3200/`.
+
+**Same day, v2.64 — UCF theme colours.** Ian: "most of the UCF things are
+colored in their theme colors, aka gold white and black", and a gradient of
+those rather than pure black. The source draws a rejection-region figure as
+a solid gold bell with a white tail and a black leader arrow to it. The
+engine had no gold, washed every area at .18 and painted every movement
+arrow red by stylesheet, so: `gold` in the palette, `opacity` on an area,
+and a `moves` colour that beats the sheet. The QMB3200 set uses gold at two
+opacities (body .55, tail .22) with ink curves and ink leaders.

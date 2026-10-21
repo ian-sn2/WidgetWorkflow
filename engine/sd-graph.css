@@ -1,4 +1,4 @@
-.sdg { --navy:#002060; --ink:#1c2a44; --red:#d62828; --teal:#1a8a8a; --orange:#d8641c; --grey:#8a94a6; --rule:#c9d2e3; --paper:#f6f8fc; --plot:#eef3fd; --fig:580px;
+.sdg { --navy:#002060; --ink:#1c2a44; --red:#d62828; --teal:#1a8a8a; --orange:#d8641c; --grey:#8a94a6; --gold:#c9a633; --rule:#c9d2e3; --paper:#f6f8fc; --plot:#eef3fd; --fig:580px;
   font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; color:var(--ink);
   border:1px solid var(--navy); background:var(--paper); padding:18px 20px 16px; width:80%; margin:24px auto;
   container:sdg / inline-size; }
