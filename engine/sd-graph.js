@@ -1,4 +1,4 @@
-/* ===== sd-graph.js v2.60 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.61 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)
@@ -1085,8 +1085,11 @@
       if (l.style === 'arrow') {
         g.appendChild(el('path', {d: headed(CX, y1 + 2, CX, y2 - 2), class: 'fl-arrow'}));
       } else {
-        g.appendChild(el('line', {x1: CX, y1: y1, x2: CX, y2: y2}));
-        [0.25, 0.5, 0.75].forEach(function (t) { g.appendChild(el('rect', {x: CX - 2.6, y: y1 + GAP * t - 4.5, width: 5.2, height: 9, rx: 2.6})); });
+        // the chain motif with a head at its foot (v2.61): a chain alone
+        // reads as a two-way join, and these channels run one way, down
+        g.appendChild(el('line', {x1: CX, y1: y1, x2: CX, y2: y2 - 8}));
+        g.appendChild(el('path', {d: 'M' + (CX - 7) + ' ' + (y2 - 10) + ' L' + CX + ' ' + (y2 - 1) + ' L' + (CX + 7) + ' ' + (y2 - 10) + ' Z', class: 'fl-chainhead'}));
+        [0.2, 0.42, 0.64].forEach(function (t) { g.appendChild(el('rect', {x: CX - 2.6, y: y1 + GAP * t - 4.5, width: 5.2, height: 9, rx: 2.6})); });
       }
       if (l.text) { var rows = lines(l.text); g.appendChild(text(CX - 14, (y1 + y2) / 2 + 4 - (rows.length - 1) * 5.5, l.text, 'fl-linklabel', 11, 'end')); }
       part(g, l); svg.appendChild(g);
