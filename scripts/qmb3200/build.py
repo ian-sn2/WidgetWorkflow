@@ -2,8 +2,8 @@
 """QMB3200 (UCF, StudyKnight): every image that is a drawing or a table becomes
 an sd-graph figure or HTML. Writes maps/<chapter>.json for apply_widgets.py,
 keyed by the image file names of both the Exam 1 and the Exam 2 folders."""
-import json, math, os, pathlib
-HERE = pathlib.Path(os.environ.get("QMB_WORK", pathlib.Path(__file__).resolve().parent))
+import json, math, pathlib
+HERE = pathlib.Path(__file__).resolve().parent
 MAPS = HERE / "maps"; MAPS.mkdir(exist_ok=True)
 
 def cap(s, n=200):
@@ -234,7 +234,7 @@ customers_trend = {"title": "Number of Customers Over Time, With a Trendline", "
 CSS = """<style>
   .sk-fig { margin: 18px auto; max-width: 640px; }
   .sk-fig svg { display: block; width: 100%; height: auto; font-family: 'Red Hat Display', sans-serif; }
-  .sk-fig-venn { max-width: 300px; }
+  .sk-fig-venn { max-width: 230px; margin: 14px auto; }
   .sk-fig-right { float: right; width: 42%; max-width: 300px; margin: 0 0 10px 20px; }
   .xl { border-collapse: collapse; margin: 18px auto; font-size: 0.9em; font-family: 'Red Hat Display', sans-serif; background: #fff; max-width: 100%; }
   .xl th, .xl td { padding: 4px 10px; border: 0; text-align: right; white-space: nowrap; }
@@ -278,7 +278,7 @@ def venn(union):
                  '<text x="100" y="120" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2a44">A</text>'
                  '<text x="222" y="120" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2a44">A’</text>')
         lab = "Sample space S holding a circle A; everything outside the circle is its complement A prime"
-    return f'<figure class="sk-fig sk-fig-venn sk-fig-right"><svg viewBox="0 0 300 190" role="img" aria-label="{lab}">{body}</svg></figure>'
+    return f'<figure class="sk-fig sk-fig-venn"><svg viewBox="0 0 300 190" role="img" aria-label="{lab}">{body}</svg></figure>'
 VENN_COMP, VENN_UNION = venn(False), venn(True)
 CORR_LINE = ('<figure class="sk-fig"><svg viewBox="0 0 600 120" role="img" aria-label="A number line from minus one to one; the left half, toward minus one, is negative correlation and the right half, toward one, positive correlation">'
              '<defs><linearGradient id="skcl" x1="0" x2="1"><stop offset="0" stop-color="#f4a3a3"/><stop offset="0.5" stop-color="#f4f4f4"/><stop offset="1" stop-color="#a9cdf3"/></linearGradient></defs>'

@@ -1,6 +1,6 @@
 set -u
 S=${QMB_WORK:?set QMB_WORK to the folder holding src/ (the unpacked zip), maps/ and deliver/}
-D="$S/deliver/e - QMB3200 Widgets"; rm -rf "$D"; mkdir -p "$D"
+D="$S/deliver/e - QMB3200 Widgets"; find "$D" -name "*.html" -delete 2>/dev/null; mkdir -p "$D"
 for exam in 1 2; do for part in 1 2 3; do
   src="$S/src/e - QMB3200/Exam $exam - DONE/0$part - QMB3200 UCF Exam $exam Part $part - DONE"
   out="$D/Exam $exam/0$part - QMB3200 UCF Exam $exam Part $part"; mkdir -p "$out"
