@@ -138,30 +138,38 @@ def strip_band(pts, slope, c1, c2):
     for c in (c1, c2):
         xs = [x for x in (2, 104) ]
         seg = []
-        for x in range(2, 105, 2):
+        for x in range(2, 117, 2):
             y = slope * x + c
-            if 2 <= y <= 104: seg.append([x, round(y, 1)])
+            if 2 <= y <= 146: seg.append([x, round(y, 1)])
         out.append({"id": "b%g" % c, "label": "", "pts": [seg[0], seg[-1]], "dashed": True, "thin": True, "color": "grey"})
     return out
 SP = [[10, 14], [18, 22], [24, 20], [30, 36], [36, 40], [42, 50], [48, 56], [50, 46], [56, 62], [62, 68], [70, 66], [76, 80], [84, 86], [90, 92]]
 WP = [[12, 44], [16, 62], [22, 30], [30, 70], [34, 52], [38, 24], [46, 60], [50, 42], [56, 84], [62, 36], [68, 70], [76, 50], [84, 78], [90, 60]]
 SN = [[s[0], 104 - s[1]] for s in SP]
 WN = [[w[0], 104 - w[1]] for w in WP]
+def inside(pts, slope, c1, c2, margin=3):
+    """every point sits at least `margin` units inside both band lines"""
+    lo, hi = sorted((c1, c2))
+    for x, y in pts:
+        c = y - slope * x
+        assert lo + margin <= c <= hi - margin, (x, y, c, lo, hi)
+for _pts, _sl, _c1, _c2 in ((SP, 1, 14, -14), (WP, 1, 50, -34), (SN, -1, 118, 90), (WN, -1, 138, 54)):
+    inside(_pts, _sl, _c1, _c2)
 def sc_case(label, pts, slope, c1, c2, r, rx):
     return {"label": label, "curves": strip_band(pts, slope, c1, c2), "points": dots(pts),
             "caption": None}
 scatter4 = {
     "title": "Strong and Weak Correlations",
     "lede": "The tighter the band the points fall in, the closer r is to 1 or −1.",
-    "axes": {"x": "x", "y": "y", "xmax": 110, "ymax": 110, "bg": False},
+    "axes": {"x": "x", "y": "y", "xmax": 120, "ymax": 150, "bg": False},
     "scenarios": {
         "sp": {"label": "Strong positive", "curves": strip_band(SP, 1, 14, -14), "points": dots(SP) + [{"q": 72, "p": 40, "dot": False, "label": "r ≥ 0.7", **NOPT}],
                "caption": cap("The points hug a rising line, so r is close to 1: at least 0.7.")},
-        "wp": {"label": "Weak positive", "curves": strip_band(WP, 1, 40, -40), "points": dots(WP) + [{"q": 82, "p": 24, "dot": False, "label": "r ≤ 0.5", **NOPT}],
+        "wp": {"label": "Weak positive", "curves": strip_band(WP, 1, 50, -34), "points": dots(WP) + [{"q": 82, "p": 24, "dot": False, "label": "r ≤ 0.5", **NOPT}],
                "caption": cap("The points rise only loosely, so r is positive but small: no more than 0.5.")},
         "sn": {"label": "Strong negative", "curves": strip_band(SN, -1, 118, 90), "points": dots(SN) + [{"q": 72, "p": 70, "dot": False, "label": "r ≤ −0.7", **NOPT}],
                "caption": cap("The points hug a falling line, so r is close to −1: at most −0.7.")},
-        "wn": {"label": "Weak negative", "curves": strip_band(WN, -1, 144, 64), "points": dots(WN) + [{"q": 82, "p": 86, "dot": False, "label": "r ≥ −0.5", **NOPT}],
+        "wn": {"label": "Weak negative", "curves": strip_band(WN, -1, 138, 54), "points": dots(WN) + [{"q": 82, "p": 86, "dot": False, "label": "r ≥ −0.5", **NOPT}],
                "caption": cap("The points fall only loosely, so r is negative but small: no less than −0.5.")},
     },
 }
@@ -184,25 +192,27 @@ hardrock_pred = {"title": "A Predicted Value on the Line", "axes": HR_AX, "curve
                  "steps": [cap("The ten locations and the fitted line ŷ = 0.00189x + 38.4233."),
                            cap("At a median income of $55,750 the line predicts $143.79 million, so the predicted point sits exactly on it.")]}
 # error distributions: a lobe standing on the line at x = 30 and x = 50
-def lobe(x0, y0, spread=24, half=22, reach=28):
+def lobe(x0, y0, spread=20, half=20, reach=14):
     pts = []
     t = -half
     while t <= half + 1e-9:
         pts.append([round(x0 + reach * math.exp(-(t / (spread / 2.2)) ** 2), 2), round(y0 + t, 2)]); t += 2
     return pts
 def line_y(x): return 30 + 0.5 * x
-err_curves, err_areas, err_pts = [], [], []
-for x0 in (30, 50):
+err_curves, err_areas, err_pts, err_moves = [], [], [], []
+for x0, name, tail in ((28, "$30", [72, 29]), (62, "$50", [75, 35])):
     y0 = line_y(x0); L = lobe(x0, y0)
-    err_curves.append({"id": "stem%d" % x0, "label": "", "pts": [[x0, y0 - 24], [x0, y0 + 24]], "thin": True})
+    err_moves.append({"from": tail, "to": [x0 + 8, y0 - 9], "color": "ink", "offset": 0})
+    err_curves.append({"id": "stem%d" % x0, "label": "", "pts": [[x0, y0 - 22], [x0, y0 + 22]], "thin": True})
     err_curves.append({"id": "lobe%d" % x0, "label": "", "pts": L, "curved": True, "thin": True})
-    err_areas.append({"pts": [[x0, y0]] + [p for p in L if p[1] <= y0 + 1e-9][::-1] + [[x0, y0 - 22]], "color": "gold", "opacity": 0.45, "label": ""})
-    err_pts.append({"q": x0, "p": y0, "guides": False, "showP": False, "ql": "$%d" % x0})
+    err_areas.append({"pts": [[x0, y0]] + [p for p in L if p[1] <= y0 + 1e-9][::-1] + [[x0, y0 - 20]], "color": "gold", "opacity": 0.45, "label": ""})
+    err_pts.append({"q": x0, "p": y0, "guides": False, "showP": False, "ql": name})
 error_dist = {"title": "Error Probability Distributions",
               "axes": {"x": "\nMedian Annual Income ($ thousands)", "y": "Monthly Revenue ($ millions)", "xmax": 100, "ymax": 100, "bg": False},
               "curves": [{"id": "line", "label": "", "pts": [[8, line_y(8)], [92, line_y(92)]], "color": "gold"}] + err_curves,
               "areas": err_areas,
-              "points": err_pts + [{"q": 62, "p": 22, "dot": False, "label": "Error probability\ndistributions", "dx": 0, "dy": 0, **NOPT}],
+              "moves": err_moves,
+              "points": err_pts + [{"q": 73, "p": 30, "dot": False, "label": "Error probability\ndistributions", "dx": 2, "dy": 2, **NOPT}],
               "caption": cap("At every income the actual revenue scatters around the line's value, with the same bell-shaped spread and a mean of zero.")}
 
 # ---------------------------------------------------------------- GRE
