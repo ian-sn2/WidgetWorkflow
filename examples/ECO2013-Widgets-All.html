@@ -1361,16 +1361,17 @@
         // a pipe (v2.62): the old "pipeline" view's channel, a tube with a
         // dark open end, the way the figure draws what only passes goods along
         g.appendChild(el('rect', {x: x, y: top, width: widths[i], height: NH, rx: NH / 2}));
-        g.appendChild(el('ellipse', {cx: x + widths[i] - NH / 2, cy: top + NH / 2, rx: NH / 4.2, ry: NH / 2 - 1.5, class: 'fl-pipeend'}));
+        // the mouth is a full disc, the tube's whole height, as the figure draws it
+        g.appendChild(el('circle', {cx: x + widths[i] - NH / 2, cy: top + NH / 2, r: NH / 2 - 1.5, class: 'fl-pipeend'}));
       } else if (!nd.plain) g.appendChild(el('rect', {x: x, y: top, width: widths[i], height: NH, rx: 6}));
       var rows = lines(nd.text), lh = nd.plain ? 15 : 14, y0 = top + NH / 2 + 4.5 - (rows.length - 1) * lh / 2;
-      var t = text(cx(i) - (nd.pipe ? NH / 4 : 0), y0, nd.text, nd.plain ? 'fl-plainlabel' : 'fl-nodelabel', lh);
+      var t = text(cx(i) - (nd.pipe ? NH / 2 : 0), y0, nd.text, nd.plain ? 'fl-plainlabel' : 'fl-nodelabel', lh);
       // a name wider than its box is set smaller, never clipped (v2.60):
       // "Manufacturer" in a four-box chain is wider than a quarter of the row
       if (!nd.plain) {
         var widest = rows.reduce(function (m, r) { return Math.max(m, emw(r.replace(/_\{([^}]*)\}/g, '$1'))); }, 0) * 12.5;
         // an inline style, because the stylesheet's own font-size outranks a presentation attribute
-        var avail = nd.pipe ? widths[i] - NH - 10 : widths[i] - 14;   // a pipe's rounded ends and dark mouth take their own room
+        var avail = nd.pipe ? widths[i] - NH * 1.5 - 8 : widths[i] - 14;   // a pipe's rounded ends and dark mouth take their own room
         if (widest > avail) t.style.fontSize = Math.max(9, 12.5 * avail / widest).toFixed(1) + 'px';
       }
       g.appendChild(t);
