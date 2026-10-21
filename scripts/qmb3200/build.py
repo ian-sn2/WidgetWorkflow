@@ -23,9 +23,16 @@ def bell(mu=MU, sig=SIG, peak=100, lo=-3.6, hi=3.6, step=0.2):
             pts.append([round(x, 2), round(peak * math.exp(-k * k / 2), 2)])
         k += step
     return pts
+def _interp(pts, x):
+    for (xa, ya), (xb, yb) in zip(pts, pts[1:]):
+        if xa <= x <= xb:
+            return round(ya + (yb - ya) * (x - xa) / (xb - xa), 2)
+    raise ValueError(x)
 def under(pts, x1=None, x2=None):
-    """polygon under the bell between x1 and x2 (default whole)"""
-    sel = [p for p in pts if (x1 is None or p[0] >= x1 - 1e-9) and (x2 is None or p[0] <= x2 + 1e-9)]
+    """polygon under the bell between x1 and x2 (default whole), cut at exactly x1 and x2"""
+    sel = [p for p in pts if (x1 is None or p[0] > x1) and (x2 is None or p[0] < x2)]
+    if x1 is not None: sel = [[round(x1, 2), _interp(pts, x1)]] + sel
+    if x2 is not None: sel = sel + [[round(x2, 2), _interp(pts, x2)]]
     return [[sel[0][0], 0]] + sel + [[sel[-1][0], 0]]
 B = bell()
 BELL_AX = {"x": "x", "y": "f(x)", "xmax": 110, "ymax": 112, "bg": False}
@@ -87,7 +94,7 @@ ci = {
               {"pts": under(B, MU + Z * SIG, None), "color": "teal", "label": ""}],
     "points": [{"q": MU - Z * SIG, "p": 0, "dot": False, "guides": False, "showP": False, "ql": "−z_{α/2}"},
                {"q": MU + Z * SIG, "p": 0, "dot": False, "guides": False, "showP": False, "ql": "z_{α/2}"},
-               {"q": MU, "p": 0, "dot": False, "guides": False, "showP": False, "ql": "p̄"},
+               {"q": MU, "p": 0, "dot": False, "guides": False, "showP": False, "ql": "p\u0305"},
                {"q": MU - 2.8 * SIG, "p": 22, "dot": False, "label": "α/2", "dx": -6, "dy": 0, **NOPT},
                {"q": MU + 2.6 * SIG, "p": 22, "dot": False, "label": "α/2", "dx": -6, "dy": 0, **NOPT}],
     "caption": cap("The middle .9500 of the sampling distribution lies between the two critical z values; each shaded tail holds α/2 = .025."),
