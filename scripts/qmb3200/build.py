@@ -276,7 +276,7 @@ CSS = """<style>
   .xl .hl-orange { outline: 2px solid #d8641c; outline-offset: -2px; }
   .xl .hl-yellow { outline: 2px solid #e6c300; outline-offset: -2px; }
   .xl .hl-blue { outline: 2px solid #1a8ad6; outline-offset: -2px; }
-  .xl .note { display: block; font-size: 0.74em; font-weight: 700; color: #d62828; white-space: normal; max-width: 230px; margin-left: auto; line-height: 1.2; }
+  .xl .note { display: block; font-size: 0.74em; font-weight: 700; color: #d62828; white-space: normal; width: 200px; max-width: 100%; margin-left: auto; line-height: 1.2; }
   .xl .note.green { color: #2e8b57; } .xl .note.purple { color: #7a3e9d; } .xl .note.orange { color: #d8641c; } .xl .note.yellow { color: #a08900; } .xl .note.blue { color: #1a6fb0; }
   .xl-wrap { overflow-x: auto; }
   .xl-grid { border-collapse: collapse; margin: 18px auto; font-size: 0.9em; font-family: 'Red Hat Display', sans-serif; background: #fff; }
