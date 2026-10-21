@@ -1096,8 +1096,12 @@ def check_labels(cfgs, r):
                 yt_ttl = ax.get("y") or "P"
                 pw = X(float(ax.get("xmax") or 1)) - ox
                 _xw = len(str(xt_ttl).split("\n")) > 1
+                # a one-line title sits at the end of the axis line, which
+                # with axes.cross is inside the plot; a wrapped one below
+                # the tick row at the plot's foot (engine v2.65)
+                _axy = Y(float(ax["cross"][1])) if ax.get("cross") else oy
                 boxes.append((title_box(xt_ttl, ox + pw + 34,
-                                        oy + (36.0 if _xw else 16.0), "end"),
+                                        oy + 36.0 if _xw else _axy + 16.0, "end"),
                               "the %r axis title" % xt_ttl, (0, None)))
                 _yw = len(str(yt_ttl).split("\n")) > 1
                 boxes.append((title_box(yt_ttl,

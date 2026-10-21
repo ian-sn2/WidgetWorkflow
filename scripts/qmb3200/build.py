@@ -276,7 +276,7 @@ CSS = """<style>
   .xl .hl-orange { outline: 2px solid #d8641c; outline-offset: -2px; }
   .xl .hl-yellow { outline: 2px solid #e6c300; outline-offset: -2px; }
   .xl .hl-blue { outline: 2px solid #1a8ad6; outline-offset: -2px; }
-  .xl .note { font-size: 0.78em; font-weight: 700; color: #d62828; margin-left: 6px; }
+  .xl .note { display: block; font-size: 0.74em; font-weight: 700; color: #d62828; white-space: normal; max-width: 230px; margin-left: auto; line-height: 1.2; }
   .xl .note.green { color: #2e8b57; } .xl .note.purple { color: #7a3e9d; } .xl .note.orange { color: #d8641c; } .xl .note.yellow { color: #a08900; } .xl .note.blue { color: #1a6fb0; }
   .xl-wrap { overflow-x: auto; }
   .xl-grid { border-collapse: collapse; margin: 18px auto; font-size: 0.9em; font-family: 'Red Hat Display', sans-serif; background: #fff; }
@@ -384,6 +384,8 @@ P3_NAMES = {"01": ["qmb3200-final-p3-01-quadratic-parabola-output-profit-chart.p
             "03": ["qmb3200-final-p3-03-excel-regression-output-annotated.png", "brook03-qmb3200-finalpt3-04-excel-regression-output.png"],
             "04": ["qmb3200-final-p3-04-number-of-customers-over-time-with-trendline.png", "brook03-qmb3200-finalpt3-03-number-of-customers-trendline-chart.png"]}
 def build_map(cfgs, names, anchors, exam, concise_imgs):
+    # an anchor's `after` may differ per exam (the two Concise files word the exam tip differently)
+    anchors = [dict(a, after=a["after"][exam] if isinstance(a["after"], list) else a["after"]) for a in anchors]
     images = {}
     for k, cfg in cfgs.items():
         nm = names[k][exam] if len(names[k]) > 1 else names[k][0]
@@ -394,7 +396,7 @@ ANCH = {
     "Part1": [{"after": "<tr><td>μ ± 3σ</td><td>99.72%</td></tr>", "widget": empirical, "comment": "the empirical rule, after its table"}],
     "Part2": [{"after": "<h2>Test Statistics and Rejection Rules</h2>", "widget": reject_scen, "comment": "rejection regions, after the heading's table"},
               {"after": "r = −1: perfect negative; r = 0: no linear correlation; r = 1: perfect positive.</li>", "html": CSS + CORR_LINE, "comment": "the correlation number line"}],
-    "Part3": [{"after": "Y = 18{,}338.57(7) + 500{,}860 = 629{,}230 \\text{ customers}", "widget": customers_trend, "comment": "the trendline, after the forecast"}],
+    "Part3": [{"after": ["<h4>EXAM TIP: Trendline in Excel</h4>", "<h4>EXAM TIP: Excel Trendline</h4>"], "widget": customers_trend, "comment": "the trendline, after the exam tip, where the Full places its figure"}],
 }
 CONCISE_IMGS = {"Part1": set(), "Part2": set(), "Part3": {"qmb3200-final-p3-03-excel-regression-output-annotated.png", "brook03-qmb3200-finalpt3-04-excel-regression-output.png"}}
 for part, cfgs, names in (("Part1", P1, P1_NAMES), ("Part2", P2, P2_NAMES), ("Part3", P3, P3_NAMES)):

@@ -366,7 +366,7 @@
 .sdg .fl-chainhead { fill:#6f6f6f; stroke:#6f6f6f; stroke-width:1; stroke-linejoin:round; }
 </style>
 <script>
-/* ===== sd-graph.js v2.64 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.65 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)
@@ -380,6 +380,7 @@
         x, y = axis titles, default 'Q' and 'P'. A word or two fits; they are never wrapped.
      curves[]: {id, label, pts:[[q,p],...], color, at, until, from, arrowP, shiftArrow, curved, thin, leader, dashed, lstart, ldx, ldy}
      areas[]:  {pts:[[q,p],...], label, boxed, color, edge, opacity, lp, ldx, ldy, at, until}   a shaded polygon under the curves (CS, PS, deadweight loss)
+        a wrapped quantity title sits below the tick row even when the axes cross inside the plot (v2.65)
         opacity (v2.64) overrides the .18 wash, for a body the source prints solid; color 'gold' (v2.64) is the UCF theme's; a move's color is honoured (v2.64)
         label wraps on \n; boxed:true gives it a white box so it can be read over the curves crossing its shape
         lstart = put the curve label at the first point instead of the last; ldx/ldy nudge it
@@ -613,8 +614,11 @@
       });
       return t;
     }
+    // A wrapped quantity title drops below the tick row, and the tick row is
+    // at the plot's foot whatever height the axes cross at (v2.65): measured
+    // from the crossing it sat above the numbers on the profit parabola.
     g.appendChild(axisTitle(ax.x || 'Q', O.x + PW + 34,
-                            AXY + (xtitle.length > 1 ? 36 : 16), 'end'));
+                            xtitle.length > 1 ? O.y + 36 : AXY + 16, 'end'));
     // A wrapped title drops below the topmost tick rather than standing
     // beside it (v2.35), which is where the source puts it and what keeps the
     // margin down to the title's own width: side by side, "100%" and

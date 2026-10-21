@@ -978,3 +978,9 @@ engine had no gold, washed every area at .18 and painted every movement
 arrow red by stylesheet, so: `gold` in the palette, `opacity` on an area,
 and a `moves` colour that beats the sheet. The QMB3200 set uses gold at two
 opacities (body .55, tail .22) with ink curves and ink leaders.
+
+**Same day, v2.65.** A wrapped quantity title was placed from the axis
+crossing, so on the profit parabola (axes crossing at the origin) it sat
+above the tick numbers; it sits below the tick row at the plot's foot now,
+which is where `check_file` had been measuring it all along. The checker's
+one-line case now follows the crossing, as the engine does.

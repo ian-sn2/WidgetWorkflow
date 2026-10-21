@@ -1,4 +1,6 @@
-# Engine reference — `engine/sd-graph.js` v2.64
+# Engine reference — `engine/sd-graph.js` v2.65
+
+**v2.65:** a quantity title that starts with `\n` sits below the tick row at the plot's foot even when `axes.cross` puts the axis line higher; it was measured from the crossing and sat above the numbers.
 
 Written from the engine source. The conversion prompt carries a shorter version
 of this in its own "Engine reference" section; that one is what the model needs
