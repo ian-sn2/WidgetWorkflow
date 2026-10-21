@@ -1,4 +1,4 @@
-# Engine reference — `engine/sd-graph.js` v2.61
+# Engine reference — `engine/sd-graph.js` v2.62
 
 Written from the engine source. The conversion prompt carries a shorter version
 of this in its own "Engine reference" section; that one is what the model needs
@@ -266,7 +266,9 @@ beside them and stacking outward by `row` ("Supplier network" and
 "Marketing channel" in row 0, "Supply Chain" over both in row 1). `changes`
 are not drawn in this layout. Each downward link carries an arrowhead at its
 foot (**v2.61**): a chain motif alone reads as a two-way join, and these
-channels run one way (Ian, 2026-10-21). In the horizontal chain a span takes
+channels run one way (Ian, 2026-10-21). A horizontal node takes `pipe: true` (**v2.62**)
+to be drawn as a tube with a dark open end, the old "pipeline" view's
+channel; give it the row's largest `w`. In the horizontal chain a span takes
 `brace: true` for the same bracket drawn over a run of boxes, a link takes
 `style: "arrow"` for a plain arrow where the chain motif would say the
 wrong thing (the old "pipeline" view of a channel) and `size` to set its
