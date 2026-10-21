@@ -18,7 +18,10 @@ def bell(mu=MU, sig=SIG, peak=100, lo=-3.6, hi=3.6, step=0.2):
     pts = []
     k = lo
     while k <= hi + 1e-9:
-        x = mu + k * sig; pts.append([round(x, 2), round(peak * math.exp(-k * k / 2), 2)]); k += step
+        x = mu + k * sig
+        if 1.5 <= x <= 108.5:   # a curve stays inside the plot, never past the axis
+            pts.append([round(x, 2), round(peak * math.exp(-k * k / 2), 2)])
+        k += step
     return pts
 def under(pts, x1=None, x2=None):
     """polygon under the bell between x1 and x2 (default whole)"""
