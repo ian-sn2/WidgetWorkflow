@@ -984,3 +984,15 @@ crossing, so on the profit parabola (axes crossing at the origin) it sat
 above the tick numbers; it sits below the tick row at the plot's foot now,
 which is where `check_file` had been measuring it all along. The checker's
 one-line case now follows the crossing, as the engine does.
+
+## 2026-10-23 — MAR3203 (UCF operations management): engine v2.66, the `network` widget
+
+Eleven chapters, 67 figures. The project-management chapter draws its CPM
+example as a run of five network diagrams (the bare network, a forward
+pass, a backward pass, the critical path, the crashed project), which no
+existing widget kind could carry: `flow` is a chain or a ring, not a graph.
+`network` (v2.66) lays activities on a grid, draws precedence arrows, and
+reveals ES/EF, LS/LF and the critical path by step, so the five figures are
+one widget with four steps and a scenario button. The AON/AOA example
+pairs are the same widget twice side by side (`panels`), the AOA half with
+blank nodes and named, sometimes dashed, arrows.

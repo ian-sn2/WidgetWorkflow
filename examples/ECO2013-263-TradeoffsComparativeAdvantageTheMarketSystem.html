@@ -355,9 +355,23 @@
 .sdg .fl-pipe .fl-pipeend { fill:#111; stroke:none; }
 .sdg .fl-pipe .fl-nodelabel { fill:#111; }
 .sdg .fl-chainhead { fill:#6f6f6f; stroke:#6f6f6f; stroke-width:1; stroke-linejoin:round; }
+/* project network (v2.66) */
+.sdg .sdg-network .nw-node circle, .sdg .sdg-network .nw-node ellipse { fill:#fff; stroke:var(--ink); stroke-width:2.2; }
+.sdg .sdg-network .nw-comp { fill:none; stroke:var(--ink); stroke-width:1.2; }
+.sdg .sdg-network .nw-label { font-size:17px; font-weight:800; fill:var(--navy); }
+.sdg .sdg-network .nw-dur { font-size:11px; font-weight:700; fill:var(--navy); }
+.sdg .sdg-network .nw-time { font-size:11px; font-weight:700; fill:var(--navy); }
+.sdg .sdg-network .nw-edgelabel { font-size:13px; font-weight:800; fill:var(--ink); }
+.sdg .sdg-network .nw-arrow { fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.sdg .sdg-network .nw-dummy .nw-arrow { stroke-dasharray:5 4; }
+.sdg .sdg-network .nw-critpath .nw-arrow { stroke:var(--gold); stroke-width:3; }
+.sdg .sdg-network .nw-legend rect { fill:#fff; stroke:var(--ink); stroke-width:1.2; }
+.sdg .sdg-network .nw-legend circle { fill:#fff; stroke:var(--ink); stroke-width:1.8; }
+.sdg .sdg-network .nw-legendtitle { font-size:12px; font-weight:800; fill:var(--navy); }
+.sdg .sdg-body.two .sdg-flowfig { max-width:none; }
 </style>
 <script>
-/* ===== sd-graph.js v2.65 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.66 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)
@@ -372,6 +386,8 @@
      curves[]: {id, label, pts:[[q,p],...], color, at, until, from, arrowP, shiftArrow, curved, thin, leader, dashed, lstart, ldx, ldy}
      areas[]:  {pts:[[q,p],...], label, boxed, color, edge, opacity, lp, ldx, ldy, at, until}   a shaded polygon under the curves (CS, PS, deadweight loss)
         a wrapped quantity title sits below the tick row even when the axes cross inside the plot (v2.65)
+     network: {nodes:[{id,x,y,label,dur,es,ef,ls,lf,at}], edges:[{from,to,label,dashed,crit,at}], style:'corners'|'ellipse', aoa, legend, show:{ef,lf,crit}, panels:[...]}
+        a project network (v2.66): AON/AOA activity diagrams with ES/EF/LS/LF and the critical path, revealed by step through `show`
         opacity (v2.64) overrides the .18 wash, for a body the source prints solid; color 'gold' (v2.64) is the UCF theme's; a move's color is honoured (v2.64)
         label wraps on \n; boxed:true gives it a white box so it can be read over the curves crossing its shape
         lstart = put the curve label at the first point instead of the last; ldx/ldy nudge it
@@ -1068,6 +1084,7 @@
     if (cfg.plays) { this.panels = []; this.buildPlays(); return this.finish(); }
     if (cfg.amort) { this.panels = []; this.buildAmort(); return this.finish(); }
     if (cfg.flow) { this.panels = []; this.buildFlow(); return this.finish(); }
+    if (cfg.network) { this.panels = []; this.buildNetwork(); return this.finish(); }
     var panels = cfg.panels || [cfg];
     this.panels = panels.map(buildPanel);
     var body = h('div', 'sdg-body' + (cfg.table ? ' has-table' : '') + (panels.length > 1 ? ' two' : ''));
@@ -1489,6 +1506,118 @@
     });
     var fig = h('figure', 'sdg-flowfig'); fig.appendChild(svg);
     var body = h('div', 'sdg-body'); body.appendChild(fig);
+    var main = h('div', 'sdg-main'); main.appendChild(body); host.appendChild(main); this.main = main;
+  };
+
+  // A project network (v2.66), from the MAR3203 project-management chapter:
+  // activities as circles on a 100x100 grid, precedence as arrows between
+  // them, the four times at a node's corners (ES top-left, EF top-right,
+  // LS bottom-left, LF bottom-right) or inside an ellipse's compartments
+  // (`style: "ellipse"`), and the critical path in gold. `show` says at
+  // which step the forward pass (ES/EF), the backward pass (LS/LF) and the
+  // critical path arrive, so one widget walks the whole CPM example that
+  // the printed chapter needs four figures for. `aoa: true` draws the
+  // activity-on-arrow convention: blank nodes, activities named on the
+  // arrows, a dashed arrow for a dummy. `panels` sets two networks side by
+  // side (AON beside AOA), each with its own `heading`.
+  //
+  //   network: {nodes: [{id: "A", x: 6, y: 50, dur: 3, es: 0, ef: 3, ls: 0, lf: 3}, ...],
+  //             edges: [{from: "A", to: "B", crit: true}, ...],
+  //             show: {ef: 1, lf: 2, crit: 3}, legend: true}
+  Widget.prototype.buildNetwork = function () {
+    var self = this, N = this.cfg.network, host = this.host;
+    var nets = N.panels || [N];
+    var body = h('div', 'sdg-body' + (nets.length > 1 ? ' two' : ''));
+    function lines(t) { return String(t).split('\n'); }
+    nets.forEach(function (net) {
+      var style = net.style || N.style || 'corners', aoa = net.aoa || N.aoa, show = net.show || N.show || {};
+      var W = net.w || N.w || 560, H = net.h || N.h || 240, R = net.r || N.r || (style === 'ellipse' ? 0 : 20);
+      var RX = style === 'ellipse' ? 44 : R, RY = style === 'ellipse' ? 30 : R;
+      var PAD = {l: 26, r: 26, t: 22, b: 22};
+      function X(x) { return PAD.l + x / 100 * (W - PAD.l - PAD.r); }
+      function Y(y) { return PAD.t + y / 100 * (H - PAD.t - PAD.b); }
+      var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, role: 'img', class: 'sdg-flow sdg-network', 'aria-label': net.heading || self.cfg.title || 'Project network'});
+      function part(g, spec) { if (spec && (spec.at || spec.until != null)) { g.classList.add('fl-step'); self.mparts.push({node: g, spec: spec, cls: 'shown'}); } }
+      function text(x, y, t, cls, anchor, dy) {
+        var e = el('text', {x: x, y: y, class: cls, 'text-anchor': anchor || 'middle'});
+        lines(t).forEach(function (row, i) { var sp = el('tspan', {x: x, dy: i ? (dy || 12) : 0}); setLabel(sp, row); e.appendChild(sp); });
+        return e;
+      }
+      var byId = {};
+      (net.nodes || []).forEach(function (nd) { byId[nd.id] = nd; });
+      // the point on an ellipse's rim in the direction of (dx, dy)
+      function rim(nd, dx, dy) {
+        var ang = Math.atan2(dy, dx), cx = X(nd.x), cy = Y(nd.y);
+        return [cx + RX * Math.cos(ang), cy + RY * Math.sin(ang)];
+      }
+      var edgeG = el('g'), critG = el('g', {class: 'nw-crit'});
+      (net.edges || []).forEach(function (e) {
+        var a = byId[e.from], b = byId[e.to]; if (!a || !b) return;
+        var dx = X(b.x) - X(a.x), dy = Y(b.y) - Y(a.y);
+        var p1 = rim(a, dx, dy), p2 = rim(b, -dx, -dy);
+        var gap = 4, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len;
+        var x1 = p1[0] + ux * gap, y1 = p1[1] + uy * gap, x2 = p2[0] - ux * gap, y2 = p2[1] - uy * gap;
+        var g = el('g', {class: 'nw-edge' + (e.dashed ? ' nw-dummy' : '')});
+        g.appendChild(el('path', {d: headed(x1, y1, x2, y2), class: 'nw-arrow'}));
+        if (e.label) {
+          var mx = (x1 + x2) / 2, my = (y1 + y2) / 2, off = e.loff != null ? e.loff : 11;
+          // the name sits beside the arrow, on the side away from the centre line
+          var nx = -uy, ny = ux; if (ny > 0) { nx = -nx; ny = -ny; }
+          g.appendChild(text(mx + nx * off + (e.ldx || 0), my + ny * off + 4 + (e.ldy || 0), e.label, 'nw-edgelabel'));
+        }
+        part(g, e); edgeG.appendChild(g);
+        if (e.crit) {
+          var c = el('g', {class: 'nw-edge nw-critpath'});
+          c.appendChild(el('path', {d: headed(x1, y1, x2, y2), class: 'nw-arrow'}));
+          if (show.crit != null) part(c, {at: show.crit});
+          critG.appendChild(c);
+        }
+      });
+      svg.appendChild(edgeG); svg.appendChild(critG);
+      (net.nodes || []).forEach(function (nd) {
+        var g = el('g', {class: 'nw-node'}), cx = X(nd.x), cy = Y(nd.y);
+        if (style === 'ellipse') {
+          g.appendChild(el('ellipse', {cx: cx, cy: cy, rx: RX, ry: RY}));
+          // compartments: a column either side of the name, split at the middle
+          var c1 = cx - RX * 0.42, c2 = cx + RX * 0.42;
+          g.appendChild(el('path', {d: 'M' + c1 + ' ' + (cy - RY * 0.9) + ' V' + (cy + RY * 0.9) + ' M' + c2 + ' ' + (cy - RY * 0.9) + ' V' + (cy + RY * 0.9) +
+                                      ' M' + (cx - RX) + ' ' + cy + ' H' + c1 + ' M' + c2 + ' ' + cy + ' H' + (cx + RX), class: 'nw-comp'}));
+          g.appendChild(text(cx, cy - 6, nd.label || nd.id, 'nw-label'));
+          if (nd.dur != null) g.appendChild(text(cx, cy + RY * 0.72, nd.dur, 'nw-dur'));
+          var ef = el('g'), lf = el('g');
+          if (nd.es != null) ef.appendChild(text(cx - RX * 0.71, cy - 5, nd.es, 'nw-time'));
+          if (nd.ef != null) ef.appendChild(text(cx + RX * 0.71, cy - 5, nd.ef, 'nw-time'));
+          if (nd.ls != null) lf.appendChild(text(cx - RX * 0.71, cy + 14, nd.ls, 'nw-time'));
+          if (nd.lf != null) lf.appendChild(text(cx + RX * 0.71, cy + 14, nd.lf, 'nw-time'));
+          if (show.ef != null) part(ef, {at: show.ef}); if (show.lf != null) part(lf, {at: show.lf});
+          g.appendChild(ef); g.appendChild(lf);
+        } else {
+          g.appendChild(el('circle', {cx: cx, cy: cy, r: R}));
+          if (!aoa || nd.label) g.appendChild(text(cx, cy + 6, nd.label || nd.id, 'nw-label'));
+          var ef2 = el('g'), lf2 = el('g'), d = R + 3;
+          if (nd.es != null) ef2.appendChild(text(cx - d, cy - R + 2, nd.es, 'nw-time', 'end'));
+          if (nd.ef != null) ef2.appendChild(text(cx + d, cy - R + 2, nd.ef, 'nw-time', 'start'));
+          if (nd.ls != null) lf2.appendChild(text(cx - d, cy + R + 8, nd.ls, 'nw-time', 'end'));
+          if (nd.lf != null) lf2.appendChild(text(cx + d, cy + R + 8, nd.lf, 'nw-time', 'start'));
+          if (show.ef != null) part(ef2, {at: show.ef}); if (show.lf != null) part(lf2, {at: show.lf});
+          g.appendChild(ef2); g.appendChild(lf2);
+        }
+        part(g, nd); svg.appendChild(g);
+      });
+      if (net.legend || (N.legend && nets.length === 1)) {
+        var lg = el('g', {class: 'nw-legend'}), lx = W - 140, ly = 8, lcx = lx + 92;
+        lg.appendChild(el('rect', {x: lx, y: ly, width: 134, height: 66, rx: 3}));
+        lg.appendChild(text(lx + 8, ly + 40, 'Legend:', 'nw-legendtitle', 'start'));
+        lg.appendChild(el('circle', {cx: lcx, cy: ly + 33, r: 15}));
+        lg.appendChild(text(lcx, ly + 38, 'L', 'nw-label'));
+        lg.appendChild(text(lcx - 18, ly + 16, 'ES', 'nw-time', 'end')); lg.appendChild(text(lcx + 18, ly + 16, 'EF', 'nw-time', 'start'));
+        lg.appendChild(text(lcx - 18, ly + 60, 'LS', 'nw-time', 'end')); lg.appendChild(text(lcx + 18, ly + 60, 'LF', 'nw-time', 'start'));
+        svg.appendChild(lg);
+      }
+      var fig = h('figure', 'sdg-flowfig');
+      if (net.heading) fig.appendChild(h('figcaption', null, net.heading));
+      fig.appendChild(svg); body.appendChild(fig);
+    });
     var main = h('div', 'sdg-main'); main.appendChild(body); host.appendChild(main); this.main = main;
   };
 

@@ -344,3 +344,17 @@
 .sdg .fl-pipe .fl-pipeend { fill:#111; stroke:none; }
 .sdg .fl-pipe .fl-nodelabel { fill:#111; }
 .sdg .fl-chainhead { fill:#6f6f6f; stroke:#6f6f6f; stroke-width:1; stroke-linejoin:round; }
+/* project network (v2.66) */
+.sdg .sdg-network .nw-node circle, .sdg .sdg-network .nw-node ellipse { fill:#fff; stroke:var(--ink); stroke-width:2.2; }
+.sdg .sdg-network .nw-comp { fill:none; stroke:var(--ink); stroke-width:1.2; }
+.sdg .sdg-network .nw-label { font-size:17px; font-weight:800; fill:var(--navy); }
+.sdg .sdg-network .nw-dur { font-size:11px; font-weight:700; fill:var(--navy); }
+.sdg .sdg-network .nw-time { font-size:11px; font-weight:700; fill:var(--navy); }
+.sdg .sdg-network .nw-edgelabel { font-size:13px; font-weight:800; fill:var(--ink); }
+.sdg .sdg-network .nw-arrow { fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.sdg .sdg-network .nw-dummy .nw-arrow { stroke-dasharray:5 4; }
+.sdg .sdg-network .nw-critpath .nw-arrow { stroke:var(--gold); stroke-width:3; }
+.sdg .sdg-network .nw-legend rect { fill:#fff; stroke:var(--ink); stroke-width:1.2; }
+.sdg .sdg-network .nw-legend circle { fill:#fff; stroke:var(--ink); stroke-width:1.8; }
+.sdg .sdg-network .nw-legendtitle { font-size:12px; font-weight:800; fill:var(--navy); }
+.sdg .sdg-body.two .sdg-flowfig { max-width:none; }

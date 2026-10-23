@@ -266,6 +266,10 @@ PLAYS_STEPPABLE = ("years", "arrows", "total")
 # box or a link may arrive late too (engine v2.57).
 # A circular flow's loops arrive one at a time (v2.59).
 FLOW_STEPPABLE = ("nodes", "links", "changes", "spans", "loops")
+# A project network (v2.66) steps its nodes and edges, and its `show` marks
+# -- the forward pass, the backward pass, the critical path -- which the
+# signature below turns into one element each.
+NETWORK_STEPPABLE = ("nodes", "edges", "_show")
 
 
 def check_steps(cfgs, r):
@@ -313,6 +317,12 @@ def check_steps(cfgs, r):
                     sources.append((-2, pl, PLAYS_STEPPABLE))
                 if v.get("flow"):
                     sources.append((-3, v["flow"], FLOW_STEPPABLE))
+                if v.get("network"):
+                    for pi2, net in enumerate(v["network"].get("panels") or [v["network"]]):
+                        net = dict(net)
+                        show = net.get("show") or v["network"].get("show") or {}
+                        net["_show"] = [{"at": a} for a in show.values()]
+                        sources.append((-4 - pi2, net, NETWORK_STEPPABLE))
                 for pi, pn, keys in sources:
                     for key in keys:
                         for ei, e in enumerate(pn.get(key) or []):
@@ -540,7 +550,7 @@ def check_schema(cfgs, r):
         # An amortization explorer is the third way a widget earns its place:
         # no steps and no static caption, but a reading the student scrubs to
         # (v2.50).
-        if not (has_steps or cfg.get("caption") or cfg.get("amort") or cfg.get("flow") or static_preset
+        if not (has_steps or cfg.get("caption") or cfg.get("amort") or cfg.get("flow") or cfg.get("network") or static_preset
                 or titled_scenarios
                 or cfg.get("lede")
                 or any(v.get("caption") or (isinstance(v.get("steps"), list)

@@ -1,4 +1,4 @@
-# Engine reference — `engine/sd-graph.js` v2.65
+# Engine reference — `engine/sd-graph.js` v2.66
 
 **v2.65:** a quantity title that starts with `\n` sits below the tick row at the plot's foot even when `axes.cross` puts the axis line higher; it was measured from the crossing and sat above the numbers.
 
@@ -284,6 +284,35 @@ name wider than its box is set smaller rather than clipped.
                     {"from": 1, "to": 2, "label": "Marketing\nchannel", "at": 2},
                     {"from": 0, "to": 2, "label": "Supply\nChain", "row": 1, "at": 3}]}}
 ```
+
+### `network`
+
+A project network (**v2.66**), from the MAR3203 project-management chapter:
+activities as circles on a 100 × 100 grid, precedence as arrows, the four
+times at a node's corners (ES top-left, EF top-right, LS bottom-left, LF
+bottom-right), the critical path in gold. `show` names the step at which
+the forward pass (`ef`: ES and EF), the backward pass (`lf`: LS and LF) and
+the critical path (`crit`) arrive, so one widget walks the whole CPM
+example the printed chapter needs four figures for. Nodes and edges take
+`at`/`until` too.
+
+```json
+{"network": {"legend": true, "show": {"ef": 1, "lf": 2, "crit": 3},
+             "nodes": [{"id": "A", "x": 4, "y": 50, "es": 0, "ef": 3, "ls": 0, "lf": 3}, ...],
+             "edges": [{"from": "A", "to": "B", "crit": true}, ...]},
+ "steps": ["The network.", "A forward pass…", "A backward pass…", "The critical path…"]}
+```
+
+`style: "ellipse"` draws each node as the textbook's compartment ellipse
+(times inside, `dur` under the name). `aoa: true` draws the
+activity-on-arrow convention: blank nodes, activities named on the arrows
+(`label`), a dashed arrow (`dashed: true`) for a dummy. `panels` sets
+networks side by side, each with a `heading`; give each a `w` of about 280
+so the circles keep their size at half width. `w`/`h` set the viewBox
+(560 × 240 by default), `r` the circle radius (20). A scenario can replace
+the whole `network` (the crashed project).
+`check_file.py` counts nodes, edges and each `show` mark as what a step can
+change.
 
 ### `axes`
 
