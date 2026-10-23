@@ -153,7 +153,7 @@ FC = {"mar3203-exam1-forecasting-01-demand-uncertainty-zone-chart.png": zone, "m
 FC_CONCISE = {"mar3203-exam1-forecasting-07-excel-data-function.png": html(excel_p3(), True)}
 # Full and Balanced: the one widget stands after the list of all four patterns (Ian, 2026-10-23), so the three pictures inside the list go
 FC_FULL_ANCH = [{"after": "<li><em>Demand is patterned cyclically</em>", "widget": patterns, "comment": "the three demand patterns, after the list that introduces all four"}]
-FC_ANCH = [{"after": "<li><b>Cyclical</b> – Up/down fluctuations without a clear pattern (economic/political factors).</li>", "widget": patterns, "comment": "the three patterns, after the list that names them"},
+FC_ANCH = [{"after": "<h4>EXAM TIP: Plotting Data</h4>", "widget": patterns, "comment": "the three patterns, after the list that names them"},
            {"after": "<h4>EXAM TIP: Trendline Function</h4>", "widget": customers_trend, "comment": "the trendline, after the exam tip that introduces it"}]
 
 # ================================================================ Inventory
