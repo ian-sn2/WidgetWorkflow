@@ -83,14 +83,19 @@ TREND = [390, 400, 420, 435, 425, 460, 450, 475, 510, 500, 525]
 SEAS = [300, 310, 425, 500, 515, 450, 390, 375, 450, 520, 435, 380]
 def series(xs, ys, color="gold"):
     return {"curves": [{"id": "s", "label": "", "pts": [[x, y] for x, y in zip(xs, ys)], "color": color}], "points": dots(list(zip(xs, ys)))}
-patterns = {"title": "Three Time-Series Patterns", "lede": "Plot the data first: the pattern decides the method.",
+# no source picture for the cyclical case (Ian asked for one, 2026-10-23): the years are the series' own axis,
+# the demand axis carries no numbers, and the shape is a long irregular swing rather than a calendar repeat
+CYC = [470, 500, 540, 520, 480, 430, 410, 440, 500, 560, 530]
+patterns = {"title": "Four Time-Series Patterns", "lede": "Plot the data first: the pattern decides the method.",
             "axes": {"x": "\nYear", "y": "Demand", "xmin": 1999.5, "xmax": 2010.5, "ymin": 350, "ymax": 650, "xticks": [2000, 2002, 2004, 2006, 2008, 2010], "yticks": [350, 400, 450, 500, 550, 600, 650], "years": True, "grid": True, "bg": False},
             "scenarios": {
                 "const": dict(series(YEARS, CONST), label="Constant mean", caption=cap("Demand wanders a little above and below one level, with nothing to it but random variation.")),
                 "trend": dict(series(YEARS, TREND), label="Trend", axes={"x": "\nYear", "y": "Demand", "xmin": 1999.5, "xmax": 2010.5, "ymin": 350, "ymax": 550, "xticks": [2000, 2002, 2004, 2006, 2008, 2010], "yticks": [350, 390, 430, 470, 510, 550], "years": True, "grid": True, "bg": False},
                               caption=cap("Demand still bounces period to period, but the bounces ride a steady upward trend.")),
                 "seas": dict(series(list(range(1, 13)), SEAS), label="Seasonal", axes={"x": "\nMonth", "y": "Demand", "xmin": 0.5, "xmax": 12.5, "ymin": 200, "ymax": 600, "xticks": list(range(1, 13)), "yticks": [200, 300, 400, 500, 600], "grid": True, "bg": False},
-                             caption=cap("Demand peaks in spring and again in autumn and dips between, a pattern tied to the calendar rather than a trend."))}}
+                             caption=cap("Demand peaks in spring and again in autumn and dips between, a pattern tied to the calendar rather than a trend.")),
+                "cyc": dict(series(YEARS, CYC), label="Cyclical", axes={"x": "\nYear", "y": "Demand", "xmin": 1999.5, "xmax": 2010.5, "ymin": 350, "ymax": 650, "xticks": [2000, 2002, 2004, 2006, 2008, 2010], "years": True, "grid": True, "bg": False},
+                            caption=cap("Demand rises and falls in long swings of no fixed length, following the business cycle rather than the calendar."))}}
 BOB = [10000, 18600, 7100, 4200, 10500, 19420, 7000, 4900, 11200, 19400, 7250, 4100, 10800, 18500, 6710, 4605]
 bobs = {"title": "Bob's River Place Attendance 2013–2016",
         "axes": {"x": "\nPeriod", "y": "Attendance (thousands)", "xmin": 0, "xmax": 16.5, "ymax": 25, "xticks": [2, 4, 6, 8, 10, 12, 14, 16], "yticks": [5, 10, 15, 20, 25], "grid": True, "bg": False},
