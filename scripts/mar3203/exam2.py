@@ -313,6 +313,6 @@ CAP_ANCH = [{"after": "<td><b>Leading demand — one-step</b></td>", "widget": c
             {"after": "<li><b>Variable costs (V):</b> change with output (materials, hourly labor, packaging).</li>", "widget": breakeven, "comment": "the break-even chart, after the definitions"}]
 
 for f in (PMCYCLE, NODECONV, LABFLOW, TF_BASE, TF_TARGET, PROCCHART, BLUEPRINT, EQUIP): assert "<script" not in f["html"]
-write_map("Exam2-ProjectMgmt", PM, PM_ANCH); write_map("Exam2-ProjectMgmt-Concise", {}, PM_ANCH)
-write_map("Exam2-Processes", PR, PR_ANCH); write_map("Exam2-Processes-Concise", {}, PR_ANCH)
-write_map("Exam2-CapacityMgmt", CAP, CAP_ANCH); write_map("Exam2-CapacityMgmt-Concise", {}, CAP_ANCH)
+write_map("Exam2-ProjectMgmt", PM); write_map("Exam2-ProjectMgmt-Concise", {}, PM_ANCH)
+write_map("Exam2-Processes", PR); write_map("Exam2-Processes-Concise", {}, PR_ANCH)
+write_map("Exam2-CapacityMgmt", CAP); write_map("Exam2-CapacityMgmt-Concise", {}, CAP_ANCH)

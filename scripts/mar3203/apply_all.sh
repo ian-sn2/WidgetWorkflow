@@ -25,8 +25,8 @@ for k in "${keys[@]}"; do
   mkdir -p "$D/$out"
   for ed in Full Balanced Concise; do
     f=$(ls "$S/$src"/*-$ed.html 2>/dev/null | head -1); [ -z "$f" ] && { echo "!! no $ed file for $k"; continue; }
-    map="$S/maps/$k.json"; flags="--toc"
-    if [ "$ed" = Concise ]; then map="$S/maps/$k-Concise.json"; flags="--toc --anchors"; fi
+    map="$S/maps/$k.json"; flags="--toc --anchors"
+    if [ "$ed" = Concise ]; then map="$S/maps/$k-Concise.json"; fi
     [ -f "$map" ] || map="$S/maps/$k.json"
     echo "== $k $ed"
     python3 "$REPO/scripts/apply_widgets.py" "$f" "$map" "$D/$out/$(basename "$f")" $flags 2>&1 | grep -v '^UCF' | grep -v '^\s*$'

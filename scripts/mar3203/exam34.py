@@ -284,8 +284,8 @@ SCA = {"mar3203-exam4-supply-chain-analytics-01-bullwhip-effect-diagra.png": bul
 SCA_ANCH = [{"after": "<h4>EXAM TIP: Bullwhip Effect Causes and Solutions</h4>", "widget": bullwhip, "comment": "the bullwhip, after the tip about its causes"}]
 
 for f in (TQM, PDCA, DMAIC, MOVIE, CHECK, FISH, CHAIN, PRICING, NODES, TREE): assert "<script" not in f["html"]
-write_map("Exam3-QualityMgmt", QM, QM_ANCH); write_map("Exam3-QualityMgmt-Concise", {}, QM_ANCH)
-write_map("Exam3-SPC", SPC, SPC_ANCH); write_map("Exam3-SPC-Concise", {}, SPC_ANCH)
+write_map("Exam3-QualityMgmt", QM); write_map("Exam3-QualityMgmt-Concise", {}, QM_ANCH)
+write_map("Exam3-SPC", SPC); write_map("Exam3-SPC-Concise", {}, SPC_ANCH)
 write_map("Exam3-JITLeanOps", {}, []); write_map("Exam3-JITLeanOps-Concise", {}, [])
-write_map("Exam4-SupplyChainMgmt", SCM, SCM_ANCH); write_map("Exam4-SupplyChainMgmt-Concise", {}, SCM_ANCH)
-write_map("Exam4-SupplyChainAnalytics", SCA, SCA_ANCH); write_map("Exam4-SupplyChainAnalytics-Concise", {}, SCA_ANCH)
+write_map("Exam4-SupplyChainMgmt", SCM); write_map("Exam4-SupplyChainMgmt-Concise", {}, SCM_ANCH)
+write_map("Exam4-SupplyChainAnalytics", SCA); write_map("Exam4-SupplyChainAnalytics-Concise", {}, SCA_ANCH)

@@ -140,12 +140,14 @@ demand20 = {"title": "Demand Over Time",
             "points": dots([(i + 1, v) for i, v in enumerate(DEM)]) + [label(8.5, 2900, "y = 59.23x + 544.68", at=1)],
             "steps": [cap("Twenty quarters of demand: every fourth quarter spikes, and the spikes grow."),
                       cap("The regression line y = 59.23x + 544.68 carries the trend; each quarter sits above or below it in a repeating pattern, which is the seasonal index.")]}
-FC = {"mar3203-exam1-forecasting-01-demand-uncertainty-zone-chart.png": zone, "mar3203-exam1-forecasting-02-demand-constant-mean-chart-2.png": patterns,
-      "mar3203-exam1-forecasting-03-demand-trend-chart-2.png": {"keep": "folded into the three-pattern widget above"}, "mar3203-exam1-forecasting-04-demand-seasonal-chart-2.png": {"keep": "folded into the three-pattern widget above"},
+FC = {"mar3203-exam1-forecasting-01-demand-uncertainty-zone-chart.png": zone, "mar3203-exam1-forecasting-02-demand-constant-mean-chart-2.png": {"drop": "folded into the three-pattern widget after the list"},
+      "mar3203-exam1-forecasting-03-demand-trend-chart-2.png": {"drop": "folded into the three-pattern widget after the list"}, "mar3203-exam1-forecasting-04-demand-seasonal-chart-2.png": {"drop": "folded into the three-pattern widget after the list"},
       "mar3203-exam1-forecasting-05-bobs-river-place-attendance-2013-2016-2.png": bobs, "mar3203-exam1-forecasting-06-number-of-customers-over-time-chart-2.png": customers,
       "mar3203-exam1-forecasting-07-excel-data-function.png": EXCEL, "mar3203-exam1-forecasting-10-number-of-customers-trendline-chart-2.png": customers_trend,
       "mar3203-exam1-forecasting-08-hard-rock-cafe-scatter-plot-2.png": hardrock, "mar3203-exam1-forecasting-09-demand-over-time-seasonal-trend-chart-2.png": demand20}
 FC_CONCISE = {"mar3203-exam1-forecasting-07-excel-data-function.png": html(excel_p3(), True)}
+# Full and Balanced: the one widget stands after the list of all four patterns (Ian, 2026-10-23), so the three pictures inside the list go
+FC_FULL_ANCH = [{"after": "<li><em>Demand is patterned cyclically</em>", "widget": patterns, "comment": "the three demand patterns, after the list that introduces all four"}]
 FC_ANCH = [{"after": "<li><b>Cyclical</b> – Up/down fluctuations without a clear pattern (economic/political factors).</li>", "widget": patterns, "comment": "the three patterns, after the list that names them"},
            {"after": "<h4>EXAM TIP: Trendline Function</h4>", "widget": customers_trend, "comment": "the trendline, after the exam tip that introduces it"}]
 
@@ -214,11 +216,11 @@ ZT_ANCH = [{"after": "<li>Total area under the curve : 1.00; left half (z ≤ 0)
            {"after": "\\[z = \\frac{1.64 + 1.65}{2} = 1.645\\]", "html": CSS + ztable([i / 10 for i in range(8, 19)], hl={"row": 1.6, "cols": [0.04, 0.05]}), "comment": "the lookup, after the example that reads it"}]
 
 for f in (FORD, PIE, GLOBAL, EXCEL, ZFULL, ZARROWS): assert "<script" not in f["html"]
-write_map("Exam1-OperationsProductivity", OPS, OPS_ANCH)
+write_map("Exam1-OperationsProductivity", OPS)
 write_map("Exam1-OperationsProductivity-Concise", {}, OPS_ANCH)
-write_map("Exam1-Forecasting", FC, FC_ANCH)
+write_map("Exam1-Forecasting", FC, FC_FULL_ANCH)
 write_map("Exam1-Forecasting-Concise", FC_CONCISE, FC_ANCH)
-write_map("Exam1-InventoryMgmt", INV, INV_ANCH)
+write_map("Exam1-InventoryMgmt", INV)
 write_map("Exam1-InventoryMgmt-Concise", {}, INV_ANCH)
-write_map("Exam1-ZTableSupplement", ZTB, ZT_ANCH)
+write_map("Exam1-ZTableSupplement", ZTB)
 write_map("Exam1-ZTableSupplement-Concise", {}, ZT_ANCH)

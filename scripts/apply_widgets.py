@@ -34,7 +34,8 @@ MAP.json:
      "anchors": [{"after": "<b>Binding price ceiling</b>",
                   "image": "eco2023-market-equilibrium-04-price-ceiling-diagram.png"}]}
 
-An image entry is a widget config, `{"keep": why}`, `{"html": block}` (plain
+An image entry is a widget config, `{"keep": why}`, `{"drop": why}` (the
+picture is removed and an anchor places its widget elsewhere), `{"html": block}` (plain
 HTML in place of a picture of a formula or a calculation, with no script and
 no widget in it; 2026-10-19), or a **calculator widget**
 for the FIN3403 set (2026-10-16): `{"hp": "tvm"|"cf"|"amort"|"stat"|"keys",
@@ -172,6 +173,14 @@ def apply(src, m, name, use_anchors=False, toc=False):
             return tag
         entry = images[base]
         seen[base] = seen.get(base, 0) + 1
+        if isinstance(entry, dict) and "drop" in entry:
+            # the picture goes and nothing takes its place here: a figure
+            # folded into a widget that an anchor puts elsewhere (the three
+            # demand patterns, placed after the list that introduces all
+            # four; Ian, 2026-10-23). Counted as a removal for the proof.
+            used.add(base)
+            removed.append(match.span())
+            return ""
         if isinstance(entry, dict) and "keep" in entry:
             # the image stays, and says why: the KEEP comment check_file.py
             # reads is the record of the decision (CLAUDE.md, "an image that
