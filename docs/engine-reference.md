@@ -1,4 +1,6 @@
-# Engine reference — `engine/sd-graph.js` v2.66
+# Engine reference — `engine/sd-graph.js` v2.67
+
+**v2.67:** `axes.years: true` prints quantity ticks as written (a year is 2010, not 2,010).
 
 **v2.65:** a quantity title that starts with `\n` sits below the tick row at the plot's foot even when `axes.cross` puts the axis line higher; it was measured from the crossing and sat above the numbers.
 

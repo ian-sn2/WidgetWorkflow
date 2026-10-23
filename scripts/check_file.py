@@ -752,6 +752,8 @@ def fmt_q(v, ax):
     # pct:true is both axes; pct:"y" is the price axis alone (engine v2.50)
     if ax.get("pct") is True:
         return "%s%%" % v
+    if ax.get("years"):          # a year prints as written (engine v2.67)
+        return str(v)
     if ax.get("k") and v >= 1000:
         return "%gk" % (v / 1000.0)
     return "{:,}".format(v)

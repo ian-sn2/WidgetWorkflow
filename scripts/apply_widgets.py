@@ -173,8 +173,13 @@ def apply(src, m, name, use_anchors=False, toc=False):
         entry = images[base]
         seen[base] = seen.get(base, 0) + 1
         if isinstance(entry, dict) and "keep" in entry:
+            # the image stays, and says why: the KEEP comment check_file.py
+            # reads is the record of the decision (CLAUDE.md, "an image that
+            # stays an image says why"). It is counted as an insertion, so
+            # the proof below still holds.
             used.add(base)
-            return tag
+            inserted.append("<!-- KEEP: %s -->" % str(entry["keep"]).replace("--", "-"))
+            return inserted[-1] + tag
         if isinstance(entry, dict) and "occurrence" in entry and entry["occurrence"] != seen[base]:
             return tag             # another use of the same picture stays a picture
         used.add(base)

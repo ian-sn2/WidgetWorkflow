@@ -380,7 +380,7 @@
 .sdg .sdg-body.two .sdg-flowfig { max-width:none; }
 </style>
 <script>
-/* ===== sd-graph.js v2.66 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.67 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)
@@ -389,7 +389,7 @@
      panels: [panelCfg, panelCfg]  two side-by-side graphs (two-market). Otherwise the panel keys live at top level.
    Panel config:
      heading                      title above the panel (two-market only)
-     axes: {x, y, xmin, xmax, ymin, ymax, xticks[], yticks[], money, cents, pct, k, grid, bg:false, cross:[q,p]}
+     axes: {x, y, xmin, xmax, ymin, ymax, xticks[], yticks[], money, cents, pct, k, years, grid, bg:false, cross:[q,p]}
         xmin/ymin (v2.63) put the plot's corner somewhere other than 0: a scatter of GPAs from 2.9 to 3.9, a profit that goes negative
         x, y = axis titles, default 'Q' and 'P'. A word or two fits; they are never wrapped.
      curves[]: {id, label, pts:[[q,p],...], color, at, until, from, arrowP, shiftArrow, curved, thin, leader, dashed, lstart, ldx, ldy}
@@ -501,7 +501,8 @@
   // pct:true is both axes; pct:'y' is the price axis alone, for a figure that
   // plots a percentage against something that is not one -- a share of the
   // payment against the year of the loan (v2.50).
-  function fmtQ(v, ax) { if (ax.pct === true) return v + '%'; if (ax.k && v >= 1000) return (v / 1000) + 'k'; return v.toLocaleString('en-US'); }
+  // years:true (v2.67) prints a quantity tick as written: a year is not 2,010
+  function fmtQ(v, ax) { if (ax.pct === true) return v + '%'; if (ax.years) return String(v); if (ax.k && v >= 1000) return (v / 1000) + 'k'; return v.toLocaleString('en-US'); }
   function merge(a, b) { var o = {}; for (var k in a) o[k] = a[k]; for (var k2 in b) o[k2] = b[k2]; return o; }
 
   // ---------- one SVG panel ----------
@@ -1571,7 +1572,11 @@
         if (e.label) {
           var mx = (x1 + x2) / 2, my = (y1 + y2) / 2, off = e.loff != null ? e.loff : 11;
           // the name sits beside the arrow, on the side away from the centre line
-          var nx = -uy, ny = ux; if (ny > 0) { nx = -nx; ny = -ny; }
+          var nx = -uy, ny = ux;
+          // the name goes above a flat or rising arrow and below a falling one's
+          // outer side, which is where the printed figures put it
+          if (ny > 0) { nx = -nx; ny = -ny; }
+          if (e.side === 'below') { nx = -nx; ny = -ny; }
           g.appendChild(text(mx + nx * off + (e.ldx || 0), my + ny * off + 4 + (e.ldy || 0), e.label, 'nw-edgelabel'));
         }
         part(g, e); edgeG.appendChild(g);
@@ -1603,11 +1608,13 @@
         } else {
           g.appendChild(el('circle', {cx: cx, cy: cy, r: R}));
           if (!aoa || nd.label) g.appendChild(text(cx, cy + 6, nd.label || nd.id, 'nw-label'));
-          var ef2 = el('g'), lf2 = el('g'), d = R + 3;
-          if (nd.es != null) ef2.appendChild(text(cx - d, cy - R + 2, nd.es, 'nw-time', 'end'));
-          if (nd.ef != null) ef2.appendChild(text(cx + d, cy - R + 2, nd.ef, 'nw-time', 'start'));
-          if (nd.ls != null) lf2.appendChild(text(cx - d, cy + R + 8, nd.ls, 'nw-time', 'end'));
-          if (nd.lf != null) lf2.appendChild(text(cx + d, cy + R + 8, nd.lf, 'nw-time', 'start'));
+          // the four times sit on the node's diagonals, outside the rim, where
+          // an arrow leaving horizontally or at 45 degrees does not run through them
+          var ef2 = el('g'), lf2 = el('g'), d = R + 11;
+          if (nd.es != null) ef2.appendChild(text(cx - d, cy - R - 5, nd.es, 'nw-time', 'end'));
+          if (nd.ef != null) ef2.appendChild(text(cx + d, cy - R - 5, nd.ef, 'nw-time', 'start'));
+          if (nd.ls != null) lf2.appendChild(text(cx - d, cy + R + 16, nd.ls, 'nw-time', 'end'));
+          if (nd.lf != null) lf2.appendChild(text(cx + d, cy + R + 16, nd.lf, 'nw-time', 'start'));
           if (show.ef != null) part(ef2, {at: show.ef}); if (show.lf != null) part(lf2, {at: show.lf});
           g.appendChild(ef2); g.appendChild(lf2);
         }

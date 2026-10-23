@@ -996,3 +996,23 @@ reveals ES/EF, LS/LF and the critical path by step, so the five figures are
 one widget with four steps and a scenario button. The AON/AOA example
 pairs are the same widget twice side by side (`panels`), the AOA half with
 blank nodes and named, sometimes dashed, arrows.
+
+**Delivered 2026-10-23** as `MAR3203-UCF-Widgets.zip`: twelve chapters
+(the Operations & Productivity chapter arrived separately with its Word,
+PDF and image folder), thirty-six files, 59 of 66 images converted. The
+seven not converted are duplicates folded into one scenario widget (the
+three demand patterns, the four capacity strategies); they stay in the file
+as pictures, and `apply_widgets.py` now writes the `<!-- KEEP: why -->`
+comment in front of a kept image itself, counted as an insertion so the
+"only the widgets differ" proof still holds -- before this a `keep` entry
+left the tag bare and `check_file` went on reporting it as a graph. The
+build is `scripts/mar3203/` (`common.py` for the theme, SVG and table
+helpers; `exam1.py`, `exam2.py`, `exam34.py` write the maps;
+`apply_all.sh` applies them). Two more engine changes came out of it:
+v2.67's `axes.years` (Bob's River Place attendance printed 2,013 on the
+axis), and the network widget's corner times moved 11px outside the node so
+a 45-degree arrow never runs through them. The phone check found the same
+thing as QMB3200: the sources' fixed-width `.financial` tables push every
+page sideways and, zoomed to fit, leave widget buttons unresponsive; the
+same file passes with those tables allowed to scroll. Reported on the
+checklist, not changed.
