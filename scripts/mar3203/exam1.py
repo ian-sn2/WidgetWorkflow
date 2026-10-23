@@ -41,10 +41,12 @@ def lc_div(x): return {"id": "d%g" % x, "label": "", "pts": [[x, 0], [x, interp(
 lifecycle = {"title": "The Product Life Cycle",
              "axes": {"x": "Time", "y": "Sales", "xmax": 110, "ymax": 112, "bg": False},
              "curves": [{"id": "lc", "label": "", "pts": LC, "curved": True, "color": "gold"}, lc_div(28), lc_div(50), lc_div(72)],
-             "areas": [{"pts": under(LC, None, 28), "color": "gold", "opacity": 0.2, "label": "Introduction", "lp": [14, 13]},
-                       {"pts": under(LC, 28, 50), "color": "gold", "opacity": 0.35, "label": "Growth", "lp": [39, 30]},
-                       {"pts": under(LC, 50, 72), "color": "gold", "opacity": 0.5, "label": "Maturity", "lp": [61, 50]},
-                       {"pts": under(LC, 72, None), "color": "gold", "opacity": 0.35, "label": "Decline", "lp": [83, 15]}],
+             # the phase names sit above the curve, over their own band (Ian, 2026-10-23: inside, the curve ran through them)
+             "areas": [{"pts": under(LC, None, 28), "color": "gold", "opacity": 0.2},
+                       {"pts": under(LC, 28, 50), "color": "gold", "opacity": 0.35},
+                       {"pts": under(LC, 50, 72), "color": "gold", "opacity": 0.5},
+                       {"pts": under(LC, 72, None), "color": "gold", "opacity": 0.35}],
+             "points": [label(2, 44, "Introduction"), label(33, 102, "Growth"), label(61, 110, "Maturity"), label(86, 56, "Decline")],
              "caption": cap("Sales climb through introduction and growth, level off at maturity and fall in decline, so the production run lengthens and then shortens again.")}
 
 def global2x2():
