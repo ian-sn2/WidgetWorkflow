@@ -236,10 +236,25 @@ def apply(src, m, name, use_anchors=False, toc=False):
                     continue
                 used.add(a["image"])
             body = hp_html(cfg) if "hp" in cfg else widget_html(cfg)
+        lead = ""
+        if a.get("lead"):
+            # a block the source sets elsewhere that belongs above the widget:
+            # the exam tip the source keeps inside list item 1, which Ian wants
+            # over the widget that follows the list (2026-10-23). The needle
+            # names a line inside an .exam-tip; the whole box moves. It is
+            # taken out of the source by position and put back inside the
+            # inserted snippet, so the proof still holds.
+            m = re.search(r'<div class="exam-tip">\s*' + re.escape(a["lead"]) + r'.*?</div>', src, re.S)
+            if not m or src.count(m.group(0)) != 1 or out.count(m.group(0)) != 1:
+                problems.append("lead block not found once: %r" % a["lead"][:60])
+                continue
+            removed.append(m.span())
+            out = out.replace(m.group(0), "", 1)
+            lead = m.group(0) + "\n"
         pos = out.find(needle)
         end = block_end(out, pos)
         comment = a.get("comment", "below-referenced paragraph")
-        ins = "\n<!-- IMAGE POSITION: %s -->\n%s\n" % (comment, body)
+        ins = "\n%s<!-- IMAGE POSITION: %s -->\n%s\n" % (lead, comment, body)
         inserted.append(ins)
         out = out[:end] + ins + out[end:]
 
@@ -286,7 +301,7 @@ def apply(src, m, name, use_anchors=False, toc=False):
     # cut the replaced tags out of the source by position: a picture the file uses
     # twice is the same bytes twice, and replace() would take the wrong one
     orig, pos = [], 0
-    for a, b in removed:
+    for a, b in sorted(removed):
         orig.append(src[pos:a]); pos = b
     orig.append(src[pos:])
     orig = "".join(orig)
