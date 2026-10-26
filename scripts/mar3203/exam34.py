@@ -233,7 +233,7 @@ TLC = [[x, round(FAC[i][1] + INVC[i][1] + TRN[i][1], 2)] for i, x in enumerate(r
 lowest = min(TLC, key=lambda p: p[1])
 costs = {"title": "Total Logistics Cost and the Number of Facilities", "axes": {"x": "Number of facilities", "y": "Cost", "xmax": 125, "ymax": 120, "bg": False},
          "curves": [{"id": "tlc", "label": "Total logistics\ncost", "pts": TLC, "curved": True, "color": "red"}, {"id": "fac", "label": "Facility costs", "pts": FAC, "curved": True, "color": "ink"},
-                    {"id": "inv", "label": "Inventory costs", "pts": INVC, "curved": True, "color": "gold", "ldy": -8}, {"id": "trn", "label": "Transportation\ncosts", "pts": TRN, "curved": True, "color": "grey", "ldy": 14}],
+                    {"id": "inv", "label": "Inventory costs", "pts": INVC, "curved": True, "color": "gold", "ldy": 14}, {"id": "trn", "label": "Transportation\ncosts", "pts": TRN, "curved": True, "color": "grey", "ldy": -14}],   # flipped (Ian, 2026-10-26)
          "points": [{"q": lowest[0], "p": lowest[1], "guides": "p", "showQ": False, "showP": False, "color": "red", "label": "Lowest cost", "dx": -40, "dy": -14}],
          "caption": cap("Facility costs rise and transportation costs fall as facilities are added, with inventory in between; their sum dips to a lowest point and then rises again.")}
 REV = [[x, round(20 + 70 * (1 - math.exp(-x / 38)), 2)] for x in range(6, 101, 4)]
@@ -241,8 +241,10 @@ TLC2 = [[x, round(44 - 0.9 * x + 0.011 * x * x, 2)] for x in range(6, 101, 4)]
 best = max(range(len(REV)), key=lambda i: REV[i][1] - TLC2[i][1]); bx = REV[best][0]
 profit = {"title": "Revenue, Cost and Profit Against the Number of Facilities", "axes": {"x": "Number of facilities", "y": "$$$", "xmax": 125, "ymax": 110, "bg": False},
           "curves": [{"id": "rev", "label": "Revenue", "pts": REV, "curved": True, "color": "gold"}, {"id": "tlc", "label": "Total logistics\ncost", "pts": TLC2, "curved": True, "color": "red"},
-                     {"id": "opt", "label": "", "pts": [[bx, 0], [bx, 104]], "dashed": True, "thin": True}],
-          "vbraces": [{"q": bx - 3, "p1": TLC2[best][1], "p2": REV[best][1], "label": "Max\nprofit"}],
+                     {"id": "opt", "label": "", "pts": [[bx, 0], [bx, TLC2[best][1] - 2]], "dashed": True, "thin": True}],   # the guide stops under the cost curve; the arrow carries the gap above it
+          # a two-headed arrow between the curves at the best count, named beside it, in place of the brace (Ian, 2026-10-26: "not very aesthetic")
+          "moves": [{"from": [bx, TLC2[best][1] + 3], "to": [bx, REV[best][1] - 3], "color": "ink", "offset": 0}, {"from": [bx, REV[best][1] - 3], "to": [bx, TLC2[best][1] + 3], "color": "ink", "offset": 0}],
+          "points": [label(bx + 3, (TLC2[best][1] + REV[best][1]) / 2, "Max profit")],
           "caption": cap("Profit is the gap between revenue and total logistics cost, and it is widest at the number of facilities marked by the dashed line.")}
 SCM = {"mar3203-exam4-scm-01-supply-chain-diagram-flows.png": CHAIN, "mar3203-exam4-scm-03-pricing-model-spectrum-diagram.png": PRICING,
        "mar3203-exam4-scm-04-response-time-facilities-graph.png": resp, "mar3203-exam4-scm-05-cost-facilities-graph.png": costs, "mar3203-exam4-scm-06-revenue-cost-profit-facilities-graph.png": profit}
@@ -250,7 +252,7 @@ facilities = {"title": "Facilities, Response Time, Cost and Profit", "lede": "Wh
               "axes": resp["axes"],
               "scenarios": {"resp": dict(label="Response time", axes=resp["axes"], curves=resp["curves"], caption=resp["caption"]),
                             "cost": dict(label="Cost", axes=costs["axes"], curves=costs["curves"], points=costs["points"], caption=costs["caption"]),
-                            "profit": dict(label="Revenue and profit", axes=profit["axes"], curves=profit["curves"], vbraces=profit["vbraces"], caption=profit["caption"])}}
+                            "profit": dict(label="Revenue and profit", axes=profit["axes"], curves=profit["curves"], moves=profit["moves"], points=profit["points"], caption=profit["caption"])}}
 SCM_ANCH = [{"after": "<td><strong>Finance</strong></td>", "html": CSS + chain_net(), "comment": "the supply chain network, after the flows table"},
             {"after": "<tr><td><strong>Response time</strong></td><td>Decreases (facilities closer to consumers)</td></tr>", "widget": facilities, "comment": "the three facility curves, after the criteria table"}]
 

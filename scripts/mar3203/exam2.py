@@ -94,7 +94,7 @@ big_filled = {"title": "The Completed Network", "network": dict(net(BIG, BIG_E, 
                         cap("The backward pass runs right to left from F's finish at 38: LF is the earliest LS of what follows, and LS = LF − duration."),
                         cap("Only C has slack (LS − ES = 24 − 20 = 4). The path A → B → D → E → F has none, so it is the critical path, 38 weeks long.")]}
 
-SM = {"A": (5, 50), "B": (24, 50), "C": (44, 16), "D": (44, 84), "E": (64, 50), "F": (84, 50)}
+SM = {"A": (4, 50), "B": (22, 50), "C": (50, 22), "D": (50, 78), "E": (76, 50), "F": (97, 50)}   # wide and shallow: corner times clear of the arrows (Ian, 2026-10-26)
 SM_E = ["A>B", "B>C", "B>D", "C>E", "D>E", "E>F"]
 FWD = {"A": (0, 3), "B": (3, 4), "C": (4, 6), "D": (4, 7), "E": (7, 11), "F": (11, 16)}
 BWD = {"A": (0, 3), "B": (3, 4), "C": (5, 7), "D": (4, 7), "E": (7, 11), "F": (11, 16)}
