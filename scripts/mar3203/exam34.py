@@ -59,7 +59,8 @@ DMAIC = html(cycle_fig([("Define.", "Identify customer priorities.\nDetermine me
                        "DMAIC", "The DMAIC cycle: define, measure, analyze, improve, control", r=178))
 QM = {"mar3203-exam3-quality-management-01-quality-associated-costs-graph.png": qcost, "mar3203-exam3-quality-management-02-tqm-flow-of-activities-chart.png": TQM,
       "mar3203-exam3-quality-management-03-pdca-cycle-diagram.png": PDCA, "mar3203-exam3-quality-management-04-dmaic-methodology-cycle-diagra.png": DMAIC}
-QM_ANCH = [{"after": "<h4>EXAM TIP: Quality-Associated Costs</h4>", "widget": qcost, "comment": "the cost bands, after the tip about them"}]   # the PDCA ring is a diagram: dropped from the Concise (Ian, 2026-10-26)
+QM_ANCH = []   # the cost bands only picture what the tip says (Ian, 2026-10-26)
+QM_ANCH_ALL = [{"after": "<h4>EXAM TIP: Quality-Associated Costs</h4>", "widget": qcost, "comment": "the cost bands, after the tip about them"}]   # the PDCA ring is a diagram: dropped from the Concise (Ian, 2026-10-26)
 
 # ================================================================ SPC
 def movie_flow():
@@ -194,8 +195,9 @@ SPC = {"mar3203-exam3-spc-01-movie-theater-flow-chart.png": MOVIE, "mar3203-exam
        "mar3203-exam3-spc-09-xbar-rchart-example.png": xbar_r, "mar3203-exam3-spc-10-xbar-rchart-toothpaste.png": tooth, "mar3203-exam3-spc-11-normal-distribution-curve.png": normal,
        "mar3203-exam3-spc-12-empirical-rule-normal-distribution.png": empirical, "mar3203-exam3-spc-13-process-capability-clorox.png": clorox, "mar3203-exam3-spc-14-cp-cpk-diagram.png": cpk}
 TOOTH_TABLE = html('<table class="sk-tbl financial"><tr><th>Sample</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>Limits</th></tr><tr><td class="lbl">Mean (x̄)</td><td>2.05</td><td class=hl>1.725</td><td>1.95</td><td>2.2</td><td class=hl>3.15</td><td>UCL 2.6238 · x̿ 2.215 · LCL 1.8062</td></tr><tr><td class="lbl">Range (R)</td><td>0.5</td><td>0.6</td><td>0.6</td><td>0.5</td><td>0.6</td><td>UCL 1.2768 · R̄ 0.56 · LCL 0</td></tr></table>', True)
-SPC_ANCH = [{"after": "<p>Samples 2 and 5 fall outside X-bar control limits → process is <b>out of control</b>. R-chart alone would miss this shift.</p>", "html": TOOTH_TABLE["html"], "comment": "the toothpaste charts, after the worked example's conclusion"},
-            {"after": "<li>±3\\(\\sigma\\): 99.72% of values</li>", "widget": empirical, "comment": "the empirical rule, after the list that states it"},
+# the Concise keeps the toothpaste table; the empirical-rule and Cp pictures repeat what its text says (Ian, 2026-10-26)
+SPC_ANCH = [{"after": "<p>Samples 2 and 5 fall outside X-bar control limits → process is <b>out of control</b>. R-chart alone would miss this shift.</p>", "html": TOOTH_TABLE["html"], "comment": "the toothpaste charts, after the worked example's conclusion"}]
+SPC_ANCH_ALL = [            {"after": "<li>±3\\(\\sigma\\): 99.72% of values</li>", "widget": empirical, "comment": "the empirical rule, after the list that states it"},
             {"after": "<tr><td><em>C</em><sub>p</sub> &gt; 1</td><td>Process capable (&gt;1.33 is ideal)</td></tr>", "widget": cpk, "comment": "the three capability cases, after their table"}]
 
 # ================================================================ Supply Chain Management
@@ -253,7 +255,8 @@ facilities = {"title": "Facilities, Response Time, Cost and Profit", "lede": "Wh
               "scenarios": {"resp": dict(label="Response time", axes=resp["axes"], curves=resp["curves"], caption=resp["caption"]),
                             "cost": dict(label="Cost", axes=costs["axes"], curves=costs["curves"], points=costs["points"], caption=costs["caption"]),
                             "profit": dict(label="Revenue and profit", axes=profit["axes"], curves=profit["curves"], moves=profit["moves"], points=profit["points"], caption=profit["caption"])}}
-SCM_ANCH = [# the network diagram is dropped from the Concise (Ian, 2026-10-26)
+SCM_ANCH = []   # the effects table carries it (Ian, 2026-10-26)
+SCM_ANCH_ALL = [
             {"after": "<tr><td><strong>Response time</strong></td><td>Decreases (facilities closer to consumers)</td></tr>", "widget": facilities, "comment": "the three facility curves, after the criteria table"}]
 
 # ================================================================ Supply Chain Analytics
@@ -283,7 +286,8 @@ def tree_fig():
 TREE = html(tree_fig())
 SCA = {"mar3203-exam4-supply-chain-analytics-01-bullwhip-effect-diagra.png": bullwhip, "mar3203-exam4-supply-chain-analytics-02-decision-chance-nodes.png": NODES,
        "mar3203-exam4-supply-chain-analytics-03-decision-tree-supplier.png": TREE}
-SCA_ANCH = [{"after": "<h4>EXAM TIP: Bullwhip Effect Causes and Solutions</h4>", "widget": bullwhip, "comment": "the bullwhip, after the tip about its causes"}]
+SCA_ANCH = []   # the tip explains the bullwhip without the picture (Ian, 2026-10-26)
+SCA_ANCH_ALL = [{"after": "<h4>EXAM TIP: Bullwhip Effect Causes and Solutions</h4>", "widget": bullwhip, "comment": "the bullwhip, after the tip about its causes"}]
 
 for f in (TQM, PDCA, DMAIC, MOVIE, CHECK, FISH, CHAIN, PRICING, NODES, TREE): assert "<script" not in f["html"]
 write_map("Exam3-QualityMgmt", QM); write_map("Exam3-QualityMgmt-Concise", {}, QM_ANCH)

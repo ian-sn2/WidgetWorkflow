@@ -325,7 +325,8 @@ CAP = {"mar3203-exam2-capacity-management-01-leading-demand-incremental-.png": c
        "mar3203-exam2-capacity-management-03-leading-demand-one-step-exp.png": {"keep": "folded into the four-strategy widget above"},
        "mar3203-exam2-capacity-management-04-average-capacity-incrementa.png": {"keep": "folded into the four-strategy widget above"},
        "mar3203-exam2-capacity-management-07-breakeven-chart-total-reven.png": breakeven}
-CAP_ANCH = [{"after": "<td><b>Leading demand — one-step</b></td>", "widget": capacity, "comment": "the four strategies, after their table"},
+CAP_ANCH = []   # the strategy table and the break-even formula carry the Concise on their own (Ian, 2026-10-26)
+CAP_ANCH_ALL = [{"after": "<td><b>Leading demand — one-step</b></td>", "widget": capacity, "comment": "the four strategies, after their table"},
             {"after": "<li><b>Variable costs (V):</b> change with output (materials, hourly labor, packaging).</li>", "widget": breakeven, "comment": "the break-even chart, after the definitions"}]
 
 for f in (PMCYCLE, NODECONV, LABFLOW, TF_BASE, TF_TARGET, PROCCHART, BLUEPRINT, EQUIP): assert "<script" not in f["html"]

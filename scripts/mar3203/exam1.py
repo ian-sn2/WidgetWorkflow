@@ -154,7 +154,9 @@ FC = {"mar3203-exam1-forecasting-01-demand-uncertainty-zone-chart.png": zone, "m
 FC_CONCISE = {"mar3203-exam1-forecasting-07-excel-data-function.png": html(excel_p3(), True)}
 # Full and Balanced: the one widget stands after the list of all four patterns (Ian, 2026-10-23), so the three pictures inside the list go
 FC_FULL_ANCH = [{"after": "<li><em>Demand is patterned cyclically</em>", "lead": "<h4>EXAM TIP: Plotting Data</h4>", "widget": patterns, "comment": "the demand patterns, after the list that introduces all four, under the plotting tip moved out of item 1"}]
-FC_ANCH = [{"after": "<h4>EXAM TIP: Plotting Data</h4>", "widget": patterns, "comment": "the three patterns, after the list that names them"},
+# the Concise keeps the Excel table only: the pattern and trendline pictures repeat what its text says (Ian, 2026-10-26)
+FC_ANCH = []
+FC_ANCH_ALL = [{"after": "<h4>EXAM TIP: Plotting Data</h4>", "widget": patterns, "comment": "the three patterns, after the list that names them"},
            {"after": "<h4>EXAM TIP: Trendline Function</h4>", "widget": customers_trend, "comment": "the trendline, after the exam tip that introduces it"}]
 
 # ================================================================ Inventory
@@ -185,7 +187,8 @@ eoq = {"title": "EOQ: Where Total Cost Is Lowest",
        "points": [{"q": round(EOQ, 1), "p": round(H * EOQ / 2 + S_ / EOQ, 1), "guides": "q", "showP": False, "ql": "EOQ"}],
        "caption": cap("Holding cost rises with the order size and ordering cost falls with it; their sum is lowest where the two cross, which is the EOQ.")}
 INV = {"mar3203-exam1-ch12-02-abc-analysis-bar-chart-annual-expenses-in.png": abc, "mar3203-exam1-ch12-03-eoq-inventory-level-over-time-sawtooth-di.png": saw, "mar3203-exam1-ch12-04-eoq-total-cost-holding-ordering-cost-grap.png": eoq}
-INV_ANCH = [{"after": "<h4>EXAM TIP: 80/20 Rule</h4>", "widget": abc, "comment": "ABC analysis, after the 80/20 tip"}]   # the EOQ curve is a static picture with no tip of its own: dropped from the Concise (Ian, 2026-10-26)
+INV_ANCH = []   # the ABC bars only picture what the 80/20 tip says (Ian, 2026-10-26)
+INV_ANCH_ALL = [{"after": "<h4>EXAM TIP: 80/20 Rule</h4>", "widget": abc, "comment": "ABC analysis, after the 80/20 tip"}]   # the EOQ curve is a static picture with no tip of its own: dropped from the Concise (Ian, 2026-10-26)
 
 # ================================================================ Z-table
 ZB = bell(0, 1, 100, -3.6, 3.6, 0.2)
