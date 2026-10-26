@@ -1,10 +1,15 @@
 .sol-shell { font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; }
-/* The box itself is the house .toc-box; these only mark the selection. */
-.sol-shell .sol-box { margin:10px 0; padding:10px 20px; }
-.sol-shell .sol-box ul { margin:6px 0 0; padding-left:22px; }
-.sol-shell .sol-box li.sol-current > a { color:#002060; font-weight:800; }
-.sol-shell .sol-box li.sol-current > a::before { content:"\25B8 "; }
-.sol-shell .sol-box a { display:inline-block; padding:4px 0; }
+/* The box itself is the house .toc-box; these lay out its three stages:
+   a label, then that stage's choices in a row that wraps. */
+.sol-shell .sol-box { margin:10px 0; padding:10px 20px 6px; }
+.sol-shell .sol-stage { margin:10px 0 4px; }
+.sol-shell .sol-stage-k { margin:0 0 2px; font-weight:800; color:#002060; font-size:.95rem; }
+.sol-shell .sol-stage ul { list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px 8px; }
+.sol-shell .sol-stage li { margin:0; }
+.sol-shell .sol-stage a { display:inline-block; padding:6px 12px; border:1px solid #c9d2e3; border-radius:6px; background:#fff; color:#333; line-height:1.2; }
+.sol-shell .sol-stage li.sol-current > a { background:#002060; border-color:#002060; color:#fff; font-weight:700; }
+.sol-shell .sol-stage a:hover { text-decoration:none; border-color:#002060; }
+@media (max-width:640px){ .sol-shell .sol-stage a { min-height:44px; display:flex; align-items:center; } }
 .sol-shell .sol-count { margin:4px 0 16px; font-size:.85rem; color:#333; }
 section.sol { margin:0 0 22px; padding:0 0 12px; border-bottom:1px solid #c9d2e3; }
 section.sol p { margin:6px 0; line-height:1.45; }

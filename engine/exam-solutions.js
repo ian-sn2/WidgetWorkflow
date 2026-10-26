@@ -1,9 +1,10 @@
-/* ===== exam-solutions.js v0.5 =====
+/* ===== exam-solutions.js v0.6 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
-   script lists in its table of contents. This builds three collapsible boxes, styled like the house table of
-   contents, into the first <div class="sol-shell">: semester, exam, topic, hides every
+   script lists in its table of contents. This builds one collapsible box, styled like the house table of
+   contents, into the first <div class="sol-shell">, with three stages in
+   order -- semester, exam, topic -- hides every
    section the selection does not match, and keeps the selection in the URL
    hash so a link lands on one exam.
 
@@ -51,52 +52,51 @@
       if (state.topic && topicsFor(state.term, state.exam).indexOf(state.topic) < 0) state.topic = '';
     }
 
-    // Three collapsible boxes, each built the way the house script builds its
-    // table of contents (a <details class="toc-box"> with a bold summary and a
-    // list of links): one for the semester, one for the exam, one for the
-    // topic (Ian, 2026-10-26: "separate sections ... so it won't show
-    // everything all at once"). Each summary names the current choice, the
-    // list inside holds only that box's choices, and picking one closes it.
-    var boxes = {};
-    ['Semester', 'Exam', 'Topic'].forEach(function (name) {
-      var box = document.createElement('details'); box.className = 'toc-box sol-box';
-      var summary = document.createElement('summary'); box.appendChild(summary);
-      var nav = document.createElement('nav'); box.appendChild(nav);
-      mount.appendChild(box);
-      boxes[name] = { box: box, summary: summary, nav: nav };
-    });
+    // One collapsible box, built the way the house script builds its table of
+    // contents (a <details class="toc-box"> with a bold summary), holding three
+    // stages in order: semester, then exam, then topic (Ian, 2026-10-26: "1
+    // toc, and then you select the semester, which then makes you select an
+    // exam, and then topics"). A later stage lists only what the earlier
+    // choices allow, and the summary names the whole selection.
+    var box = document.createElement('details'); box.className = 'toc-box sol-box';
+    var summary = document.createElement('summary'); box.appendChild(summary);
+    var nav = document.createElement('nav'); box.appendChild(nav);
+    mount.appendChild(box);
     var count = document.createElement('p'); count.className = 'sol-count'; mount.appendChild(count);
 
-    function fill(name, current, items, pick) {
-      var b = boxes[name];
-      b.summary.innerHTML = '';
-      var st = document.createElement('strong');
-      st.textContent = '\ud83d\udcd8 ' + name + ': ' + current;
-      b.summary.appendChild(st);
-      b.nav.innerHTML = '';
-      var ul = document.createElement('ul'); ul.style.lineHeight = '1.8';
+    function stage(n, name, items, pick) {
+      var d = document.createElement('div'); d.className = 'sol-stage';
+      var h = document.createElement('p'); h.className = 'sol-stage-k';
+      h.textContent = n + '. ' + name; d.appendChild(h);
+      var ul = document.createElement('ul');
       items.forEach(function (it) {
         var li = document.createElement('li'), a = document.createElement('a');
         a.href = '#'; a.textContent = it.label;
         if (it.current) { li.className = 'sol-current'; a.setAttribute('aria-current', 'true'); }
-        a.addEventListener('click', function (e) { e.preventDefault(); b.box.open = false; pick(it.value); });
+        a.addEventListener('click', function (e) { e.preventDefault(); pick(it.value); });
         li.appendChild(a); ul.appendChild(li);
       });
-      b.nav.appendChild(ul);
+      d.appendChild(ul);
+      return d;
     }
 
     function render() {
       settle();
-      fill('Semester', termName(state.term),
+      summary.innerHTML = '';
+      var st = document.createElement('strong');
+      st.textContent = '\ud83d\udcd8 ' + termName(state.term) + ' \u00b7 ' + examName(state.exam) + ' \u00b7 ' + (state.topic || 'All topics');
+      summary.appendChild(st);
+      nav.innerHTML = '';
+      nav.appendChild(stage(1, 'Semester',
         terms.map(function (t) { return { value: t, label: termName(t), current: t === state.term }; }),
-        function (v) { state.term = v; state.exam = ''; state.topic = ''; render(); });
-      fill('Exam', examName(state.exam),
+        function (v) { state.term = v; state.exam = ''; state.topic = ''; render(); }));
+      nav.appendChild(stage(2, 'Exam',
         examsFor(state.term).map(function (e) { return { value: e, label: examName(e), current: e === state.exam }; }),
-        function (v) { state.exam = v; state.topic = ''; render(); });
-      fill('Topic', state.topic || 'All topics',
+        function (v) { state.exam = v; state.topic = ''; render(); }));
+      nav.appendChild(stage(3, 'Topic',
         [{ value: '', label: 'All topics', current: !state.topic }].concat(
           topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t, current: t === state.topic }; })),
-        function (v) { state.topic = v; render(); });
+        function (v) { state.topic = v; render(); }));
 
       var shown = 0;
       secs.forEach(function (s) {
