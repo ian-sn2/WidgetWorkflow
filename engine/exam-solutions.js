@@ -1,8 +1,8 @@
-/* ===== exam-solutions.js v0.1 =====
+/* ===== exam-solutions.js v0.2 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
-   script lists in its table of contents. This builds three rows of buttons --
+   script lists in its table of contents. This builds three dropdowns --
    exam, semester, topic -- into the first <div class="sol-shell">, hides every
    section the selection does not match, and keeps the selection in the URL
    hash so a link lands on one exam.
@@ -51,28 +51,27 @@
       if (state.topic && topicsFor(state.term, state.exam).indexOf(state.topic) < 0) state.topic = '';
     }
 
+    // A dropdown per row (Ian, 2026-10-26: "a dropdown or that kind of
+    // toggle"). Three selects cascade: changing the exam resets the topic,
+    // changing the semester resets both the exam and the topic.
     function row(label, items, current, pick) {
       var r = document.createElement('div'); r.className = 'sol-row';
-      var k = document.createElement('span'); k.className = 'sol-k'; k.textContent = label;
-      var b = document.createElement('div'); b.className = 'sol-btns';
+      var id = 'sol-' + label.toLowerCase();
+      var k = document.createElement('label'); k.className = 'sol-k'; k.textContent = label; k.htmlFor = id;
+      var sel = document.createElement('select'); sel.id = id;
       items.forEach(function (it) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = it.label;
-        btn.setAttribute('aria-pressed', it.value === current ? 'true' : 'false');
-        btn.addEventListener('click', function () { pick(it.value); });
-        b.appendChild(btn);
+        var o = document.createElement('option');
+        o.value = it.value; o.textContent = it.label; o.selected = it.value === current;
+        sel.appendChild(o);
       });
-      r.appendChild(k); r.appendChild(b);
+      sel.addEventListener('change', function () { pick(sel.value); });
+      r.appendChild(k); r.appendChild(sel);
       return r;
     }
 
     function render() {
       settle();
       mount.innerHTML = '';
-      // Exam first, then the semester it was set in, then the topic: the
-      // order Ian asked for (2026-10-26). A semester's exams come from the
-      // sections, so a term that only has an Exam 1 shows one exam button.
       mount.appendChild(row('Exam', examsFor(state.term).map(function (e) { return { value: e, label: examName(e) }; }),
         state.exam, function (v) { state.exam = v; state.topic = ''; render(); }));
       mount.appendChild(row('Semester', terms.map(function (t) { return { value: t, label: termName(t) }; }),

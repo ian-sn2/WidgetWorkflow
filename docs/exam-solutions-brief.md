@@ -39,7 +39,7 @@ The body is:
 ```
 
 The shell reads `data-term`, `data-exam` and `data-topic` off the sections and
-builds three rows of buttons -- **Exam, Semester, Topic**, in that order --
+builds three dropdowns -- **Exam, Semester, Topic**, in that order --
 hides every section the selection does not match, and keeps the selection in
 the URL hash (`#243/1/Elasticity`), so a link lands on one exam. A hash that
 names a heading or a question (`#eco2023-243-e1-q13`, which is what the house

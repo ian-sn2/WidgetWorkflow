@@ -1724,16 +1724,14 @@
   font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; color:var(--ink);
   border:1px solid var(--navy); background:var(--paper); padding:14px 18px 10px; margin:18px 0 26px; }
 .sol-shell, .sol-shell * { box-sizing:border-box; }
-.sol-shell .sol-row { display:flex; align-items:flex-start; gap:10px; margin:0 0 10px; flex-wrap:wrap; }
-.sol-shell .sol-k { flex:0 0 86px; font-weight:800; color:var(--navy); font-size:.9rem; padding-top:9px; }
-.sol-shell .sol-btns { display:flex; flex:1 1 240px; gap:8px; flex-wrap:wrap; }
-.sol-shell button { border:1px solid var(--navy); background:#fff; color:var(--navy); padding:8px 14px;
-  font:inherit; font-size:.9rem; font-weight:600; cursor:pointer; line-height:1.3; }
-.sol-shell button[aria-pressed="true"] { background:var(--navy); color:#fff; }
+.sol-shell .sol-row { display:flex; align-items:center; gap:10px; margin:0 0 10px; flex-wrap:wrap; }
+.sol-shell .sol-k { flex:0 0 86px; font-weight:800; color:var(--navy); font-size:.9rem; }
+.sol-shell select { flex:1 1 240px; max-width:420px; min-height:44px; border:1px solid var(--navy); background:#fff;
+  color:var(--navy); padding:8px 12px; font:inherit; font-size:.95rem; font-weight:600; cursor:pointer; border-radius:0; }
 .sol-shell .sol-count { margin:4px 0 0; font-size:.85rem; color:var(--ink); }
 @media (max-width:640px){
-  .sol-shell .sol-k { flex-basis:100%; padding-top:0; }
-  .sol-shell button { min-height:44px; flex:1 1 120px; }
+  .sol-shell .sol-k { flex-basis:100%; }
+  .sol-shell select { max-width:none; }
 }
 section.sol { margin:0 0 34px; padding:0 0 18px; border-bottom:1px solid var(--rule, #c9d2e3); }
 section.sol .sol-q { font-weight:800; color:#002060; margin:18px 0 6px; font-size:1.05rem; }
@@ -1751,11 +1749,11 @@ section.sol details.sol-answer p { margin:8px 0 2px; }
 section.sol .sol-table { overflow-x:auto; margin:10px 0; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.1 =====
+/* ===== exam-solutions.js v0.2 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
-   script lists in its table of contents. This builds three rows of buttons --
+   script lists in its table of contents. This builds three dropdowns --
    exam, semester, topic -- into the first <div class="sol-shell">, hides every
    section the selection does not match, and keeps the selection in the URL
    hash so a link lands on one exam.
@@ -1804,28 +1802,27 @@ section.sol .sol-table { overflow-x:auto; margin:10px 0; }
       if (state.topic && topicsFor(state.term, state.exam).indexOf(state.topic) < 0) state.topic = '';
     }
 
+    // A dropdown per row (Ian, 2026-10-26: "a dropdown or that kind of
+    // toggle"). Three selects cascade: changing the exam resets the topic,
+    // changing the semester resets both the exam and the topic.
     function row(label, items, current, pick) {
       var r = document.createElement('div'); r.className = 'sol-row';
-      var k = document.createElement('span'); k.className = 'sol-k'; k.textContent = label;
-      var b = document.createElement('div'); b.className = 'sol-btns';
+      var id = 'sol-' + label.toLowerCase();
+      var k = document.createElement('label'); k.className = 'sol-k'; k.textContent = label; k.htmlFor = id;
+      var sel = document.createElement('select'); sel.id = id;
       items.forEach(function (it) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = it.label;
-        btn.setAttribute('aria-pressed', it.value === current ? 'true' : 'false');
-        btn.addEventListener('click', function () { pick(it.value); });
-        b.appendChild(btn);
+        var o = document.createElement('option');
+        o.value = it.value; o.textContent = it.label; o.selected = it.value === current;
+        sel.appendChild(o);
       });
-      r.appendChild(k); r.appendChild(b);
+      sel.addEventListener('change', function () { pick(sel.value); });
+      r.appendChild(k); r.appendChild(sel);
       return r;
     }
 
     function render() {
       settle();
       mount.innerHTML = '';
-      // Exam first, then the semester it was set in, then the topic: the
-      // order Ian asked for (2026-10-26). A semester's exams come from the
-      // sections, so a term that only has an Exam 1 shows one exam button.
       mount.appendChild(row('Exam', examsFor(state.term).map(function (e) { return { value: e, label: examName(e) }; }),
         state.exam, function (v) { state.exam = v; state.topic = ''; render(); }));
       mount.appendChild(row('Semester', terms.map(function (t) { return { value: t, label: termName(t) }; }),
