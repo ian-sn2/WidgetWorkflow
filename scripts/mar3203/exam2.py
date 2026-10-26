@@ -59,11 +59,11 @@ EX2 = {
  "e5": ("Example 5", "C cannot begin until A and B are complete, and D cannot begin until B is complete.",
         aon_aoa({"A": (20, 22), "B": (20, 78), "C": (76, 22), "D": (76, 78)}, ["A>C", "B>C", "B>D"],
                 {"1": (8, 20), "2": (50, 20), "3": (92, 20), "4": (8, 80), "5": (50, 80), "6": (92, 80)},
-                [aoa_e("1", "2", "A"), aoa_e("2", "3", "C"), aoa_e("4", "5", "B"), aoa_e("5", "6", "D"), aoa_e("5", "2", "Dummy", dashed=True, loff=14, ldx=26)], h=190)),
+                [aoa_e("1", "2", "A"), aoa_e("2", "3", "C"), aoa_e("4", "5", "B"), aoa_e("5", "6", "D"), aoa_e("5", "2", "Dummy", dashed=True, loff=30)], h=190)),
  "e6": ("Example 6", "B cannot begin before A is complete, C cannot begin before A is complete, and D cannot begin before B and C are complete.",
         aon_aoa({"A": (10, 25), "B": (45, 25), "D": (84, 25), "C": (45, 82)}, ["A>B", "B>D", "A>C", "C>D"],
                 {"1": (6, 25), "2": (32, 25), "3": (62, 25), "4": (92, 25), "5": (50, 85)},
-                [aoa_e("1", "2", "A"), aoa_e("2", "3", "B"), aoa_e("3", "4", "D"), aoa_e("2", "5", "Dummy", dashed=True, loff=12, ldx=-36, ldy=-2), aoa_e("5", "3", "C")], h=200)),
+                [aoa_e("1", "2", "A"), aoa_e("2", "3", "B"), aoa_e("3", "4", "D"), aoa_e("2", "5", "Dummy", dashed=True, loff=-26, ldx=-6), aoa_e("5", "3", "C", loff=16)], h=200)),
 }
 def examples(exs, title):
     return {"title": title, "lede": "The same precedence rule drawn both ways; a dashed arrow is a dummy activity.",
@@ -80,8 +80,9 @@ def nodeconv():
     b += path("M265 62 V238 M335 62 V238 M205 150 H265 M335 150 H395", sw=1.4, head=False)
     b += text(300, 142, "A", 30, color=NAVY) + text(300, 225, "2", 20, color=NAVY)
     b += text(235, 140, "ES", 20, color=NAVY) + text(365, 140, "EF", 20, color=NAVY) + text(235, 200, "LS", 20, color=NAVY) + text(365, 200, "LF", 20, color=NAVY)
-    calls = [(230, 120, 150, 40, "Earliest\nStart", "end"), (370, 120, 450, 40, "Earliest\nFinish", "start"), (335, 110, 500, 110, "Activity\nLabel", "start"),
-             (230, 185, 150, 268, "Latest\nStart", "end"), (370, 185, 450, 268, "Latest\nFinish", "start"), (300, 232, 300, 285, "Activity\nDuration", "middle")]
+    # every leader stops at the circle's rim, outside the lettering it points at (Ian, 2026-10-26: lines were crossing ES, EF and LS)
+    calls = [(233, 83, 150, 40, "Earliest\nStart", "end"), (367, 83, 450, 40, "Earliest\nFinish", "start"), (386, 110, 500, 110, "Activity\nLabel", "start"),
+             (233, 217, 150, 268, "Latest\nStart", "end"), (367, 217, 450, 268, "Latest\nFinish", "start"), (300, 245, 300, 285, "Activity\nDuration", "middle")]
     for x1, y1, x2, y2, t, anc in calls:
         b += arrow(x2, y2 - 4 if y2 < y1 else y2 - 16, x1, y1, sw=1.3, head=False)
         b += text(x2, y2 + (4 if anc == "middle" else -14 if y2 < y1 else 2), t, 13, anchor=anc, lh=15)
@@ -131,9 +132,20 @@ PM = {"mar3203-exam2-pm-01-project-planning-scheduling-controlling-cycle.png": P
 PM_ANCH = [{"after": "<p>Node convention (ES | EF over LS | LF):</p>", "widget": big_filled, "comment": "the worked CPM network, after the convention it uses"}]
 
 # ================================================================ Processes
+# The diagonal y = 104 - m(x - 2) through the three focus boxes, drawn only in the gaps between them,
+# so it never runs through a box's name (Ian, 2026-10-26). Entry and exit points are solved, not typed.
+PPM_BOXES = [((4, 30), (82, 104)), ((38, 64), (50, 72)), ((76, 102), (8, 30))]
+def _ppm_cross(box):
+    (x0, x1), (y0, y1) = box; m = 98 / 102
+    f = lambda x: 104 - m * (x - 2); g = lambda y: 2 + (104 - y) / m
+    pts = [(x, f(x)) for x in (x0, x1) if y0 <= f(x) <= y1] + [(g(y), y) for y in (y0, y1) if x0 <= g(y) <= x1]
+    pts = sorted(set((round(x, 1), round(y, 1)) for x, y in pts)); assert len(pts) == 2, pts
+    return pts
+_c = [_ppm_cross(b) for b in PPM_BOXES]
+PPM_SEGS = [[list(_c[0][1]), list(_c[1][0])], [list(_c[1][1]), list(_c[2][0])]]   # exit of one box to entry of the next
 ppm = {"title": "Product-Process Matrix",
        "axes": {"x": "\nVolume", "y": "Variety", "xmax": 110, "ymax": 110, "bg": False},
-       "curves": [{"id": "diag", "label": "", "pts": [[2, 104], [104, 6]], "dashed": True, "thin": True, "color": "grey"}],
+       "curves": [{"id": "diag%d" % i, "label": "", "pts": seg, "dashed": True, "thin": True, "color": "grey"} for i, seg in enumerate(PPM_SEGS)],
        "areas": [{"pts": [[4, 82], [4, 104], [30, 104], [30, 82]], "color": "gold", "opacity": 0.4, "edge": True, "label": "Process\nFocus"},
                  {"pts": [[38, 50], [38, 72], [64, 72], [64, 50]], "color": "gold", "opacity": 0.4, "edge": True, "label": "Repetitive\nFocus"},
                  {"pts": [[76, 8], [76, 30], [102, 30], [102, 8]], "color": "gold", "opacity": 0.4, "edge": True, "label": "Product\nFocus"},
@@ -168,12 +180,13 @@ def lab_flow():
     b += arrow(540, 232, 470, 232, sw=2.2)
     b += diamond(420, 232, 94, 60, "Retest?", fs=11)
     b += path("M373 232 H196 V150", sw=2.2)
-    lg = 1060
-    b += f'<polygon points="{lg},40 {lg+28},40 {lg+14},62" fill="#d9cbe6" stroke="{INK}" stroke-width="1"/>' + text(lg + 40, 55, "= Inventory/Buffer", 12, anchor="start")
-    b += arrow(lg, 100, lg + 28, 100, sw=2) + text(lg + 40, 104, "= Direction of Flow", 12, anchor="start")
-    b += f'<polygon points="{lg+14},128 {lg+28},142 {lg+14},156 {lg},142" fill="#fbf1c7" stroke="{INK}" stroke-width="1"/>' + text(lg + 40, 146, "= Decision", 12, anchor="start")
-    b += f'<circle cx="{lg+14}" cy="186" r="14" fill="#f9cfb3" stroke="{INK}" stroke-width="1"/>' + text(lg + 40, 190, "= Process/Activity", 12, anchor="start")
-    return svg(1250, 275, b, "A flowchart of work through a lab: three sources feed a process, a separation decision, separation, distribution and a test; failed tests go to a post-test, storage and a retest decision that loops back to the process", 700)
+    # legend in a row under the chart (Ian, 2026-10-26: beside it, the whole drawing shrank to fit the column)
+    ly = 300
+    b += f'<polygon points="60,{ly-11} 88,{ly-11} 74,{ly+11}" fill="#d9cbe6" stroke="{INK}" stroke-width="1"/>' + text(100, ly + 4, "= Inventory/Buffer", 13, anchor="start")
+    b += arrow(290, ly, 318, ly, sw=2) + text(330, ly + 4, "= Direction of Flow", 13, anchor="start")
+    b += f'<polygon points="534,{ly-14} 548,{ly} 534,{ly+14} 520,{ly}" fill="#fbf1c7" stroke="{INK}" stroke-width="1"/>' + text(560, ly + 4, "= Decision", 13, anchor="start")
+    b += f'<circle cx="704" cy="{ly}" r="14" fill="#f9cfb3" stroke="{INK}" stroke-width="1"/>' + text(730, ly + 4, "= Process/Activity", 13, anchor="start")
+    return svg(1000, 330, b, "A flowchart of work through a lab: three sources feed a process, a separation decision, separation, distribution and a test; failed tests go to a post-test, storage and a retest decision that loops back to the process", 1000)
 LABFLOW = html(lab_flow(), True)
 
 def tfmap(rows, cols, cells, arrows_, title_days):
@@ -232,22 +245,22 @@ def blueprint():
     cols = ["Personal Greeting", "Service Diagnosis", "Perform Service", "Friendly Close"]
     for i, c in enumerate(cols): b += text(150 + i * 250, 22, c, 14, italic=True)
     b += f'<line x1="40" y1="118" x2="1040" y2="118" stroke="{INK}" stroke-width="1.6"/><line x1="60" y1="508" x2="1040" y2="508" stroke="{INK}" stroke-width="1.6"/>'
-    b += text(14, 72, "Level 1", 10, anchor="start") + text(14, 300, "Level 2", 10, anchor="start") + text(14, 620, "Level 3", 10, anchor="start")
-    E = lambda cx, cy, t, fill="#f9cfb3": ellipse(cx, cy, 115, 30, t, fill=fill, fs=12, lh=14)
+    b += text(14, 72, "Level 1", 12, anchor="start") + text(14, 300, "Level 2", 12, anchor="start") + text(14, 620, "Level 3", 12, anchor="start")
+    E = lambda cx, cy, t, fill="#f9cfb3": ellipse(cx, cy, 115, 30, t, fill=fill, fs=13, lh=15)
     b += E(170, 78, "Customer Arrives\nfor Service", "#dff1f3") + E(920, 78, "Customer\nDeparts", "#dff1f3")
-    b += E(170, 210, "Warm Greeting and\nObtain Service Request") + diamond(355, 268, 90, 70, "Standard\nRequest", fs=10) + E(475, 190, "Determine\nSpecifics")
-    b += diamond(475, 320, 130, 94, "Can Service\nBe Done, and\nDoes Customer\nApprove?", fs=9.5, lh=11) + E(670, 212, "Notify Customer\nand Recommend\nAlternative Provider")
+    b += E(170, 210, "Warm Greeting and\nObtain Service Request") + diamond(355, 268, 96, 74, "Standard\nRequest", fs=11) + E(475, 190, "Determine\nSpecifics")
+    b += diamond(475, 320, 150, 106, "Can Service\nBe Done, and\nDoes Customer\nApprove?", fs=10.5, lh=12) + E(670, 212, "Notify Customer\nand Recommend\nAlternative Provider")
     b += E(920, 192, "Customer\nPays Bill") + E(920, 430, "Notify Customer\nthat the Car Is Ready") + E(170, 410, "Direct Customer\nto Waiting Room")
     b += E(685, 552, "Perform\nRequired Work") + E(685, 685, "Prepare\nInvoice")
     # flow lines
     b += arrow(170, 108, 170, 180, sw=1.4) + path("M170 240 V268 H306", sw=1.4) + path("M355 233 V190 H356", sw=1.4) + arrow(475, 220, 475, 272, sw=1.4)
-    b += path("M540 320 H670 V244", sw=1.4) + path("M670 180 V78 H800", sw=1.4) + text(600, 310, "NO", 9) + text(370, 205, "NO", 9)
-    b += path("M355 303 V545 H565", sw=1.4) + path("M475 367 V545", sw=1.4, head=False) + text(368, 540, "YES", 9) + text(492, 540, "YES", 9)
+    b += path("M540 320 H670 V244", sw=1.4) + path("M670 180 V78 H800", sw=1.4) + text(600, 310, "NO", 11) + text(338, 216, "NO", 11)
+    b += path("M355 303 V545 H565", sw=1.4) + path("M475 367 V545", sw=1.4, head=False) + text(368, 540, "YES", 11) + text(492, 540, "YES", 11)
     b += path("M355 303 V525 H170 V442", sw=1.4) + path("M685 582 V655", sw=1.4) + path("M805 685 H920 V462", sw=1.4) + arrow(920, 400, 920, 224, sw=1.4) + arrow(920, 162, 920, 110, sw=1.4)
     for cx, cy in [(170, 145), (170, 487), (355, 487), (475, 487), (685, 612), (855, 685), (920, 290), (920, 355)]:
         b += f'<circle cx="{cx}" cy="{cy}" r="17" fill="{INK}"/>'
     b += f'<circle cx="60" cy="720" r="14" fill="{INK}"/>' + text(82, 725, "= Potential Failure Point", 12, anchor="start")
-    return svg(1060, 745, b, "A service blueprint for an automobile repair shop across four stages and three levels of customer contact, with potential failure points marked", 700)
+    return svg(1060, 745, b, "A service blueprint for an automobile repair shop across four stages and three levels of customer contact, with potential failure points marked", 1000)
 BLUEPRINT = html(blueprint())
 
 def equipment():
