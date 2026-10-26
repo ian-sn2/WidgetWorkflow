@@ -63,7 +63,8 @@ GLOBAL = html(global2x2())
 
 OPS = {"ucf-mar3203-operations-exam1-01-ford-supply-chain.png": FORD, "ucf-mar3203-operations-exam1-02-productivity-pie-chart.png": PIE,
        "ucf-mar3203-operations-exam1-03-product-life-cycle.png": lifecycle, "ucf-mar3203-operations-exam1-04-global-operations.png": GLOBAL}
-OPS_ANCH = [{"after": "<b>Supply chain management</b>: coordinating operations processes across a network of businesses.</p>", "html": CSS + ford(), "comment": "the Ford supply chain"},
+OPS_ANCH = []   # the Concise carries its own tables for all three (Ian, 2026-10-26); the figures were diagrams
+OPS_ANCH_ALL = [{"after": "<b>Supply chain management</b>: coordinating operations processes across a network of businesses.</p>", "html": CSS + ford(), "comment": "the Ford supply chain"},
             {"after": "<tr><td><b>Decline</b></td><td>Cost control; reduce capacity</td><td>Overcapacity risk</td></tr>", "widget": lifecycle, "comment": "the life cycle, after its table"},
             {"after": "<tr><td><b>Transnational</b></td><td>High</td><td>High</td><td>HQs worldwide; moves materials/labor/ideas across borders (P&amp;G)</td></tr>", "html": global2x2(), "comment": "the strategy grid, after its table"}]
 
@@ -184,8 +185,7 @@ eoq = {"title": "EOQ: Where Total Cost Is Lowest",
        "points": [{"q": round(EOQ, 1), "p": round(H * EOQ / 2 + S_ / EOQ, 1), "guides": "q", "showP": False, "ql": "EOQ"}],
        "caption": cap("Holding cost rises with the order size and ordering cost falls with it; their sum is lowest where the two cross, which is the EOQ.")}
 INV = {"mar3203-exam1-ch12-02-abc-analysis-bar-chart-annual-expenses-in.png": abc, "mar3203-exam1-ch12-03-eoq-inventory-level-over-time-sawtooth-di.png": saw, "mar3203-exam1-ch12-04-eoq-total-cost-holding-ordering-cost-grap.png": eoq}
-INV_ANCH = [{"after": "<h4>EXAM TIP: 80/20 Rule</h4>", "widget": abc, "comment": "ABC analysis, after the 80/20 tip"},
-            {"after": "<h4>EXAM TIP: Quantity Discounts</h4>", "widget": eoq, "comment": "the EOQ cost curves, before the formulas"}]
+INV_ANCH = [{"after": "<h4>EXAM TIP: 80/20 Rule</h4>", "widget": abc, "comment": "ABC analysis, after the 80/20 tip"}]   # the EOQ curve is a static picture with no tip of its own: dropped from the Concise (Ian, 2026-10-26)
 
 # ================================================================ Z-table
 ZB = bell(0, 1, 100, -3.6, 3.6, 0.2)
@@ -217,8 +217,8 @@ def ztable(rows, hl=None, first=False):
 ZFULL = html(ztable([i / 10 for i in range(0, 21)]), True)
 ZARROWS = html(ztable([i / 10 for i in range(8, 19)], hl={"row": 1.6, "cols": [0.04, 0.05]}))
 ZTB = {"mar3203-exam1-ztable-01-standard-normal-curve-pz-less-equal-zero.png": zcurve, "mar3203-exam1-ztable-02-z-table.png": ZFULL, "mar3203-exam1-ztable-03-z-table-arrows.png": ZARROWS}
-ZT_ANCH = [{"after": "<li>Total area under the curve : 1.00; left half (z ≤ 0) : 0.50.</li>", "widget": zcurve, "comment": "the standard normal curve, after the list that states its halves"},
-           {"after": "\\[z = \\frac{1.64 + 1.65}{2} = 1.645\\]", "html": CSS + ztable([i / 10 for i in range(8, 19)], hl={"row": 1.6, "cols": [0.04, 0.05]}), "comment": "the lookup, after the example that reads it"}]
+ZT_ANCH = [# the curve itself is a static picture: dropped from the Concise (Ian, 2026-10-26); the lookup table stays
+                      {"after": "\\[z = \\frac{1.64 + 1.65}{2} = 1.645\\]", "html": CSS + ztable([i / 10 for i in range(8, 19)], hl={"row": 1.6, "cols": [0.04, 0.05]}), "comment": "the lookup, after the example that reads it"}]
 
 for f in (FORD, PIE, GLOBAL, EXCEL, ZFULL, ZARROWS): assert "<script" not in f["html"]
 write_map("Exam1-OperationsProductivity", OPS)

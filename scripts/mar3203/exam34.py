@@ -59,8 +59,7 @@ DMAIC = html(cycle_fig([("Define.", "Identify customer priorities.\nDetermine me
                        "DMAIC", "The DMAIC cycle: define, measure, analyze, improve, control", r=178))
 QM = {"mar3203-exam3-quality-management-01-quality-associated-costs-graph.png": qcost, "mar3203-exam3-quality-management-02-tqm-flow-of-activities-chart.png": TQM,
       "mar3203-exam3-quality-management-03-pdca-cycle-diagram.png": PDCA, "mar3203-exam3-quality-management-04-dmaic-methodology-cycle-diagra.png": DMAIC}
-QM_ANCH = [{"after": "<h4>EXAM TIP: Quality-Associated Costs</h4>", "widget": qcost, "comment": "the cost bands, after the tip about them"},
-           {"after": "<td><b>Kaizen</b> (\"change for better\"): never-ending improvement cycle — <b>Plan, Do, Check, Act (PDCA)</b></td>", "html": CSS + cycle_fig([("Plan.", "Identify the process defect and\nmake a plan for improvement."), ("Do.", "Experiment with the\nimprovement strategy."), ("Check.", "Evaluate the effectiveness\nof the plan."), ("Act.", "Implement the plan and\ncontinuously document its progress.")], "PDCA", "The plan, do, check, act cycle"), "comment": "PDCA, after the table row that names it"}]
+QM_ANCH = [{"after": "<h4>EXAM TIP: Quality-Associated Costs</h4>", "widget": qcost, "comment": "the cost bands, after the tip about them"}]   # the PDCA ring is a diagram: dropped from the Concise (Ian, 2026-10-26)
 
 # ================================================================ SPC
 def movie_flow():
@@ -194,7 +193,8 @@ SPC = {"mar3203-exam3-spc-01-movie-theater-flow-chart.png": MOVIE, "mar3203-exam
        "mar3203-exam3-spc-06-control-chart-example.png": control, "mar3203-exam3-spc-07-random-variation-distribution.png": random_var, "mar3203-exam3-spc-08-assignable-variation-distribution.png": assign_var,
        "mar3203-exam3-spc-09-xbar-rchart-example.png": xbar_r, "mar3203-exam3-spc-10-xbar-rchart-toothpaste.png": tooth, "mar3203-exam3-spc-11-normal-distribution-curve.png": normal,
        "mar3203-exam3-spc-12-empirical-rule-normal-distribution.png": empirical, "mar3203-exam3-spc-13-process-capability-clorox.png": clorox, "mar3203-exam3-spc-14-cp-cpk-diagram.png": cpk}
-SPC_ANCH = [{"after": "<p>Samples 2 and 5 fall outside X-bar control limits → process is <b>out of control</b>. R-chart alone would miss this shift.</p>", "widget": tooth, "comment": "the toothpaste charts, after the worked example's conclusion"},
+TOOTH_TABLE = html('<table class="sk-tbl financial"><tr><th>Sample</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>Limits</th></tr><tr><td class="lbl">Mean (x̄)</td><td>2.05</td><td class=hl>1.725</td><td>1.95</td><td>2.2</td><td class=hl>3.15</td><td>UCL 2.6238 · x̿ 2.215 · LCL 1.8062</td></tr><tr><td class="lbl">Range (R)</td><td>0.5</td><td>0.6</td><td>0.6</td><td>0.5</td><td>0.6</td><td>UCL 1.2768 · R̄ 0.56 · LCL 0</td></tr></table>', True)
+SPC_ANCH = [{"after": "<p>Samples 2 and 5 fall outside X-bar control limits → process is <b>out of control</b>. R-chart alone would miss this shift.</p>", "html": TOOTH_TABLE["html"], "comment": "the toothpaste charts, after the worked example's conclusion"},
             {"after": "<li>±3\\(\\sigma\\): 99.72% of values</li>", "widget": empirical, "comment": "the empirical rule, after the list that states it"},
             {"after": "<tr><td><em>C</em><sub>p</sub> &gt; 1</td><td>Process capable (&gt;1.33 is ideal)</td></tr>", "widget": cpk, "comment": "the three capability cases, after their table"}]
 
@@ -253,7 +253,7 @@ facilities = {"title": "Facilities, Response Time, Cost and Profit", "lede": "Wh
               "scenarios": {"resp": dict(label="Response time", axes=resp["axes"], curves=resp["curves"], caption=resp["caption"]),
                             "cost": dict(label="Cost", axes=costs["axes"], curves=costs["curves"], points=costs["points"], caption=costs["caption"]),
                             "profit": dict(label="Revenue and profit", axes=profit["axes"], curves=profit["curves"], moves=profit["moves"], points=profit["points"], caption=profit["caption"])}}
-SCM_ANCH = [{"after": "<td><strong>Finance</strong></td>", "html": CSS + chain_net(), "comment": "the supply chain network, after the flows table"},
+SCM_ANCH = [# the network diagram is dropped from the Concise (Ian, 2026-10-26)
             {"after": "<tr><td><strong>Response time</strong></td><td>Decreases (facilities closer to consumers)</td></tr>", "widget": facilities, "comment": "the three facility curves, after the criteria table"}]
 
 # ================================================================ Supply Chain Analytics

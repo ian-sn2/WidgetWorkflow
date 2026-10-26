@@ -1015,8 +1015,11 @@ Ian changed this rule on 2026-09-17, and the change applies **here only**:
   widget, anchors widgets into a Concise edition, and refuses to write a file
   that differs from its source in anything else; `check_file.py --no-head`
   checks the widgets without the Smokin' Notes head rules.
-* **A Concise edition carries a widget only where its own text introduces
-  it.** Cases of one lesson that the text introduces together (surplus and
+* **A Concise edition carries a widget only where its own text or an exam
+  tip is about it, and a diagram or static picture not at all** (Ian,
+  2026-10-26, tightening the rule below: scenario buttons count as
+  interaction; a static figure with data becomes a table, one without is
+  dropped). The older wording: Cases of one lesson that the text introduces together (surplus and
   shortage, the two taxes, the four surplus areas) become one widget with
   scenario buttons; a widget the Concise text never introduces is dropped,
   and not replaced by a table of its numbers either (Ian, 2026-10-12: the
