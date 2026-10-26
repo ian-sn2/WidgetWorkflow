@@ -281,8 +281,9 @@ PR = {"mar3203-exam2-processes-01-product-process-matrix-diagram.png": ppm, "mar
       "mar3203-exam2-processes-05-process-chart-hot-dog-production.png": PROCCHART, "mar3203-exam2-processes-06-service-blueprint-automobile-repair-shop.png": BLUEPRINT,
       "mar3203-exam2-processes-07-selecting-equipment-factors-diagram.png": EQUIP}
 PPM_TABLE = html('<table class="sk-tbl financial"><tr><th>Process strategy</th><th>Variety</th><th>Volume</th></tr><tr><td class="lbl">Process focus</td><td>High</td><td>Low</td></tr><tr><td class="lbl">Repetitive focus</td><td>Moderate</td><td>Moderate</td></tr><tr><td class="lbl">Product focus</td><td>Low</td><td>High</td></tr><tr><td class="lbl">Mass customization</td><td>High</td><td>High</td></tr></table>', True)
-# the Concise gets the matrix as a table rather than the picture (Ian, 2026-10-26)
-PR_ANCH = [{"after": "maps the relationship between a product's <b>variety</b> and <b>volume</b> characteristics", "html": PPM_TABLE["html"], "comment": "the matrix, after the paragraph that defines it"}]
+# the Concise already tabulates the strategies right under this paragraph, so it gets nothing (Ian, 2026-10-26)
+PR_ANCH = []
+PR_ANCH_TABLE = [{"after": "maps the relationship between a product's <b>variety</b> and <b>volume</b> characteristics", "html": PPM_TABLE["html"], "comment": "the matrix, after the paragraph that defines it"}]
 
 # ================================================================ Capacity
 DEM = lambda x: 20 + 0.6 * x
