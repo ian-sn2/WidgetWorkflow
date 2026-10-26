@@ -1,4 +1,6 @@
-# Engine reference — `engine/sd-graph.js` v2.67
+# Engine reference — `engine/sd-graph.js` v2.68
+
+**v2.68:** a network node's four times sit 5px out from its side and 1px above or below it, rather than 11px and 5px off, so they read as the node's own (Ian, 2026-10-26). Clear the arrows by spreading the nodes, not by moving the times.
 
 **v2.67:** `axes.years: true` prints quantity ticks as written (a year is 2010, not 2,010).
 

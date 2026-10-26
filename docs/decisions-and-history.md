@@ -1035,3 +1035,19 @@ way for QMB3200 Exam 2 Part 2 measured the eleven figures at 4,436px
 against 5,931px framed. The engine stays at v2.67. The same day's other
 change: the project-management cycle's canvas was 30px too short for its
 bottom arc.
+
+**2026-10-26, review rounds.** Ian reviewed every MAR3203 widget on a
+live flashcard page (an artifact with a shared store for his verdicts
+and comments, read back with `ArtifactData`). Two rounds, all answered
+in the build scripts bar one: the network's corner times are engine
+geometry, and his "close to the nodes but not too close" is v2.68 --
+the times sit 5px out and 1px above or below the node instead of 11 and
+5, and the arrows are cleared by spreading the nodes, not by moving the
+times. The rest: a pie label pulled in from the rim, a grid title
+centred over the grid, an arrow ending inside its shading, break-even
+signs carried on the braces, cost-band names in ink, TQM rows spaced
+for a real arrow, the Clorox bell sampled to five decimals (three made
+the spline zig-zag), decision-tree names clear of their lines, the
+example network spread wide and shallow, two cost labels swapped, the
+max-profit brace replaced by a two-headed arrow, and a stray stub cut
+from the lab flowchart.

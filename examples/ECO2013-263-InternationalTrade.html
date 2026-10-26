@@ -378,7 +378,7 @@ MathJax = {
 .sdg .sdg-body.two .sdg-flowfig { max-width:none; }
 </style>
 <script>
-/* ===== sd-graph.js v2.67 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.68 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)
@@ -1608,11 +1608,14 @@ MathJax = {
           if (!aoa || nd.label) g.appendChild(text(cx, cy + 6, nd.label || nd.id, 'nw-label'));
           // the four times sit on the node's diagonals, outside the rim, where
           // an arrow leaving horizontally or at 45 degrees does not run through them
-          var ef2 = el('g'), lf2 = el('g'), d = R + 11;
-          if (nd.es != null) ef2.appendChild(text(cx - d, cy - R - 5, nd.es, 'nw-time', 'end'));
-          if (nd.ef != null) ef2.appendChild(text(cx + d, cy - R - 5, nd.ef, 'nw-time', 'start'));
-          if (nd.ls != null) lf2.appendChild(text(cx - d, cy + R + 16, nd.ls, 'nw-time', 'end'));
-          if (nd.lf != null) lf2.appendChild(text(cx + d, cy + R + 16, nd.lf, 'nw-time', 'start'));
+          // v2.68: the four times hug the node -- 5px out from its side and 1px above or
+          // below it -- rather than standing 11px off (Ian, 2026-10-26: "close to the
+          // nodes but not too close"). The arrows were cleared by spreading the nodes.
+          var ef2 = el('g'), lf2 = el('g'), d = R + 5;
+          if (nd.es != null) ef2.appendChild(text(cx - d, cy - R - 1, nd.es, 'nw-time', 'end'));
+          if (nd.ef != null) ef2.appendChild(text(cx + d, cy - R - 1, nd.ef, 'nw-time', 'start'));
+          if (nd.ls != null) lf2.appendChild(text(cx - d, cy + R + 12, nd.ls, 'nw-time', 'end'));
+          if (nd.lf != null) lf2.appendChild(text(cx + d, cy + R + 12, nd.lf, 'nw-time', 'start'));
           if (show.ef != null) part(ef2, {at: show.ef}); if (show.lf != null) part(lf2, {at: show.lf});
           g.appendChild(ef2); g.appendChild(lf2);
         }
