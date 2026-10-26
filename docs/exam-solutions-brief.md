@@ -39,19 +39,28 @@ The body is:
 ```
 
 The shell reads `data-term`, `data-exam` and `data-topic` off the sections and
-builds a collapsible picker styled like the house table of contents -- a
-`<details class="toc-box">` whose summary names what is showing, holding a
-nested list of **exams, then semesters, then the chosen semester's topics**,
-each a link that sets the selection -- hides every section the selection does not match, and keeps the selection in
+builds three collapsible boxes styled like the house table of contents --
+`<details class="toc-box">`, one each for **Semester, Exam and Topic**, whose
+summary names the current choice and whose list holds that box's choices;
+picking one closes the box -- hides every section the selection does not match, and keeps the selection in
 the URL hash (`#243/1/Elasticity`), so a link lands on one exam. A hash that
 names a heading or a question (`#eco2023-243-e1-q13`, which is what the house
 table of contents links to) selects that question's exam and semester first,
 so a link to a hidden heading never scrolls to nothing. Terms are the usual
 codes (YY + 1 spring, 2 summer, 3 fall) and the shell names them.
 
-**The solution is behind a click.** Each `<details>` starts closed so a
-student can try the question first. One attribute (`open`) reverses that for
-the whole file; it is Ian's call.
+**The question is a quiz.** Each choice is clickable: the one picked turns
+green or red, the right one is shown green, and a line under the list says
+which letter is correct. The letter comes from `data-answer` on the section,
+which the build reads off the written solution's own "(c)"; a question with
+none stays plain text. **The solution is behind a click** after that: each
+`<details>` starts closed. One attribute (`open`) reverses that for the whole
+file; it is Ian's call.
+
+**Solutions are set tight.** The house sheet gives every paragraph and list
+item 10px to 20px of margin at 1.6 line height, which made a worked answer
+twice as tall as it needed to be; inside `.sol-answer` the shell's stylesheet
+halves that, and a figure there is 440px wide rather than 580.
 
 ## Where the widgets go
 

@@ -61,6 +61,14 @@ through; the counts are in the build log and the tags are on each section.
 
 ## Decisions to review
 
+* **The choices are a quiz** (Ian, 2026-10-26): click one and it turns green
+  or red, the right one shows green, and the solution stays behind its own
+  click. Spring 2023 question 10 accepts (a) or (d), as the key does.
+* **The picker is three collapsible boxes** -- Semester, Exam, Topic -- in
+  the style of the table of contents, each closing when a choice is made.
+* **Solutions are set tighter than a chapter**: half the house margins, and
+  figures at 440px inside a solution.
+
 * **Solutions start closed.** `open` on every `<details class="sol-answer">`
   shows them all.
 * **Title** is "ECO2023 Exam 1 Detailed Solutions"; the file Ian sent was

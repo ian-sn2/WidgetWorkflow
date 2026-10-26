@@ -1,21 +1,43 @@
 .sol-shell { font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; }
 /* The box itself is the house .toc-box; these only mark the selection. */
+.sol-shell .sol-box { margin:10px 0; padding:10px 20px; }
 .sol-shell .sol-box ul { margin:6px 0 0; padding-left:22px; }
 .sol-shell .sol-box li.sol-current > a { color:#002060; font-weight:800; }
 .sol-shell .sol-box li.sol-current > a::before { content:"\25B8 "; }
 .sol-shell .sol-box a { display:inline-block; padding:4px 0; }
-.sol-shell .sol-count { margin:10px 0 0; font-size:.85rem; color:#333; }
-section.sol { margin:0 0 34px; padding:0 0 18px; border-bottom:1px solid var(--rule, #c9d2e3); }
-section.sol .sol-q { font-weight:800; color:#002060; margin:18px 0 6px; font-size:1.05rem; }
-section.sol ol.sol-choices { margin:6px 0 14px 1.4em; padding:0; }
-section.sol ol.sol-choices li { margin:2px 0; }
-section.sol details.sol-answer { box-sizing:border-box; border:1px solid #002060; background:#fff; padding:8px 14px; margin:12px auto 0; width:80%; }
+.sol-shell .sol-count { margin:4px 0 16px; font-size:.85rem; color:#333; }
+section.sol { margin:0 0 22px; padding:0 0 12px; border-bottom:1px solid #c9d2e3; }
+section.sol p { margin:6px 0; line-height:1.45; }
+section.sol .sol-q { font-weight:800; color:#002060; margin:14px 0 4px; font-size:1.05rem; }
+section.sol ol.sol-sub { margin:2px 0 4px 2em; padding:0; }
+section.sol ol.sol-sub li { margin:0; line-height:1.45; }
+/* The choices are the quiz: each one a button that turns green or red. */
+section.sol ol.sol-choices { margin:6px 0 8px; padding:0; list-style:none; counter-reset:choice; }
+section.sol ol.sol-choices li { margin:0 0 3px; padding:3px 8px; line-height:1.4; border:1px solid transparent; border-radius:4px; cursor:pointer; }
+section.sol ol.sol-choices li::before { counter-increment:choice; content:counter(choice, upper-alpha) ".\00a0\00a0"; font-weight:600; }
+section.sol ol.sol-choices li:hover { background:#eef3fd; border-color:#c9d2e3; }
+section.sol.sol-answered ol.sol-choices li { cursor:default; }
+section.sol.sol-answered ol.sol-choices li:hover { background:transparent; border-color:transparent; }
+section.sol ol.sol-choices li.sol-right, section.sol.sol-answered ol.sol-choices li.sol-right:hover { background:#e3f5e8; border-color:#2e8b57; color:#1d5e3a; font-weight:600; }
+section.sol ol.sol-choices li.sol-wrong, section.sol.sol-answered ol.sol-choices li.sol-wrong:hover { background:#fbe5e5; border-color:#d62828; color:#8f1d1d; }
+section.sol .sol-verdict { margin:2px 0 6px; font-weight:700; }
+section.sol .sol-verdict.is-right { color:#1d5e3a; }
+section.sol .sol-verdict.is-wrong { color:#8f1d1d; }
+/* The solution, written tight: the house sheet gives every paragraph and
+   list item 10px to 20px of margin at 1.6 line height, which is right for a
+   chapter and makes a worked answer twice as tall as it needs to be. */
+section.sol details.sol-answer { box-sizing:border-box; border:1px solid #002060; background:#fff; padding:6px 12px; margin:6px 0 0; width:100%; }
 section.sol details.sol-answer summary { cursor:pointer; font-weight:800; color:#002060; }
-section.sol details.sol-answer p { margin:8px 0 2px; }
-@media (max-width:640px){ section.sol details.sol-answer { width:100%; } }
+section.sol details.sol-answer p { margin:5px 0; line-height:1.4; }
+section.sol details.sol-answer ul, section.sol details.sol-answer ol { margin:3px 0 5px; padding-left:1.4em; }
+section.sol details.sol-answer li { margin:0 0 3px; line-height:1.4; }
+section.sol details.sol-answer li p { margin:3px 0; }
+section.sol details.sol-answer ul[style*="center"] { padding-left:0; }
+section.sol details.sol-answer ul[style*="center"] p { margin:2px 0; }
+/* A figure inside a solution is read beside its working, not as the page's
+   centrepiece: narrower plot, full width, less padding. */
+section.sol .sdg { --fig:440px; width:100%; margin:10px auto; padding:12px 14px 10px; }
+section.sol .sdg .sdg-lede { margin-bottom:8px; }
+section.sol .sol-table { overflow-x:auto; margin:8px 0; }
+section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
-/* An exam's table keeps the exam's own column headings, and the house sheet
-   sets every table full width with 16px cell padding, so a three-column table
-   with long headings ran 32px past a 320px screen. It scrolls inside its own
-   box instead of pushing the page sideways. */
-section.sol .sol-table { overflow-x:auto; margin:10px 0; }
