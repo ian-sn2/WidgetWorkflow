@@ -451,12 +451,14 @@ or "unattainable" dot) whose exact coordinates are not the lesson.
 
 ## Exam solutions (`solutions/`, from 2026-10-26)
 
-- [ ] Widgets on the other four Exam 1 papers (Fall 2023, Summer 2023, Spring
-      2023, Summer 2022). Their stems, choices, solutions and topics are in the
-      page; the four-panel figure questions carry a `<!-- FIGURE -->` comment
-      where the image was.
-- [ ] Topic tags on those four exams are from the keyword pass and not yet
-      read through; Fall 2024's are read and listed in the changelog.
+- [x] Widgets on the other four Exam 1 papers (2026-10-26, 104 of them from
+      eighteen generated shapes; the changelog lists them).
+- [ ] Topic tags on the four earlier exams are from the keyword pass and not
+      yet read through; Fall 2024's are read and listed in the changelog.
+- [ ] The generators behind the solutions widgets (`widgets_lib.py`) live in
+      the session's scratch space with the exam papers, not in the repo, because
+      they are keyed to the papers' layout. Bring them in under `scripts/` once
+      a second exam shows which parts are general.
 - [ ] A solutions mode for `check_file.py`: quiet `images` and `dates`, and
       run the browser scripts on an opened, unfiltered copy without making one
       by hand.

@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.6 =====
+/* ===== exam-solutions.js v0.7 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -29,6 +29,12 @@
   document.addEventListener('DOMContentLoaded', function () {
     var mount = document.querySelector('.sol-shell');
     if (!mount) return;
+    // The house script builds its own table of contents at the top of every
+    // page, listing the h2 under each semester. On a solutions page the
+    // picker below is the table of contents, so the house one goes (Ian,
+    // 2026-10-26: "we don't need the top toc"). Its listener ran first, so
+    // the box is there to remove.
+    document.querySelectorAll('details.toc-box:not(.sol-box)').forEach(function (t) { t.remove(); });
     var secs = [].slice.call(document.querySelectorAll('section.sol'));
     var groups = [].slice.call(document.querySelectorAll('.sol-group'));
     if (!secs.length) return;

@@ -42,7 +42,7 @@ docs/
   changelogs/                 ← one changelog per conversion
   archive/                    ← prompt-variant conventions
 solutions/
-  ECO2023-263-Exam1-DetailedSolutions-Full.html ← five semesters of Exam 1, Fall 2024 with widgets
+  ECO2023-263-Exam1-DetailedSolutions-Full.html ← five semesters of Exam 1, 120 widgets
 engine/exam-solutions.js, .css  ← the solutions shell (the semester / exam / topic picker)
 docs/exam-solutions-brief.md    ← what a solutions page is and how it is checked
 examples/

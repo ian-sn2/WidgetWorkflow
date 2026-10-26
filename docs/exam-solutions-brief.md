@@ -109,9 +109,11 @@ one. Make a copy with the shell `<script>` removed and `open` on every
 
 ## Still to do
 
-* Widgets on the other four Fall exams. Fall 2024 is the only one that has
-  them; the others carry their stems, choices and written solutions and are
-  tagged by topic, so the toggles already work across all five.
+* The widget generators (`widgets_lib.py`: one function per lesson, from a
+  single shift to a tariff) and the per-paper maps are in the session's
+  scratch space beside the exam papers; the changelog lists every shape and
+  the questions it is on. They belong in `scripts/` once a second exam shows
+  which parts are general.
 * Exams 2 and 3, and ECO2013. The shell needs nothing new for them: a new
   `sol-group` with its `data-exam`, and the Exam row grows a button.
 * A `check_file.py` mode for a solutions page, so `images` and `dates` stay
