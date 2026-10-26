@@ -1016,8 +1016,10 @@ Ian changed this rule on 2026-09-17, and the change applies **here only**:
   that differs from its source in anything else; `check_file.py --no-head`
   checks the widgets without the Smokin' Notes head rules.
 * **A Concise edition carries a widget only where the text is hard to grasp
-  without it** (Ian, 2026-10-26, final form, after two tightenings the same
-  day: "the widget should only be there if it is needed to comprehend the
+  without it.** The test, in Ian's words (2026-10-26, confirmed after two
+  tightenings the same day): *if it is complex, keep it in the Concise; if
+  it is already explained sufficiently in the tables or text, the widget is
+  not needed.* His fuller statement: "the widget should only be there if it is needed to comprehend the
   text, like the financial calculator; a simple diagram of something being
   described is most likely not needed unless it is very complex"). So a CPM
   pass with its four times stays and a bell curve, a cost band or a
