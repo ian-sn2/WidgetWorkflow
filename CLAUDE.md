@@ -20,7 +20,8 @@ per container; Chromium is already under `/opt/pw-browsers`, so never run
 
 **A second kind of page lives in `solutions/`** since 2026-10-26: detailed
 solutions to past exam questions, with a widget wherever the reasoning is a
-graph and dropdowns for the exam, the semester and the topic. Read
+graph and a picker, styled like the table of contents, for the exam, the
+semester and the topic. Read
 `docs/exam-solutions-brief.md` before touching one. The toggles are
 `engine/exam-solutions.js` + `.css`, embedded by `embed_engine.py` in place of
 `<!--SOL-SHELL-->`; the graphs are ordinary widgets and every rule below
@@ -42,7 +43,7 @@ docs/
   archive/                    ← prompt-variant conventions
 solutions/
   ECO2023-263-Exam1-DetailedSolutions-Full.html ← five semesters of Exam 1, Fall 2024 with widgets
-engine/exam-solutions.js, .css  ← the solutions shell (exam / semester / topic buttons)
+engine/exam-solutions.js, .css  ← the solutions shell (the exam / semester / topic picker)
 docs/exam-solutions-brief.md    ← what a solutions page is and how it is checked
 examples/
   ECO2013-263-SupplyAndDemand.html ← FINISHED OUTPUT (Fall '26, transcript-only, 9 widgets)

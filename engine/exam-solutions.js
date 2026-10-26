@@ -1,9 +1,10 @@
-/* ===== exam-solutions.js v0.2 =====
+/* ===== exam-solutions.js v0.3 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
-   script lists in its table of contents. This builds three dropdowns --
-   exam, semester, topic -- into the first <div class="sol-shell">, hides every
+   script lists in its table of contents. This builds a collapsible picker, styled like the house table of
+   contents, into the first <div class="sol-shell">: exams, then semesters,
+   then the chosen semester's topics, hides every
    section the selection does not match, and keeps the selection in the URL
    hash so a link lands on one exam.
 
@@ -51,34 +52,60 @@
       if (state.topic && topicsFor(state.term, state.exam).indexOf(state.topic) < 0) state.topic = '';
     }
 
-    // A dropdown per row (Ian, 2026-10-26: "a dropdown or that kind of
-    // toggle"). Three selects cascade: changing the exam resets the topic,
-    // changing the semester resets both the exam and the topic.
-    function row(label, items, current, pick) {
-      var r = document.createElement('div'); r.className = 'sol-row';
-      var id = 'sol-' + label.toLowerCase();
-      var k = document.createElement('label'); k.className = 'sol-k'; k.textContent = label; k.htmlFor = id;
-      var sel = document.createElement('select'); sel.id = id;
-      items.forEach(function (it) {
-        var o = document.createElement('option');
-        o.value = it.value; o.textContent = it.label; o.selected = it.value === current;
-        sel.appendChild(o);
-      });
-      sel.addEventListener('change', function () { pick(sel.value); });
-      r.appendChild(k); r.appendChild(sel);
-      return r;
+    // The picker is a collapsible box built the way the house script builds
+    // its table of contents (Ian, 2026-10-26: "kind of like how our toc does
+    // it"): a <details class="toc-box"> whose summary names what is showing,
+    // holding a nested list -- exams, then semesters, then the chosen
+    // semester's topics -- each entry a link that sets the selection.
+    var box = document.createElement('details'); box.className = 'toc-box sol-box';
+    var summary = document.createElement('summary'); box.appendChild(summary);
+    var nav = document.createElement('nav'); box.appendChild(nav);
+    mount.appendChild(box);
+
+    function link(text, on, current) {
+      var li = document.createElement('li'), a = document.createElement('a');
+      a.href = '#'; a.textContent = text;
+      if (current) { li.className = 'sol-current'; a.setAttribute('aria-current', 'true'); }
+      a.addEventListener('click', function (e) { e.preventDefault(); on(); });
+      li.appendChild(a);
+      return li;
     }
 
     function render() {
       settle();
-      mount.innerHTML = '';
-      mount.appendChild(row('Exam', examsFor(state.term).map(function (e) { return { value: e, label: examName(e) }; }),
-        state.exam, function (v) { state.exam = v; state.topic = ''; render(); }));
-      mount.appendChild(row('Semester', terms.map(function (t) { return { value: t, label: termName(t) }; }),
-        state.term, function (v) { state.term = v; state.exam = ''; state.topic = ''; render(); }));
-      var topics = [{ value: '', label: 'All topics' }].concat(
-        topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t }; }));
-      mount.appendChild(row('Topic', topics, state.topic, function (v) { state.topic = v; render(); }));
+      summary.innerHTML = '';
+      var st = document.createElement('strong');
+      st.textContent = '\ud83d\udcd8 ' + examName(state.exam) + ' \u00b7 ' + termName(state.term) + ' \u00b7 ' + (state.topic || 'All topics');
+      summary.appendChild(st);
+
+      nav.innerHTML = '';
+      var ul = document.createElement('ul'); ul.style.lineHeight = '1.8';
+      var exams = uniq(secs.map(function (s) { return s.dataset.exam; }))
+        .sort(function (a, b) { return examOrder(a) - examOrder(b); });
+      exams.forEach(function (e) {
+        var termsFor = terms.filter(function (t) { return examsFor(t).indexOf(e) >= 0; });
+        var li = link(examName(e), function () {
+          state.exam = e; if (termsFor.indexOf(state.term) < 0) state.term = termsFor[0]; state.topic = ''; render();
+        }, e === state.exam);
+        li.firstChild.style.fontWeight = 'bold';
+        var sub = document.createElement('ul');
+        termsFor.forEach(function (t) {
+          var tli = link(termName(t), function () { state.term = t; state.exam = e; state.topic = ''; render(); },
+                         e === state.exam && t === state.term);
+          if (e === state.exam && t === state.term) {
+            var tul = document.createElement('ul');
+            tul.appendChild(link('All topics', function () { state.topic = ''; render(); }, !state.topic));
+            topicsFor(t, e).forEach(function (tp) {
+              tul.appendChild(link(tp, function () { state.topic = tp; render(); }, state.topic === tp));
+            });
+            tli.appendChild(tul);
+          }
+          sub.appendChild(tli);
+        });
+        li.appendChild(sub);
+        ul.appendChild(li);
+      });
+      nav.appendChild(ul);
 
       var shown = 0;
       secs.forEach(function (s) {
@@ -90,10 +117,11 @@
       groups.forEach(function (g) {
         g.hidden = !g.querySelector('section.sol:not([hidden])');
       });
+      var old = nav.querySelector('.sol-count'); if (old) old.remove();
       var c = document.createElement('p'); c.className = 'sol-count';
       c.textContent = shown + ' question' + (shown === 1 ? '' : 's') + ' · ' +
         termName(state.term) + ', ' + examName(state.exam) + (state.topic ? ', ' + state.topic : '');
-      mount.appendChild(c);
+      nav.appendChild(c);
 
       var hash = '#' + state.term + '/' + state.exam + (state.topic ? '/' + encodeURIComponent(state.topic) : '');
       if (location.hash !== hash && history.replaceState) history.replaceState(null, '', hash);

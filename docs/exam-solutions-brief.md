@@ -39,8 +39,10 @@ The body is:
 ```
 
 The shell reads `data-term`, `data-exam` and `data-topic` off the sections and
-builds three dropdowns -- **Exam, Semester, Topic**, in that order --
-hides every section the selection does not match, and keeps the selection in
+builds a collapsible picker styled like the house table of contents -- a
+`<details class="toc-box">` whose summary names what is showing, holding a
+nested list of **exams, then semesters, then the chosen semester's topics**,
+each a link that sets the selection -- hides every section the selection does not match, and keeps the selection in
 the URL hash (`#243/1/Elasticity`), so a link lands on one exam. A hash that
 names a heading or a question (`#eco2023-243-e1-q13`, which is what the house
 table of contents links to) selects that question's exam and semester first,

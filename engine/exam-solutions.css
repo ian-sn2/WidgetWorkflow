@@ -1,16 +1,10 @@
-.sol-shell { --navy:#002060; --ink:#1c2a44; --rule:#c9d2e3; --paper:#f6f8fc;
-  font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; color:var(--ink);
-  border:1px solid var(--navy); background:var(--paper); padding:14px 18px 10px; margin:18px 0 26px; }
-.sol-shell, .sol-shell * { box-sizing:border-box; }
-.sol-shell .sol-row { display:flex; align-items:center; gap:10px; margin:0 0 10px; flex-wrap:wrap; }
-.sol-shell .sol-k { flex:0 0 86px; font-weight:800; color:var(--navy); font-size:.9rem; }
-.sol-shell select { flex:1 1 240px; max-width:420px; min-height:44px; border:1px solid var(--navy); background:#fff;
-  color:var(--navy); padding:8px 12px; font:inherit; font-size:.95rem; font-weight:600; cursor:pointer; border-radius:0; }
-.sol-shell .sol-count { margin:4px 0 0; font-size:.85rem; color:var(--ink); }
-@media (max-width:640px){
-  .sol-shell .sol-k { flex-basis:100%; }
-  .sol-shell select { max-width:none; }
-}
+.sol-shell { font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; }
+/* The box itself is the house .toc-box; these only mark the selection. */
+.sol-shell .sol-box ul { margin:6px 0 0; padding-left:22px; }
+.sol-shell .sol-box li.sol-current > a { color:#002060; font-weight:800; }
+.sol-shell .sol-box li.sol-current > a::before { content:"\25B8 "; }
+.sol-shell .sol-box a { display:inline-block; padding:4px 0; }
+.sol-shell .sol-count { margin:10px 0 0; font-size:.85rem; color:#333; }
 section.sol { margin:0 0 34px; padding:0 0 18px; border-bottom:1px solid var(--rule, #c9d2e3); }
 section.sol .sol-q { font-weight:800; color:#002060; margin:18px 0 6px; font-size:1.05rem; }
 section.sol ol.sol-choices { margin:6px 0 14px 1.4em; padding:0; }
