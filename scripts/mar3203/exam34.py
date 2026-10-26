@@ -273,7 +273,7 @@ def nodes_fig():
     b = box(20, 20, 150, 110, "Decision", fill="#e3cf7a", fs=16, rx=0, sw=4)
     b += f'<circle cx="330" cy="75" r="56" fill="#e3cf7a" stroke="{INK}" stroke-width="6"/>' + text(330, 71, "Chance\nEvent", 16, lh=18)
     return svg(420, 150, b, "A square decision node and a circular chance-event node", 360)
-NODES = html(nodes_fig())
+NODES = html(nodes_fig(), True)   # the first figure carries the sheet; without it the figures sat left (Ian, 2026-10-26)
 def tree_fig():
     b = f'<rect x="20" y="170" width="80" height="80" fill="#e3cf7a" stroke="{INK}" stroke-width="5"/>'
     b += path("M100 180 L240 90", sw=2, head=False) + path("M100 240 L240 310", sw=2, head=False)
