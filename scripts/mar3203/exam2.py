@@ -108,8 +108,10 @@ def sm_nodes(fwd=None, bwd=None):
     return out
 CRIT = {"A>B", "B>D", "D>E", "E>F"}
 def sm_edges(crit=False): return [(e.split(">")[0], e.split(">")[1], {"crit": True} if crit and e in CRIT else {}) for e in SM_E]
-ex_plain = {"title": "The Example Network", "network": net(sm_nodes(), sm_edges(), h=220),
-            "caption": cap("A leads to B, B splits into C and D, both of which feed E, and E leads to F.")}
+ex_plain = {"title": "The Example Network", "network": dict(net(sm_nodes(FWD, BWD), sm_edges(), h=240, legend=True), show={"ef": 1, "lf": 2}),
+            "steps": [cap("A leads to B, B splits into C and D, both of which feed E, and E leads to F."),
+                      cap("Forward pass: start at A with ES = 0 and add each activity's time. E waits for the later of C (EF 6) and D (EF 7), so its ES is 7; F finishes at 16."),
+                      cap("Backward pass: F's LF is its EF, 16, and LS = LF − time. B feeds C (LS 5) and D (LS 4), so B's LF is the earlier one, 4.")]}
 ex_fwd = {"title": "The Forward Pass", "network": dict(net(sm_nodes(FWD), sm_edges(), h=240, legend=True), show={"ef": 1}),
           "steps": [cap("Start at A with ES = 0; every EF is ES plus the activity's time."),
                     cap("E waits for both C (EF 6) and D (EF 7), so its ES is the later one, 7. The project finishes when F does, at 16.")]}
@@ -126,8 +128,8 @@ PM = {"mar3203-exam2-pm-01-project-planning-scheduling-controlling-cycle.png": P
       "mar3203-exam2-pm-03-network-diagram-abcd-complex.png": complex_, "mar3203-exam2-pm-04-aon-aoa-examples-1-2.png": aon1,
       "mar3203-exam2-pm-06-aon-aoa-examples-5-6-dummy.png": aon2, "mar3203-exam2-pm-07-network-diagram-abcdef-cpm.png": big_plain,
       "mar3203-exam2-pm-08-node-convention-diagram.png": NODECONV, "mar3203-exam2-pm-09-network-diagram-abcdef-filled-values.png": big_filled,
-      "mar3203-exam2-pm-10-network-diagram-example-abcdef.png": ex_plain, "mar3203-exam2-pm-11-network-diagram-forward-pass.png": ex_fwd,
-      "mar3203-exam2-pm-12-network-diagram-backward-pass.png": ex_bwd, "mar3203-exam2-pm-13-network-diagram-critical-path-highlighted.png": ex_crit,
+      "mar3203-exam2-pm-10-network-diagram-example-abcdef.png": ex_plain, "mar3203-exam2-pm-11-network-diagram-forward-pass.png": {"drop": "folded into the stepped example network above"},
+      "mar3203-exam2-pm-12-network-diagram-backward-pass.png": {"drop": "folded into the stepped example network above"}, "mar3203-exam2-pm-13-network-diagram-critical-path-highlighted.png": ex_crit,
       "mar3203-exam2-pm-14-network-diagram-post-crash-d.png": ex_crash}
 PM_ANCH = [{"after": "<p>Node convention (ES | EF over LS | LF):</p>", "widget": big_filled, "comment": "the worked CPM network, after the convention it uses"}]
 
@@ -320,11 +322,13 @@ breakeven = {"title": "Break-Even Analysis",
              "steps": [cap("Total cost starts at the fixed costs and climbs at the variable cost per unit; total revenue starts at zero and climbs at the price."),
                        cap("Below the break-even point revenue is under cost, and the gap between the two lines is a loss."),
                        cap("Above it revenue is over cost, and the gap is operating income; the point itself is where profit is zero.")]}
-CAP = {"mar3203-exam2-capacity-management-01-leading-demand-incremental-.png": capacity,
-       "mar3203-exam2-capacity-management-02-lagging-demand-incremental-.png": {"keep": "folded into the four-strategy widget above"},
-       "mar3203-exam2-capacity-management-03-leading-demand-one-step-exp.png": {"keep": "folded into the four-strategy widget above"},
-       "mar3203-exam2-capacity-management-04-average-capacity-incrementa.png": {"keep": "folded into the four-strategy widget above"},
+CAP = {"mar3203-exam2-capacity-management-01-leading-demand-incremental-.png": {"drop": "folded into the four-strategy widget before the list"},
+       "mar3203-exam2-capacity-management-02-lagging-demand-incremental-.png": {"drop": "folded into the four-strategy widget before the list"},
+       "mar3203-exam2-capacity-management-03-leading-demand-one-step-exp.png": {"drop": "folded into the four-strategy widget before the list"},
+       "mar3203-exam2-capacity-management-04-average-capacity-incrementa.png": {"drop": "folded into the four-strategy widget before the list"},
        "mar3203-exam2-capacity-management-07-breakeven-chart-total-reven.png": breakeven}
+# Full and Balanced: the four-strategy widget once, after the paragraph introducing the options and before the list of the four (Ian, 2026-10-26)
+CAP_FULL_ANCH = [{"after": "When deciding when to invest in new capacity, operations managers analyze", "widget": capacity, "comment": "the four capacity strategies, before the list that describes them one by one"}]
 CAP_ANCH = []   # the strategy table and the break-even formula carry the Concise on their own (Ian, 2026-10-26)
 CAP_ANCH_ALL = [{"after": "<td><b>Leading demand — one-step</b></td>", "widget": capacity, "comment": "the four strategies, after their table"},
             {"after": "<li><b>Variable costs (V):</b> change with output (materials, hourly labor, packaging).</li>", "widget": breakeven, "comment": "the break-even chart, after the definitions"}]
@@ -332,4 +336,4 @@ CAP_ANCH_ALL = [{"after": "<td><b>Leading demand — one-step</b></td>", "widget
 for f in (PMCYCLE, NODECONV, LABFLOW, TF_BASE, TF_TARGET, PROCCHART, BLUEPRINT, EQUIP): assert "<script" not in f["html"]
 write_map("Exam2-ProjectMgmt", PM); write_map("Exam2-ProjectMgmt-Concise", {}, PM_ANCH)
 write_map("Exam2-Processes", PR); write_map("Exam2-Processes-Concise", {}, PR_ANCH)
-write_map("Exam2-CapacityMgmt", CAP); write_map("Exam2-CapacityMgmt-Concise", {}, CAP_ANCH)
+write_map("Exam2-CapacityMgmt", CAP, CAP_FULL_ANCH); write_map("Exam2-CapacityMgmt-Concise", {}, CAP_ANCH)
