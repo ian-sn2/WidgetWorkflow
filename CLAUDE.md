@@ -18,6 +18,14 @@ per container; Chromium is already under `/opt/pw-browsers`, so never run
 
 ## What is in this repo
 
+**A second kind of page lives in `solutions/`** since 2026-10-26: detailed
+solutions to past exam questions, with a widget wherever the reasoning is a
+graph and buttons for the exam, the semester and the topic. Read
+`docs/exam-solutions-brief.md` before touching one. The toggles are
+`engine/exam-solutions.js` + `.css`, embedded by `embed_engine.py` in place of
+`<!--SOL-SHELL-->`; the graphs are ordinary widgets and every rule below
+applies to them.
+
 ```
 CLAUDE.md                     ← you are here
 README.md                     ← short human-facing overview
@@ -32,6 +40,10 @@ docs/
   open-issues.md              ← bugs, gaps, next steps (checkboxes)
   changelogs/                 ← one changelog per conversion
   archive/                    ← prompt-variant conventions
+solutions/
+  ECO2023-263-Exam1-DetailedSolutions-Full.html ← five semesters of Exam 1, Fall 2024 with widgets
+engine/exam-solutions.js, .css  ← the solutions shell (exam / semester / topic buttons)
+docs/exam-solutions-brief.md    ← what a solutions page is and how it is checked
 examples/
   ECO2013-263-SupplyAndDemand.html ← FINISHED OUTPUT (Fall '26, transcript-only, 9 widgets)
   ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html ← FINISHED OUTPUT (Exam 1 ch. 1, 7 widgets)

@@ -1,0 +1,29 @@
+.sol-shell { --navy:#002060; --ink:#1c2a44; --rule:#c9d2e3; --paper:#f6f8fc;
+  font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; color:var(--ink);
+  border:1px solid var(--navy); background:var(--paper); padding:14px 18px 10px; margin:18px 0 26px; }
+.sol-shell, .sol-shell * { box-sizing:border-box; }
+.sol-shell .sol-row { display:flex; align-items:flex-start; gap:10px; margin:0 0 10px; flex-wrap:wrap; }
+.sol-shell .sol-k { flex:0 0 86px; font-weight:800; color:var(--navy); font-size:.9rem; padding-top:9px; }
+.sol-shell .sol-btns { display:flex; flex:1 1 240px; gap:8px; flex-wrap:wrap; }
+.sol-shell button { border:1px solid var(--navy); background:#fff; color:var(--navy); padding:8px 14px;
+  font:inherit; font-size:.9rem; font-weight:600; cursor:pointer; line-height:1.3; }
+.sol-shell button[aria-pressed="true"] { background:var(--navy); color:#fff; }
+.sol-shell .sol-count { margin:4px 0 0; font-size:.85rem; color:var(--ink); }
+@media (max-width:640px){
+  .sol-shell .sol-k { flex-basis:100%; padding-top:0; }
+  .sol-shell button { min-height:44px; flex:1 1 120px; }
+}
+section.sol { margin:0 0 34px; padding:0 0 18px; border-bottom:1px solid var(--rule, #c9d2e3); }
+section.sol .sol-q { font-weight:800; color:#002060; margin:18px 0 6px; font-size:1.05rem; }
+section.sol ol.sol-choices { margin:6px 0 14px 1.4em; padding:0; }
+section.sol ol.sol-choices li { margin:2px 0; }
+section.sol details.sol-answer { box-sizing:border-box; border:1px solid #002060; background:#fff; padding:8px 14px; margin:12px auto 0; width:80%; }
+section.sol details.sol-answer summary { cursor:pointer; font-weight:800; color:#002060; }
+section.sol details.sol-answer p { margin:8px 0 2px; }
+@media (max-width:640px){ section.sol details.sol-answer { width:100%; } }
+[hidden] { display:none !important; }
+/* An exam's table keeps the exam's own column headings, and the house sheet
+   sets every table full width with 16px cell padding, so a three-column table
+   with long headings ran 32px past a 320px screen. It scrolls inside its own
+   box instead of pushing the page sideways. */
+section.sol .sol-table { overflow-x:auto; margin:10px 0; }

@@ -448,3 +448,17 @@ or "unattainable" dot) whose exact coordinates are not the lesson.
       fits 3.5px clear of both lines in that gap. A larger `dS`, or no supply
       arrow, would settle both if Ian wants them gone. (2026-10-07)
 
+
+## Exam solutions (`solutions/`, from 2026-10-26)
+
+- [ ] Widgets on the other four Exam 1 papers (Fall 2023, Summer 2023, Spring
+      2023, Summer 2022). Their stems, choices, solutions and topics are in the
+      page; the four-panel figure questions carry a `<!-- FIGURE -->` comment
+      where the image was.
+- [ ] Topic tags on those four exams are from the keyword pass and not yet
+      read through; Fall 2024's are read and listed in the changelog.
+- [ ] A solutions mode for `check_file.py`: quiet `images` and `dates`, and
+      run the browser scripts on an opened, unfiltered copy without making one
+      by hand.
+- [ ] Exams 2 and 3, and ECO2013 -- the shell needs nothing new for them.
+- [ ] Whether the solutions should start open (`<details open>`): Ian's call.

@@ -17,6 +17,15 @@ the re-embed step after any change to engine/ (CLAUDE.md hard rule 1).
 
 The embedded copies are byte-identical to engine/, header comment included;
 scripts/check_file.py verifies that.
+
+A solutions page (solutions/) also carries the shell that filters its questions
+by semester, exam and topic. It emits a second placeholder,
+
+    <!--SOL-SHELL-->
+
+and this script fills it from engine/exam-solutions.css and .js the same way;
+with no placeholder, an embedded shell is replaced by the current one. A notes
+file carries neither and is untouched by this half.
 """
 
 import argparse
@@ -29,6 +38,11 @@ CSS_SRC = ROOT / "engine" / "sd-graph.css"
 JS_SRC = ROOT / "engine" / "sd-graph.js"
 
 PLACEHOLDER = "<!--SDG-ENGINE-->"
+SHELL_CSS_SRC = ROOT / "engine" / "exam-solutions.css"
+SHELL_JS_SRC = ROOT / "engine" / "exam-solutions.js"
+SHELL_PLACEHOLDER = "<!--SOL-SHELL-->"
+SHELL_CSS_BLOCK = re.compile(r"[ \t]*<style>\s*\n\.sol-shell \{.*?\n</style>\n?", re.S)
+SHELL_JS_BLOCK = re.compile(r"[ \t]*<script>\s*\n/\* ===== exam-solutions\.js.*?\n</script>\n?", re.S)
 # An embedded engine is a <style> block whose first rule is .sdg, and a <script>
 # block that is the engine's header comment or its IIFE.
 CSS_BLOCK = re.compile(r"[ \t]*<style>\s*\n\.sdg \{.*?\n</style>\n?", re.S)
@@ -38,10 +52,28 @@ HOSTED = re.compile(
     re.I)
 
 
-def blocks():
-    css = CSS_SRC.read_text(encoding="utf-8").rstrip("\n")
-    js = JS_SRC.read_text(encoding="utf-8").rstrip("\n")
+def blocks(css_src=CSS_SRC, js_src=JS_SRC):
+    css = css_src.read_text(encoding="utf-8").rstrip("\n")
+    js = js_src.read_text(encoding="utf-8").rstrip("\n")
     return "<style>\n%s\n</style>\n<script>\n%s\n</script>\n" % (css, js)
+
+
+def embed_shell(out):
+    """Fill or refresh the solutions shell; returns (text, note or None)."""
+    n = out.count(SHELL_PLACEHOLDER)
+    if n > 1:
+        sys.exit("%d %s lines; expected at most one" % (n, SHELL_PLACEHOLDER))
+    shell = blocks(SHELL_CSS_SRC, SHELL_JS_SRC)
+    if n == 1:
+        out = re.sub(r"[ \t]*" + re.escape(SHELL_PLACEHOLDER) + r"[ \t]*\n?",
+                     lambda _m: shell, out, count=1)
+        return out, "replaced the %s placeholder" % SHELL_PLACEHOLDER
+    if SHELL_CSS_BLOCK.search(out) or SHELL_JS_BLOCK.search(out):
+        out = SHELL_CSS_BLOCK.sub("", out)
+        out = SHELL_JS_BLOCK.sub("", out)
+        out = out.replace("</head>", shell + "</head>", 1)
+        return out, "re-embedded over the existing solutions shell"
+    return out, None
 
 
 def main():
@@ -88,6 +120,10 @@ def main():
             sys.exit("%s has no </head> and no %s placeholder" % (path, PLACEHOLDER))
         out = out.replace("</head>", engine + "</head>", 1)
         how = "inserted the engine before </head>"
+
+    out, shell_note = embed_shell(out)
+    if shell_note:
+        how += "; " + shell_note
 
     note = "%s%s" % (how, ", removed %d hosted reference(s)" % n_hosted if n_hosted else "")
 
