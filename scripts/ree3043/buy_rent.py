@@ -45,6 +45,11 @@ cfg = {"title": "PV of Cost of Owning − PV of Cost of Renting",
            "rent": case("Rent of $1,600", 3, "With rent at $1,600 instead of $1,300, renting is dearer every year, so owning wins after only about 3 years."),
            "appr": case("5% appreciation", 2, "With the house appreciating 5% a year instead of 2%, the gain on sale offsets the transaction costs sooner, and owning wins after about 2 years."),
            "stdd": case("Standard deduction", 8, "Deducting mortgage interest and property taxes at a 0% rate, as a household taking the standard deduction does, stretches the break-even to about 8 years.")}}
+sys.path.insert(0, str(REPO / "scripts/mar3203"))
+try:
+    from common import LOOK          # the frameless sheet the UCF sets use
+except Exception:
+    LOOK = ""
 WIDGET = '<div class="sdg"><script type="application/json">%s</script></div>' % json.dumps(cfg, ensure_ascii=False).replace("</", "<\\/")
 
 def main(src_path, out_path):
@@ -58,6 +63,12 @@ def main(src_path, out_path):
     assert out.count("<!--SDG-ENGINE-->") == 1 and out.count('<div class="sdg"') == 1
     pathlib.Path(out_path).write_text(out, encoding="utf-8")
     subprocess.run([sys.executable, str(REPO / "scripts/embed_engine.py"), out_path], check=True)
+    if LOOK:
+        # the frameless look (Ian, 2026-10-26, "cleaner"): one <style> after the engine's own blocks, engine untouched
+        out = pathlib.Path(out_path).read_text(encoding="utf-8")
+        i = out.index("</script>", out.index("sd-graph.js v2.")) + len("</script>")
+        out = out[:i] + "\n<style>\n/* widget look */\n" + LOOK.strip() + "\n</style>" + out[i:]
+        pathlib.Path(out_path).write_text(out, encoding="utf-8")
     print("wrote", out_path)
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
