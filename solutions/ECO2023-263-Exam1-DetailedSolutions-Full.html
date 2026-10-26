@@ -9,6 +9,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>
+    <script>
+    MathJax = {
+        tex: {
+            displayMath: [['\[','\]']],
+            inlineMath: [['\(','\)']]
+        }
+    };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 <style>
 .sdg { --navy:#002060; --ink:#1c2a44; --red:#d62828; --teal:#1a8a8a; --orange:#d8641c; --grey:#8a94a6; --rule:#c9d2e3; --paper:#f6f8fc; --plot:#eef3fd; --fig:580px;
   font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; color:var(--ink);
@@ -1733,9 +1742,16 @@
 .sol-shell .sol-stage a:hover { text-decoration:none; border-color:#002060; }
 @media (max-width:640px){ .sol-shell .sol-stage a { min-height:44px; display:flex; align-items:center; } }
 .sol-shell .sol-count { margin:4px 0 16px; font-size:.85rem; color:#333; }
-section.sol { margin:0 0 22px; padding:0 0 12px; border-bottom:1px solid #c9d2e3; }
+/* The current question sits in its own box under the picker; the groups'
+   headings stay in the page for structure but are not shown. */
+.sol-group > h2 { display:none; }
+section.sol { margin:10px 0 0; padding:12px 20px 14px; border:1px solid #DEDEDE; border-radius:12px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+.sol-shell .sol-nav { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0 20px; }
+.sol-shell .sol-nav button { border:1px solid #002060; background:#fff; color:#002060; padding:8px 16px; min-height:44px; font:inherit; font-size:.95rem; font-weight:700; cursor:pointer; border-radius:6px; }
+.sol-shell .sol-nav button:disabled { opacity:.35; cursor:default; }
+.sol-shell .sol-nav .sol-count { margin:0; font-size:.9rem; font-weight:700; color:#002060; }
 section.sol p { margin:6px 0; line-height:1.45; }
-section.sol .sol-q { font-weight:800; color:#002060; margin:14px 0 4px; font-size:1.05rem; }
+section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; }
 section.sol ol.sol-sub { margin:2px 0 4px 2em; padding:0; }
 section.sol ol.sol-sub li { margin:0; line-height:1.45; }
 /* The choices are the quiz: each one a button that turns green or red. */
@@ -1770,7 +1786,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.7 =====
+/* ===== exam-solutions.js v0.8 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -1792,6 +1808,10 @@ section.sol .sol-table table { margin:0; }
   }
   function examName(e) { return /^\d+$/.test(e) ? 'Exam ' + e : e; }
   function examOrder(e) { return /^\d+$/.test(e) ? +e : 99; }
+  // Ian's order for the topics (2026-10-26); the frontier comes first because
+  // it is the course's first chapter. Anything else sorts after, by name.
+  var TOPIC_ORDER = ['The PPF', 'Supply and Demand', 'Elasticity', 'Efficiency and Equity', 'Government Intervention', 'International Trade'];
+  function topicRank(t) { var i = TOPIC_ORDER.indexOf(t); return i < 0 ? TOPIC_ORDER.length : i; }
   function uniq(list) {
     var out = [];
     list.forEach(function (x) { if (out.indexOf(x) < 0) out.push(x); });
@@ -1813,7 +1833,7 @@ section.sol .sol-table table { margin:0; }
 
     var terms = uniq(secs.map(function (s) { return s.dataset.term; }))
       .sort(function (a, b) { return b.localeCompare(a); });            // newest first
-    var state = { term: terms[0], exam: '', topic: '' };
+    var state = { term: terms[0], exam: '', topic: '', idx: 0 };
 
     function examsFor(term) {
       return uniq(secs.filter(function (s) { return s.dataset.term === term; })
@@ -1822,7 +1842,8 @@ section.sol .sol-table table { margin:0; }
     }
     function topicsFor(term, exam) {
       return uniq(secs.filter(function (s) { return s.dataset.term === term && s.dataset.exam === exam; })
-                      .map(function (s) { return s.dataset.topic; }));
+                      .map(function (s) { return s.dataset.topic; }))
+        .sort(function (a, b) { return (topicRank(a) - topicRank(b)) || a.localeCompare(b); });
     }
     function settle() {
       var exams = examsFor(state.term);
@@ -1840,7 +1861,22 @@ section.sol .sol-table table { margin:0; }
     var summary = document.createElement('summary'); box.appendChild(summary);
     var nav = document.createElement('nav'); box.appendChild(nav);
     mount.appendChild(box);
-    var count = document.createElement('p'); count.className = 'sol-count'; mount.appendChild(count);
+    // One question at a time (Ian, 2026-10-26: "a self-contained box ... that
+    // would not require any scrolling"): the picker, then the current
+    // question in its own box, then Previous / Next. The page holds every
+    // section; the shell shows one.
+    var bar = document.createElement('div'); bar.className = 'sol-nav';
+    var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
+    var count = document.createElement('span'); count.className = 'sol-count';
+    var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
+    bar.appendChild(prev); bar.appendChild(count); bar.appendChild(next);
+    prev.addEventListener('click', function () { if (state.idx > 0) { state.idx--; render(); } });
+    next.addEventListener('click', function () { state.idx++; render(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+      if (e.key === 'ArrowRight') { state.idx++; render(); }
+      if (e.key === 'ArrowLeft' && state.idx > 0) { state.idx--; render(); }
+    });
 
     function stage(n, name, items, pick) {
       var d = document.createElement('div'); d.className = 'sol-stage';
@@ -1867,29 +1903,29 @@ section.sol .sol-table table { margin:0; }
       nav.innerHTML = '';
       nav.appendChild(stage(1, 'Semester',
         terms.map(function (t) { return { value: t, label: termName(t), current: t === state.term }; }),
-        function (v) { state.term = v; state.exam = ''; state.topic = ''; render(); }));
+        function (v) { state.term = v; state.exam = ''; state.topic = ''; state.idx = 0; render(); }));
       nav.appendChild(stage(2, 'Exam',
         examsFor(state.term).map(function (e) { return { value: e, label: examName(e), current: e === state.exam }; }),
-        function (v) { state.exam = v; state.topic = ''; render(); }));
+        function (v) { state.exam = v; state.topic = ''; state.idx = 0; render(); }));
       nav.appendChild(stage(3, 'Topic',
         [{ value: '', label: 'All topics', current: !state.topic }].concat(
           topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t, current: t === state.topic }; })),
-        function (v) { state.topic = v; render(); }));
+        function (v) { state.topic = v; state.idx = 0; render(); }));
 
-      var shown = 0;
-      secs.forEach(function (s) {
-        var on = s.dataset.term === state.term && s.dataset.exam === state.exam &&
-                 (!state.topic || s.dataset.topic === state.topic);
-        s.hidden = !on;
-        if (on) shown++;
+      var list = secs.filter(function (s) {
+        return s.dataset.term === state.term && s.dataset.exam === state.exam &&
+               (!state.topic || s.dataset.topic === state.topic);
       });
-      groups.forEach(function (g) {
-        g.hidden = !g.querySelector('section.sol:not([hidden])');
-      });
-      count.textContent = shown + ' question' + (shown === 1 ? '' : 's') + ' \u00b7 ' +
-        termName(state.term) + ', ' + examName(state.exam) + (state.topic ? ', ' + state.topic : '');
+      if (state.idx >= list.length) state.idx = Math.max(0, list.length - 1);
+      secs.forEach(function (s) { s.hidden = s !== list[state.idx]; });
+      groups.forEach(function (g) { g.hidden = !g.querySelector('section.sol:not([hidden])'); });
+      // the box for the question goes under the picker, the nav under it
+      if (list[state.idx]) mount.appendChild(list[state.idx]);
+      mount.appendChild(bar);
+      count.textContent = list.length ? ('Question ' + (state.idx + 1) + ' of ' + list.length) : 'No questions';
+      prev.disabled = state.idx <= 0; next.disabled = state.idx >= list.length - 1;
 
-      var hash = '#' + state.term + '/' + state.exam + (state.topic ? '/' + encodeURIComponent(state.topic) : '');
+      var hash = '#' + state.term + '/' + state.exam + '/' + encodeURIComponent(state.topic || '') + '/' + (state.idx + 1);
       if (location.hash !== hash && history.replaceState) history.replaceState(null, '', hash);
     }
 
@@ -1905,8 +1941,8 @@ section.sol .sol-table table { margin:0; }
         var src = sec && (sec.matches('section.sol') ? sec : sec.querySelector('section.sol'));
         if (src) {
           state.term = src.dataset.term; state.exam = src.dataset.exam; state.topic = '';
+          state.idx = secs.filter(function (s) { return s.dataset.term === state.term && s.dataset.exam === state.exam; }).indexOf(src);
           render();
-          el.scrollIntoView();
           return true;
         }
         return false;
@@ -1914,6 +1950,7 @@ section.sol .sol-table table { margin:0; }
       var parts = h.split('/');
       if (terms.indexOf(parts[0]) < 0) return false;
       state.term = parts[0]; state.exam = parts[1] || ''; state.topic = parts[2] || '';
+      state.idx = Math.max(0, (parseInt(parts[3], 10) || 1) - 1);
       render();
       return true;
     }
@@ -1957,7 +1994,7 @@ section.sol .sol-table table { margin:0; }
 </head>
 <body>
 <h1>ECO2023 Exam 1 Detailed Solutions</h1>
-<p>Pick the exam, the semester it was given in, and a topic. Every question is followed by its full solution, and where the reasoning is a graph the graph is live: press through it one step at a time.</p>
+<p>Pick a semester, the exam and a topic, then work the questions one at a time. Click an answer to check it, open the solution to see it worked, and where the reasoning is a graph the graph is live.</p>
 <div class="sol-shell"></div>
 <div class="sol-group" data-term="243" data-exam="1">
 <h2>Exam 1 · Fall 2024</h2>
@@ -2282,14 +2319,6 @@ section.sol .sol-table table { margin:0; }
 <details class="sol-answer"><summary>Solution</summary>
 <p><strong>(b)</strong> Production is inefficient when it would be possible to produce more of one good without producing less of any other. That is the situation at any point inside the PPF, where some resources are either unemployed or not assigned to the tasks they are best suited for. By putting those resources to better use, the nation could move outward toward the PPF and have more of one good, or even more of both.</p>
     <p>Points on the PPF are production efficient, because from those points more of one good can be had only by giving up some of the other. Points outside the PPF are not inefficient; they are unattainable, meaning they cannot be produced at all with the nation's current resources and technology. Only the points inside the PPF are production inefficient.</p>
-</details>
-</section>
-<section class="sol" id="eco2023-243-e1-q30" data-term="243" data-exam="1" data-topic="Free Point" data-answer="a">
-<p class="sol-q"><b>Question 30 · Free Point</b></p>
-<p>ANSWER A FOR THIS QUESTION!!!! After the scores are posted, if you have a question about your test score, email the grader at eco2023.grader@clas.ufl.edu and the director is so fat that (HINT: Be SURE to answer this question because you’ll get credit for any answer.)</p>
-<ol class="sol-choices" type="A"><li>he returns bowling balls because they've got holes in them, he thinks the Internet is used to catch fish, and he killed his toy poodle by putting batteries in it.</li></ol>
-<details class="sol-answer"><summary>Solution</summary>
-<p><strong>(a)</strong> This is a "freebie" question, but you have to bubble the answer choice in order to get credit.</p>
 </details>
 </section>
 </div>
@@ -2676,14 +2705,6 @@ section.sol .sol-table table { margin:0; }
 <div class="sdg"><script type="application/json">{"title":"A Market That Exports","lede":"The world price is above the no-trade price.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":70,"tag":"World price","at":1,"showP":false}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":70,"p":70,"guides":"q","ql":"Qₛ","pl":"Pᵂ","at":1},{"q":30,"p":70,"guides":"q","ql":"Qᴅ","showP":false,"at":1}],"areas":[{"pts":[[0,50],[0,100],[50,50]],"label":"CS","color":"teal","until":2},{"pts":[[0,50],[0,0],[50,50]],"label":"PS","color":"orange","until":2},{"pts":[[0,70],[0,100],[30,70]],"label":"CS","color":"teal","at":2},{"pts":[[0,70],[0,0],[70,70]],"label":"PS","color":"orange","at":2}],"braces":[{"p":70,"q1":30,"q2":70,"label":"Exports","at":2}],"steps":["With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.","The world price is above P₁. At that price domestic producers offer Qₛ and domestic buyers want only Qᴅ.","With trade the price rises to the world price and the difference is exported. PS grows by more than CS shrinks, so total surplus rises."]}</script></div>
 </details>
 </section>
-<section class="sol" id="eco2023-233-e1-q40" data-term="233" data-exam="1" data-topic="Free Point" data-answer="a">
-<p class="sol-q"><b>Question 40 · Free Point</b></p>
-<p>ANSWER A FOR THIS QUESTION!!!! After the scores are posted, if you have a question about your test score, email the grader at eco2023.grader@clas.ufl.edu and the director is so stupid that (HINT: Be SURE to answer this question because you’ll get credit for it.)</p>
-<ol class="sol-choices" type="A"><li>he threw away his vacuum because it was just gathering dust, he thought Dunkin’ Doughnuts was a basketball team, he yells into an envelope to send a voice mail, and when he heard that Thanksgiving was just around the corner, he went looking for it.</li></ol>
-<details class="sol-answer"><summary>Solution</summary>
-<p><strong>(a)</strong> This is a "freebie" question, but you have to bubble the answer choice in order to get credit.</p>
-</details>
-</section>
 </div>
 <div class="sol-group" data-term="232" data-exam="1">
 <h2>Exam 1 · Summer 2023</h2>
@@ -2979,14 +3000,6 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <details class="sol-answer"><summary>Solution</summary>
 <p><strong>(c)</strong> Tax incidence depends on the relative elasticities of demand and supply. You can think of elasticity as flexibility. If demanders are more flexible than suppliers, the suppliers will be left to pay the majority of the tax. On the other hand, if suppliers are more flexible than demanders, the demanders will be left to pay the majority of the tax. Therefore, demanders pay a larger fraction of a tax when demand is inelastic.</p>
 <div class="sdg"><script type="application/json">{"title":"Who Pays a Tax: Steep Demand Against Flat Demand","lede":"Switch between the two demand curves to see how the same tax is shared.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"pl":"P₁","ql":"Q₁"},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"pl":"P₁","ql":"Q₁","showP":false,"label":"P₁","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
-</details>
-</section>
-<section class="sol" id="eco2023-232-e1-q30" data-term="232" data-exam="1" data-topic="Free Point" data-answer="a">
-<p class="sol-q"><b>Question 30 · Free Point</b></p>
-<p>You must email the grader (within 1 week after the test scores are posted) if you have a question about your test score and you must email me if you have a question about a question, then the director is so stupid that (Hint: A is the correct answer):</p>
-<ol class="sol-choices" type="A"><li>named his two dogs Rolex and Timex because they are watch dogs, and he cut a hole in his umbrella so he could see if it is raining, and he went to the library to find Facebook, and he kept returning doughnuts because they all had a hole in them.</li></ol>
-<details class="sol-answer"><summary>Solution</summary>
-<p><strong>(a)</strong> This is a "freebie" question, but you have to bubble the answer choice in order to get credit.</p>
 </details>
 </section>
 </div>
@@ -3406,14 +3419,6 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <div class="sdg"><script type="application/json">{"title":"An Import Quota on Sugar","lede":"A quota raises the domestic price the way a tariff does.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","showP":false},{"p":42,"tag":"Price with quota","showP":false,"at":1}],"points":[{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ"},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false},{"q":42,"p":42,"guides":"q","ql":"Qₛ′","pl":"Pᵠ","at":1},{"q":58,"p":42,"guides":"q","ql":"Qᴅ′","showP":false,"at":1}],"areas":[{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","until":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","until":2},{"pts":[[0,42],[0,100],[58,42]],"label":"CS","color":"teal","at":2},{"pts":[[0,42],[0,0],[42,42]],"label":"PS","color":"orange","at":2},{"pts":[[42,30],[42,42],[58,42],[58,30]],"label":"Importers' profit","color":"navy","lp":[50,20],"at":3},{"pts":[[30,30],[42,42],[42,30]],"label":"","color":"red","at":3},{"pts":[[58,30],[58,42],[70,30]],"label":"","color":"red","at":3}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports before","below":true,"until":1},{"p":42,"q1":42,"q2":58,"label":"Imports after","below":true,"at":1}],"steps":["At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.","A quota caps imports, which lifts the domestic price to Pᵠ. Producers sell more, Qₛ′, and buyers take less, Qᴅ′.","Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.","The band over the remaining imports goes to whoever holds the import licences, and the two red triangles are the deadweight loss."]}</script></div>
 </details>
 </section>
-<section class="sol" id="eco2023-231-e1-q40" data-term="231" data-exam="1" data-topic="Free Point" data-answer="a">
-<p class="sol-q"><b>Question 40 · Free Point</b></p>
-<p>ANSWER A FOR THIS QUESTION!!!! After the scores are posted, if you have a question about your test score, email the grader at eco2023.grader@clas.ufl.edu and the director is so fat that (HINT: Be SURE to answer this question because you’ll get credit for any answer.)</p>
-<ol class="sol-choices" type="A"><li>when he goes camping, the bears hide <em>their</em> food.</li><li>when he goes to the zoo, the elephants throw peanuts to him.</li><li>every time he puts an apple in his mouth, people try to roast him.</li><li>they changed “one size fits all” to “one size fits most”.</li><li>the last time he was lying on the beach, Greenpeace tried to haul him back into the ocean.</li></ol>
-<details class="sol-answer"><summary>Solution</summary>
-<p><strong>(a)</strong> This is a "freebie" question, but you have to bubble the answer choice in order to get credit.</p>
-</details>
-</section>
 </div>
 <div class="sol-group" data-term="222" data-exam="1">
 <h2>Exam 1 · Summer 2022</h2>
@@ -3728,15 +3733,6 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <details class="sol-answer"><summary>Solution</summary>
 <p><strong>(e)</strong> An increase in the cost of producing insulin causes a leftward shift of the supply curve for insulin. If the demand curve for insulin is completely vertical (i.e., the price elasticity of demand is zero), the result will be an increase in the equilibrium price but no change in the equilibrium quantity.</p>
 <div class="sdg"><script type="application/json">{"title":"Insulin: Perfectly Inelastic Demand","lede":"With an elasticity of zero, a supply shift moves only the price.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[50,8],[50,100]],"ldx":6,"ldy":-4},{"id":"S1","label":"S₁","pts":[[8,8],[100,100]]},{"id":"S2","label":"S₂","pts":[[8,32],[76,100]],"color":"red","from":"S1","at":1,"arrowP":88}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁","guides":"p"},{"q":50,"p":74,"pl":"P₂","guides":"p","showQ":false,"color":"red","at":2}],"steps":["Insulin buyers take Q₁ whatever the price, so the demand curve is vertical.","Higher production costs shift supply left, from S₁ to S₂.","The quantity cannot change, so the whole adjustment is in the price: it rises to P₂ and Q₁ is unchanged."]}</script></div>
-
-</details>
-</section>
-<section class="sol" id="eco2023-222-e1-q30" data-term="222" data-exam="1" data-topic="Free Point" data-answer="a">
-<p class="sol-q"><b>Question 30 · Free Point</b></p>
-<p>You must email the grader (within 1 week after the test scores are posted) if you have a question about your test score and you must email me if you have a question about a question, then the director is so stupid that (Hint: A is the correct answer):</p>
-<ol class="sol-choices" type="A"><li>named his two dogs Rolex and Timex because they are watch dogs, and he cut a hole in his umbrella so he could see if it is raining, and he went to the library to find Facebook, and he kept returning doughnuts because they all had a hole in them.</li></ol>
-<details class="sol-answer"><summary>Solution</summary>
-<p><strong>(a)</strong> This is a "freebie" question, but you have to bubble the answer choice in order to get credit.</p>
 
 </details>
 </section>

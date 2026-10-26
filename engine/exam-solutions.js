@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.7 =====
+/* ===== exam-solutions.js v0.8 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -20,6 +20,10 @@
   }
   function examName(e) { return /^\d+$/.test(e) ? 'Exam ' + e : e; }
   function examOrder(e) { return /^\d+$/.test(e) ? +e : 99; }
+  // Ian's order for the topics (2026-10-26); the frontier comes first because
+  // it is the course's first chapter. Anything else sorts after, by name.
+  var TOPIC_ORDER = ['The PPF', 'Supply and Demand', 'Elasticity', 'Efficiency and Equity', 'Government Intervention', 'International Trade'];
+  function topicRank(t) { var i = TOPIC_ORDER.indexOf(t); return i < 0 ? TOPIC_ORDER.length : i; }
   function uniq(list) {
     var out = [];
     list.forEach(function (x) { if (out.indexOf(x) < 0) out.push(x); });
@@ -41,7 +45,7 @@
 
     var terms = uniq(secs.map(function (s) { return s.dataset.term; }))
       .sort(function (a, b) { return b.localeCompare(a); });            // newest first
-    var state = { term: terms[0], exam: '', topic: '' };
+    var state = { term: terms[0], exam: '', topic: '', idx: 0 };
 
     function examsFor(term) {
       return uniq(secs.filter(function (s) { return s.dataset.term === term; })
@@ -50,7 +54,8 @@
     }
     function topicsFor(term, exam) {
       return uniq(secs.filter(function (s) { return s.dataset.term === term && s.dataset.exam === exam; })
-                      .map(function (s) { return s.dataset.topic; }));
+                      .map(function (s) { return s.dataset.topic; }))
+        .sort(function (a, b) { return (topicRank(a) - topicRank(b)) || a.localeCompare(b); });
     }
     function settle() {
       var exams = examsFor(state.term);
@@ -68,7 +73,22 @@
     var summary = document.createElement('summary'); box.appendChild(summary);
     var nav = document.createElement('nav'); box.appendChild(nav);
     mount.appendChild(box);
-    var count = document.createElement('p'); count.className = 'sol-count'; mount.appendChild(count);
+    // One question at a time (Ian, 2026-10-26: "a self-contained box ... that
+    // would not require any scrolling"): the picker, then the current
+    // question in its own box, then Previous / Next. The page holds every
+    // section; the shell shows one.
+    var bar = document.createElement('div'); bar.className = 'sol-nav';
+    var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
+    var count = document.createElement('span'); count.className = 'sol-count';
+    var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
+    bar.appendChild(prev); bar.appendChild(count); bar.appendChild(next);
+    prev.addEventListener('click', function () { if (state.idx > 0) { state.idx--; render(); } });
+    next.addEventListener('click', function () { state.idx++; render(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+      if (e.key === 'ArrowRight') { state.idx++; render(); }
+      if (e.key === 'ArrowLeft' && state.idx > 0) { state.idx--; render(); }
+    });
 
     function stage(n, name, items, pick) {
       var d = document.createElement('div'); d.className = 'sol-stage';
@@ -95,29 +115,29 @@
       nav.innerHTML = '';
       nav.appendChild(stage(1, 'Semester',
         terms.map(function (t) { return { value: t, label: termName(t), current: t === state.term }; }),
-        function (v) { state.term = v; state.exam = ''; state.topic = ''; render(); }));
+        function (v) { state.term = v; state.exam = ''; state.topic = ''; state.idx = 0; render(); }));
       nav.appendChild(stage(2, 'Exam',
         examsFor(state.term).map(function (e) { return { value: e, label: examName(e), current: e === state.exam }; }),
-        function (v) { state.exam = v; state.topic = ''; render(); }));
+        function (v) { state.exam = v; state.topic = ''; state.idx = 0; render(); }));
       nav.appendChild(stage(3, 'Topic',
         [{ value: '', label: 'All topics', current: !state.topic }].concat(
           topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t, current: t === state.topic }; })),
-        function (v) { state.topic = v; render(); }));
+        function (v) { state.topic = v; state.idx = 0; render(); }));
 
-      var shown = 0;
-      secs.forEach(function (s) {
-        var on = s.dataset.term === state.term && s.dataset.exam === state.exam &&
-                 (!state.topic || s.dataset.topic === state.topic);
-        s.hidden = !on;
-        if (on) shown++;
+      var list = secs.filter(function (s) {
+        return s.dataset.term === state.term && s.dataset.exam === state.exam &&
+               (!state.topic || s.dataset.topic === state.topic);
       });
-      groups.forEach(function (g) {
-        g.hidden = !g.querySelector('section.sol:not([hidden])');
-      });
-      count.textContent = shown + ' question' + (shown === 1 ? '' : 's') + ' \u00b7 ' +
-        termName(state.term) + ', ' + examName(state.exam) + (state.topic ? ', ' + state.topic : '');
+      if (state.idx >= list.length) state.idx = Math.max(0, list.length - 1);
+      secs.forEach(function (s) { s.hidden = s !== list[state.idx]; });
+      groups.forEach(function (g) { g.hidden = !g.querySelector('section.sol:not([hidden])'); });
+      // the box for the question goes under the picker, the nav under it
+      if (list[state.idx]) mount.appendChild(list[state.idx]);
+      mount.appendChild(bar);
+      count.textContent = list.length ? ('Question ' + (state.idx + 1) + ' of ' + list.length) : 'No questions';
+      prev.disabled = state.idx <= 0; next.disabled = state.idx >= list.length - 1;
 
-      var hash = '#' + state.term + '/' + state.exam + (state.topic ? '/' + encodeURIComponent(state.topic) : '');
+      var hash = '#' + state.term + '/' + state.exam + '/' + encodeURIComponent(state.topic || '') + '/' + (state.idx + 1);
       if (location.hash !== hash && history.replaceState) history.replaceState(null, '', hash);
     }
 
@@ -133,8 +153,8 @@
         var src = sec && (sec.matches('section.sol') ? sec : sec.querySelector('section.sol'));
         if (src) {
           state.term = src.dataset.term; state.exam = src.dataset.exam; state.topic = '';
+          state.idx = secs.filter(function (s) { return s.dataset.term === state.term && s.dataset.exam === state.exam; }).indexOf(src);
           render();
-          el.scrollIntoView();
           return true;
         }
         return false;
@@ -142,6 +162,7 @@
       var parts = h.split('/');
       if (terms.indexOf(parts[0]) < 0) return false;
       state.term = parts[0]; state.exam = parts[1] || ''; state.topic = parts[2] || '';
+      state.idx = Math.max(0, (parseInt(parts[3], 10) || 1) - 1);
       render();
       return true;
     }

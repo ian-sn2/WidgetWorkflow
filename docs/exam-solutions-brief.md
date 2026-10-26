@@ -14,6 +14,11 @@ house head, the engine, and the **solutions shell** -- `engine/exam-solutions.js
 and `.css`, embedded by `scripts/embed_engine.py` in place of
 `<!--SOL-SHELL-->` the same way the engine fills `<!--SDG-ENGINE-->`.
 
+The head carries MathJax (the same three lines Ian's own solutions file had),
+because the written solutions set their formulas as `\[ … \]`. The CDN it
+loads from is not reachable from this container, so the formulas cannot be
+checked here; Ian's browser renders them.
+
 The body is:
 
 ```html
@@ -43,8 +48,9 @@ builds one collapsible box styled like the house table of contents -- a
 `<details class="toc-box">` whose summary names the whole selection -- with
 three stages inside it in order, **Semester, then Exam, then Topic**, each a
 row of choices with the current one filled navy; a later stage lists only
-what the earlier choices allow. It hides every section the selection does not match, and keeps the selection in
-the URL hash (`#243/1/Elasticity`), so a link lands on one exam. A hash that
+what the earlier choices allow. It hides all but the current one, and keeps the selection in the URL hash
+(`#243/1/Elasticity/3`: term, exam, topic, question position), so a link lands
+on one question. A hash that
 names a heading or a question (`#eco2023-243-e1-q13`, which is what the house
 table of contents links to) selects that question's exam and semester first,
 so a link to a hidden heading never scrolls to nothing. Terms are the usual
@@ -92,9 +98,10 @@ preset's own choice crossed the new equilibrium's guides on both.
 
 Each question carries one topic, assigned by a keyword pass over its stem and
 choices and then read: The PPF, Supply and Demand, Elasticity, Efficiency and
-Equity, Government Intervention, International Trade, and Free Point for the
-"answer A" question every exam ends with. The assignment is a judgement and is
-listed per exam in the changelog for Ian to overrule.
+Equity, Government Intervention, International Trade. The "answer A" question
+every paper ends with is left out of the page (Ian, 2026-10-26). The
+assignment is a judgement and is listed per exam in the changelog for Ian to
+overrule.
 
 ## Checks
 

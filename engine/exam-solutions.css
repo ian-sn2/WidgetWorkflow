@@ -11,9 +11,16 @@
 .sol-shell .sol-stage a:hover { text-decoration:none; border-color:#002060; }
 @media (max-width:640px){ .sol-shell .sol-stage a { min-height:44px; display:flex; align-items:center; } }
 .sol-shell .sol-count { margin:4px 0 16px; font-size:.85rem; color:#333; }
-section.sol { margin:0 0 22px; padding:0 0 12px; border-bottom:1px solid #c9d2e3; }
+/* The current question sits in its own box under the picker; the groups'
+   headings stay in the page for structure but are not shown. */
+.sol-group > h2 { display:none; }
+section.sol { margin:10px 0 0; padding:12px 20px 14px; border:1px solid #DEDEDE; border-radius:12px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+.sol-shell .sol-nav { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0 20px; }
+.sol-shell .sol-nav button { border:1px solid #002060; background:#fff; color:#002060; padding:8px 16px; min-height:44px; font:inherit; font-size:.95rem; font-weight:700; cursor:pointer; border-radius:6px; }
+.sol-shell .sol-nav button:disabled { opacity:.35; cursor:default; }
+.sol-shell .sol-nav .sol-count { margin:0; font-size:.9rem; font-weight:700; color:#002060; }
 section.sol p { margin:6px 0; line-height:1.45; }
-section.sol .sol-q { font-weight:800; color:#002060; margin:14px 0 4px; font-size:1.05rem; }
+section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; }
 section.sol ol.sol-sub { margin:2px 0 4px 2em; padding:0; }
 section.sol ol.sol-sub li { margin:0; line-height:1.45; }
 /* The choices are the quiz: each one a button that turns green or red. */

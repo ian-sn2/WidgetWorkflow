@@ -11,13 +11,14 @@ on the second (same day, at Ian's ask), 120 widgets in all. See
 
 ## What is in it
 
-170 questions under five semesters, each with its stem, its choices, and its
-written solution behind a "Solution" click. The shell filters by exam (one so
-far), semester and topic.
+165 questions under five semesters, each with its stem, its choices, and its
+written solution behind a "Solution" click, shown one at a time in a box
+with Previous / Next under the picker. The "answer A" question each paper
+ends with is left out (Ian, 2026-10-26: the Free Point topic "looks weird").
 
 | semester | questions kept | dropped |
 | --- | --- | --- |
-| Fall 2024 | 1–30 | — |
+| Fall 2024 | 1–29 | 30, the "answer A" question (and the same on every paper) |
 | Fall 2023 | 1–40 | — |
 | Summer 2023 | 1–30 | 31, a three-part written question with no key and no solution |
 | Spring 2023 | 1–40 | 41, the extra-credit confidence question |
@@ -117,7 +118,15 @@ through; the counts are in the build log and the tags are on each section.
   or red, the right one shows green, and the solution stays behind its own
   click. Spring 2023 question 10 accepts (a) or (d), as the key does.
 * **The picker is one collapsible box** in the style of the table of
-  contents, with three stages inside: Semester, then Exam, then Topic.
+  contents, with three stages inside: Semester, then Exam, then Topic, the
+  topics in Ian's order with The PPF first (his list did not name it; it is
+  the course's first chapter, so it leads -- his call if it should go
+  elsewhere).
+* **One question at a time**, in its own box, with Previous / Next and the
+  arrow keys; the page does not scroll until a solution is opened.
+* **MathJax is in the head**, as in the file Ian sent, for the `\[ … \]`
+  formulas in the four earlier papers' solutions. Its CDN is not reachable
+  from the build container, so the rendering is unverified here.
 * **Solutions are set tighter than a chapter**: half the house margins, and
   figures at 440px inside a solution.
 
