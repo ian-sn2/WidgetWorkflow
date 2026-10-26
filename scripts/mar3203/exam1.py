@@ -30,7 +30,7 @@ def pie():
         x0, y0 = cx + r * math.cos(math.radians(a0)), cy + r * math.sin(math.radians(a0))
         x1, y1 = cx + r * math.cos(math.radians(a1)), cy + r * math.sin(math.radians(a1))
         b += f'<path d="M{cx} {cy} L{x0:.1f} {y0:.1f} A{r} {r} 0 {1 if pct > 50 else 0} 1 {x1:.1f} {y1:.1f} Z" fill="{fill}" stroke="#fff" stroke-width="2"/>'
-        am = math.radians((a0 + a1) / 2); lx, ly = cx + r * 0.62 * math.cos(am), cy + r * 0.62 * math.sin(am)
+        am = math.radians((a0 + a1) / 2); k = {"Management": 0.46, "Capital": 0.6, "Labor": 0.7}[name]; lx, ly = cx + r * k * math.cos(am), cy + r * k * math.sin(am)  # the wide name sits well inside its slice (Ian, 2026-10-26)
         b += text(lx, ly, f"{name}\n{pct}%", 13, lh=16)
         a0 = a1
     return svg(400, 250, b, "Contributions to productivity growth: management 52 percent, capital 38 percent, labor 10 percent", 360)
@@ -50,7 +50,7 @@ lifecycle = {"title": "The Product Life Cycle",
              "caption": cap("Sales climb through introduction and growth, level off at maturity and fall in decline, so the production run lengthens and then shortens again.")}
 
 def global2x2():
-    b = text(260, 24, "Global Operations Strategies", 17)
+    b = text(320, 24, "Global Operations Strategies", 17)  # centred over the grid, which spans x 150-490 (Ian, 2026-10-26)
     b += f'<rect x="150" y="40" width="340" height="230" rx="18" fill="#fff" stroke="{INK}" stroke-width="2"/>'
     cells = [(165, 55, "Global strategy"), (325, 55, "Transnational\nstrategy"), (165, 160, "International\nstrategy"), (325, 160, "Multidomestic\nstrategy")]
     for x, y, t in cells: b += box(x, y, 150, 95, t, fill=PALEG, fs=14, rx=12)
@@ -193,7 +193,7 @@ zcurve = {"title": "The Standard Normal Curve",
           "axes": {"x": "z", "y": " ", "xmin": -3.8, "xmax": 3.8, "ymax": 112, "bg": False},
           "curves": [{"id": "z", "label": "", "pts": ZB, "curved": True}, {"id": "mid", "label": "", "pts": [[0, 0], [0, 100]], "dashed": True, "thin": True}],
           "areas": [{"pts": under(ZB, None, 0), **GOLD, "label": ""}],
-          "moves": [{"from": [-2.3, 72], "to": [-1.25, 44], "color": "ink", "offset": 0}],
+          "moves": [{"from": [-2.3, 72], "to": [-0.95, 30], "color": "ink", "offset": 0}],   # the head lands inside the shaded area, not on the curve (Ian, 2026-10-26)
           "points": [label(-3.3, 86, "P(z ≤ 0)", 0, 0)] + [{"q": k, "p": 0, "dot": False, "guides": False, "showP": False, "ql": lab} for k, lab in [(-3, "−3σ"), (-2, "−2σ"), (-1, "−1σ"), (0, "μ = 0"), (1, "+1σ"), (2, "+2σ"), (3, "+3σ")]],
           "caption": cap("Every entry in the table is an area like this one, measured from the far left up to the z in question.")}
 ZT = {}

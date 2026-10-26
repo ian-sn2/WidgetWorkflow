@@ -22,7 +22,7 @@ def bell(mu, sig, peak=100, lo=-3.6, hi=3.6, step=0.2, xlo=None, xhi=None):
     while k <= hi + 1e-9:
         x = mu + k * sig
         if (xlo is None or x >= xlo) and (xhi is None or x <= xhi):
-            pts.append([round(x, 3), round(peak * math.exp(-k * k / 2), 2)])
+            pts.append([round(x, 5), round(peak * math.exp(-k * k / 2), 2)])
         k += step
     return pts
 def interp(pts, x):

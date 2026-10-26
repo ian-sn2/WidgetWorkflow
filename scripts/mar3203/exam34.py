@@ -11,10 +11,10 @@ L1 = band(18, 8, 1.1); L2 = band(42, 22, 1.2); L3 = band(74, 44, 1.3); TOP = [ro
 def layer(lo, hi): return [[x, lo[i]] for i, x in enumerate(XS)] + [[x, hi[i]] for i, x in enumerate(XS)][::-1]
 qcost = {"title": "Quality-Associated Costs",
          "axes": {"x": " ", "y": " ", "xmax": 110, "ymax": 112, "bg": False},
-         "areas": [{"pts": layer([0] * len(XS), L1), "color": "gold", "opacity": 0.2, "label": "Appraisal", "lp": [26, 8]},
-                   {"pts": layer(L1, L2), "color": "gold", "opacity": 0.35, "label": "Prevention", "lp": [26, 30]},
-                   {"pts": layer(L2, L3), "color": "gold", "opacity": 0.5, "label": "Internal Failure", "lp": [34, 56]},
-                   {"pts": layer(L3, TOP), "color": "gold", "opacity": 0.65, "label": "External Failure", "lp": [30, 84]}],
+         # the band names are ink point labels, not area labels, which the engine sets in the band's own gold (Ian, 2026-10-26: "camouflaged")
+         "areas": [{"pts": layer([0] * len(XS), L1), "color": "gold", "opacity": 0.2}, {"pts": layer(L1, L2), "color": "gold", "opacity": 0.35},
+                   {"pts": layer(L2, L3), "color": "gold", "opacity": 0.5}, {"pts": layer(L3, TOP), "color": "gold", "opacity": 0.65}],
+         "points": [label(8, 9, "Appraisal"), label(8, 30, "Prevention"), label(8, 52, "Internal Failure"), label(8, 76, "External Failure")],
          "curves": [{"id": "tc", "label": "Total Cost", "pts": [[x, TOP[i]] for i, x in enumerate(XS)], "curved": True, "color": "red", "ldx": -8, "ldy": -10}],
          "caption": cap("External failure is the thickest band and the dearest; as prevention and appraisal do their work, the total cost of quality falls.")}
 
@@ -25,14 +25,14 @@ def tqm_flow():
             ("Customer\nSatisfaction", "Do organizational practices have a competitive advantage?", "Winning orders, company reputation, repeat\ncustomers", 0.85)]
     b = ""
     for i, (h, q, a, shade) in enumerate(rows):
-        y = 10 + i * 120
+        y = 10 + i * 140   # a 40px gap between rows, so the arrow can be a proper arrow rather than a squashed chevron (Ian, 2026-10-26)
         fill = f"rgba(201,166,51,{shade})"; dark = shade > 0.5
         b += f'<rect x="10" y="{y}" width="190" height="100" rx="12" fill="{fill}" stroke="{INK}" stroke-width="1.2"/>'
         b += text(105, y + 44, h, 16, color=("#fff" if dark else INK), lh=20)
         b += f'<rect x="220" y="{y}" width="500" height="100" rx="12" fill="#fff" stroke="{GOLDC}" stroke-width="2"/>'
         b += text(236, y + 28, q, 13, anchor="start", italic=True, bold=False) + text(262, y + 54, "➤  " + a, 12.5, anchor="start", bold=False, lh=16)
-        if i < 3: b += f'<polygon points="652,{y+100} 684,{y+100} 684,{y+108} 696,{y+108} 668,{y+128} 640,{y+108} 652,{y+108}" fill="{GOLDC}" fill-opacity="{0.4 + 0.2*i}" stroke="{INK}" stroke-width="0.8"/>'
-    return svg(730, 490, b, "The flow of activities in TQM: organizational practices lead to quality principles, employee fulfillment and customer satisfaction", 700)
+        if i < 3: b += f'<polygon points="660,{y+102} 676,{y+102} 676,{y+124} 692,{y+124} 668,{y+138} 644,{y+124} 660,{y+124}" fill="{GOLDC}" fill-opacity="{0.4 + 0.2*i}" stroke="{INK}" stroke-width="0.8"/>'
+    return svg(730, 550, b, "The flow of activities in TQM: organizational practices lead to quality principles, employee fulfillment and customer satisfaction", 700)
 TQM = html(tqm_flow(), True)
 
 def cycle_fig(items, title, aria, r=150):
@@ -276,7 +276,7 @@ def tree_fig():
         b += f'<circle cx="270" cy="{cy}" r="34" fill="#e3cf7a" stroke="{INK}" stroke-width="5"/>'
         b += path(f"M300 {cy - 12} L420 {cy - 50} H640", sw=2, head=False) + path(f"M300 {cy + 12} L420 {cy + 50} H640", sw=2, head=False)
         b += text(540, cy - 56, labs[0], 15) + text(540, cy + 70, labs[1], 15)
-    b += text(150, 118, "One supplier", 12, italic=True, bold=False) + text(150, 290, "Two suppliers", 12, italic=True, bold=False)
+    b += text(140, 104, "One supplier", 12, italic=True, bold=False) + text(140, 318, "Two suppliers", 12, italic=True, bold=False)   # 28px clear of the branch lines (Ian, 2026-10-26)
     return svg(660, 400, b, "A decision tree: a square decision node branches to two chance nodes, one supplier with the outcomes no failure or failure, two suppliers with the outcomes at most one fails or both fail", 560)
 TREE = html(tree_fig())
 SCA = {"mar3203-exam4-supply-chain-analytics-01-bullwhip-effect-diagra.png": bullwhip, "mar3203-exam4-supply-chain-analytics-02-decision-chance-nodes.png": NODES,

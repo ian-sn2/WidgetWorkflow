@@ -309,11 +309,12 @@ BEQ = 40 / 0.8
 breakeven = {"title": "Break-Even Analysis",
              "axes": {"x": "Quantity", "y": "$", "xmax": 110, "ymax": 180, "bg": False},
              "curves": [{"id": "tr", "label": "TR", "pts": [[0, 0], [100, TR(100)]], "color": "gold"}, {"id": "tc", "label": "TC", "pts": [[0, 40], [100, TC(100)]], "color": "red"}],
-             "areas": [{"pts": [[0, 0], [0, 40], [BEQ, TC(BEQ)]], "color": "red", "label": "−", "at": 1},
-                       {"pts": [[BEQ, TR(BEQ)], [100, TR(100)], [100, TC(100)]], "color": "gold", "opacity": 0.45, "label": "+", "at": 2}],
+             "areas": [{"pts": [[0, 0], [0, 40], [BEQ, TC(BEQ)]], "color": "red", "at": 1},
+                       {"pts": [[BEQ, TR(BEQ)], [100, TR(100)], [100, TC(100)]], "color": "gold", "opacity": 0.45, "at": 2}],
              "points": [{"q": BEQ, "p": TR(BEQ), "guides": "q", "showP": False, "ql": "Break-Even\nPoint", "color": "gold"}],
              "vbraces": [{"q": 0, "p1": 0, "p2": 40, "label": "Fixed\nCosts", "left": True}],
-             "braces": [{"q1": 4, "q2": BEQ - 3, "p": 0, "label": "Loss", "below": True}, {"q1": BEQ + 3, "q2": 92, "p": 0, "label": "Profit", "below": True}],
+             # the signs were unreadable inside the thin wedges (Ian, 2026-10-26); they ride the braces, whose labels are set large
+             "braces": [{"q1": 4, "q2": BEQ - 3, "p": 0, "label": "Loss (−)", "below": True}, {"q1": BEQ + 3, "q2": 92, "p": 0, "label": "Profit (+)", "below": True}],
              "steps": [cap("Total cost starts at the fixed costs and climbs at the variable cost per unit; total revenue starts at zero and climbs at the price."),
                        cap("Below the break-even point revenue is under cost, and the gap between the two lines is a loss."),
                        cap("Above it revenue is over cost, and the gap is operating income; the point itself is where profit is zero.")]}
