@@ -1016,3 +1016,22 @@ thing as QMB3200: the sources' fixed-width `.financial` tables push every
 page sideways and, zoomed to fit, leave widget buttons unresponsive; the
 same file passes with those tables allowed to scroll. Reported on the
 checklist, not changed.
+
+## 2026-10-26 — The frameless look for the UCF sets, without touching the engine
+
+Ian set a colleague's QMB3200 file beside ours: his figures are transparent
+inline SVGs with nothing around them, and ours sat in a navy frame on paper
+with an inner box, a red-barred caption and full-width navy buttons. He
+asked for ours to be "transparent and seamless", the buttons "less out
+there", and the static captions gone ("they take up too much space"), and
+separately that the engine not be modified without his say-so. So the look
+is not an engine flag: `apply_widgets.py` takes a `style` key in the map
+and writes it as one `<style>` after the engine's own blocks, counted as an
+insertion for the proof. `scripts/mar3203/common.py` holds the sheet
+(`LOOK`) and every MAR3203 map carries it. A static widget's caption is
+hidden by the sheet, not deleted from the JSON, so `check_file` still reads
+it and a stepped widget keeps its live caption. The preview built the same
+way for QMB3200 Exam 2 Part 2 measured the eleven figures at 4,436px
+against 5,931px framed. The engine stays at v2.67. The same day's other
+change: the project-management cycle's canvas was 30px too short for its
+bottom arc.

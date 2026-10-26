@@ -244,13 +244,13 @@ def apply(src, m, name, use_anchors=False, toc=False):
             # names a line inside an .exam-tip; the whole box moves. It is
             # taken out of the source by position and put back inside the
             # inserted snippet, so the proof still holds.
-            m = re.search(r'<div class="exam-tip">\s*' + re.escape(a["lead"]) + r'.*?</div>', src, re.S)
-            if not m or src.count(m.group(0)) != 1 or out.count(m.group(0)) != 1:
+            lm = re.search(r'<div class="exam-tip">\s*' + re.escape(a["lead"]) + r'.*?</div>', src, re.S)
+            if not lm or src.count(lm.group(0)) != 1 or out.count(lm.group(0)) != 1:
                 problems.append("lead block not found once: %r" % a["lead"][:60])
                 continue
-            removed.append(m.span())
-            out = out.replace(m.group(0), "", 1)
-            lead = m.group(0) + "\n"
+            removed.append(lm.span())
+            out = out.replace(lm.group(0), "", 1)
+            lead = lm.group(0) + "\n"
         pos = out.find(needle)
         end = block_end(out, pos)
         comment = a.get("comment", "below-referenced paragraph")
@@ -290,6 +290,15 @@ def apply(src, m, name, use_anchors=False, toc=False):
                 out = out.replace("</head>", PLACEHOLDER + "\n</head>", 1)
         out = re.sub(r"[ \t]*" + re.escape(PLACEHOLDER) + r"[ \t]*\n?",
                      lambda _m: embed_engine.blocks(), out, count=1)
+        if m.get("style"):
+            # a per-file look for the widgets (the frameless UCF look, Ian
+            # 2026-10-26): one <style> after the engine's own, carried in the
+            # map so the engine stays verbatim and the decision is recorded
+            # with the widgets it styles. Counted as an insertion for the proof.
+            look = "<style>\n/* widget look, from the map */\n%s\n</style>\n" % m["style"].strip()
+            i = out.index(embed_engine.blocks()) + len(embed_engine.blocks())
+            out = out[:i] + look + out[i:]
+            inserted.append(look)
 
     # the proof: nothing but the engine(s) and the widgets differs
     back = out.replace(embed_engine.blocks(), "", 1) if n_sdg else out

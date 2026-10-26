@@ -14,7 +14,7 @@ def pm_cycle():
     b += path("M408 100 A170 170 0 0 1 492 208", sw=3.4, color=GOLDC)
     b += path("M450 312 A170 170 0 0 1 150 312", sw=3.4, color=GOLDC)
     b += path("M108 208 A170 170 0 0 1 192 100", sw=3.4, color=GOLDC)
-    return svg(600, 372, b, "The continuous cycle of project planning, scheduling and controlling", 600)
+    return svg(600, 416, b, "The continuous cycle of project planning, scheduling and controlling", 600)  # the bottom arc reaches y = 402
 PMCYCLE = html(pm_cycle(), True)
 
 def net(nodes, edges, **kw):

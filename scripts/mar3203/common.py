@@ -95,6 +95,27 @@ def text(x, y, s, fs=13, anchor="middle", bold=True, color=INK, lh=15, italic=Fa
 def html(block, first=False):
     return {"html": (CSS if first else "") + block}
 
+# The frameless look (Ian, 2026-10-26, after comparing against a colleague's
+# inline-SVG file): no navy frame, no paper, no inner box, the caption a plain
+# centred line, the buttons quiet pills. Applied from the map through
+# apply_widgets.py's "style" key, so the engine itself is untouched.
+LOOK = """
+.sdg { border:0; background:transparent; padding:0; margin:14px auto 18px; }
+.sdg h4 { font-size:.95rem; text-align:center; margin:0 0 2px; }
+.sdg .sdg-lede { text-align:center; margin:0 0 8px; font-size:.88rem; }
+.sdg figure { border:0; background:transparent; padding:0; }
+.sdg .sdg-scen, .sdg .sdg-ctrl { justify-content:center; gap:6px; }
+.sdg .sdg-scen { margin-bottom:6px; }
+.sdg .sdg-scen button, .sdg .sdg-ctrl button { flex:0 1 auto; border:1px solid #c9d2e3; border-radius:999px; background:#fff; color:#1c2a44; padding:4px 12px; font-size:.82rem; font-weight:600; }
+.sdg .sdg-scen button[aria-pressed="true"] { background:#1c2a44; border-color:#1c2a44; color:#fff; }
+.sdg .sdg-ctrl { margin-top:4px; }
+.sdg .sdg-step { font-size:.8rem; color:#555; }
+.sdg .sdg-cap { background:transparent; border-left:0; padding:0; margin:4px auto 0; max-width:580px; font-size:.88rem; text-align:center; color:#444; }
+.sdg .sdg-cap:not([aria-live]) { display:none; }
+"""
+# A static widget's caption is hidden by the look sheet (Ian, 2026-10-26: they
+# take up too much space); it stays in the JSON, so the checker still reads it
+# and a stepped widget keeps its live caption, which is what drives the steps.
 def write_map(name, images, anchors=()):
-    (MAPS / f"{name}.json").write_text(json.dumps({"images": images, "anchors": list(anchors)}, ensure_ascii=False, indent=1))
+    (MAPS / f"{name}.json").write_text(json.dumps({"images": images, "anchors": list(anchors), "style": LOOK}, ensure_ascii=False, indent=1))
     print(f"{name}: {len(images)} images, {len(anchors)} anchors")
