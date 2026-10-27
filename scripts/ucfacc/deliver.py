@@ -5,7 +5,7 @@ changelog per changed chapter."""
 import os, sys, json, glob, re, subprocess, shutil
 import build, figs
 from common import LOOK
-S = build.SRC; D = S + "/deliver/UCF Accounting & Management"; REPO = build.REPO
+S = build.SRC; D = S + "/deliver/UCF-AccMgmt"; REPO = build.REPO
 TIGHT = open(S + "/tools/tight.css").read()
 COURSE = {"a - ACG2021": "ACG2021", "c - ACG2071": "ACG2071", "d- ACG3173": "ACG3173", "i - MAN3025": "MAN3025"}
 def short(rel):
@@ -14,6 +14,9 @@ def short(rel):
         p = p.replace(" - DONE", "")
         for k, v in COURSE.items():
             if p.startswith(k): p = v
+        # Windows path limit (Ian hit it twice): strip the course and exam the folder repeats, keep the number and the name
+        p = re.sub(r"^(\d+) - (?:UCF |UCG )?(?:ACG\d{4} |MAN\d{4} )?(?:UCF )?(?:Exam \d )?(?:- )?", r"\1 ", p)
+        p = p.replace("Replace the Exam 3 Content", "Replace Exam 3 Content")
         out.append(p)
     return "/".join(out)
 if os.path.isdir(D): shutil.rmtree(D)
