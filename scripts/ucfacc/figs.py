@@ -12,8 +12,13 @@ FIGCSS = CSS.replace("</style>", """
   .sk-fig.tiny { max-width: 300px; }
   @media (max-width: 700px) { .sk-fig.right { float: none; width: 100%; margin: 12px auto; } }
 </style>""")
+import itertools
+_uid = itertools.count(1)
 def fig(w, h, body, aria, maxw=None, cls="", first=False):
-    return {"html": (FIGCSS if first else "") + svg(w, h, body, aria, maxw, cls)}
+    # one marker id per figure: a page shows several figures, and the deck keeps most of them hidden, where a
+    # shared "skah" marker in a display:none section paints no arrowhead anywhere (Ian saw no arrows, 2026-10-27)
+    s = svg(w, h, body, aria, maxw, cls).replace("skah", "skah%d" % next(_uid))
+    return {"html": (FIGCSS if first else "") + s}
 DEEP, MID, PALE, FAINT = "#c9a633", "#dcc470", "#efe3b0", "#f8f1d8"
 
 # ------------------------------------------------------------- 2 x 2 grids
@@ -39,7 +44,7 @@ def grid2x2(cells, fills=None, top=None, left=None, cols=None, rows=None, bottom
     return fig(W, H, b, aria, maxw, cls, first)
 
 # ------------------------------------------------------------- pyramids
-def pyramid(levels, w=440, h=330, fills=None, numbered=False, aria="", maxw=380, cls="narrow", first=False, fs=15, weights=None, dashed_after=None, top_fs=None):
+def pyramid(levels, w=440, h=330, fills=None, numbered=False, aria="", maxw=380, cls="narrow", first=False, fs=15, weights=None, dashed_after=None):
     """levels top to bottom, each a text. A triangle cut into bands; `weights` give each band its share of the height
     (the apex band is narrow, so it usually takes more), `dashed_after` = index of the band whose lower edge is dashed."""
     n = len(levels); fills = fills or [DEEP, MID, PALE, FAINT, "#fcf8ea"][:n]
@@ -51,9 +56,16 @@ def pyramid(levels, w=440, h=330, fills=None, numbered=False, aria="", maxw=380,
         w1 = bw * (y1 - top) / (base - top); w2 = bw * (y2 - top) / (base - top)
         b += f'<polygon points="{cx - w1/2:.1f},{y1:.1f} {cx + w1/2:.1f},{y1:.1f} {cx + w2/2:.1f},{y2:.1f} {cx - w2/2:.1f},{y2:.1f}" fill="{fl}" stroke="{INK}" stroke-width="1.4"/>'
         if dashed_after == i: b += f'<line x1="{cx - w2/2:.1f}" y1="{y2:.1f}" x2="{cx + w2/2:.1f}" y2="{y2:.1f}" stroke="#fff" stroke-width="1.6" stroke-dasharray="6 5"/>'
-        ym = (y1 + y2) / 2; size = (top_fs or fs) if i == 0 else fs
-        # the apex band holds its name low, where the triangle is wide enough for it
-        ty = y2 - 7 if i == 0 else ym + 5
+        ym = (y1 + y2) / 2; size = fs
+        ty = ym + 5
+        if i == 0:
+            # the apex band holds its name low, where the triangle is wide enough, and as large as fits there:
+            # the band's width at the top of the letters must clear the name (Ian: as big as the rest, never on the lines)
+            while size > 9:
+                top_y = y2 - 7 - size * 0.74; width_there = bw * (top_y - top) / (base - top) - 10
+                if 0.6 * size * len(t) <= width_there: break
+                size -= 0.5
+            ty = y2 - 7
         b += text(cx, ty, t, size, lh=size + 2)
         if numbered:
             wm = bw * (ym - top) / (base - top); b += text(cx - wm / 2 - 14, ym + 4, str(n - i), 12, bold=True, color=GREY)
@@ -139,11 +151,11 @@ def fraud_triangle():
     b = f'<polygon points="{A[0]},{A[1]} {C[0]},{C[1]} {Bp[0]},{Bp[1]}" fill="{PALE}" stroke="{INK}" stroke-width="1.5"/>'
     for P in (A, Bp, C): b += f'<line x1="{cx}" y1="{cy}" x2="{P[0]}" y2="{P[1]}" stroke="{INK}" stroke-width="1.2"/>'
     def rot(x, y, ang, first, rest):
-        return (f'<text transform="translate({x} {y}) rotate({ang})" text-anchor="middle" font-size="12.5" fill="{INK}"><tspan font-weight="800">{first}</tspan>{rest}</text>')
+        return (f'<text transform="translate({x} {y}) rotate({ang})" text-anchor="middle" font-size="13" font-weight="600" fill="{INK}"><tspan font-weight="900" font-size="14">{first}</tspan>{rest}</text>')
     # each name sits at the centroid of its own region, turned to run along that region's outer side
     b += rot(228, 160, -42, "Motivation", " – the need or") + rot(240, 176, -42, "", "pressure to commit fraud")
     b += rot(432, 160, 42, "Opportunity", " – the right situation") + rot(420, 176, 42, "", "occurs for fraud to take place")
-    b += f'<text x="330" y="250" text-anchor="middle" font-size="12.5" fill="{INK}"><tspan font-weight="800">Rationalization</tspan> – justification for</text>' + text(330, 266, "committing the fraud", 12.5, bold=False)
+    b += f'<text x="330" y="250" text-anchor="middle" font-size="13" font-weight="600" fill="{INK}"><tspan font-weight="900" font-size="14">Rationalization</tspan> – justification for</text>' + text(330, 267, "committing the fraud", 13, bold=False)
     return fig(660, 300, b, "The fraud triangle: motivation, opportunity and rationalization", 560, "", True)
 def controls_summary():
     b = box(230, 10, 140, 30, "Internal Controls", fill=PALE, fs=13) + arrow(300, 40, 300, 58, sw=2.4)
@@ -186,12 +198,12 @@ def wip_flow():
     for i, t in enumerate(["Raw\nMaterials\nInventory", "WIP\nInventory", "Finished\nGoods\nInventory", "Cost of\nGoods Sold\n(COGS)"]):
         x = 20 + i * 190; b += box(x, 20, 130, 64, t, fill=DEEP if i != 1 else PALE, fs=12.5, lh=14, rx=6, color=INK)
         if i < 3: b += f'<polygon points="{x+136},{44} {x+166},{44} {x+166},{36} {x+186},{52} {x+166},{68} {x+166},{60} {x+136},{60}" fill="{INK}"/>'
-    b += text(540, 14, "SALE", 12)
-    b += arrow(275, 84, 275, 150, sw=1.8, head=False) + f'<line x1="275" y1="150" x2="290" y2="150" stroke="{INK}" stroke-width="1.8"/>'
-    b += vbrace(288, 100, 318, "left", 1.8) + text(250, 204, "Subsidiary\nAccounts", 10.5, bold=True, lh=12)
+    b += text(561, 14, "SALE", 12)
+    b += f'<line x1="275" y1="84" x2="275" y2="209" stroke="{INK}" stroke-width="1.8"/>' + arrow(275, 209, 300, 209, sw=1.8)
+    b += vbrace(314, 100, 318, "left", 1.8) + text(250, 224, "Subsidiary\nAccounts", 10.5, bold=True, lh=12)
     for t, y in [("Product 1\nDirect materials\nDirect labor\nOverhead", 100), ("Product 2\nDirect materials\nDirect labor\nOverhead", 170), ("Product 99\nDirect materials\nDirect labor\nOverhead", 262)]:
-        b += box(305, y, 130, 56, t, fill=DEEP, fs=10.5, lh=12, rx=4)
-    b += text(370, 248, "• • •", 12)
+        b += box(330, y, 130, 56, t, fill=DEEP, fs=10.5, lh=12, rx=4)
+    b += text(395, 248, "• • •", 12)
     return fig(760, 330, b, "Costs flow from raw materials to work in process to finished goods and, on sale, to cost of goods sold; each product has its own subsidiary WIP account of direct materials, direct labor and overhead", 640, "", True)
 
 # ------------------------------------------------------------- MAN3025
@@ -220,12 +232,12 @@ def decision_tree():
     b += arrow(90, 148, 150, 112) + text(112, 118, "YES", 8) + arrow(90, 165, 150, 204) + text(112, 198, "NO", 8)
     b += q(156, 96, "Does the action\nmaximize\nshareholder\nvalue?") + q(156, 214, "Don’t do it.")
     b += arrow(262, 86, 322, 44) + text(288, 56, "YES", 8) + arrow(262, 120, 322, 184) + text(288, 164, "NO", 8)
-    b += q(328, 30, "Is the action\nethical?") + text(328, 60, "(Weigh the effect on the community,\ncustomers, employees, supplier, and the\nenvironment against the benefit\nto shareholders.)", 7.5, anchor="start", bold=False, lh=9)
-    b += q(328, 176, "Would it be\nethical to not\ntake the action?") + text(328, 220, "(Weigh the cost imposed on\nshareholders against the benefit\nto other stakeholders.)", 7.5, anchor="start", bold=False, lh=9)
-    b += arrow(432, 24, 492, 14) + text(458, 10, "YES", 8) + q(498, 18, "Do it.")
-    b += arrow(432, 38, 492, 118) + text(466, 86, "NO", 8) + q(498, 122, "Don’t do it.")
-    b += arrow(432, 174, 492, 160) + text(458, 160, "YES", 8) + q(498, 164, "Don’t do it.")
-    b += arrow(432, 192, 492, 236) + text(458, 226, "NO", 8) + q(498, 228, "Do it, but\ndisclose the\neffect to\nshareholders.")
+    b += q(328, 42, "Is the action\nethical?") + text(328, 72, "(Weigh the effect on the\ncommunity, customers,\nemployees, supplier, and the\nenvironment against the\nbenefit to shareholders.)", 7.5, anchor="start", bold=False, lh=9)
+    b += q(328, 176, "Would it be\nethical to not\ntake the action?") + text(328, 220, "(Weigh the cost imposed on\nshareholders against the\nbenefit to other stakeholders.)", 7.5, anchor="start", bold=False, lh=9)
+    b += arrow(446, 36, 492, 20) + text(468, 18, "YES", 8) + q(498, 24, "Do it.")
+    b += arrow(446, 50, 492, 84) + text(468, 76, "NO", 8) + q(498, 88, "Don’t do it.")
+    b += arrow(446, 174, 492, 160) + text(466, 160, "YES", 8) + q(498, 164, "Don’t do it.")
+    b += arrow(446, 192, 492, 236) + text(466, 224, "NO", 8) + q(498, 228, "Do it, but\ndisclose the\neffect to\nshareholders.")
     return fig(600, 290, b, "A decision tree for a managerial decision: is it legal, does it maximize shareholder value, is it ethical, and would it be ethical not to act", 640, "", True)
 def diversity_wheel():
     b = ""
@@ -233,11 +245,11 @@ def diversity_wheel():
         b += f'<circle cx="200" cy="200" r="{r}" fill="none" stroke="{INK}" stroke-width="2"/>' + text(200, 200 + dy, t, 12, lh=14)
     return fig(400, 400, b, "The diversity wheel: personality at the centre, then internal, external and organizational dimensions", 340, "tiny", True)
 def carroll():
-    return pyramid(["Philanthropic", "Ethical", "Legal", "Economic"], w=460, h=360, fills=[DEEP, MID, PALE, FAINT], weights=[1.7, 1, 1, 1], top_fs=15, dashed_after=2,
+    return pyramid(["Philanthropic", "Ethical", "Legal", "Economic"], w=460, h=360, fills=[DEEP, MID, PALE, FAINT], weights=[3.0, 1, 1, 1], dashed_after=2,
                    aria="Carroll's pyramid of corporate social responsibility: economic, legal, ethical and philanthropic responsibilities", cls="right", maxw=None, first=True, fs=17)
 def maslow():
-    return pyramid(["Self-Actualization", "Esteem", "Social", "Safety", "Physiological"], fills=[DEEP, MID, PALE, FAINT, "#fff"], weights=[2.1, 1, 1, 1, 1], top_fs=13,
-                   aria="Maslow's hierarchy of needs from physiological at the base to self-actualization at the top", first=True, fs=16, w=500, h=380)
+    return pyramid(["Self-Actualization", "Esteem", "Social", "Safety", "Physiological"], fills=[DEEP, MID, PALE, FAINT, "#fff"], weights=[3.4, 1, 1, 1, 1],
+                   aria="Maslow's hierarchy of needs from physiological at the base to self-actualization at the top", first=True, fs=16, w=540, h=400)
 def controls_pyramid():
-    return pyramid(["Monitoring", "Control Activities", "Risk Assessment", "Control Environment"], w=520, h=360, fills=[FAINT, PALE, MID, DEEP], weights=[1.8, 1, 1, 1], top_fs=14, numbered=True,
+    return pyramid(["Monitoring", "Control Activities", "Risk Assessment", "Control Environment"], w=520, h=360, fills=[FAINT, PALE, MID, DEEP], weights=[2.8, 1, 1, 1], numbered=True,
                    aria="The internal-control framework as a pyramid: control environment, risk assessment, control activities, monitoring", maxw=440, fs=16)

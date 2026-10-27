@@ -13,8 +13,10 @@ def tip(x1, y1, x2, y2, color="gold"): return {"from": [x1, y1], "to": [x2, y2],
 VAR = {"curves": [line([[0, 0], [95, 95]])]}
 FIX = {"curves": [line([[0, 55], [95, 55]])]}
 DASH = {"id": "f", "label": "", "pts": [[0, 35], [95, 35]], "color": "ink", "dashed": True, "thin": True}       # the fixed component
-VDASH = {"id": "v", "label": "", "pts": [[0, 0], [55, 32.4]], "color": "ink", "dashed": True, "thin": True}    # the variable component, the same slope from the origin
-MIX = {"curves": [line([[0, 35], [95, 91]]), DASH, VDASH]}
+# the two components as upright braces at the right end: the fixed part from the axis up to the dashed level,
+# the variable part from there up to the line (Ian, 2026-10-27: the variable component is the part above the fixed level)
+MIX = {"curves": [line([[0, 35], [78, 81]]), dict(DASH, pts=[[0, 35], [78, 35]])],
+       "vbraces": [{"p1": 0, "p2": 35, "q": 80, "label": "fixed cost\ncomponent"}, {"p1": 35, "p2": 81, "q": 80, "label": "variable cost\ncomponent"}]}
 
 def patterns(xv, xf, xm, lab_var, lab_fix, title="Three Cost Behavior Patterns"):
     return {"title": title, "lede": "Total cost against the activity that drives it.",
@@ -23,7 +25,7 @@ def patterns(xv, xf, xm, lab_var, lab_fix, title="Three Cost Behavior Patterns")
                                   "caption": cap("A variable cost starts at the origin and rises in a straight line: with no activity there is no cost, and each unit adds the same amount.")},
                           "fix": {"label": "Fixed", "axes": AX(xf, "Total\nFixed Cost"), **FIX, "points": [label(50, 66, lab_fix)],
                                   "caption": cap("A fixed cost is a horizontal line: rent is the same whether one cup or a thousand are sold.")},
-                          "mix": {"label": "Mixed", "axes": AX(xm, "Total\nCost"), **MIX, "points": [label(78, 44, "fixed cost\ncomponent", 0, 0), label(36, 6, "variable cost component", 0, 0)],
+                          "mix": {"label": "Mixed", "axes": AX(xm, "Total\nCost"), **MIX, "points": [],
                                   "caption": cap("A mixed cost starts above the origin at its fixed part and rises from there at the variable rate per unit.")}}}
 COST3 = patterns("Cups of coffee", "Cups of coffee", "Cups of coffee", "Total Variable Cost =\n$0.10 × (# of cups)", "Total Fixed Cost = $450")
 COST3_3173 = patterns("Cups of Coffee", "Cups of Coffee", "Miles", "Total Variable Cost =\n$0.10 × Volume", "Total Fixed Cost = $450")
@@ -74,7 +76,7 @@ HIGHLOW = {"title": "The High-Low Method", "lede": "The cost line is drawn strai
 CAKES = [[1, 40], [3, 95], [4, 150], [6, 180], [7, 240], [9, 230], [10, 290], [12, 320], [15, 400]]
 SCATTER = {"title": "High-Low Method Example", "axes": {"x": "Cakes", "y": "Total\nCost", "xmax": 17, "ymax": 450, "bg": False, "money": True},
            "points": [{"q": q, "p": p, "dot": True, "guides": False, "showP": False, "showQ": False, "color": "gold"} for q, p in CAKES[1:-1]] +
-                     [{"q": 1, "p": 40, "dot": True, "guides": False, "showP": False, "showQ": False, "label": "(1, $40)", "dx": 42, "dy": 4},
+                     [{"q": 1, "p": 40, "dot": True, "guides": False, "showP": False, "showQ": False, "label": "(1, $40)", "dx": 30, "dy": 4},
                       {"q": 15, "p": 400, "dot": True, "guides": False, "showP": False, "showQ": False, "label": "(15, $400)", "dx": -62, "dy": -8}],
            "caption": cap("Total cost against cakes baked, with the lowest and highest activity levels marked.")}
 STD3 = {"drop": "the three-pattern widget above already draws them; the sentence before now says so (Ian, 2026-10-27)"}
