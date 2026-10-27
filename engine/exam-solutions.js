@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.9 =====
+/* ===== exam-solutions.js v0.10 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -42,6 +42,32 @@
     var secs = [].slice.call(document.querySelectorAll('section.sol'));
     var groups = [].slice.call(document.querySelectorAll('.sol-group'));
     if (!secs.length) return;
+
+    // A star at the left of each question's heading bookmarks it (Ian,
+    // 2026-10-27): the number in the strip carries the star, so a student can
+    // find it again. Stars are kept in this browser's localStorage, a
+    // per-viewer convenience, and the page works without it.
+    var STAR_KEY = 'sol-stars:' + location.pathname;
+    var stars = {};
+    try { stars = JSON.parse(localStorage.getItem(STAR_KEY) || '{}') || {}; } catch (e) { stars = {}; }
+    function saveStars() { try { localStorage.setItem(STAR_KEY, JSON.stringify(stars)); } catch (e) {} }
+    secs.forEach(function (sec) {
+      var q = sec.querySelector('.sol-q'); if (!q) return;
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-star';
+      function paint() {
+        var on = !!stars[sec.id];
+        btn.textContent = on ? '\u2605' : '\u2606';
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        btn.title = on ? 'Remove bookmark' : 'Bookmark this question';
+        sec.classList.toggle('sol-starred', on);
+      }
+      btn.addEventListener('click', function () {
+        if (stars[sec.id]) delete stars[sec.id]; else stars[sec.id] = 1;
+        saveStars(); paint(); render();
+      });
+      paint();
+      q.insertBefore(btn, q.firstChild);
+    });
 
     var terms = uniq(secs.map(function (s) { return s.dataset.term; }))
       .sort(function (a, b) { return b.localeCompare(a); });            // newest first
@@ -140,7 +166,7 @@
       strip.innerHTML = '';
       list.forEach(function (sec, i) {
         var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = String(i + 1);
-        btn.className = 'sol-num' + (sec.dataset.result ? ' is-' + sec.dataset.result : '');
+        btn.className = 'sol-num' + (sec.dataset.result ? ' is-' + sec.dataset.result : '') + (stars[sec.id] ? ' is-starred' : '');
         btn.setAttribute('aria-pressed', i === state.idx ? 'true' : 'false');
         btn.setAttribute('aria-label', 'Question ' + (i + 1));
         btn.addEventListener('click', function () { state.idx = i; render(); });

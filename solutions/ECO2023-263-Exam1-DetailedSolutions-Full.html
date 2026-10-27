@@ -1762,7 +1762,12 @@ section.sol { margin:10px 0 0; padding:12px 20px 14px; border:1px solid #DEDEDE;
   .sol-shell .sol-strip { order:3; flex-basis:100%; }
   .sol-shell .sol-strip .sol-num { min-width:40px; min-height:40px; }
 }
-section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; }
+section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; display:flex; align-items:center; gap:8px; }
+section.sol .sol-star { flex:0 0 auto; width:34px; height:34px; border:1px solid #c9d2e3; border-radius:6px; background:#fff; color:#8a94a6;
+  font-size:1.2rem; line-height:1; cursor:pointer; padding:0; }
+section.sol .sol-star[aria-pressed="true"] { color:#d8a21c; border-color:#d8a21c; background:#fff8e1; }
+.sol-shell .sol-strip .sol-num { position:relative; }
+.sol-shell .sol-strip .sol-num.is-starred::after { content:"\2605"; position:absolute; top:-9px; right:-6px; font-size:.8rem; color:#d8a21c; line-height:1; }
 section.sol ol.sol-sub { margin:2px 0 4px 2em; padding:0; }
 section.sol ol.sol-sub li { margin:0; line-height:1.45; }
 /* The choices are the quiz: each one a button that turns green or red. */
@@ -1797,7 +1802,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.9 =====
+/* ===== exam-solutions.js v0.10 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -1841,6 +1846,32 @@ section.sol .sol-table table { margin:0; }
     var secs = [].slice.call(document.querySelectorAll('section.sol'));
     var groups = [].slice.call(document.querySelectorAll('.sol-group'));
     if (!secs.length) return;
+
+    // A star at the left of each question's heading bookmarks it (Ian,
+    // 2026-10-27): the number in the strip carries the star, so a student can
+    // find it again. Stars are kept in this browser's localStorage, a
+    // per-viewer convenience, and the page works without it.
+    var STAR_KEY = 'sol-stars:' + location.pathname;
+    var stars = {};
+    try { stars = JSON.parse(localStorage.getItem(STAR_KEY) || '{}') || {}; } catch (e) { stars = {}; }
+    function saveStars() { try { localStorage.setItem(STAR_KEY, JSON.stringify(stars)); } catch (e) {} }
+    secs.forEach(function (sec) {
+      var q = sec.querySelector('.sol-q'); if (!q) return;
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-star';
+      function paint() {
+        var on = !!stars[sec.id];
+        btn.textContent = on ? '\u2605' : '\u2606';
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        btn.title = on ? 'Remove bookmark' : 'Bookmark this question';
+        sec.classList.toggle('sol-starred', on);
+      }
+      btn.addEventListener('click', function () {
+        if (stars[sec.id]) delete stars[sec.id]; else stars[sec.id] = 1;
+        saveStars(); paint(); render();
+      });
+      paint();
+      q.insertBefore(btn, q.firstChild);
+    });
 
     var terms = uniq(secs.map(function (s) { return s.dataset.term; }))
       .sort(function (a, b) { return b.localeCompare(a); });            // newest first
@@ -1939,7 +1970,7 @@ section.sol .sol-table table { margin:0; }
       strip.innerHTML = '';
       list.forEach(function (sec, i) {
         var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = String(i + 1);
-        btn.className = 'sol-num' + (sec.dataset.result ? ' is-' + sec.dataset.result : '');
+        btn.className = 'sol-num' + (sec.dataset.result ? ' is-' + sec.dataset.result : '') + (stars[sec.id] ? ' is-starred' : '');
         btn.setAttribute('aria-pressed', i === state.idx ? 'true' : 'false');
         btn.setAttribute('aria-label', 'Question ' + (i + 1));
         btn.addEventListener('click', function () { state.idx = i; render(); });
