@@ -34,9 +34,9 @@ def block(e):
 cards = []
 ROUND2 = {"06-financial-statements": "Round 2: the links are now plain arrows, left to right.",
           "debit-credit": "Round 2: proper curly braces on the left, the +, = and − signs set at 24px; the two page screenshots under the figure show its size in the actual file at desktop and phone width.",
-          "accounting-cycle-diagram": "Round 4: thinner arrows with small heads, the way the source draws them.",
+          "accounting-cycle-diagram": "Round 5: the names sit on the ring and each arrow runs from one name to point at the next, with a clear gap either side of every name.",
           "fraud-triangle": "Round 3: the three names are set heavier (900 weight, 14px) and the rest of each phrase at 13px semibold.",
-          "pyramid-framework": "Round 4: Monitoring sits as close to the vertical centre of its band as the sides allow, at the largest size that fits.",
+          "pyramid-framework": "Round 5: the line under Monitoring is moved up so its band is just tall enough for the name to sit centred in it without touching the sides.",
           "chapter-summary": "Round 3: the arrowheads show now (the deck was hiding them, see the accounting-cycle card). the brace is a real curly brace with its tip up toward the triangle, and the arrows are heavier.",
           "01-variable-cost.png": "Round 3: the dashed line from the origin is gone. The Mixed case now marks the two components as braces at the right end: the fixed part from the axis up to the dashed level, the variable part from there up to the line.",
           "09-scatterplot": "Round 4: the (1, $40) label is moved in against its circle.",
@@ -45,9 +45,9 @@ ROUND2 = {"06-financial-statements": "Round 2: the links are now plain arrows, l
           "wip-inventory": "Round 4: Subsidiary Accounts sits between the arrow and the brace, as in the source.",
           "mod5-01-variable": "Round 3: the Mixed case marks the fixed and variable components as braces at the right end, the variable one being the part above the dashed fixed level.",
           "management-pyramid": "Round 2: every level name is the same size and weight.",
-          "maslow": "Round 4: Self-Actualization sits as close to the centre of its band as the sides allow.",
+          "maslow": "Round 5: the line under Self-Actualization is moved up so its band is just tall enough for the name to sit centred in it without touching the sides.",
           "systems-viewpoint": "Round 3: the arrowheads show now (the deck was hiding them, see the accounting-cycle card). heavier arrows with clear heads, including the feedback arrow back up into Inputs.",
-          "carroll": "Round 4: Philanthropic sits as close to the centre of its band as the sides allow.",
+          "carroll": "Round 5: the line under Philanthropic is moved up so its band is just tall enough for the name to sit centred in it without touching the sides.",
           "decision-tree": "Round 4: every NO is set a little further from its arrow.",
           "01-accounting-equation": "Round 2: kept as the picture, as asked."}
 def card(id, chapter, title, html, desc="", kind="figure"):

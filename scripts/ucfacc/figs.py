@@ -45,32 +45,27 @@ def grid2x2(cells, fills=None, top=None, left=None, cols=None, rows=None, bottom
 
 # ------------------------------------------------------------- pyramids
 def pyramid(levels, w=440, h=330, fills=None, numbered=False, aria="", maxw=380, cls="narrow", first=False, fs=15, weights=None, dashed_after=None):
-    """levels top to bottom, each a text. A triangle cut into bands; `weights` give each band its share of the height
-    (the apex band is narrow, so it usually takes more), `dashed_after` = index of the band whose lower edge is dashed."""
+    """levels top to bottom, each a text. A triangle cut into bands. The apex band is sized to its own name: the
+    shortest band in which the name sits vertically centred without touching the sides, at the largest size up to
+    two points under `fs` (Ian, 2026-10-27: centred in its band, the line moved up)."""
     n = len(levels); fills = fills or [DEEP, MID, PALE, FAINT, "#fcf8ea"][:n]
-    weights = weights or [1] * n; tot = sum(weights)
-    cx, top, base, bw = w / 2, 16, h - 16, w - 40
-    b = ""; y1 = top; acc = 0
+    cx, top, base, bw = w / 2, 16, h - 16, w - 40; H = base - top
+    def apex_height(size):   # the band height that puts the name's top where the triangle is wide enough for it
+        need = (0.56 * size * len(levels[0]) + 12) * H / bw   # distance below the apex at which the width clears the name
+        return 2 * (need + 0.37 * size)
+    size0 = fs - 2   # a step below the other names: centred in the tip, a full-size name would need half the pyramid
+    h0 = apex_height(size0); rest = (H - h0) / (n - 1)
+    edges = [top, top + h0] + [top + h0 + rest * k for k in range(1, n)]
+    b = ""
     for i, (t, fl) in enumerate(zip(levels, fills)):
-        acc += weights[i]; y2 = top + (base - top) * acc / tot
-        w1 = bw * (y1 - top) / (base - top); w2 = bw * (y2 - top) / (base - top)
+        y1, y2 = edges[i], edges[i + 1]
+        w1 = bw * (y1 - top) / H; w2 = bw * (y2 - top) / H
         b += f'<polygon points="{cx - w1/2:.1f},{y1:.1f} {cx + w1/2:.1f},{y1:.1f} {cx + w2/2:.1f},{y2:.1f} {cx - w2/2:.1f},{y2:.1f}" fill="{fl}" stroke="{INK}" stroke-width="1.4"/>'
         if dashed_after == i: b += f'<line x1="{cx - w2/2:.1f}" y1="{y2:.1f}" x2="{cx + w2/2:.1f}" y2="{y2:.1f}" stroke="#fff" stroke-width="1.6" stroke-dasharray="6 5"/>'
-        ym = (y1 + y2) / 2; size = fs
-        ty = ym + 5
-        if i == 0:
-            # the apex band holds its name low, where the triangle is wide enough, and as large as fits there:
-            # the band's width at the top of the letters must clear the name (Ian: as big as the rest, never on the lines)
-            def fits(ty, size):
-                top_y = ty - size * 0.74; return 0.6 * size * len(t) <= bw * (top_y - top) / (base - top) - 10
-            while size > 9 and not fits(y2 - 7, size): size -= 0.5
-            # then as close to the band's vertical centre as the narrowing sides allow (Ian, 2026-10-27)
-            ty = ym + size * 0.37
-            while ty < y2 - 7 and not fits(ty, size): ty += 1
-        b += text(cx, ty, t, size, lh=size + 2)
+        ym = (y1 + y2) / 2; size = size0 if i == 0 else fs
+        b += text(cx, ym + size * 0.37, t, size, lh=size + 2)
         if numbered:
-            wm = bw * (ym - top) / (base - top); b += text(cx - wm / 2 - 14, ym + 4, str(n - i), 12, bold=True, color=GREY)
-        y1 = y2
+            wm = bw * (ym - top) / H; b += text(cx - wm / 2 - 14, ym + 4, str(n - i), 12, bold=True, color=GREY)
     return fig(w, h, b, aria, maxw, cls, first)
 
 def vbrace(x, y1, y2, side="left", sw=1.8):
@@ -138,15 +133,20 @@ def debit_credit():
 def accounting_cycle():
     steps = ["Beginning of\nAccounting\nPeriod", "Transactions", "Record Journal\nEntries", "Post to Ledger", "Unadjusted\nTrial\nBalance", "Adjusting\nEntries",
              "Adjusted\nTrial\nBalance", "Income\nStatement", "Statement of\nStockholders’\nEquity", "Balance Sheet", "Cash Flow\nStatement", "Closing\nEntries"]
-    cx, cy, R, n = 300, 272, 190, len(steps); b = ""
-    for i in range(n):
-        a0 = -math.pi / 2 + 2 * math.pi * i / n; a1 = -math.pi / 2 + 2 * math.pi * (i + 1) / n
-        s0, s1 = a0 + 0.1, a1 - 0.12
-        b += path(f"M {cx + R*math.cos(s0):.1f} {cy + R*math.sin(s0):.1f} A {R} {R} 0 0 1 {cx + R*math.cos(s1):.1f} {cy + R*math.sin(s1):.1f}", sw=1.7, color=GOLDC)
-        lx, ly = cx + (R + 58) * math.cos(a0), cy + (R + 58) * math.sin(a0)
-        b += text(lx, ly + 4 - steps[i].count("\n") * 6.5, steps[i], 11.5, lh=13)
+    cx, cy, R, n, fs = 360, 320, 250, len(steps), 10.5; b = ""
+    # each name sits on the ring; the arrow from one name runs along the ring and points at the next (Ian, 2026-10-27)
+    def half_angle(t, a):
+        lines = t.split("\n"); wd = 0.56 * fs * max(len(l) for l in lines); ht = len(lines) * (fs + 1.5)
+        return ((wd / 2) * abs(math.sin(a)) + (ht / 2) * abs(math.cos(a)) + 7) / R   # the name's reach along the ring's tangent
+    angs = [-math.pi / 2 + 2 * math.pi * i / n for i in range(n)]
+    for i, t in enumerate(steps):
+        a = angs[i]; lx, ly = cx + R * math.cos(a), cy + R * math.sin(a)
+        b += text(lx, ly + 4 - t.count("\n") * (fs + 1.5) / 2, t, fs, lh=fs + 1.5)
+        a1 = angs[(i + 1) % n]; s0 = a + half_angle(t, a); s1 = a1 + (2 * math.pi if i == n - 1 else 0) - half_angle(steps[(i + 1) % n], a1)
+        if s1 - s0 > 0.08:
+            b += path(f"M {cx + R*math.cos(s0):.1f} {cy + R*math.sin(s0):.1f} A {R} {R} 0 0 1 {cx + R*math.cos(s1):.1f} {cy + R*math.sin(s1):.1f}", sw=1.7, color=GOLDC)
     b += text(cx, cy - 10, "The\nAccounting\nCycle", 17, lh=21)
-    return fig(600, 546, b, "The accounting cycle as a ring: transactions, journal entries, ledger, unadjusted trial balance, adjusting entries, adjusted trial balance, the four statements, closing entries, and round again", 520, "narrow", True)
+    return fig(720, 640, b, "The accounting cycle as a ring: transactions, journal entries, ledger, unadjusted trial balance, adjusting entries, adjusted trial balance, the four statements, closing entries, and round again", 520, "narrow", True)
 def fraud_triangle():
     A, Bp, C = (330, 20), (30, 290), (630, 290); cx, cy = 330, 200
     b = f'<polygon points="{A[0]},{A[1]} {C[0]},{C[1]} {Bp[0]},{Bp[1]}" fill="{PALE}" stroke="{INK}" stroke-width="1.5"/>'
@@ -244,11 +244,11 @@ def diversity_wheel():
         b += f'<circle cx="200" cy="200" r="{r}" fill="none" stroke="{INK}" stroke-width="2"/>' + text(200, 200 + dy, t, 12, lh=14)
     return fig(400, 400, b, "The diversity wheel: personality at the centre, then internal, external and organizational dimensions", 340, "tiny", True)
 def carroll():
-    return pyramid(["Philanthropic", "Ethical", "Legal", "Economic"], w=460, h=360, fills=[DEEP, MID, PALE, FAINT], weights=[3.0, 1, 1, 1], dashed_after=2,
-                   aria="Carroll's pyramid of corporate social responsibility: economic, legal, ethical and philanthropic responsibilities", cls="right", maxw=None, first=True, fs=17)
+    return pyramid(["Philanthropic", "Ethical", "Legal", "Economic"], w=640, h=300, fills=[DEEP, MID, PALE, FAINT], dashed_after=2,
+                   aria="Carroll's pyramid of corporate social responsibility: economic, legal, ethical and philanthropic responsibilities", cls="right", maxw=None, first=True, fs=15)
 def maslow():
-    return pyramid(["Self-Actualization", "Esteem", "Social", "Safety", "Physiological"], fills=[DEEP, MID, PALE, FAINT, "#fff"], weights=[3.4, 1, 1, 1, 1],
-                   aria="Maslow's hierarchy of needs from physiological at the base to self-actualization at the top", first=True, fs=16, w=540, h=400)
+    return pyramid(["Self-Actualization", "Esteem", "Social", "Safety", "Physiological"], fills=[DEEP, MID, PALE, FAINT, "#fff"],
+                   aria="Maslow's hierarchy of needs from physiological at the base to self-actualization at the top", first=True, fs=15, w=640, h=300)
 def controls_pyramid():
-    return pyramid(["Monitoring", "Control Activities", "Risk Assessment", "Control Environment"], w=520, h=360, fills=[FAINT, PALE, MID, DEEP], weights=[2.8, 1, 1, 1], numbered=True,
-                   aria="The internal-control framework as a pyramid: control environment, risk assessment, control activities, monitoring", maxw=440, fs=16)
+    return pyramid(["Monitoring", "Control Activities", "Risk Assessment", "Control Environment"], w=640, h=300, fills=[FAINT, PALE, MID, DEEP], numbered=True,
+                   aria="The internal-control framework as a pyramid: control environment, risk assessment, control activities, monitoring", maxw=480, fs=16)
