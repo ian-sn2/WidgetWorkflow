@@ -1755,8 +1755,11 @@ section.sol { margin:10px 0 0; padding:12px 20px 14px; border:1px solid #DEDEDE;
 .sol-shell .sol-strip .sol-num[aria-pressed="true"] { background:#002060; border-color:#002060; color:#fff; }
 .sol-shell .sol-strip .sol-num.is-right { border-color:#2e8b57; background:#e3f5e8; color:#1d5e3a; }
 .sol-shell .sol-strip .sol-num.is-wrong { border-color:#d62828; background:#fbe5e5; color:#8f1d1d; }
-.sol-shell .sol-strip .sol-num.is-right[aria-pressed="true"] { background:#2e8b57; color:#fff; }
-.sol-shell .sol-strip .sol-num.is-wrong[aria-pressed="true"] { background:#d62828; color:#fff; }
+/* The current question, once answered: a deep green or deep red ground
+   with white numerals, which reads at a glance; a mid green behind white
+   did not (Ian, 2026-10-27). */
+.sol-shell .sol-strip .sol-num.is-right[aria-pressed="true"] { background:#1d5e3a; border-color:#1d5e3a; color:#fff; }
+.sol-shell .sol-strip .sol-num.is-wrong[aria-pressed="true"] { background:#9c1c1c; border-color:#9c1c1c; color:#fff; }
 @media (max-width:640px){
   .sol-shell .sol-nav { flex-wrap:wrap; }
   .sol-shell .sol-strip { order:3; flex-basis:100%; }
