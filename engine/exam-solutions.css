@@ -31,24 +31,24 @@ section.sol { margin:10px 0 0; padding:12px 20px 14px; border:1px solid #DEDEDE;
   .sol-shell .sol-strip { order:3; flex-basis:100%; }
   .sol-shell .sol-strip .sol-num { min-width:40px; min-height:40px; }
 }
-section.sol { position:relative; }
-section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; padding-right:48px; }
-/* The ribbon hangs over the box's top edge at the right, the way a ribbon
-   marks a page: grey until clicked, then the same red as the strip's. */
-section.sol .sol-star { position:absolute; top:-4px; right:22px; width:26px; height:34px; padding:0; border:0; background:transparent; cursor:pointer;
-  display:flex; align-items:flex-start; justify-content:center; }
-section.sol .sol-star svg { width:18px; height:26px; display:block; filter:drop-shadow(0 1px 1px rgba(0,0,0,0.18)); }
-section.sol .sol-star svg path { fill:#c9d2e3; }
-section.sol .sol-star:hover svg path { fill:#e58a8a; }
-section.sol .sol-star[aria-pressed="true"] svg path { fill:#d62828; }
-/* A bookmarked number carries the ribbon before it: red on a pale red
-   ground, white on navy when it is the current question. */
-.sol-shell .sol-strip .sol-num.is-starred { border-color:#d62828; background:#fbe5e5; padding:0 8px 0 6px; }
-.sol-shell .sol-strip .sol-num.is-starred::before { content:""; display:inline-block; width:9px; height:12px; margin-right:4px; vertical-align:-1px;
-  background:#d62828; -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 20"><path d="M3 1.5h10a1 1 0 0 1 1 1V18l-6-4-6 4V2.5a1 1 0 0 1 1-1z"/></svg>') center/contain no-repeat;
-  mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 20"><path d="M3 1.5h10a1 1 0 0 1 1 1V18l-6-4-6 4V2.5a1 1 0 0 1 1-1z"/></svg>') center/contain no-repeat; }
+section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; display:flex; align-items:center; gap:8px; }
+/* The bookmark button is boxed exactly like a strip number: same border,
+   radius and size; bookmarked, the same pale red ground and red ribbon. */
+section.sol .sol-star { flex:0 0 auto; width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid #c9d2e3; border-radius:6px; background:#fff; cursor:pointer; padding:0; }
+section.sol .sol-star svg path { fill:none; stroke:#8a94a6; stroke-width:1.6; stroke-linejoin:round; }
+section.sol .sol-star:hover svg path { stroke:#d62828; }
+section.sol .sol-star[aria-pressed="true"] { border-color:#d62828; background:#fbe5e5; }
+section.sol .sol-star[aria-pressed="true"] svg path { fill:#d62828; stroke:#d62828; }
+/* A bookmarked number in the strip wears the ribbon draped over its top
+   edge, hanging past the border the way a ribbon marks a page. */
+.sol-shell .sol-strip .sol-num { position:relative; }
+.sol-shell .sol-strip .sol-num.is-starred { border-color:#d62828; background:#fbe5e5; }
+.sol-shell .sol-strip .sol-num.is-starred::after { content:""; position:absolute; top:-5px; right:3px; width:9px; height:15px; background:#d62828;
+  -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 22"><path d="M1 0h14v21l-7-5-7 5z"/></svg>') center/contain no-repeat;
+  mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 22"><path d="M1 0h14v21l-7-5-7 5z"/></svg>') center/contain no-repeat;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,0.18)); }
 .sol-shell .sol-strip .sol-num.is-starred[aria-pressed="true"] { background:#002060; border-color:#002060; color:#fff; }
-.sol-shell .sol-strip .sol-num.is-starred[aria-pressed="true"]::before { background:#fff; }
 .sol-shell .sol-strip .sol-num.is-starred.is-right { border-color:#2e8b57; background:#e3f5e8; }
 .sol-shell .sol-strip .sol-num.is-starred.is-wrong { border-color:#d62828; }
 section.sol ol.sol-sub { margin:2px 0 4px 2em; padding:0; }

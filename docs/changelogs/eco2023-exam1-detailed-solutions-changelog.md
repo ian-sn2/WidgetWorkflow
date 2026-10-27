@@ -125,9 +125,9 @@ through; the counts are in the build log and the tags are on each section.
 * **One question at a time**, in its own box, with Previous / Next, a strip
   of question numbers between them (the current one filled navy, an answered
   one green or red, a bookmarked one carrying a ribbon; Ian, 2026-10-27) and the arrow
-  keys; the page does not scroll until a solution is opened. A bookmark ribbon
-  draped over the top-right edge of the question's box marks it, remembered
-  in the browser.
+  keys; the page does not scroll until a solution is opened. A bookmark button
+  at the left of the question's heading marks it, and the strip's number
+  wears the ribbon draped over its top edge; remembered in the browser.
 * **MathJax is in the head**, as in the file Ian sent, for the `\[ … \]`
   formulas in the four earlier papers' solutions. Its CDN is not reachable
   from the build container, so the rendering is unverified here.

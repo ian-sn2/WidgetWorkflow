@@ -56,8 +56,9 @@ Under the picker the shell shows **one question at a time** in its own box
 (Ian, 2026-10-26: a self-contained box that needs no scrolling until a
 solution is opened). Under the box sit Previous and Next with a strip of
 question numbers between them: the current one filled navy, an answered one
-green or red, a bookmarked one carrying a red ribbon. A bookmark ribbon draped over the
-top-right edge of the question's box marks it, in the same red; bookmarks are kept in the browser's
+green or red, a bookmarked one carrying a red ribbon. A bookmark button at the left of
+the question's heading, boxed like a strip number, marks it, and the strip's
+number then wears the ribbon draped over its top edge; bookmarks are kept in the browser's
 localStorage, so they survive a reload on that device and nowhere else, and
 the page works without it. The arrow keys step too. The page holds every
 section and the shell hides all but the current one.
