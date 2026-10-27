@@ -43,9 +43,10 @@
     var groups = [].slice.call(document.querySelectorAll('.sol-group'));
     if (!secs.length) return;
 
-    // A star at the left of each question's heading bookmarks it (Ian,
-    // 2026-10-27): the number in the strip carries the star, so a student can
-    // find it again. Stars are kept in this browser's localStorage, a
+    // A bookmark ribbon at the left of each question's heading marks it
+    // (Ian, 2026-10-27; a ribbon rather than a star, this being a study
+    // guide): the number in the strip carries the ribbon, so a student can
+    // find it again. Bookmarks are kept in this browser's localStorage, a
     // per-viewer convenience, and the page works without it.
     var STAR_KEY = 'sol-stars:' + location.pathname;
     var stars = {};
@@ -54,9 +55,9 @@
     secs.forEach(function (sec) {
       var q = sec.querySelector('.sol-q'); if (!q) return;
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-star';
+      btn.innerHTML = '<svg viewBox="0 0 16 20" width="14" height="18" aria-hidden="true"><path d="M3 1.5h10a1 1 0 0 1 1 1V18l-6-4-6 4V2.5a1 1 0 0 1 1-1z"/></svg>';
       function paint() {
         var on = !!stars[sec.id];
-        btn.textContent = on ? '\u2605' : '\u2606';
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
         btn.title = on ? 'Remove bookmark' : 'Bookmark this question';
         sec.classList.toggle('sol-starred', on);
