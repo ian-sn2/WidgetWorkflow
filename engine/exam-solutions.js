@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.12 =====
+/* ===== exam-solutions.js v0.13 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -165,11 +165,15 @@
       if (list[state.idx]) mount.appendChild(list[state.idx]);
       mount.appendChild(bar);
       strip.innerHTML = '';
+      // Each button carries the question's own number (from its id, ...-q24),
+      // not its position in the selection: under a topic filter the ninth
+      // question shown may be question 24 (Ian, 2026-10-27).
       list.forEach(function (sec, i) {
-        var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = String(i + 1);
+        var m = /-q(\d+)$/.exec(sec.id);
+        var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = m ? m[1] : String(i + 1);
         btn.className = 'sol-num' + (sec.dataset.result ? ' is-' + sec.dataset.result : '') + (stars[sec.id] ? ' is-starred' : '');
         btn.setAttribute('aria-pressed', i === state.idx ? 'true' : 'false');
-        btn.setAttribute('aria-label', 'Question ' + (i + 1));
+        btn.setAttribute('aria-label', 'Question ' + btn.textContent);
         btn.addEventListener('click', function () { state.idx = i; render(); });
         strip.appendChild(btn);
       });
