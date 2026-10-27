@@ -48,13 +48,25 @@ builds one collapsible box styled like the house table of contents -- a
 `<details class="toc-box">` whose summary names the whole selection -- with
 three stages inside it in order, **Semester, then Exam, then Topic**, each a
 row of choices with the current one filled navy; a later stage lists only
-what the earlier choices allow. It hides all but the current one, and keeps the selection in the URL hash
-(`#243/1/Elasticity/3`: term, exam, topic, question position), so a link lands
-on one question. A hash that
-names a heading or a question (`#eco2023-243-e1-q13`, which is what the house
-table of contents links to) selects that question's exam and semester first,
-so a link to a hidden heading never scrolls to nothing. Terms are the usual
-codes (YY + 1 spring, 2 summer, 3 fall) and the shell names them.
+what the earlier choices allow. Topics run in Ian's order (The PPF first, then
+Supply and Demand, Elasticity, Efficiency and Equity, Government Intervention,
+International Trade).
+
+Under the picker the shell shows **one question at a time** in its own box
+(Ian, 2026-10-26: a self-contained box that needs no scrolling until a
+solution is opened). Under the box sit Previous and Next with a strip of
+question numbers between them: the current one filled navy, an answered one
+green or red, a bookmarked one carrying a red ribbon. A bookmark ribbon at the
+left of each question's heading marks it; bookmarks are kept in the browser's
+localStorage, so they survive a reload on that device and nowhere else, and
+the page works without it. The arrow keys step too. The page holds every
+section and the shell hides all but the current one.
+
+The selection lives in the URL hash (`#243/1/Elasticity/3`: term, exam,
+topic, question position), so a link lands on one question. A hash that names
+a question or a heading (`#eco2023-243-e1-q13`) selects that question's
+semester and exam first. Terms are the usual codes (YY + 1 spring, 2 summer,
+3 fall) and the shell names them.
 
 **The question is a quiz.** Each choice is clickable: the one picked turns
 green or red, the right one is shown green, and a line under the list says
