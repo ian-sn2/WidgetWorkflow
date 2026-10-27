@@ -1749,8 +1749,19 @@ section.sol { margin:10px 0 0; padding:12px 20px 14px; border:1px solid #DEDEDE;
 .sol-shell .sol-nav { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0 20px; }
 .sol-shell .sol-nav button { border:1px solid #002060; background:#fff; color:#002060; padding:8px 16px; min-height:44px; font:inherit; font-size:.95rem; font-weight:700; cursor:pointer; border-radius:6px; }
 .sol-shell .sol-nav button:disabled { opacity:.35; cursor:default; }
-.sol-shell .sol-nav .sol-count { margin:0; font-size:.9rem; font-weight:700; color:#002060; }
-section.sol p { margin:6px 0; line-height:1.45; }
+.sol-shell .sol-strip { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; flex:1 1 auto; }
+.sol-shell .sol-strip .sol-num { min-width:34px; min-height:34px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
+  color:#002060; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
+.sol-shell .sol-strip .sol-num[aria-pressed="true"] { background:#002060; border-color:#002060; color:#fff; }
+.sol-shell .sol-strip .sol-num.is-right { border-color:#2e8b57; background:#e3f5e8; color:#1d5e3a; }
+.sol-shell .sol-strip .sol-num.is-wrong { border-color:#d62828; background:#fbe5e5; color:#8f1d1d; }
+.sol-shell .sol-strip .sol-num.is-right[aria-pressed="true"] { background:#2e8b57; color:#fff; }
+.sol-shell .sol-strip .sol-num.is-wrong[aria-pressed="true"] { background:#d62828; color:#fff; }
+@media (max-width:640px){
+  .sol-shell .sol-nav { flex-wrap:wrap; }
+  .sol-shell .sol-strip { order:3; flex-basis:100%; }
+  .sol-shell .sol-strip .sol-num { min-width:40px; min-height:40px; }
+}
 section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; }
 section.sol ol.sol-sub { margin:2px 0 4px 2em; padding:0; }
 section.sol ol.sol-sub li { margin:0; line-height:1.45; }
@@ -1786,7 +1797,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.8 =====
+/* ===== exam-solutions.js v0.9 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -1867,9 +1878,12 @@ section.sol .sol-table table { margin:0; }
     // section; the shell shows one.
     var bar = document.createElement('div'); bar.className = 'sol-nav';
     var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
-    var count = document.createElement('span'); count.className = 'sol-count';
+    // A strip of question numbers under the box (Ian, 2026-10-27), the
+    // current one filled, an answered one edged green or red. Previous and
+    // Next sit at its ends.
+    var strip = document.createElement('div'); strip.className = 'sol-strip';
     var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
-    bar.appendChild(prev); bar.appendChild(count); bar.appendChild(next);
+    bar.appendChild(prev); bar.appendChild(strip); bar.appendChild(next);
     prev.addEventListener('click', function () { if (state.idx > 0) { state.idx--; render(); } });
     next.addEventListener('click', function () { state.idx++; render(); });
     document.addEventListener('keydown', function (e) {
@@ -1922,7 +1936,15 @@ section.sol .sol-table table { margin:0; }
       // the box for the question goes under the picker, the nav under it
       if (list[state.idx]) mount.appendChild(list[state.idx]);
       mount.appendChild(bar);
-      count.textContent = list.length ? ('Question ' + (state.idx + 1) + ' of ' + list.length) : 'No questions';
+      strip.innerHTML = '';
+      list.forEach(function (sec, i) {
+        var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = String(i + 1);
+        btn.className = 'sol-num' + (sec.dataset.result ? ' is-' + sec.dataset.result : '');
+        btn.setAttribute('aria-pressed', i === state.idx ? 'true' : 'false');
+        btn.setAttribute('aria-label', 'Question ' + (i + 1));
+        btn.addEventListener('click', function () { state.idx = i; render(); });
+        strip.appendChild(btn);
+      });
       prev.disabled = state.idx <= 0; next.disabled = state.idx >= list.length - 1;
 
       var hash = '#' + state.term + '/' + state.exam + '/' + encodeURIComponent(state.topic || '') + '/' + (state.idx + 1);
@@ -1978,6 +2000,9 @@ section.sol .sol-table table { margin:0; }
             if (ok.indexOf('abcde'.charAt(j)) >= 0) it.classList.add('sol-right');
           });
           if (!right) li.classList.add('sol-wrong');
+          sec.dataset.result = right ? 'right' : 'wrong';
+          var me = strip.querySelector('[aria-pressed="true"]');
+          if (me) me.classList.add('is-' + sec.dataset.result);
           var note = document.createElement('p'); note.className = 'sol-verdict ' + (right ? 'is-right' : 'is-wrong');
           note.textContent = right ? 'Correct.' : 'Not quite. The answer is (' + ok.join(' or ') + ').';
           var det = sec.querySelector('details.sol-answer');

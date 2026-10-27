@@ -122,8 +122,10 @@ through; the counts are in the build log and the tags are on each section.
   topics in Ian's order with The PPF first (his list did not name it; it is
   the course's first chapter, so it leads -- his call if it should go
   elsewhere).
-* **One question at a time**, in its own box, with Previous / Next and the
-  arrow keys; the page does not scroll until a solution is opened.
+* **One question at a time**, in its own box, with Previous / Next, a strip
+  of question numbers between them (the current one filled navy, an answered
+  one green or red; Ian, 2026-10-27) and the arrow keys; the page does not
+  scroll until a solution is opened.
 * **MathJax is in the head**, as in the file Ian sent, for the `\[ … \]`
   formulas in the four earlier papers' solutions. Its CDN is not reachable
   from the build container, so the rendering is unverified here.

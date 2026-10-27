@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.8 =====
+/* ===== exam-solutions.js v0.9 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -79,9 +79,12 @@
     // section; the shell shows one.
     var bar = document.createElement('div'); bar.className = 'sol-nav';
     var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
-    var count = document.createElement('span'); count.className = 'sol-count';
+    // A strip of question numbers under the box (Ian, 2026-10-27), the
+    // current one filled, an answered one edged green or red. Previous and
+    // Next sit at its ends.
+    var strip = document.createElement('div'); strip.className = 'sol-strip';
     var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
-    bar.appendChild(prev); bar.appendChild(count); bar.appendChild(next);
+    bar.appendChild(prev); bar.appendChild(strip); bar.appendChild(next);
     prev.addEventListener('click', function () { if (state.idx > 0) { state.idx--; render(); } });
     next.addEventListener('click', function () { state.idx++; render(); });
     document.addEventListener('keydown', function (e) {
@@ -134,7 +137,15 @@
       // the box for the question goes under the picker, the nav under it
       if (list[state.idx]) mount.appendChild(list[state.idx]);
       mount.appendChild(bar);
-      count.textContent = list.length ? ('Question ' + (state.idx + 1) + ' of ' + list.length) : 'No questions';
+      strip.innerHTML = '';
+      list.forEach(function (sec, i) {
+        var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = String(i + 1);
+        btn.className = 'sol-num' + (sec.dataset.result ? ' is-' + sec.dataset.result : '');
+        btn.setAttribute('aria-pressed', i === state.idx ? 'true' : 'false');
+        btn.setAttribute('aria-label', 'Question ' + (i + 1));
+        btn.addEventListener('click', function () { state.idx = i; render(); });
+        strip.appendChild(btn);
+      });
       prev.disabled = state.idx <= 0; next.disabled = state.idx >= list.length - 1;
 
       var hash = '#' + state.term + '/' + state.exam + '/' + encodeURIComponent(state.topic || '') + '/' + (state.idx + 1);
@@ -190,6 +201,9 @@
             if (ok.indexOf('abcde'.charAt(j)) >= 0) it.classList.add('sol-right');
           });
           if (!right) li.classList.add('sol-wrong');
+          sec.dataset.result = right ? 'right' : 'wrong';
+          var me = strip.querySelector('[aria-pressed="true"]');
+          if (me) me.classList.add('is-' + sec.dataset.result);
           var note = document.createElement('p'); note.className = 'sol-verdict ' + (right ? 'is-right' : 'is-wrong');
           note.textContent = right ? 'Correct.' : 'Not quite. The answer is (' + ok.join(' or ') + ').';
           var det = sec.querySelector('details.sol-answer');

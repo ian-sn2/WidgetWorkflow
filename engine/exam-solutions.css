@@ -18,8 +18,19 @@ section.sol { margin:10px 0 0; padding:12px 20px 14px; border:1px solid #DEDEDE;
 .sol-shell .sol-nav { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0 20px; }
 .sol-shell .sol-nav button { border:1px solid #002060; background:#fff; color:#002060; padding:8px 16px; min-height:44px; font:inherit; font-size:.95rem; font-weight:700; cursor:pointer; border-radius:6px; }
 .sol-shell .sol-nav button:disabled { opacity:.35; cursor:default; }
-.sol-shell .sol-nav .sol-count { margin:0; font-size:.9rem; font-weight:700; color:#002060; }
-section.sol p { margin:6px 0; line-height:1.45; }
+.sol-shell .sol-strip { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; flex:1 1 auto; }
+.sol-shell .sol-strip .sol-num { min-width:34px; min-height:34px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
+  color:#002060; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
+.sol-shell .sol-strip .sol-num[aria-pressed="true"] { background:#002060; border-color:#002060; color:#fff; }
+.sol-shell .sol-strip .sol-num.is-right { border-color:#2e8b57; background:#e3f5e8; color:#1d5e3a; }
+.sol-shell .sol-strip .sol-num.is-wrong { border-color:#d62828; background:#fbe5e5; color:#8f1d1d; }
+.sol-shell .sol-strip .sol-num.is-right[aria-pressed="true"] { background:#2e8b57; color:#fff; }
+.sol-shell .sol-strip .sol-num.is-wrong[aria-pressed="true"] { background:#d62828; color:#fff; }
+@media (max-width:640px){
+  .sol-shell .sol-nav { flex-wrap:wrap; }
+  .sol-shell .sol-strip { order:3; flex-basis:100%; }
+  .sol-shell .sol-strip .sol-num { min-width:40px; min-height:40px; }
+}
 section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; }
 section.sol ol.sol-sub { margin:2px 0 4px 2em; padding:0; }
 section.sol ol.sol-sub li { margin:0; line-height:1.45; }
