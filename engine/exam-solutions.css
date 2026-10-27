@@ -31,13 +31,16 @@ section.sol { margin:10px 0 0; padding:12px 20px 14px; border:1px solid #DEDEDE;
   .sol-shell .sol-strip { order:3; flex-basis:100%; }
   .sol-shell .sol-strip .sol-num { min-width:40px; min-height:40px; }
 }
-section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; display:flex; align-items:center; gap:8px; }
-section.sol .sol-star { flex:0 0 auto; width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center;
-  border:1px solid #c9d2e3; border-radius:6px; background:#fff; cursor:pointer; padding:0; }
-section.sol .sol-star svg path { fill:none; stroke:#8a94a6; stroke-width:1.6; stroke-linejoin:round; }
-section.sol .sol-star:hover svg path { stroke:#d62828; }
-section.sol .sol-star[aria-pressed="true"] { border-color:#d62828; background:#fbe5e5; }
-section.sol .sol-star[aria-pressed="true"] svg path { fill:#d62828; stroke:#d62828; }
+section.sol { position:relative; }
+section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; padding-right:48px; }
+/* The ribbon hangs over the box's top edge at the right, the way a ribbon
+   marks a page: grey until clicked, then the same red as the strip's. */
+section.sol .sol-star { position:absolute; top:-4px; right:22px; width:26px; height:34px; padding:0; border:0; background:transparent; cursor:pointer;
+  display:flex; align-items:flex-start; justify-content:center; }
+section.sol .sol-star svg { width:18px; height:26px; display:block; filter:drop-shadow(0 1px 1px rgba(0,0,0,0.18)); }
+section.sol .sol-star svg path { fill:#c9d2e3; }
+section.sol .sol-star:hover svg path { fill:#e58a8a; }
+section.sol .sol-star[aria-pressed="true"] svg path { fill:#d62828; }
 /* A bookmarked number carries the ribbon before it: red on a pale red
    ground, white on navy when it is the current question. */
 .sol-shell .sol-strip .sol-num.is-starred { border-color:#d62828; background:#fbe5e5; padding:0 8px 0 6px; }

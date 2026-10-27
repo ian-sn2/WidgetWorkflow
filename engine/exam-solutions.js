@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.10 =====
+/* ===== exam-solutions.js v0.11 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -43,10 +43,10 @@
     var groups = [].slice.call(document.querySelectorAll('.sol-group'));
     if (!secs.length) return;
 
-    // A bookmark ribbon at the left of each question's heading marks it
+    // A bookmark ribbon drapes over the top edge of the question's box
     // (Ian, 2026-10-27; a ribbon rather than a star, this being a study
-    // guide): the number in the strip carries the ribbon, so a student can
-    // find it again. Bookmarks are kept in this browser's localStorage, a
+    // guide, and over the box rather than beside the heading): the number in
+    // the strip carries the same ribbon, so a student can find it again. Bookmarks are kept in this browser's localStorage, a
     // per-viewer convenience, and the page works without it.
     var STAR_KEY = 'sol-stars:' + location.pathname;
     var stars = {};
@@ -55,7 +55,7 @@
     secs.forEach(function (sec) {
       var q = sec.querySelector('.sol-q'); if (!q) return;
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-star';
-      btn.innerHTML = '<svg viewBox="0 0 16 20" width="14" height="18" aria-hidden="true"><path d="M3 1.5h10a1 1 0 0 1 1 1V18l-6-4-6 4V2.5a1 1 0 0 1 1-1z"/></svg>';
+      btn.innerHTML = '<svg viewBox="0 0 16 22" width="18" height="26" aria-hidden="true"><path d="M1 0h14v21l-7-5-7 5z"/></svg>';
       function paint() {
         var on = !!stars[sec.id];
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
@@ -67,7 +67,7 @@
         saveStars(); paint(); render();
       });
       paint();
-      q.insertBefore(btn, q.firstChild);
+      sec.appendChild(btn);
     });
 
     var terms = uniq(secs.map(function (s) { return s.dataset.term; }))
