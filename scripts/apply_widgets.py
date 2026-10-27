@@ -34,6 +34,10 @@ MAP.json:
      "anchors": [{"after": "<b>Binding price ceiling</b>",
                   "image": "eco2023-market-equilibrium-04-price-ceiling-diagram.png"}]}
 
+A map-level `page_style` is a <style> block written after the house script
+in every file, widgets or not (the ACG/MAN set's tighter spacing, 2026-10-27);
+`style` is the widgets' own look and goes in only with the engine.
+
 An image entry is a widget config, `{"keep": why}`, `{"drop": why}` (the
 picture is removed and an anchor places its widget elsewhere), `{"html": block}` (plain
 HTML in place of a picture of a formula or a calculation, with no script and
@@ -272,8 +276,14 @@ def apply(src, m, name, use_anchors=False, toc=False):
     n_sdg = out.count('<div class="sdg"')   # before the engine's own doc comment joins the file
     n_hp = sum(out.count('<div class="%s" ' % k) for k in HP_KINDS.values())
     n_widgets = n_sdg + n_hp
-    if not n_widgets:
-        return out, 0
+    if m.get("page_style"):
+        # a page-wide <style> after the house script, widgets or not: the
+        # tighter spacing Ian chose for the ACG/MAN set (2026-10-27). Counted
+        # as an insertion for the proof, like the widget look below.
+        ps = "\n<style>\n/* page spacing, from the map */\n%s\n</style>" % m["page_style"].strip()
+        hm = HOUSE_SCRIPT_RE.search(out)
+        out = (out[:hm.end()] + ps + out[hm.end():]) if hm else out.replace("</head>", ps + "\n</head>", 1)
+        inserted.append(ps)
     hpb = hp_block() if n_hp else ""
     if n_hp:
         hm = HOUSE_SCRIPT_RE.search(out)
@@ -302,7 +312,7 @@ def apply(src, m, name, use_anchors=False, toc=False):
 
     # the proof: nothing but the engine(s) and the widgets differs
     back = out.replace(embed_engine.blocks(), "", 1) if n_sdg else out
-    if n_hp:
+    if n_hp and n_widgets:
         back = back.replace(hpb, "", 1)
     for snippet in inserted:
         assert snippet in back, "an inserted snippet is not in the output"
