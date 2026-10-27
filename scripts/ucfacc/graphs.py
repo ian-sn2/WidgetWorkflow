@@ -12,8 +12,9 @@ def line(pts, color="gold", **k): return dict({"id": "c", "label": "", "pts": pt
 def tip(x1, y1, x2, y2, color="gold"): return {"from": [x1, y1], "to": [x2, y2], "color": color, "offset": 0}   # the arrowhead the picture puts on the line
 VAR = {"curves": [line([[0, 0], [95, 95]])]}
 FIX = {"curves": [line([[0, 55], [95, 55]])]}
-DASH = {"id": "f", "label": "", "pts": [[0, 35], [86, 35]], "color": "ink", "dashed": True, "thin": True}
-MIX = {"curves": [line([[0, 35], [95, 91]]), DASH]}
+DASH = {"id": "f", "label": "", "pts": [[0, 35], [95, 35]], "color": "ink", "dashed": True, "thin": True}       # the fixed component
+VDASH = {"id": "v", "label": "", "pts": [[0, 0], [55, 32.4]], "color": "ink", "dashed": True, "thin": True}    # the variable component, the same slope from the origin
+MIX = {"curves": [line([[0, 35], [95, 91]]), DASH, VDASH]}
 
 def patterns(xv, xf, xm, lab_var, lab_fix, title="Three Cost Behavior Patterns"):
     return {"title": title, "lede": "Total cost against the activity that drives it.",
@@ -22,11 +23,11 @@ def patterns(xv, xf, xm, lab_var, lab_fix, title="Three Cost Behavior Patterns")
                                   "caption": cap("A variable cost starts at the origin and rises in a straight line: with no activity there is no cost, and each unit adds the same amount.")},
                           "fix": {"label": "Fixed", "axes": AX(xf, "Total\nFixed Cost"), **FIX, "points": [label(50, 66, lab_fix)],
                                   "caption": cap("A fixed cost is a horizontal line: rent is the same whether one cup or a thousand are sold.")},
-                          "mix": {"label": "Mixed", "axes": AX(xm, "Total\nCost"), **MIX, "points": [label(17, 22, "fixed cost\ncomponent", 0, 0), label(70, 50, "variable cost\ncomponent", 0, 0)],
+                          "mix": {"label": "Mixed", "axes": AX(xm, "Total\nCost"), **MIX, "points": [label(78, 44, "fixed cost\ncomponent", 0, 0), label(36, 6, "variable cost component", 0, 0)],
                                   "caption": cap("A mixed cost starts above the origin at its fixed part and rises from there at the variable rate per unit.")}}}
 COST3 = patterns("Cups of coffee", "Cups of coffee", "Cups of coffee", "Total Variable Cost =\n$0.10 × (# of cups)", "Total Fixed Cost = $450")
 COST3_3173 = patterns("Cups of Coffee", "Cups of Coffee", "Miles", "Total Variable Cost =\n$0.10 × Volume", "Total Fixed Cost = $450")
-IPHONE = {"title": "A Cell Phone Plan as a Mixed Cost", "axes": AX("Length (in months)", "Total\nCost"), **MIX,
+IPHONE = {"title": "A Cell Phone Plan as a Mixed Cost", "axes": AX("Length (in months)", "Total\nCost"), "curves": [line([[0, 35], [95, 91]]), DASH],
           "points": [{"q": 0, "p": 35, "dot": False, "guides": False, "showQ": False, "pl": "$900"}],
           "caption": cap("The $900 phone is paid whatever the plan's length; the $35 a month climbs with it, so total cost is $35x + $900.")}
 STEPS = {"title": "Step and Curvilinear Costs", "lede": "Two further shapes a total-cost graph can take.",
@@ -73,12 +74,10 @@ HIGHLOW = {"title": "The High-Low Method", "lede": "The cost line is drawn strai
 CAKES = [[1, 40], [3, 95], [4, 150], [6, 180], [7, 240], [9, 230], [10, 290], [12, 320], [15, 400]]
 SCATTER = {"title": "High-Low Method Example", "axes": {"x": "Cakes", "y": "Total\nCost", "xmax": 17, "ymax": 450, "bg": False, "money": True},
            "points": [{"q": q, "p": p, "dot": True, "guides": False, "showP": False, "showQ": False, "color": "gold"} for q, p in CAKES[1:-1]] +
-                     [{"q": 1, "p": 40, "dot": True, "guides": False, "showP": False, "showQ": False, "label": "(1, $40)", "dx": 54, "dy": -4},
+                     [{"q": 1, "p": 40, "dot": True, "guides": False, "showP": False, "showQ": False, "label": "(1, $40)", "dx": 42, "dy": 4},
                       {"q": 15, "p": 400, "dot": True, "guides": False, "showP": False, "showQ": False, "label": "(15, $400)", "dx": -62, "dy": -8}],
-           "curves": [line([[0.5, 27.1], [16, 425.7]], color="ink", thin=True, at=1)],
-           "steps": [cap("The scatterplot: total cost against cakes baked, with the lowest and highest activity levels marked."),
-                     cap("The line through (1, $40) and (15, $400) has slope ($400 − $40) ÷ (15 − 1) = $25.71 a cake, and the intercept follows from either point.")]}
-STD3 = {"keep": "the three small standard graphs the example says do not fit; the widget above draws the same three"}
+           "caption": cap("Total cost against cakes baked, with the lowest and highest activity levels marked.")}
+STD3 = {"drop": "the three-pattern widget above already draws them; the sentence before now says so (Ian, 2026-10-27)"}
 
 # ------------------------------------------------------------- grids and spokes
 SWOT = grid2x2(["Strength", "Opportunity", "Weakness", "Threat"], fills=[PALE, FAINT, "#e9e9e9", "#f4f4f4"], cols=["Internal", "External"], rows=["Good", "Bad"],

@@ -13,7 +13,7 @@ NAMES = {"ACG2021-E1-M1": "ACG2021 · Exam 1 Module 1 (and Exam 2 Module 1, the 
 TITLES = {"01-accounting-equation": "The Accounting Equation", "03-asset-accounts": "Asset Accounts", "04-liability-accounts": "Liability Accounts", "05-stockholders-equity-flow": "Stockholders’ Equity Flow", "06-financial-statements-flow": "The Four Financial Statements",
           "debit-credit-diagram": "Debits and Credits by Account Type", "accounting-cycle-diagram": "The Accounting Cycle", "fraud-triangle": "The Fraud Triangle", "pyramid-framework": "Internal Control Framework", "chapter-summary": "Internal Controls Summary",
           "01-variable-cost.png": "Three Cost Behavior Patterns (replaces 3 pictures)", "02-iphone": "A Cell Phone Plan as a Mixed Cost", "04-relevant-ranges": "Relevant Ranges", "05-step-costs": "Step and Curvilinear Costs (replaces 2 pictures)", "08-high-low": "The High-Low Method (replaces 2 pictures)",
-          "09-scatterplot": "High-Low Method Example (2 steps)", "10-standard-cost": "Standard cost graphs — stays a picture", "11-phone-bill": "The Phone Bill", "12-learning-curve": "Learning Curve", "master-budget": "The Master Budget", "wip-inventory": "Cost Flow Through WIP",
+          "09-scatterplot": "High-Low Method Example (2 steps)",  "11-phone-bill": "The Phone Bill", "12-learning-curve": "Learning Curve", "master-budget": "The Master Budget", "wip-inventory": "Cost Flow Through WIP",
           "mod5-01-variable": "Three Cost Behavior Patterns (replaces 3 pictures)", "mod5-04-relevant": "Relevant Ranges", "management-pyramid": "The Management Pyramid", "systems-viewpoint": "The Systems Viewpoint", "carroll": "Carroll’s CSR Pyramid (floats right)", "swot": "SWOT Grid",
           "bcg": "BCG Matrix (floats right)", "decision-tree": "Ethical Decision Tree", "decision-making-styles": "Decision-Making Styles", "competing-values": "Competing Values Framework", "diversity-wheel": "The Diversity Wheel", "maslow": "Maslow’s Hierarchy", "conflict-handling": "Conflict-Handling Styles"}
 def title_for(base):
@@ -32,7 +32,27 @@ def block(e):
     if "html" in e: return e["html"]
     return '<div class="sdg"><script type="application/json">' + json.dumps(e, ensure_ascii=False).replace("</", "<\\/") + "</script></div>"
 cards = []
+ROUND2 = {"06-financial-statements": "Round 2: the links are now plain arrows, left to right.",
+          "debit-credit": "Round 2: proper curly braces on the left, the +, = and − signs set at 24px; the two page screenshots under the figure show its size in the actual file at desktop and phone width.",
+          "accounting-cycle-diagram": "Round 2: the ring is drawn with heavier arrows and visible heads between every step, as the source has.",
+          "fraud-triangle": "Round 2: each name sits inside its own region of the triangle, turned to run along its side, as the source draws it.",
+          "pyramid-framework": "Round 2: the apex band is taller so Monitoring fits inside it, and each number sits level with the middle of its own step.",
+          "chapter-summary": "Round 2: the brace is a real curly brace with its tip up toward the triangle, and the arrows are heavier.",
+          "01-variable-cost.png": "Round 2: the Mixed case now carries a dashed line for the variable component too, from the origin at the line's own slope, beside the dashed fixed level.",
+          "09-scatterplot": "Round 2: the slope line is gone (it is not in the source), so this is one static figure, and the (1, $40) label sits beside its own point.",
+          "10-standard-cost": "Round 2: the picture is removed and the sentence before it now reads “None of the cost graphs above represents this situation.” (Balanced: “…represent this.”)",
+          "master-budget": "Round 2: an arrow into every box, a curly brace down the left for the operating budgets and one under the bottom row for the financial budgets.",
+          "wip-inventory": "Round 2: block arrows between the four accounts as the source draws them, and a curly brace holding the product accounts with its name beside it.",
+          "mod5-01-variable": "Round 2: the Mixed case carries a dashed variable-component line as well as the dashed fixed level.",
+          "management-pyramid": "Round 2: every level name is the same size and weight.",
+          "maslow": "Round 2: the apex band is taller and Self-Actualization sits inside it.",
+          "systems-viewpoint": "Round 2: heavier arrows with clear heads, including the feedback arrow back up into Inputs.",
+          "carroll": "Round 2: Philanthropic fits inside the apex. The dashed line between Legal and Economic is kept as the source draws it; the chapter's prose never mentions it, so no meaning is added.",
+          "decision-tree": "Round 2: the right-hand branches are spread out so the note under “Is the action ethical?” no longer runs into the No branch.",
+          "01-accounting-equation": "Round 2: kept as the picture, as asked."}
 def card(id, chapter, title, html, desc="", kind="figure"):
+    for k, v in ROUND2.items():
+        if k in id: desc = v
     cards.append({"id": re.sub(r"[^A-Za-z0-9_.~-]+", "-", id)[:120], "chapter": chapter, "edition": "Full + Balanced", "kind": kind, "title": title, "flags": [], "desc": desc, "html": html})
 def img(base, w="100%"):
     data = base64.b64encode(open(S + "/imgcache/" + base, "rb").read()).decode()   # embedded: the viewer blocks other hosts
@@ -42,14 +62,20 @@ for key, (folder, images) in build.CH.items():
     if images is None or key in ("ACG2021-E2-M1", "ACG2021-E2-M2"): continue
     drops = [b for b, e in images.items() if isinstance(e, dict) and "drop" in e]
     for base, e in images.items():
-        if isinstance(e, dict) and "drop" in e: continue
+        if isinstance(e, dict) and "drop" in e:
+            if "10-standard-cost" in base:
+                card(key + "-" + base, NAMES[key], "Standard cost graphs — picture removed, sentence reworded", f'<div class="pair"><div><h5>Now</h5>{img(base)}</div><div><h5>Proposed</h5><p class="ctx">The picture goes. The sentence before it, “None of the following cost graphs represents this situation.”, becomes “None of the cost graphs above represents this situation.” — the three-pattern widget earlier in the chapter draws the same three graphs.</p></div></div><p class="ctx">{H.escape(context(key, base))}</p>', kind="drop")
+            continue
         if isinstance(e, dict) and "keep" in e:
-            card(key + "-" + base, NAMES[key], title_for(base), f'<div class="pair"><div><h5>Now</h5>{img(base)}</div><div><h5>Proposed</h5><p class="ctx">Stays as it is. The example says “none of the following cost graphs represents this situation”, so the three small graphs have to be there to be ruled out, and the three-pattern widget above already draws the same three.</p></div></div><p class="ctx">{H.escape(context(key, base))}</p>', kind="keep")
+            card(key + "-" + base, NAMES[key], title_for(base), f'<div class="pair"><div><h5>Now</h5>{img(base)}</div><div><h5>Proposed</h5><p class="ctx">Stays as the picture.</p></div></div><p class="ctx">{H.escape(context(key, base))}</p>', kind="keep")
             continue
         now = img(base)
         mine = [d for d in drops if (base.endswith("01-variable-cost.png") and ("13-fixed" in d or "14-mixed" in d or "02-fixed" in d or "03-mixed" in d)) or (base.endswith("05-step-costs-2.png") and "06-curv" in d) or (base.endswith("08-high-low-method-graphs.png") and "15-high-low" in d)]
         if mine: now += '<p class="ctx">Also removed, as cases of this widget’s buttons:</p>' + "".join(img(d, "60%") for d in mine)
         after = block(e).replace(figs.FIGCSS, "")
+        if "debit-credit" in base:
+            for nm, lab in (("desktop", "In the Full file at 1280px wide"), ("phone", "At 390px (phone)")):
+                after += f'<p class="ctx">{lab}:</p><img src="data:image/png;base64,' + base64.b64encode(open(f"{S}/gallery/dc-inpage-{nm}.png", "rb").read()).decode() + '" alt="" style="width:100%;border:1px solid #ddd;display:block">'
         card(key + "-" + base, NAMES[key], title_for(base), f'<div class="pair"><div><h5>Now</h5>{now}</div><div><h5>Proposed</h5>{after}</div></div><p class="ctx">{H.escape(context(key, base))}</p>')
 # spacing cards
 def pair_img(name): return '<img src="data:image/jpeg;base64,' + base64.b64encode(open(f"{S}/spacing/{name}-pair.jpg", "rb").read()).decode() + '" alt="before and after" style="width:100%;display:block;margin:6px 0 14px;border:1px solid #ddd">'

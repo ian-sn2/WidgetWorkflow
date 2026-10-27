@@ -13,7 +13,7 @@ F = figs
 def drop(why): return {"drop": why}
 P = "acg2021-exam1-"; C = "acg2071-exam1-cost-behavior-"; M3 = "acg3173-exam2-mod5-"
 CH = {  # key: (folder substring, {image basename: entry})
- "ACG2021-E1-M1": ("01 - UCF ACG2021 Exam 1 Module 1", {P + "01-accounting-equation-diagram.png": F.accounting_equation(), P + "03-asset-accounts-diagram.png": graphs.ASSETS, P + "04-liability-accounts-diagram.png": graphs.LIABS,
+ "ACG2021-E1-M1": ("01 - UCF ACG2021 Exam 1 Module 1", {P + "01-accounting-equation-diagram.png": {"keep": "Ian prefers the picture (review, 2026-10-27)"}, P + "03-asset-accounts-diagram.png": graphs.ASSETS, P + "04-liability-accounts-diagram.png": graphs.LIABS,
                                                       P + "05-stockholders-equity-flow.png": F.se_flow(), P + "06-financial-statements-flow.png": F.statements_flow()}),
  "ACG2021-E2-M1": ("03 - UCF ACG2021 Exam 2 Module 1", None),   # same file as E1-M1
  "ACG2021-E1-M2": ("02 - UCF ACG2021 Exam 1 Module 2", {"acg2021-exam1-accounting-cycle-01-debit-credit-diagram.png": F.debit_credit()}),
@@ -59,7 +59,14 @@ def main(keys=None):
         for ed in ("Full", "Balanced"):
             f = [x for x in glob.glob(d + f"/*-{ed}.html") if "Ignore" not in x]; assert len(f) == 1, (key, ed, f); f = f[0]
             od = OUT + "/" + os.path.relpath(d, SRC); os.makedirs(od, exist_ok=True)
-            r = subprocess.run([sys.executable, REPO + "/scripts/apply_widgets.py", f, mp, od + "/" + os.path.basename(f), "--toc"], capture_output=True, text=True)
+            out = od + "/" + os.path.basename(f)
+            r = subprocess.run([sys.executable, REPO + "/scripts/apply_widgets.py", f, mp, out, "--toc"], capture_output=True, text=True)
+            if r.returncode == 0 and key == "ACG2071-E1-CostBehavior":
+                # the one prose edit Ian asked for (review, 2026-10-27): the three standard graphs are gone, the widget above draws them
+                t = open(out, encoding="utf-8").read()
+                old, new = (("None of the following cost graphs represents this situation.", "None of the cost graphs above represents this situation.") if ed == "Full"
+                            else ("None of these cost graphs represent this:", "None of the cost graphs above represent this."))
+                assert t.count(old) == 1, (key, ed, t.count(old)); open(out, "w", encoding="utf-8").write(t.replace(old, new))
             tail = (r.stdout + r.stderr).strip().splitlines()[-1:] if (r.stdout + r.stderr).strip() else [""]
             print(f"{key:26s} {ed:9s} rc={r.returncode} {tail[0][:110]}")
             if r.returncode: print(r.stdout[-800:], r.stderr[-800:])
