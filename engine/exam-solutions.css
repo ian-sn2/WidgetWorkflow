@@ -43,14 +43,13 @@ section.sol .sol-star[aria-pressed="true"] svg path { fill:#d62828; stroke:#d628
 /* A bookmarked number in the strip wears the ribbon draped over its top
    edge, hanging past the border the way a ribbon marks a page. */
 .sol-shell .sol-strip .sol-num { position:relative; }
-.sol-shell .sol-strip .sol-num.is-starred { border-color:#d62828; background:#fbe5e5; }
 .sol-shell .sol-strip .sol-num.is-starred::after { content:""; position:absolute; top:-5px; right:3px; width:9px; height:15px; background:#d62828;
   -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 22"><path d="M1 0h14v21l-7-5-7 5z"/></svg>') center/contain no-repeat;
   mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 22"><path d="M1 0h14v21l-7-5-7 5z"/></svg>') center/contain no-repeat;
   filter:drop-shadow(0 1px 1px rgba(0,0,0,0.18)); }
-.sol-shell .sol-strip .sol-num.is-starred[aria-pressed="true"] { background:#002060; border-color:#002060; color:#fff; }
-.sol-shell .sol-strip .sol-num.is-starred.is-right { border-color:#2e8b57; background:#e3f5e8; }
-.sol-shell .sol-strip .sol-num.is-starred.is-wrong { border-color:#d62828; }
+/* The ribbon is the only thing a bookmark adds: the box keeps its colour
+   from the answer (green or red) or from being current (navy), so a
+   bookmarked question and a wrong one never look alike (Ian, 2026-10-27). */
 section.sol ol.sol-sub { margin:2px 0 4px 2em; padding:0; }
 section.sol ol.sol-sub li { margin:0; line-height:1.45; }
 /* The choices are the quiz: each one a button that turns green or red. */
