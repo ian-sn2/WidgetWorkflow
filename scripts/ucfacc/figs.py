@@ -61,11 +61,12 @@ def pyramid(levels, w=440, h=330, fills=None, numbered=False, aria="", maxw=380,
         if i == 0:
             # the apex band holds its name low, where the triangle is wide enough, and as large as fits there:
             # the band's width at the top of the letters must clear the name (Ian: as big as the rest, never on the lines)
-            while size > 9:
-                top_y = y2 - 7 - size * 0.74; width_there = bw * (top_y - top) / (base - top) - 10
-                if 0.6 * size * len(t) <= width_there: break
-                size -= 0.5
-            ty = y2 - 7
+            def fits(ty, size):
+                top_y = ty - size * 0.74; return 0.6 * size * len(t) <= bw * (top_y - top) / (base - top) - 10
+            while size > 9 and not fits(y2 - 7, size): size -= 0.5
+            # then as close to the band's vertical centre as the narrowing sides allow (Ian, 2026-10-27)
+            ty = ym + size * 0.37
+            while ty < y2 - 7 and not fits(ty, size): ty += 1
         b += text(cx, ty, t, size, lh=size + 2)
         if numbered:
             wm = bw * (ym - top) / (base - top); b += text(cx - wm / 2 - 14, ym + 4, str(n - i), 12, bold=True, color=GREY)
@@ -141,7 +142,7 @@ def accounting_cycle():
     for i in range(n):
         a0 = -math.pi / 2 + 2 * math.pi * i / n; a1 = -math.pi / 2 + 2 * math.pi * (i + 1) / n
         s0, s1 = a0 + 0.1, a1 - 0.12
-        b += path(f"M {cx + R*math.cos(s0):.1f} {cy + R*math.sin(s0):.1f} A {R} {R} 0 0 1 {cx + R*math.cos(s1):.1f} {cy + R*math.sin(s1):.1f}", sw=3, color=GOLDC)
+        b += path(f"M {cx + R*math.cos(s0):.1f} {cy + R*math.sin(s0):.1f} A {R} {R} 0 0 1 {cx + R*math.cos(s1):.1f} {cy + R*math.sin(s1):.1f}", sw=1.7, color=GOLDC)
         lx, ly = cx + (R + 58) * math.cos(a0), cy + (R + 58) * math.sin(a0)
         b += text(lx, ly + 4 - steps[i].count("\n") * 6.5, steps[i], 11.5, lh=13)
     b += text(cx, cy - 10, "The\nAccounting\nCycle", 17, lh=21)
@@ -185,9 +186,7 @@ def master_budget():
     b += f'<line x1="150" y1="198" x2="430" y2="198" stroke="{INK}" stroke-width="2"/>' + A(290, 198, 290, 210)
     b += B(230, 212, 120, "SG&A Budget") + A(290, 252, 290, 266)
     b += B(230, 268, 120, "Budgeted\nIncome\nStatement", 11) + A(290, 308, 290, 336)
-    b += f'<line x1="90" y1="324" x2="490" y2="324" stroke="{INK}" stroke-width="2"/>'
     for x, t in [(30, "Capital\nExpenditure\nBudget"), (230, "Cash\nBudget"), (430, "Budgeted\nBalance\nSheet")]:
-        if x != 230: b += A(x + 60, 324, x + 60, 336)
         b += box(x, 338, 120, 50, t, fill=PALE, fs=11, lh=12.5, rx=10)
     b += A(150, 363, 228, 363) + A(350, 363, 428, 363)
     b += vbrace(30, 12, 308, "left", 1.6) + f'<text transform="translate(12 160) rotate(-90)" text-anchor="middle" font-size="11" font-style="italic" font-weight="700" fill="{INK}">operating budgets</text>'
@@ -199,11 +198,11 @@ def wip_flow():
         x = 20 + i * 190; b += box(x, 20, 130, 64, t, fill=DEEP if i != 1 else PALE, fs=12.5, lh=14, rx=6, color=INK)
         if i < 3: b += f'<polygon points="{x+136},{44} {x+166},{44} {x+166},{36} {x+186},{52} {x+166},{68} {x+166},{60} {x+136},{60}" fill="{INK}"/>'
     b += text(561, 14, "SALE", 12)
-    b += f'<line x1="275" y1="84" x2="275" y2="209" stroke="{INK}" stroke-width="1.8"/>' + arrow(275, 209, 300, 209, sw=1.8)
-    b += vbrace(314, 100, 318, "left", 1.8) + text(250, 224, "Subsidiary\nAccounts", 10.5, bold=True, lh=12)
+    b += f'<line x1="275" y1="84" x2="275" y2="209" stroke="{INK}" stroke-width="1.8"/>' + arrow(275, 209, 298, 209, sw=1.8)
+    b += text(338, 206, "Subsidiary\nAccounts", 10.5, bold=True, lh=12) + vbrace(392, 100, 318, "left", 1.8)
     for t, y in [("Product 1\nDirect materials\nDirect labor\nOverhead", 100), ("Product 2\nDirect materials\nDirect labor\nOverhead", 170), ("Product 99\nDirect materials\nDirect labor\nOverhead", 262)]:
-        b += box(330, y, 130, 56, t, fill=DEEP, fs=10.5, lh=12, rx=4)
-    b += text(395, 248, "• • •", 12)
+        b += box(408, y, 130, 56, t, fill=DEEP, fs=10.5, lh=12, rx=4)
+    b += text(473, 248, "• • •", 12)
     return fig(760, 330, b, "Costs flow from raw materials to work in process to finished goods and, on sale, to cost of goods sold; each product has its own subsidiary WIP account of direct materials, direct labor and overhead", 640, "", True)
 
 # ------------------------------------------------------------- MAN3025
@@ -229,15 +228,15 @@ def decision_tree():
     b = ""
     def q(x, y, t, fs=11.5): return text(x, y, t, fs, anchor="start", lh=13)
     b += q(10, 160, "Is the action\nlegal?")
-    b += arrow(90, 148, 150, 112) + text(112, 118, "YES", 8) + arrow(90, 165, 150, 204) + text(112, 198, "NO", 8)
+    b += arrow(90, 148, 150, 112) + text(112, 118, "YES", 8) + arrow(90, 165, 150, 204) + text(106, 202, "NO", 8)
     b += q(156, 96, "Does the action\nmaximize\nshareholder\nvalue?") + q(156, 214, "Don’t do it.")
-    b += arrow(262, 86, 322, 44) + text(288, 56, "YES", 8) + arrow(262, 120, 322, 184) + text(288, 164, "NO", 8)
+    b += arrow(262, 86, 322, 44) + text(288, 56, "YES", 8) + arrow(262, 120, 322, 184) + text(280, 170, "NO", 8)
     b += q(328, 42, "Is the action\nethical?") + text(328, 72, "(Weigh the effect on the\ncommunity, customers,\nemployees, supplier, and the\nenvironment against the\nbenefit to shareholders.)", 7.5, anchor="start", bold=False, lh=9)
     b += q(328, 176, "Would it be\nethical to not\ntake the action?") + text(328, 220, "(Weigh the cost imposed on\nshareholders against the\nbenefit to other stakeholders.)", 7.5, anchor="start", bold=False, lh=9)
     b += arrow(446, 36, 492, 20) + text(468, 18, "YES", 8) + q(498, 24, "Do it.")
-    b += arrow(446, 50, 492, 84) + text(468, 76, "NO", 8) + q(498, 88, "Don’t do it.")
+    b += arrow(446, 50, 492, 84) + text(456, 82, "NO", 8) + q(498, 88, "Don’t do it.")
     b += arrow(446, 174, 492, 160) + text(466, 160, "YES", 8) + q(498, 164, "Don’t do it.")
-    b += arrow(446, 192, 492, 236) + text(466, 224, "NO", 8) + q(498, 228, "Do it, but\ndisclose the\neffect to\nshareholders.")
+    b += arrow(446, 192, 492, 236) + text(454, 230, "NO", 8) + q(498, 228, "Do it, but\ndisclose the\neffect to\nshareholders.")
     return fig(600, 290, b, "A decision tree for a managerial decision: is it legal, does it maximize shareholder value, is it ethical, and would it be ethical not to act", 640, "", True)
 def diversity_wheel():
     b = ""

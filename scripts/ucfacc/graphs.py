@@ -76,7 +76,7 @@ HIGHLOW = {"title": "The High-Low Method", "lede": "The cost line is drawn strai
 CAKES = [[1, 40], [3, 95], [4, 150], [6, 180], [7, 240], [9, 230], [10, 290], [12, 320], [15, 400]]
 SCATTER = {"title": "High-Low Method Example", "axes": {"x": "Cakes", "y": "Total\nCost", "xmax": 17, "ymax": 450, "bg": False, "money": True},
            "points": [{"q": q, "p": p, "dot": True, "guides": False, "showP": False, "showQ": False, "color": "gold"} for q, p in CAKES[1:-1]] +
-                     [{"q": 1, "p": 40, "dot": True, "guides": False, "showP": False, "showQ": False, "label": "(1, $40)", "dx": 30, "dy": 4},
+                     [{"q": 1, "p": 40, "dot": True, "guides": False, "showP": False, "showQ": False, "label": "(1, $40)", "dx": 12, "dy": 4},
                       {"q": 15, "p": 400, "dot": True, "guides": False, "showP": False, "showQ": False, "label": "(15, $400)", "dx": -62, "dy": -8}],
            "caption": cap("Total cost against cakes baked, with the lowest and highest activity levels marked.")}
 STD3 = {"drop": "the three-pattern widget above already draws them; the sentence before now says so (Ian, 2026-10-27)"}
