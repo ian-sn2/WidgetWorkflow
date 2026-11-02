@@ -75,7 +75,8 @@ green, and the solution sits under it in the open; nothing is clicked to
 check an answer. The letter comes from the written solution's own "(c)".
 
 **The questions are paraphrased.** Every stem and every choice is restated in
-our own words (`paraphrase.py` beside the build), keeping each number, the
+our own words (`solutions/paraphrase-eco2023-exam1.py`, which the build
+reads), keeping each number, the
 count of choices and their order, because the written solutions refer to
 choices by letter and to the numbers by value. Nothing is copied from the
 papers.
