@@ -22,13 +22,6 @@ section.sol { margin:10px 0 0; padding:12px 20px 14px; border:1px solid #DEDEDE;
 .sol-shell .sol-strip .sol-num { min-width:34px; min-height:34px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
   color:#002060; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
 .sol-shell .sol-strip .sol-num[aria-pressed="true"] { background:#002060; border-color:#002060; color:#fff; }
-.sol-shell .sol-strip .sol-num.is-right { border-color:#2e8b57; background:#e3f5e8; color:#1d5e3a; }
-.sol-shell .sol-strip .sol-num.is-wrong { border-color:#d62828; background:#fbe5e5; color:#8f1d1d; }
-/* The current question, once answered: a deep green or deep red ground
-   with white numerals, which reads at a glance; a mid green behind white
-   did not (Ian, 2026-10-27). */
-.sol-shell .sol-strip .sol-num.is-right[aria-pressed="true"] { background:#1d5e3a; border-color:#1d5e3a; color:#fff; }
-.sol-shell .sol-strip .sol-num.is-wrong[aria-pressed="true"] { background:#9c1c1c; border-color:#9c1c1c; color:#fff; }
 @media (max-width:640px){
   .sol-shell .sol-nav { flex-wrap:wrap; }
   .sol-shell .sol-strip { order:3; flex-basis:100%; }
@@ -55,29 +48,22 @@ section.sol .sol-star[aria-pressed="true"] svg path { fill:#d62828; stroke:#d628
    bookmarked question and a wrong one never look alike (Ian, 2026-10-27). */
 section.sol ol.sol-sub { margin:2px 0 4px 2em; padding:0; }
 section.sol ol.sol-sub li { margin:0; line-height:1.45; }
-/* The choices are the quiz: each one a button that turns green or red. */
+/* The choices are read, not clicked: the right one is marked green. */
 section.sol ol.sol-choices { margin:6px 0 8px; padding:0; list-style:none; counter-reset:choice; }
-section.sol ol.sol-choices li { margin:0 0 3px; padding:3px 8px; line-height:1.4; border:1px solid transparent; border-radius:4px; cursor:pointer; }
+section.sol ol.sol-choices li { margin:0 0 3px; padding:3px 8px; line-height:1.4; border:1px solid transparent; border-radius:4px; }
 section.sol ol.sol-choices li::before { counter-increment:choice; content:counter(choice, upper-alpha) ".\00a0\00a0"; font-weight:600; }
-section.sol ol.sol-choices li:hover { background:#eef3fd; border-color:#c9d2e3; }
-section.sol.sol-answered ol.sol-choices li { cursor:default; }
-section.sol.sol-answered ol.sol-choices li:hover { background:transparent; border-color:transparent; }
-section.sol ol.sol-choices li.sol-right, section.sol.sol-answered ol.sol-choices li.sol-right:hover { background:#e3f5e8; border-color:#2e8b57; color:#1d5e3a; font-weight:600; }
-section.sol ol.sol-choices li.sol-wrong, section.sol.sol-answered ol.sol-choices li.sol-wrong:hover { background:#fbe5e5; border-color:#d62828; color:#8f1d1d; }
-section.sol .sol-verdict { margin:2px 0 6px; font-weight:700; }
-section.sol .sol-verdict.is-right { color:#1d5e3a; }
-section.sol .sol-verdict.is-wrong { color:#8f1d1d; }
+section.sol ol.sol-choices li.sol-right { background:#e3f5e8; border-color:#2e8b57; color:#1d5e3a; font-weight:600; }
 /* The solution, written tight: the house sheet gives every paragraph and
    list item 10px to 20px of margin at 1.6 line height, which is right for a
    chapter and makes a worked answer twice as tall as it needs to be. */
-section.sol details.sol-answer { box-sizing:border-box; border:1px solid #002060; background:#fff; padding:6px 12px; margin:6px 0 0; width:100%; }
-section.sol details.sol-answer summary { cursor:pointer; font-weight:800; color:#002060; }
-section.sol details.sol-answer p { margin:5px 0; line-height:1.4; }
-section.sol details.sol-answer ul, section.sol details.sol-answer ol { margin:3px 0 5px; padding-left:1.4em; }
-section.sol details.sol-answer li { margin:0 0 3px; line-height:1.4; }
-section.sol details.sol-answer li p { margin:3px 0; }
-section.sol details.sol-answer ul[style*="center"] { padding-left:0; }
-section.sol details.sol-answer ul[style*="center"] p { margin:2px 0; }
+section.sol .sol-answer { box-sizing:border-box; border:1px solid #002060; background:#fff; padding:6px 12px 8px; margin:6px 0 0; width:100%; }
+section.sol .sol-answer .sol-answer-k { margin:0 0 4px; font-weight:800; color:#002060; }
+section.sol .sol-answer p { margin:5px 0; line-height:1.4; }
+section.sol .sol-answer ul, section.sol .sol-answer ol { margin:3px 0 5px; padding-left:1.4em; }
+section.sol .sol-answer li { margin:0 0 3px; line-height:1.4; }
+section.sol .sol-answer li p { margin:3px 0; }
+section.sol .sol-answer ul[style*="center"] { padding-left:0; }
+section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
 /* A figure inside a solution is read beside its working, not as the page's
    centrepiece: narrower plot, full width, less padding. */
 section.sol .sdg { --fig:440px; width:100%; margin:10px auto; padding:12px 14px 10px; }

@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.13 =====
+/* ===== exam-solutions.js v0.14 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -107,7 +107,7 @@
     var bar = document.createElement('div'); bar.className = 'sol-nav';
     var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
     // A strip of question numbers under the box (Ian, 2026-10-27), the
-    // current one filled, an answered one edged green or red. Previous and
+    // current one filled, a bookmarked one wearing the ribbon. Previous and
     // Next sit at its ends.
     var strip = document.createElement('div'); strip.className = 'sol-strip';
     var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
@@ -171,7 +171,7 @@
       list.forEach(function (sec, i) {
         var m = /-q(\d+)$/.exec(sec.id);
         var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = m ? m[1] : String(i + 1);
-        btn.className = 'sol-num' + (sec.dataset.result ? ' is-' + sec.dataset.result : '') + (stars[sec.id] ? ' is-starred' : '');
+        btn.className = 'sol-num' + (stars[sec.id] ? ' is-starred' : '');
         btn.setAttribute('aria-pressed', i === state.idx ? 'true' : 'false');
         btn.setAttribute('aria-label', 'Question ' + btn.textContent);
         btn.addEventListener('click', function () { state.idx = i; render(); });
@@ -211,39 +211,8 @@
 
     if (!fromHash()) render();
 
-    // Quiz behaviour (Ian, 2026-10-26): a choice is clicked, it turns green
-    // or red, the right one is shown, and the solution stays behind its own
-    // click. data-answer holds the letter(s) the solution gives -- "a d" where
-    // the key accepts either -- so a section with none is left as plain text.
-    secs.forEach(function (sec) {
-      var ok = (sec.dataset.answer || '').split(/\s+/).filter(Boolean);
-      var items = [].slice.call(sec.querySelectorAll('ol.sol-choices > li'));
-      if (!ok.length || !items.length) return;
-      var done = false;
-      items.forEach(function (li, i) {
-        var letter = 'abcde'.charAt(i);
-        li.tabIndex = 0; li.setAttribute('role', 'button');
-        function pick() {
-          if (done) return; done = true;
-          var right = ok.indexOf(letter) >= 0;
-          sec.classList.add('sol-answered');
-          items.forEach(function (it, j) {
-            it.tabIndex = -1;
-            if (ok.indexOf('abcde'.charAt(j)) >= 0) it.classList.add('sol-right');
-          });
-          if (!right) li.classList.add('sol-wrong');
-          sec.dataset.result = right ? 'right' : 'wrong';
-          var me = strip.querySelector('[aria-pressed="true"]');
-          if (me) me.classList.add('is-' + sec.dataset.result);
-          var note = document.createElement('p'); note.className = 'sol-verdict ' + (right ? 'is-right' : 'is-wrong');
-          note.textContent = right ? 'Correct.' : 'Not quite. The answer is (' + ok.join(' or ') + ').';
-          var det = sec.querySelector('details.sol-answer');
-          sec.insertBefore(note, det);
-        }
-        li.addEventListener('click', pick);
-        li.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
-      });
-    });
+    // No quiz: this is a list of worked solutions, the right choice marked
+    // and the solution in the open (Ian's manager, 2026-11-02).
     window.addEventListener('hashchange', function () { fromHash(); });
   });
 })();

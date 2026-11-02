@@ -11,9 +11,13 @@ on the second (same day, at Ian's ask), 120 widgets in all. See
 
 ## What is in it
 
-165 questions under five semesters, each with its stem, its choices, and its
-written solution behind a "Solution" click, shown one at a time in a box
-with Previous / Next under the picker. The "answer A" question each paper
+165 questions under five semesters, each with its stem and choices restated
+in our own words, the right choice marked, and its written solution in the
+open beneath, shown one at a time in a box with Previous / Next under the
+picker. (2026-11-02: it was a click-to-check quiz with the solution behind a
+click until Ian's manager ruled that this is a list of detailed solutions,
+not a re-presentation of the exam, and that the questions must be
+paraphrased.) The "answer A" question each paper
 ends with is left out (Ian, 2026-10-26: the Free Point topic "looks weird").
 
 | semester | questions kept | dropped |
@@ -114,9 +118,11 @@ through; the counts are in the build log and the tags are on each section.
 
 ## Decisions to review
 
-* **The choices are a quiz** (Ian, 2026-10-26): click one and it turns green
-  or red, the right one shows green, and the solution stays behind its own
-  click. Spring 2023 question 10 accepts (a) or (d), as the key does.
+* **No quiz.** The right choice is marked green and the solution is open.
+  Spring 2023 question 10 marks both (a) and (d), as the key does.
+* **Every question is paraphrased**: stem and choices restated, numbers and
+  choice order kept. The build checks that every number in the original
+  stem survives, and that each question keeps its count of choices.
 * **The picker is one collapsible box** in the style of the table of
   contents, with three stages inside: Semester, then Exam, then Topic, the
   topics in Ian's order with The PPF first (his list did not name it; it is
@@ -134,8 +140,6 @@ through; the counts are in the build log and the tags are on each section.
 * **Solutions are set tighter than a chapter**: half the house margins, and
   figures at 440px inside a solution.
 
-* **Solutions start closed.** `open` on every `<details class="sol-answer">`
-  shows them all.
 * **Title** is "ECO2023 Exam 1 Detailed Solutions"; the file Ian sent was
   titled "ECO2023 Summer 2023 Exam 1 Solutions", which named one of its five
   exams.

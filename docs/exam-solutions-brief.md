@@ -32,12 +32,12 @@ The body is:
 <p class="sol-q"><b>Question 13 · The PPF</b></p>
 <div class="sol-table"><table>…</table></div>      ← anything the exam printed above the question
 <p>…the question…</p>
-<ol class="sol-choices" type="A"><li>…</li>…</ol>
-<details class="sol-answer"><summary>Solution</summary>
+<ol class="sol-choices" type="A"><li>…</li><li class="sol-right">…</li>…</ol>
+<div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(d)</strong> …the written solution…</p>
 <div class="sdg"><script type="application/json">{…}</script></div>   ← the widget, where there is one
 …
-</details>
+</div>
 </section>
 …
 </div>
@@ -69,13 +69,16 @@ a question or a heading (`#eco2023-243-e1-q13`) selects that question's
 semester and exam first. Terms are the usual codes (YY + 1 spring, 2 summer,
 3 fall) and the shell names them.
 
-**The question is a quiz.** Each choice is clickable: the one picked turns
-green or red, the right one is shown green, and a line under the list says
-which letter is correct. The letter comes from `data-answer` on the section,
-which the build reads off the written solution's own "(c)"; a question with
-none stays plain text. **The solution is behind a click** after that: each
-`<details>` starts closed. One attribute (`open`) reverses that for the whole
-file; it is Ian's call.
+**It is a list of worked solutions, not a practice exam** (Ian's manager,
+2026-11-02). The question is shown for context with its right choice marked
+green, and the solution sits under it in the open; nothing is clicked to
+check an answer. The letter comes from the written solution's own "(c)".
+
+**The questions are paraphrased.** Every stem and every choice is restated in
+our own words (`paraphrase.py` beside the build), keeping each number, the
+count of choices and their order, because the written solutions refer to
+choices by letter and to the numbers by value. Nothing is copied from the
+papers.
 
 **Solutions are set tight.** The house sheet gives every paragraph and list
 item 10px to 20px of margin at 1.6 line height, which made a worked answer
@@ -121,11 +124,10 @@ overrule.
 The same ones as a chapter. `check_file.py` runs on the page unchanged;
 `images` and `dates` warn because a solutions page has neither, and the calcs
 warnings are the written solution stating the same arithmetic the widget
-shows -- which here is the point. **The browser scripts need the solutions
-open and the shell off:** `render_widgets.py` and `mobile_check.py` press
-buttons, a closed `<details>` hides them, and the shell hides every exam but
-one. Make a copy with the shell `<script>` removed and `open` on every
-`<details>` and run them on that (the changelog shows the three lines).
+shows -- which here is the point. **The browser scripts need the shell off:**
+`render_widgets.py` and `mobile_check.py` press buttons, and the shell hides
+every question but one. Make a copy with the shell `<script>` removed and run
+them on that.
 
 ## Still to do
 
