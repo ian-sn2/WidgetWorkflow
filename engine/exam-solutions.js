@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.21 =====
+/* ===== exam-solutions.js v0.22 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -165,13 +165,13 @@
     function render() {
       settle();
       picker.innerHTML = '';
-      picker.appendChild(stage('Semester', 'the term the paper was set in',
+      picker.appendChild(stage('Semester', '',
         terms.map(function (t) { return { value: t, label: termName(t), count: countFor(t, '', ''), current: t === state.term }; }),
         function (v) { state.term = v; state.exam = ''; state.topic = ''; state.topicChosen = false; state.idx = 0; render(); }));
       if (state.term) picker.appendChild(stage('Exam', '',
         examsFor(state.term).map(function (e) { return { value: e, label: examName(e), count: countFor(state.term, e, ''), current: e === state.exam }; }),
         function (v) { state.exam = v; state.topic = ''; state.topicChosen = false; state.idx = 0; render(); }));
-      if (state.term && state.exam) picker.appendChild(stage('Topic', 'in the order the course teaches them',
+      if (state.term && state.exam) picker.appendChild(stage('Topic', '',
         [{ value: '', label: 'All topics', count: countFor(state.term, state.exam, ''), current: !!state.topicChosen && !state.topic }].concat(
           topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t, count: countFor(state.term, state.exam, t), current: t === state.topic }; })),
         function (v) { state.topic = v; state.topicChosen = true; state.idx = 0; state.view = 'questions'; render(); window.scrollTo(0, 0); }));
