@@ -1834,6 +1834,10 @@ section.sol .sdg h4 { font-size:.95rem; padding-right:190px; }
 section.sol .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure,
 .sol-fs-panel .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure { max-width:var(--fig); }
 section.sol .sdg .sdg-lede { margin-bottom:6px; font-size:.86rem; }
+/* Back / Next step / Start over sit centred under the plot in a solution,
+   with the step counter beside them (Ian, 2026-11-04). */
+section.sol .sdg .sdg-ctrl, .sol-fs-panel .sdg .sdg-ctrl { justify-content:center; }
+section.sol .sdg .sdg-ctrl > *:last-child:not(button), .sol-fs-panel .sdg .sdg-ctrl > *:last-child:not(button) { margin-left:8px; }
 /* The size controls sit at the figure's top right: - / + and Fullscreen. */
 section.sol .sdg .sol-size { position:absolute; top:0; right:0; display:flex; gap:4px; }
 section.sol .sdg .sol-size button { display:inline-flex; align-items:center; justify-content:center; gap:5px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
