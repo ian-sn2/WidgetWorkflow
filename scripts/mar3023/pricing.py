@@ -18,7 +18,7 @@ def widget(cfg): return '<div class="sdg"><script type="application/json">' + js
 BREAKEVEN = {"title": "Breakeven Analysis", "lede": "Total revenue against total cost as quantity sold rises.",
     "axes": AX("\nQuantity sold", "Revenue\nand cost ($)"),
     "curves": [{"id": "tr", "label": "Total revenue", "pts": [[0, 0], [92, 92]], "color": "gold", "ldy": -10},
-               {"id": "tc", "label": "Total cost", "pts": [[0, 35], [84, 77]], "color": "ink", "lstart": True, "ldx": 60, "ldy": -44},
+               {"id": "tc", "label": "Total cost", "pts": [[0, 35], [84, 77]], "color": "ink", "ldx": 12, "ldy": -8},
                {"id": "pl", "label": "", "pts": [[78, 92.5], [81, 82.5]], "leader": True, "at": 2}],   # the hairline from the name to the wedge it names
     "points": [{"q": 70, "p": 70, "pl": "Breakeven\nprice", "ql": "Breakeven\nquantity", "label": "Breakeven\npoint", "dx": -72, "dy": -14, "at": 1},
                {"q": 0, "p": 35, "dot": True, "guides": False, "showQ": False, "pl": "Fixed\ncost", "at": 0}],
