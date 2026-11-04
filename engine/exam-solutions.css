@@ -96,7 +96,7 @@ section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
 /* A figure inside a solution is read beside its working, not as the page's
    centrepiece: no box of its own, a narrower plot, and a Fullscreen button
    that lifts it into an overlay (Ian, 2026-11-04). */
-section.sol .sdg { --fig:320px; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
+section.sol .sdg { --fig:400px; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
 section.sol .sdg h4 { font-size:.95rem; padding-right:330px; }
 /* The engine lets a plot with its working beside it grow past --fig; in a
    solution the size control decides, so the cap holds there too. */

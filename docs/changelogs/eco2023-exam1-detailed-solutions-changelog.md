@@ -143,7 +143,7 @@ through; the counts are in the build log and the tags are on each section.
   formulas in the four earlier papers' solutions. Its CDN is not reachable
   from the build container, so the rendering is unverified here.
 * **Solutions are set tighter than a chapter**: half the house margins, and
-  figures without their box at 320px inside a solution, with the step
+  figures without their box at 400px (the middle of five sizes) inside a solution, with the step
   controls docked as icons, − / + size steps and a Fullscreen overlay in one
   strip at the figure's top right (2026-11-04).
 

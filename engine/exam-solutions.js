@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.22 =====
+/* ===== exam-solutions.js v0.23 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -274,9 +274,10 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeFs(); });
     // A - / + pair steps the figure size (Ian, 2026-11-04); the choice is
     // kept in this browser and applies to every figure on the page.
-    // Small by default; a reader who wants more presses + (Ian, 2026-11-04).
+    // The middle of five sizes by default, two steps either way (Ian,
+    // 2026-11-04).
     var SIZES = [260, 320, 400, 520, 660], SIZE_KEY = 'sol-size';
-    var sizeIdx = 1;
+    var sizeIdx = 2;
     try { var sv = parseInt(localStorage.getItem(SIZE_KEY), 10); if (sv >= 0 && sv < SIZES.length) sizeIdx = sv; } catch (e) {}
     var allWidgets = [].slice.call(document.querySelectorAll('section.sol .sdg'));
     function applySize() {

@@ -1827,7 +1827,7 @@ section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
 /* A figure inside a solution is read beside its working, not as the page's
    centrepiece: no box of its own, a narrower plot, and a Fullscreen button
    that lifts it into an overlay (Ian, 2026-11-04). */
-section.sol .sdg { --fig:320px; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
+section.sol .sdg { --fig:400px; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
 section.sol .sdg h4 { font-size:.95rem; padding-right:330px; }
 /* The engine lets a plot with its working beside it grow past --fig; in a
    solution the size control decides, so the cap holds there too. */
@@ -1875,7 +1875,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.22 =====
+/* ===== exam-solutions.js v0.23 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -2151,9 +2151,10 @@ section.sol .sol-table table { margin:0; }
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeFs(); });
     // A - / + pair steps the figure size (Ian, 2026-11-04); the choice is
     // kept in this browser and applies to every figure on the page.
-    // Small by default; a reader who wants more presses + (Ian, 2026-11-04).
+    // The middle of five sizes by default, two steps either way (Ian,
+    // 2026-11-04).
     var SIZES = [260, 320, 400, 520, 660], SIZE_KEY = 'sol-size';
-    var sizeIdx = 1;
+    var sizeIdx = 2;
     try { var sv = parseInt(localStorage.getItem(SIZE_KEY), 10); if (sv >= 0 && sv < SIZES.length) sizeIdx = sv; } catch (e) {}
     var allWidgets = [].slice.call(document.querySelectorAll('section.sol .sdg'));
     function applySize() {

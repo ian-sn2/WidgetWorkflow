@@ -90,8 +90,8 @@ papers.
 item 10px to 20px of margin at 1.6 line height, which made a worked answer
 twice as tall as it needed to be; inside `.sol-answer` the shell's stylesheet
 halves that. **A figure in a solution has no box of its own** (Ian,
-2026-11-04): no border, no paper ground, a 320px plot by default (small, so
-the page stays short; a reader presses + for more), and one strip of
+2026-11-04): no border, no paper ground, a 400px plot by default, the middle of
+five sizes, and one strip of
 controls at its top right: the widget's own Back, Next step and Start over
 docked there as ‹ › ↻ icons with the step counter, then − and + stepping the
 plot through 260, 320, 400, 520 and 660px (remembered in the browser, for
