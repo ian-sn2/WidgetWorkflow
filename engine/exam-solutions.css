@@ -29,7 +29,7 @@
 /* The menu's greeting, and the bar at the top of the questions view. */
 .sol-shell .sol-hello { font-size:1.15rem; font-weight:600; color:var(--navy); margin:0 0 12px; line-height:1.4; }
 .sol-shell .sol-top { display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin:0 0 12px; padding:10px 14px; border:1px solid var(--rule); border-radius:12px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
-.sol-shell .sol-back { flex:0 0 auto; white-space:nowrap; border:1px solid var(--navy); background:var(--navy); color:#fff; padding:8px 14px; min-height:40px; border-radius:8px; font:inherit; font-size:.9rem; font-weight:700; cursor:pointer; }
+.sol-shell .sol-back { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; line-height:1; white-space:nowrap; border:1px solid var(--navy); background:var(--navy); color:#fff; padding:8px 14px; min-height:40px; border-radius:8px; font:inherit; font-size:.9rem; font-weight:700; cursor:pointer; }
 .sol-shell .sol-back:hover { background:#0b3a8a; }
 /* The status line and progress bar beside it. */
 .sol-shell .sol-status { flex:1 1 auto; min-width:0; }
@@ -39,7 +39,7 @@
 /* Previous and Next either side of the count. The first question keeps
    Previous's room but not the button, so the count does not jump. */
 .sol-shell .sol-pager { flex:0 0 auto; display:flex; align-items:center; gap:8px; margin-left:auto; }
-.sol-shell .sol-pager > button { flex:0 0 auto; white-space:nowrap; border:1px solid #002060; background:#fff; color:#002060; padding:6px 12px; min-height:36px; font:inherit; font-size:.88rem; font-weight:700; cursor:pointer; border-radius:6px; }
+.sol-shell .sol-pager > button { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; line-height:1; white-space:nowrap; border:1px solid #002060; background:#fff; color:#002060; padding:6px 12px; min-height:36px; font:inherit; font-size:.88rem; font-weight:700; cursor:pointer; border-radius:6px; }
 .sol-shell .sol-pager > button.is-off { visibility:hidden; }
 .sol-shell .sol-pager > button.sol-finish { background:#002060; color:#fff; }
 .sol-shell .sol-progress { height:6px; border-radius:3px; background:#e4e9f4; margin-top:6px; overflow:hidden; }
@@ -63,11 +63,12 @@ section.sol.sol-in { animation:sol-fade .22s ease-out; }
 /* The strip is the top bar's second row. */
 .sol-shell .sol-strip { display:flex; flex-wrap:wrap; gap:4px; flex-basis:100%; padding-top:8px; border-top:1px solid #e4e9f4; }
 .sol-shell .sol-strip:empty { display:none; }
-.sol-shell .sol-strip .sol-num { min-width:32px; min-height:32px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
+.sol-shell .sol-strip .sol-num { display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; line-height:1;
+  min-width:32px; height:32px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
   color:#002060; font:inherit; font-size:.82rem; font-weight:700; cursor:pointer; }
 .sol-shell .sol-strip .sol-num[aria-pressed="true"] { background:#002060; border-color:#002060; color:#fff; }
 @media (max-width:640px){
-  .sol-shell .sol-strip .sol-num { min-width:40px; min-height:40px; }
+  .sol-shell .sol-strip .sol-num { min-width:40px; height:40px; }
 }
 section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; display:flex; align-items:center; gap:8px; }
 /* The bookmark button is boxed exactly like a strip number: same border,
