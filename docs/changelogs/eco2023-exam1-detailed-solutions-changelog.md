@@ -181,3 +181,6 @@ results are in the commit message of the push that carried them.
 * **Fullscreen controls (shell v0.27).** In the overlay the step controls sat under
   the Close button. They now have a bar of their own across the top of the
   panel, centred, at tap size, with Close at the bar's right.
+* **Ends of the list (shell v0.28).** Previous is not drawn on the first question,
+  and on the last question Next becomes Finish, which returns to the menu where
+  the cards show what has been reviewed. The right-arrow key does the same.

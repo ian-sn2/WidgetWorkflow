@@ -1787,6 +1787,8 @@ section.sol.sol-in { animation:sol-fade .22s ease-out; }
 .sol-shell .sol-nav { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0 20px; }
 .sol-shell .sol-nav > button { flex:0 0 auto; white-space:nowrap; border:1px solid #002060; background:#fff; color:#002060; padding:8px 16px; min-height:44px; font:inherit; font-size:.95rem; font-weight:700; cursor:pointer; border-radius:6px; }
 .sol-shell .sol-nav > button:disabled { opacity:.35; cursor:default; }
+.sol-shell .sol-nav > button[hidden] { display:none; }
+.sol-shell .sol-nav > button.sol-finish { background:#002060; color:#fff; }
 .sol-shell .sol-strip { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; flex:1 1 auto; }
 .sol-shell .sol-strip .sol-num { min-width:34px; min-height:34px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
   color:#002060; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
@@ -1894,7 +1896,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.27 =====
+/* ===== exam-solutions.js v0.28 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -2022,7 +2024,8 @@ section.sol .sol-table table { margin:0; }
     mount.appendChild(menu);
     var top = document.createElement('div'); top.className = 'sol-top';
     var back = document.createElement('button'); back.type = 'button'; back.className = 'sol-back'; back.textContent = '\u2039 Back to menu';
-    back.addEventListener('click', function () { state.view = 'menu'; state.term = ''; state.exam = ''; state.topic = ''; state.topicChosen = false; state.idx = 0; render(); });
+    function toMenu() { state.view = 'menu'; state.term = ''; state.exam = ''; state.topic = ''; state.topicChosen = false; state.idx = 0; render(); window.scrollTo(0, 0); }
+    back.addEventListener('click', toMenu);
     var status = document.createElement('div'); status.className = 'sol-status';
     var statusText = document.createElement('div'); statusText.className = 'sol-status-text';
     var progress = document.createElement('div'); progress.className = 'sol-progress';
@@ -2075,11 +2078,17 @@ section.sol .sol-table table { margin:0; }
     var strip = document.createElement('div'); strip.className = 'sol-strip';
     var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
     bar.appendChild(prev); bar.appendChild(strip); bar.appendChild(next);
+    // On the first question Previous has nothing to go to and is not drawn;
+    // on the last, Next becomes Finish and returns to the menu, where the
+    // cards show what has been reviewed (Ian, 2026-11-04).
+    var lastIdx = 0;
+    function forward() { if (state.idx >= lastIdx) toMenu(); else { state.idx++; render(); } }
     prev.addEventListener('click', function () { if (state.idx > 0) { state.idx--; render(); } });
-    next.addEventListener('click', function () { state.idx++; render(); });
+    next.addEventListener('click', forward);
     document.addEventListener('keydown', function (e) {
       if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
-      if (e.key === 'ArrowRight') { state.idx++; render(); }
+      if (state.view !== 'questions') return;
+      if (e.key === 'ArrowRight') forward();
       if (e.key === 'ArrowLeft' && state.idx > 0) { state.idx--; render(); }
     });
 
@@ -2138,7 +2147,11 @@ section.sol .sol-table table { margin:0; }
         btn.addEventListener('click', function () { state.idx = i; render(); });
         strip.appendChild(btn);
       });
-      prev.disabled = state.idx <= 0; next.disabled = state.idx >= list.length - 1;
+      lastIdx = list.length - 1;
+      prev.hidden = state.idx <= 0;
+      var atEnd = state.idx >= lastIdx;
+      next.textContent = atEnd ? 'Finish \u2713' : 'Next \u203a';
+      next.classList.toggle('sol-finish', atEnd);
 
       var hash = inMenu ? '#' : '#' + state.term + '/' + state.exam + '/' + encodeURIComponent(state.topic || '') + '/' + (state.idx + 1);
       if (location.hash !== hash && history.replaceState) history.replaceState(null, '', hash);

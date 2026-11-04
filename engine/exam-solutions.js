@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.27 =====
+/* ===== exam-solutions.js v0.28 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -126,7 +126,8 @@
     mount.appendChild(menu);
     var top = document.createElement('div'); top.className = 'sol-top';
     var back = document.createElement('button'); back.type = 'button'; back.className = 'sol-back'; back.textContent = '\u2039 Back to menu';
-    back.addEventListener('click', function () { state.view = 'menu'; state.term = ''; state.exam = ''; state.topic = ''; state.topicChosen = false; state.idx = 0; render(); });
+    function toMenu() { state.view = 'menu'; state.term = ''; state.exam = ''; state.topic = ''; state.topicChosen = false; state.idx = 0; render(); window.scrollTo(0, 0); }
+    back.addEventListener('click', toMenu);
     var status = document.createElement('div'); status.className = 'sol-status';
     var statusText = document.createElement('div'); statusText.className = 'sol-status-text';
     var progress = document.createElement('div'); progress.className = 'sol-progress';
@@ -179,11 +180,17 @@
     var strip = document.createElement('div'); strip.className = 'sol-strip';
     var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
     bar.appendChild(prev); bar.appendChild(strip); bar.appendChild(next);
+    // On the first question Previous has nothing to go to and is not drawn;
+    // on the last, Next becomes Finish and returns to the menu, where the
+    // cards show what has been reviewed (Ian, 2026-11-04).
+    var lastIdx = 0;
+    function forward() { if (state.idx >= lastIdx) toMenu(); else { state.idx++; render(); } }
     prev.addEventListener('click', function () { if (state.idx > 0) { state.idx--; render(); } });
-    next.addEventListener('click', function () { state.idx++; render(); });
+    next.addEventListener('click', forward);
     document.addEventListener('keydown', function (e) {
       if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
-      if (e.key === 'ArrowRight') { state.idx++; render(); }
+      if (state.view !== 'questions') return;
+      if (e.key === 'ArrowRight') forward();
       if (e.key === 'ArrowLeft' && state.idx > 0) { state.idx--; render(); }
     });
 
@@ -242,7 +249,11 @@
         btn.addEventListener('click', function () { state.idx = i; render(); });
         strip.appendChild(btn);
       });
-      prev.disabled = state.idx <= 0; next.disabled = state.idx >= list.length - 1;
+      lastIdx = list.length - 1;
+      prev.hidden = state.idx <= 0;
+      var atEnd = state.idx >= lastIdx;
+      next.textContent = atEnd ? 'Finish \u2713' : 'Next \u203a';
+      next.classList.toggle('sol-finish', atEnd);
 
       var hash = inMenu ? '#' : '#' + state.term + '/' + state.exam + '/' + encodeURIComponent(state.topic || '') + '/' + (state.idx + 1);
       if (location.hash !== hash && history.replaceState) history.replaceState(null, '', hash);
