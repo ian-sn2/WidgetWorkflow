@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.17 =====
+/* ===== exam-solutions.js v0.19 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -246,6 +246,62 @@
 
     // No quiz: this is a list of worked solutions, the right choice marked
     // and the solution in the open (Ian's manager, 2026-11-02).
+
+    // Widgets inside a solution are drawn small and without their box, to
+    // save vertical space, and each carries a Fullscreen button that lifts
+    // it into an overlay at full size (Ian, 2026-11-04). The widget's own
+    // node is moved, so its step and scenario state come with it.
+    var fsOverlay = null, fsHome = null, fsWidget = null;
+    function closeFs() {
+      if (!fsOverlay) return;
+      fsHome.parentNode.insertBefore(fsWidget, fsHome); fsHome.remove();
+      fsOverlay.remove(); fsOverlay = fsHome = fsWidget = null;
+      document.body.classList.remove('sol-fs-open');
+    }
+    function openFs(w) {
+      closeFs();
+      fsWidget = w; fsHome = document.createElement('div'); fsHome.className = 'sol-fs-home';
+      w.parentNode.insertBefore(fsHome, w);
+      fsOverlay = document.createElement('div'); fsOverlay.className = 'sol-fs';
+      var panel = document.createElement('div'); panel.className = 'sol-fs-panel';
+      var close = document.createElement('button'); close.type = 'button'; close.className = 'sol-fs-close'; close.textContent = '\u2715 Close';
+      close.addEventListener('click', closeFs);
+      panel.appendChild(close); panel.appendChild(w); fsOverlay.appendChild(panel);
+      fsOverlay.addEventListener('click', function (e) { if (e.target === fsOverlay) closeFs(); });
+      document.body.appendChild(fsOverlay); document.body.classList.add('sol-fs-open');
+      close.focus();
+    }
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeFs(); });
+    // A - / + pair steps the figure size (Ian, 2026-11-04); the choice is
+    // kept in this browser and applies to every figure on the page.
+    var SIZES = [300, 400, 520, 660], SIZE_KEY = 'sol-size';
+    var sizeIdx = 1;
+    try { var sv = parseInt(localStorage.getItem(SIZE_KEY), 10); if (sv >= 0 && sv < SIZES.length) sizeIdx = sv; } catch (e) {}
+    var allWidgets = [].slice.call(document.querySelectorAll('section.sol .sdg'));
+    function applySize() {
+      allWidgets.forEach(function (w) {
+        w.style.setProperty('--fig', SIZES[sizeIdx] + 'px');
+        var ctl = w.querySelector('.sol-size');
+        if (ctl) { ctl.querySelector('.sol-minus').disabled = sizeIdx === 0; ctl.querySelector('.sol-plus').disabled = sizeIdx === SIZES.length - 1; }
+      });
+      try { localStorage.setItem(SIZE_KEY, String(sizeIdx)); } catch (e) {}
+    }
+    function stepSize(d) { sizeIdx = Math.max(0, Math.min(SIZES.length - 1, sizeIdx + d)); applySize(); }
+    allWidgets.forEach(function (w) {
+      var ctl = document.createElement('div'); ctl.className = 'sol-size';
+      var minus = document.createElement('button'); minus.type = 'button'; minus.className = 'sol-minus'; minus.textContent = '\u2212'; minus.title = 'Smaller'; minus.setAttribute('aria-label', 'Smaller figure');
+      var plus = document.createElement('button'); plus.type = 'button'; plus.className = 'sol-plus'; plus.textContent = '+'; plus.title = 'Larger'; plus.setAttribute('aria-label', 'Larger figure');
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-fs-btn';
+      btn.innerHTML = '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg> Fullscreen';
+      minus.addEventListener('click', function () { stepSize(-1); });
+      plus.addEventListener('click', function () { stepSize(1); });
+      btn.addEventListener('click', function () { openFs(w); });
+      ctl.appendChild(minus); ctl.appendChild(plus); ctl.appendChild(btn);
+      w.insertBefore(ctl, w.firstChild);
+    });
+    applySize();
+    // leaving the question closes an overlay with it
+    prev.addEventListener('click', closeFs); next.addEventListener('click', closeFs); back.addEventListener('click', closeFs);
     window.addEventListener('hashchange', function () { fromHash(); });
   });
 })();

@@ -94,9 +94,31 @@ section.sol .sol-answer li p { margin:3px 0; }
 section.sol .sol-answer ul[style*="center"] { padding-left:0; }
 section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
 /* A figure inside a solution is read beside its working, not as the page's
-   centrepiece: narrower plot, full width, less padding. */
-section.sol .sdg { --fig:440px; width:100%; margin:10px auto; padding:12px 14px 10px; }
-section.sol .sdg .sdg-lede { margin-bottom:8px; }
+   centrepiece: no box of its own, a narrower plot, and a Fullscreen button
+   that lifts it into an overlay (Ian, 2026-11-04). */
+section.sol .sdg { --fig:400px; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
+section.sol .sdg h4 { font-size:.95rem; padding-right:190px; }
+/* The engine lets a plot with its working beside it grow past --fig; in a
+   solution the size control decides, so the cap holds there too. */
+section.sol .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure,
+.sol-fs-panel .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure { max-width:var(--fig); }
+section.sol .sdg .sdg-lede { margin-bottom:6px; font-size:.86rem; }
+/* The size controls sit at the figure's top right: - / + and Fullscreen. */
+section.sol .sdg .sol-size { position:absolute; top:0; right:0; display:flex; gap:4px; }
+section.sol .sdg .sol-size button { display:inline-flex; align-items:center; justify-content:center; gap:5px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
+  color:#002060; font:inherit; font-size:.78rem; font-weight:700; padding:4px 9px; min-width:28px; min-height:28px; cursor:pointer; line-height:1; }
+section.sol .sdg .sol-size button:hover { border-color:#002060; }
+section.sol .sdg .sol-size button:disabled { opacity:.35; cursor:default; }
+section.sol .sdg .sol-minus, section.sol .sdg .sol-plus { font-size:1rem; }
+/* The overlay: the widget at full size on a white panel over a dimmed page. */
+body.sol-fs-open { overflow:hidden; }
+.sol-fs { position:fixed; inset:0; z-index:9000; background:rgba(10,20,50,0.55); display:flex; align-items:center; justify-content:center; padding:16px; }
+.sol-fs-panel { position:relative; background:#fff; border-radius:14px; padding:44px 20px 16px; width:min(100%, 960px); max-height:100%; overflow:auto; box-shadow:0 12px 40px rgba(0,0,0,0.35); }
+.sol-fs-panel .sdg { --fig:760px !important; width:100%; margin:0; padding:0; border:0; background:transparent; }
+.sol-fs-panel .sdg .sol-size { display:none; }
+.sol-fs-panel .sdg h4 { padding-right:0; font-size:1.05rem; }
+.sol-fs-close { position:absolute; top:10px; right:12px; border:1px solid #002060; background:#002060; color:#fff; border-radius:8px; padding:7px 12px; min-height:36px; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
+@media (max-width:640px){ .sol-fs { padding:8px; } .sol-fs-panel { padding:44px 10px 12px; } section.sol .sdg h4 { padding-right:0; margin-top:34px; } }
 section.sol .sol-table { overflow-x:auto; margin:8px 0; }
 section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }

@@ -143,7 +143,8 @@ through; the counts are in the build log and the tags are on each section.
   formulas in the four earlier papers' solutions. Its CDN is not reachable
   from the build container, so the rendering is unverified here.
 * **Solutions are set tighter than a chapter**: half the house margins, and
-  figures at 440px inside a solution.
+  figures without their box at 400px inside a solution, with − / + size
+  steps and a Fullscreen overlay at the figure's top right (2026-11-04).
 
 * **Title** is "ECO2023 Exam 1 Detailed Solutions"; the file Ian sent was
   titled "ECO2023 Summer 2023 Exam 1 Solutions", which named one of its five

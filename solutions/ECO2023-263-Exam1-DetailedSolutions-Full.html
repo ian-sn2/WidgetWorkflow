@@ -1825,15 +1825,37 @@ section.sol .sol-answer li p { margin:3px 0; }
 section.sol .sol-answer ul[style*="center"] { padding-left:0; }
 section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
 /* A figure inside a solution is read beside its working, not as the page's
-   centrepiece: narrower plot, full width, less padding. */
-section.sol .sdg { --fig:440px; width:100%; margin:10px auto; padding:12px 14px 10px; }
-section.sol .sdg .sdg-lede { margin-bottom:8px; }
+   centrepiece: no box of its own, a narrower plot, and a Fullscreen button
+   that lifts it into an overlay (Ian, 2026-11-04). */
+section.sol .sdg { --fig:400px; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
+section.sol .sdg h4 { font-size:.95rem; padding-right:190px; }
+/* The engine lets a plot with its working beside it grow past --fig; in a
+   solution the size control decides, so the cap holds there too. */
+section.sol .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure,
+.sol-fs-panel .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure { max-width:var(--fig); }
+section.sol .sdg .sdg-lede { margin-bottom:6px; font-size:.86rem; }
+/* The size controls sit at the figure's top right: - / + and Fullscreen. */
+section.sol .sdg .sol-size { position:absolute; top:0; right:0; display:flex; gap:4px; }
+section.sol .sdg .sol-size button { display:inline-flex; align-items:center; justify-content:center; gap:5px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
+  color:#002060; font:inherit; font-size:.78rem; font-weight:700; padding:4px 9px; min-width:28px; min-height:28px; cursor:pointer; line-height:1; }
+section.sol .sdg .sol-size button:hover { border-color:#002060; }
+section.sol .sdg .sol-size button:disabled { opacity:.35; cursor:default; }
+section.sol .sdg .sol-minus, section.sol .sdg .sol-plus { font-size:1rem; }
+/* The overlay: the widget at full size on a white panel over a dimmed page. */
+body.sol-fs-open { overflow:hidden; }
+.sol-fs { position:fixed; inset:0; z-index:9000; background:rgba(10,20,50,0.55); display:flex; align-items:center; justify-content:center; padding:16px; }
+.sol-fs-panel { position:relative; background:#fff; border-radius:14px; padding:44px 20px 16px; width:min(100%, 960px); max-height:100%; overflow:auto; box-shadow:0 12px 40px rgba(0,0,0,0.35); }
+.sol-fs-panel .sdg { --fig:760px !important; width:100%; margin:0; padding:0; border:0; background:transparent; }
+.sol-fs-panel .sdg .sol-size { display:none; }
+.sol-fs-panel .sdg h4 { padding-right:0; font-size:1.05rem; }
+.sol-fs-close { position:absolute; top:10px; right:12px; border:1px solid #002060; background:#002060; color:#fff; border-radius:8px; padding:7px 12px; min-height:36px; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
+@media (max-width:640px){ .sol-fs { padding:8px; } .sol-fs-panel { padding:44px 10px 12px; } section.sol .sdg h4 { padding-right:0; margin-top:34px; } }
 section.sol .sol-table { overflow-x:auto; margin:8px 0; }
 section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.17 =====
+/* ===== exam-solutions.js v0.19 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -2081,6 +2103,62 @@ section.sol .sol-table table { margin:0; }
 
     // No quiz: this is a list of worked solutions, the right choice marked
     // and the solution in the open (Ian's manager, 2026-11-02).
+
+    // Widgets inside a solution are drawn small and without their box, to
+    // save vertical space, and each carries a Fullscreen button that lifts
+    // it into an overlay at full size (Ian, 2026-11-04). The widget's own
+    // node is moved, so its step and scenario state come with it.
+    var fsOverlay = null, fsHome = null, fsWidget = null;
+    function closeFs() {
+      if (!fsOverlay) return;
+      fsHome.parentNode.insertBefore(fsWidget, fsHome); fsHome.remove();
+      fsOverlay.remove(); fsOverlay = fsHome = fsWidget = null;
+      document.body.classList.remove('sol-fs-open');
+    }
+    function openFs(w) {
+      closeFs();
+      fsWidget = w; fsHome = document.createElement('div'); fsHome.className = 'sol-fs-home';
+      w.parentNode.insertBefore(fsHome, w);
+      fsOverlay = document.createElement('div'); fsOverlay.className = 'sol-fs';
+      var panel = document.createElement('div'); panel.className = 'sol-fs-panel';
+      var close = document.createElement('button'); close.type = 'button'; close.className = 'sol-fs-close'; close.textContent = '\u2715 Close';
+      close.addEventListener('click', closeFs);
+      panel.appendChild(close); panel.appendChild(w); fsOverlay.appendChild(panel);
+      fsOverlay.addEventListener('click', function (e) { if (e.target === fsOverlay) closeFs(); });
+      document.body.appendChild(fsOverlay); document.body.classList.add('sol-fs-open');
+      close.focus();
+    }
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeFs(); });
+    // A - / + pair steps the figure size (Ian, 2026-11-04); the choice is
+    // kept in this browser and applies to every figure on the page.
+    var SIZES = [300, 400, 520, 660], SIZE_KEY = 'sol-size';
+    var sizeIdx = 1;
+    try { var sv = parseInt(localStorage.getItem(SIZE_KEY), 10); if (sv >= 0 && sv < SIZES.length) sizeIdx = sv; } catch (e) {}
+    var allWidgets = [].slice.call(document.querySelectorAll('section.sol .sdg'));
+    function applySize() {
+      allWidgets.forEach(function (w) {
+        w.style.setProperty('--fig', SIZES[sizeIdx] + 'px');
+        var ctl = w.querySelector('.sol-size');
+        if (ctl) { ctl.querySelector('.sol-minus').disabled = sizeIdx === 0; ctl.querySelector('.sol-plus').disabled = sizeIdx === SIZES.length - 1; }
+      });
+      try { localStorage.setItem(SIZE_KEY, String(sizeIdx)); } catch (e) {}
+    }
+    function stepSize(d) { sizeIdx = Math.max(0, Math.min(SIZES.length - 1, sizeIdx + d)); applySize(); }
+    allWidgets.forEach(function (w) {
+      var ctl = document.createElement('div'); ctl.className = 'sol-size';
+      var minus = document.createElement('button'); minus.type = 'button'; minus.className = 'sol-minus'; minus.textContent = '\u2212'; minus.title = 'Smaller'; minus.setAttribute('aria-label', 'Smaller figure');
+      var plus = document.createElement('button'); plus.type = 'button'; plus.className = 'sol-plus'; plus.textContent = '+'; plus.title = 'Larger'; plus.setAttribute('aria-label', 'Larger figure');
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-fs-btn';
+      btn.innerHTML = '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg> Fullscreen';
+      minus.addEventListener('click', function () { stepSize(-1); });
+      plus.addEventListener('click', function () { stepSize(1); });
+      btn.addEventListener('click', function () { openFs(w); });
+      ctl.appendChild(minus); ctl.appendChild(plus); ctl.appendChild(btn);
+      w.insertBefore(ctl, w.firstChild);
+    });
+    applySize();
+    // leaving the question closes an overlay with it
+    prev.addEventListener('click', closeFs); next.addEventListener('click', closeFs); back.addEventListener('click', closeFs);
     window.addEventListener('hashchange', function () { fromHash(); });
   });
 })();
