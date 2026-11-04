@@ -152,13 +152,19 @@ SALES = {"title": "The Sales Response Function", "axes": AX("Annual marketing ef
     "curves": [{"id": "s", "label": "", "pts": SR, "curved": True, "color": "gold"}],
     "caption": cap("Sales respond slowly to the first marketing dollars, rise fastest in the middle range, and flatten once the market is saturated.")}
 def modern_head(t):
-    t = re.sub(r'<link rel="stylesheet" href="https://smokinnotes\.s3\.us-east-1\.amazonaws\.com/content/sn25-v5\.css">', '<link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v6.css">', t, 1)
+    # the current house head: the Red Hat Display font links, then the v6 stylesheet (the file had neither, so its text set in a fallback font)
+    t = re.sub(r'<link rel="stylesheet" href="https://smokinnotes\.s3\.us-east-1\.amazonaws\.com/content/sn25-v5\.css">',
+               '<link rel="preconnect" href="https://fonts.googleapis.com">\n    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n    <link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v6.css">', t, 1)
     t = re.sub(r'<script src="https://smokinnotes\.s3\.us-east-1\.amazonaws\.com/content/sn25-v5\.js"></script>', '<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>', t, 1)
     assert "sn25-v6.css" in t and "studyguide/sn25-v2.js" in t, "head"
     return t
 def chapter2(src, outA, outB):
     t = modern_head(open(src, encoding="utf-8").read())
     t = sub1(t, "Dr. Cooke noted that Google restructured under Alphabet", "Google restructured under Alphabet", "cooke ch2")
+    # the opening paragraph goes under the table of contents and above the first heading, never in the contents
+    t = sub1(t, "<p>We have finished our discussion of the 4 P's of the marketing mix,", '<p id="intro-note"><i>We have finished our discussion of the 4 P\'s of the marketing mix,', "ch2 blurb")
+    i = t.index('<p id="intro-note">'); j = t.index("</p>", i); t = t[:j] + "</i></p>" + t[j + 4:]
+    t = sub1(t, "</head>", "<script>document.addEventListener('DOMContentLoaded', function () { var b = document.getElementById('intro-note'), t = document.querySelector('details.toc-box'); if (b && t) b.parentNode.insertBefore(t, b); });</script>\n</head>", "ch2 blurb script")
     open(outA, "w", encoding="utf-8").write(t)   # version A: as it is, images kept
     b = replace_img(t, "02-experience-curve.png", widget(EXPERIENCE))
     b = replace_img(b, "03-sales-response-curve.png", widget(SALES))
