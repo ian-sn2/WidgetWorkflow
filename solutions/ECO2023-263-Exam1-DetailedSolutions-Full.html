@@ -1864,28 +1864,37 @@ section.sol .sdg .sol-tools .sdg-step, .sol-fs-panel .sdg .sol-tools .sdg-step {
    own cap (one figure at --fig) never reached. */
 section.sol .sdg .sdg-body.two { max-width:min(100%, calc(var(--fig) * 1.5)); margin:0 auto; }
 .sol-fs-panel .sdg .sdg-body.two { max-width:100%; margin:0 auto; }
-/* The overlay: the widget at full size on a white panel over a dimmed page. */
+/* The overlay: the widget at full size on a white panel over a dimmed page.
+   Its controls get a bar of their own across the top -- in the flow, centred,
+   at a tap size -- with Close at the bar's right; floated at the figure's
+   corner they sat half under the Close button (Ian, 2026-11-04). */
 body.sol-fs-open { overflow:hidden; }
 .sol-fs { position:fixed; inset:0; z-index:9000; background:rgba(10,20,50,0.55); display:flex; align-items:center; justify-content:center; padding:16px; }
-.sol-fs-panel { position:relative; background:#fff; border-radius:14px; padding:44px 20px 16px; width:min(100%, 960px); max-height:100%; overflow:auto; box-shadow:0 12px 40px rgba(0,0,0,0.35); }
+.sol-fs-panel { position:relative; background:#fff; border-radius:14px; padding:12px 20px 16px; width:min(100%, 960px); max-height:100%; overflow:auto; box-shadow:0 12px 40px rgba(0,0,0,0.35); }
 .sol-fs-panel .sdg { --fig:760px !important; width:100%; margin:0; padding:0; border:0; background:transparent; }
 .sol-fs-panel .sdg .sol-size { display:none; }
-.sol-fs-panel .sdg h4 { padding-right:170px; }
-.sol-fs-panel .sdg h4 { padding-right:0; font-size:1.05rem; }
-.sol-fs-close { position:absolute; top:10px; right:12px; border:1px solid #002060; background:#002060; color:#fff; border-radius:8px; padding:7px 12px; min-height:36px; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
+.sol-fs-panel .sdg h4 { padding-right:0; font-size:1.05rem; margin-top:0; }
+.sol-fs-panel .sdg .sol-tools { position:static; justify-content:center; gap:8px; padding:0 96px 10px; margin:0 0 10px; border-bottom:1px solid #e3e8f1; min-height:44px; }
+.sol-fs-panel .sdg .sol-tools .sdg-ctrl { gap:8px; }
+.sol-fs-panel .sdg .sol-tools .sdg-ctrl button { width:44px; min-height:40px; border-radius:8px; }
+.sol-fs-panel .sdg .sol-tools .sdg-ctrl button::before { font-size:1.4rem; }
+.sol-fs-panel .sdg .sol-tools .sdg-ctrl button:nth-of-type(3)::before { font-size:1.25rem; }
+.sol-fs-panel .sdg .sol-tools .sdg-step { font-size:.9rem; margin:0 6px; }
+.sol-fs-close { position:absolute; top:12px; right:16px; border:1px solid #002060; background:#002060; color:#fff; border-radius:8px; padding:7px 12px; min-height:40px; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
 /* On a phone the strip sits in the flow above the title, wrapping as it
    needs to, rather than floating over it. */
 @media (max-width:640px){
-  .sol-fs { padding:8px; } .sol-fs-panel { padding:44px 10px 12px; }
+  .sol-fs { padding:8px; } .sol-fs-panel { padding:10px 10px 12px; }
   section.sol .sdg h4, .sol-fs-panel .sdg h4 { padding-right:0; margin-top:0; }
   section.sol .sdg .sol-tools, .sol-fs-panel .sdg .sol-tools { position:static; flex-wrap:wrap; gap:6px; margin:0 0 8px; }
+  .sol-fs-panel .sdg .sol-tools { justify-content:flex-start; padding:0 90px 8px 0; }
 }
 section.sol .sol-table { overflow-x:auto; margin:8px 0; }
 section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.26 =====
+/* ===== exam-solutions.js v0.27 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house

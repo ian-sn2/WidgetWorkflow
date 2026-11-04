@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.26 =====
+/* ===== exam-solutions.js v0.27 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house

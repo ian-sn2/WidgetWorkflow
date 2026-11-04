@@ -178,3 +178,6 @@ Browser checks ran on a copy with the shell script removed and every
 `<details>` open: `render_widgets.py` over all 120 widgets, `mobile_check.py`
 at 390px and at 320 × 568, and the picker and quiz driven in Chromium; the
 results are in the commit message of the push that carried them.
+* **Fullscreen controls (shell v0.27).** In the overlay the step controls sat under
+  the Close button. They now have a bar of their own across the top of the
+  panel, centred, at tap size, with Close at the bar's right.
