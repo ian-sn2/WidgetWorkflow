@@ -46,14 +46,19 @@ The body is:
 The shell reads `data-term`, `data-exam` and `data-topic` off the sections and
 opens on a **menu**: a greeting and a panel of buttons, three rows of cards,
 **Semester, then Exam, then Topic** (Ian, 2026-11-04: a home screen that goes
-away once chosen, to save vertical space). Nothing is lit until it is
-clicked: the exam row appears once a semester is chosen and the topic row
-once an exam is. Each
+away once chosen, to save vertical space). All three rows show at once and
+nothing is lit until it is clicked; the questions open once a semester, an
+exam and a topic have all been chosen, in any order, and Back to menu clears
+the selection. Each
 card naming its choice and how many questions it holds, the chosen one
 filled navy; a later row lists only what the earlier choices allow. Topics
 run in Ian's order (The PPF first, then Supply and Demand, Elasticity,
-Efficiency and Equity, Government Intervention, International Trade). Picking
-a topic card opens the **questions view**: the menu is gone and a bar at the
+Efficiency and Equity, Government Intervention, International Trade). Each card also shows how much of it
+has been reviewed, as a percentage and a thin green bar, with a green edge
+once every question in it has been opened; a question counts as reviewed
+once it has been shown, remembered in the browser's localStorage, and its
+number in the strip takes a pale green ground. Completing the three choices
+opens the **questions view**: the menu is gone and a bar at the
 top carries a "Back to menu" button, a status line naming the selection, and
 a progress bar. A link with a selection in its hash opens on the questions.
 

@@ -127,9 +127,11 @@ through; the counts are in the build log and the tags are on each section.
   panel of cards, Semester, then Exam, then Topic, each card with its
   question count, the topics in Ian's order with The PPF first (his list did
   not name it; it is the course's first chapter, so it leads -- his call if it
-  should go elsewhere). Nothing is pre-selected: the exam row appears once a
-  semester is clicked and the topic row once an exam is. Picking a topic
-  replaces the menu with the questions,
+  should go elsewhere). All three rows show at once, nothing pre-selected;
+  the questions open once all three are chosen, in any order, and Back to
+  menu clears the choices. Each card shows the share of its questions that
+  have been reviewed (opened), remembered in the browser. Completing the
+  choices replaces the menu with the questions,
   under a bar carrying "Back to menu", the selection and a progress bar; the
   question fades in when it changes. The greeting says "practice", as Ian
   wrote it; the heading says Detailed Solutions, as his manager asked.

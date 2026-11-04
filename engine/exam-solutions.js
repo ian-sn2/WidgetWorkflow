@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.25 =====
+/* ===== exam-solutions.js v0.26 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -70,6 +70,19 @@
       q.insertBefore(btn, q.firstChild);
     });
 
+    // Questions a reader has opened are remembered in this browser, so the
+    // menu can say how much of a semester or topic has been reviewed (Ian,
+    // 2026-11-04). A question counts as reviewed once it has been shown.
+    var SEEN_KEY = 'sol-seen:' + location.pathname;
+    var seen = {};
+    try { seen = JSON.parse(localStorage.getItem(SEEN_KEY) || '{}') || {}; } catch (e) { seen = {}; }
+    function saveSeen() { try { localStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch (e) {} }
+    function seenCount(term, exam, topic) {
+      return secs.filter(function (s) {
+        return (!term || s.dataset.term === term) && (!exam || s.dataset.exam === exam) && (!topic || s.dataset.topic === topic) && seen[s.id];
+      }).length;
+    }
+
     var terms = uniq(secs.map(function (s) { return s.dataset.term; }))
       .sort(function (a, b) { return b.localeCompare(a); });            // newest first
     // Nothing is chosen until it is clicked (Ian, 2026-11-04): the menu
@@ -113,7 +126,7 @@
     mount.appendChild(menu);
     var top = document.createElement('div'); top.className = 'sol-top';
     var back = document.createElement('button'); back.type = 'button'; back.className = 'sol-back'; back.textContent = '\u2039 Back to menu';
-    back.addEventListener('click', function () { state.view = 'menu'; render(); });
+    back.addEventListener('click', function () { state.view = 'menu'; state.term = ''; state.exam = ''; state.topic = ''; state.topicChosen = false; state.idx = 0; render(); });
     var status = document.createElement('div'); status.className = 'sol-status';
     var statusText = document.createElement('div'); statusText.className = 'sol-status-text';
     var progress = document.createElement('div'); progress.className = 'sol-progress';
@@ -124,8 +137,16 @@
 
     function countFor(term, exam, topic) {
       return secs.filter(function (s) {
-        return s.dataset.term === term && (!exam || s.dataset.exam === exam) && (!topic || s.dataset.topic === topic);
+        return (!term || s.dataset.term === term) && (!exam || s.dataset.exam === exam) && (!topic || s.dataset.topic === topic);
       }).length;
+    }
+    function allExams() {
+      return uniq(secs.map(function (s) { return s.dataset.exam; })).sort(function (a, b) { return examOrder(a) - examOrder(b); });
+    }
+    function allTopics(term, exam) {
+      return uniq(secs.filter(function (s) { return (!term || s.dataset.term === term) && (!exam || s.dataset.exam === exam); })
+                      .map(function (s) { return s.dataset.topic; }))
+        .sort(function (a, b) { return (topicRank(a) - topicRank(b)) || a.localeCompare(b); });
     }
     function stage(name, hint, items, pick) {
       var d = document.createElement('div'); d.className = 'sol-stage';
@@ -136,8 +157,12 @@
       items.forEach(function (it) {
         var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-card';
         btn.setAttribute('aria-pressed', it.current ? 'true' : 'false');
+        var pct = it.count ? Math.round(100 * (it.seen || 0) / it.count) : 0;
         btn.innerHTML = '<span class="sol-card-l">' + it.label + '</span>' +
-          (it.count != null ? '<span class="sol-card-n">' + it.count + ' question' + (it.count === 1 ? '' : 's') + '</span>' : '');
+          (it.count != null ? '<span class="sol-card-n">' + it.count + ' question' + (it.count === 1 ? '' : 's') +
+            (it.seen ? ' \u00b7 ' + pct + '% reviewed' : '') + '</span>' +
+            '<span class="sol-card-bar"><span style="width:' + pct + '%"></span></span>' : '');
+        if (it.seen && it.seen === it.count) btn.classList.add('is-done');
         btn.addEventListener('click', function () { pick(it.value); });
         row.appendChild(btn);
       });
@@ -162,19 +187,27 @@
       if (e.key === 'ArrowLeft' && state.idx > 0) { state.idx--; render(); }
     });
 
+    // The questions open once a semester, an exam and a topic are all chosen,
+    // in whatever order; a choice that leaves one missing just lights up.
+    function maybeStart() {
+      if (state.term && state.exam && state.topicChosen) { state.view = 'questions'; render(); window.scrollTo(0, 0); }
+      else render();
+    }
+
     function render() {
       settle();
       picker.innerHTML = '';
+      var T = state.term, E = state.exam;
       picker.appendChild(stage('Semester', '',
-        terms.map(function (t) { return { value: t, label: termName(t), count: countFor(t, '', ''), current: t === state.term }; }),
-        function (v) { state.term = v; state.exam = ''; state.topic = ''; state.topicChosen = false; state.idx = 0; render(); }));
-      if (state.term) picker.appendChild(stage('Exam', '',
-        examsFor(state.term).map(function (e) { return { value: e, label: examName(e), count: countFor(state.term, e, ''), current: e === state.exam }; }),
-        function (v) { state.exam = v; state.topic = ''; state.topicChosen = false; state.idx = 0; render(); }));
-      if (state.term && state.exam) picker.appendChild(stage('Topic', '',
-        [{ value: '', label: 'All topics', count: countFor(state.term, state.exam, ''), current: !!state.topicChosen && !state.topic }].concat(
-          topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t, count: countFor(state.term, state.exam, t), current: t === state.topic }; })),
-        function (v) { state.topic = v; state.topicChosen = true; state.idx = 0; state.view = 'questions'; render(); window.scrollTo(0, 0); }));
+        terms.map(function (t) { return { value: t, label: termName(t), count: countFor(t, E, state.topic), seen: seenCount(t, E, state.topic), current: t === state.term }; }),
+        function (v) { state.term = v; state.idx = 0; maybeStart(); }));
+      picker.appendChild(stage('Exam', '',
+        allExams().map(function (e) { return { value: e, label: examName(e), count: countFor(T, e, state.topic), seen: seenCount(T, e, state.topic), current: e === state.exam }; }),
+        function (v) { state.exam = v; state.idx = 0; maybeStart(); }));
+      picker.appendChild(stage('Topic', '',
+        [{ value: '', label: 'All topics', count: countFor(T, E, ''), seen: seenCount(T, E, ''), current: !!state.topicChosen && !state.topic }].concat(
+          allTopics(T, E).map(function (t) { return { value: t, label: t, count: countFor(T, E, t), seen: seenCount(T, E, t), current: t === state.topic }; })),
+        function (v) { state.topic = v; state.topicChosen = true; state.idx = 0; maybeStart(); }));
 
       var inMenu = state.view === 'menu';
       menu.hidden = !inMenu; top.hidden = inMenu; bar.hidden = inMenu;
@@ -183,6 +216,7 @@
                (!state.topic || s.dataset.topic === state.topic);
       });
       if (state.idx >= list.length) state.idx = Math.max(0, list.length - 1);
+      if (!inMenu && list[state.idx] && !seen[list[state.idx].id]) { seen[list[state.idx].id] = 1; saveSeen(); }
       secs.forEach(function (s) {
         var show = !inMenu && s === list[state.idx];
         if (show && s.hidden) { s.classList.remove('sol-in'); void s.offsetWidth; s.classList.add('sol-in'); }
@@ -202,7 +236,7 @@
       list.forEach(function (sec, i) {
         var m = /-q(\d+)$/.exec(sec.id);
         var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = m ? m[1] : String(i + 1);
-        btn.className = 'sol-num' + (stars[sec.id] ? ' is-starred' : '');
+        btn.className = 'sol-num' + (stars[sec.id] ? ' is-starred' : '') + (seen[sec.id] ? ' is-seen' : '');
         btn.setAttribute('aria-pressed', i === state.idx ? 'true' : 'false');
         btn.setAttribute('aria-label', 'Question ' + btn.textContent);
         btn.addEventListener('click', function () { state.idx = i; render(); });

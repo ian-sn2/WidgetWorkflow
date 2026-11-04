@@ -17,6 +17,15 @@
 .sol-shell .sol-card-n { font-size:.74rem; color:#6b7590; line-height:1.2; }
 .sol-shell .sol-card[aria-pressed="true"] { background:var(--navy); border-color:var(--navy); color:#fff; box-shadow:0 2px 8px rgba(0,32,96,0.25); }
 .sol-shell .sol-card[aria-pressed="true"] .sol-card-n { color:#c9d6f2; }
+/* How much of a card has been reviewed: a thin bar along its foot, and a
+   green edge once every question in it has been opened. */
+.sol-shell .sol-card { position:relative; overflow:hidden; padding-bottom:9px; }
+.sol-shell .sol-card-bar { position:absolute; left:0; right:0; bottom:0; height:4px; background:#edf1f8; }
+.sol-shell .sol-card-bar > span { display:block; height:100%; background:#2e8b57; transition:width .25s ease; }
+.sol-shell .sol-card[aria-pressed="true"] .sol-card-bar { background:rgba(255,255,255,0.18); }
+.sol-shell .sol-card[aria-pressed="true"] .sol-card-bar > span { background:#7fd49a; }
+.sol-shell .sol-card.is-done { border-color:#2e8b57; }
+.sol-shell .sol-strip .sol-num.is-seen { background:#f1f6f3; border-color:#9fcdb1; }
 /* The menu's greeting, and the bar at the top of the questions view. */
 .sol-shell .sol-hello { font-size:1.15rem; font-weight:600; color:var(--navy); margin:0 0 12px; line-height:1.4; }
 .sol-shell .sol-top { display:flex; align-items:center; gap:14px; margin:0 0 12px; padding:10px 14px; border:1px solid var(--rule); border-radius:12px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
