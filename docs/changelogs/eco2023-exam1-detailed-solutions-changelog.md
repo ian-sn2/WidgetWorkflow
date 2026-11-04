@@ -187,5 +187,8 @@ results are in the commit message of the push that carried them.
 * **Strip into the top bar (shell v0.29).** The question-number strip is the
   top bar's second row, and Prev / Next flank "Question x of y" at the bar's
   right, so nothing sits under the question box. The first topic card reads
-  "Whole exam, in order": it walks the exam by question number, which is
+  "Full Exam": it walks the exam by question number, which is
   the linear path the boss asked for.
+* **No exam row (shell v0.30).** One page per exam is the plan, so a page
+  carrying a single exam has it chosen already and the menu shows only the
+  semester and topic rows. A page with two or more exams still shows the row.

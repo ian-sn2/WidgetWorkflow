@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.29 =====
+/* ===== exam-solutions.js v0.30 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -127,6 +127,7 @@
     var top = document.createElement('div'); top.className = 'sol-top';
     var back = document.createElement('button'); back.type = 'button'; back.className = 'sol-back'; back.textContent = '\u2039 Back to menu';
     function toMenu() { state.view = 'menu'; state.term = ''; state.exam = ''; state.topic = ''; state.topicChosen = false; state.idx = 0; render(); window.scrollTo(0, 0); }
+    // (render() puts the one exam back when the page has only one.)
     back.addEventListener('click', toMenu);
     var status = document.createElement('div'); status.className = 'sol-status';
     var statusText = document.createElement('div'); statusText.className = 'sol-status-text';
@@ -211,11 +212,15 @@
       picker.appendChild(stage('Semester', '',
         terms.map(function (t) { return { value: t, label: termName(t), count: countFor(t, E, state.topic), seen: seenCount(t, E, state.topic), current: t === state.term }; }),
         function (v) { state.term = v; state.idx = 0; maybeStart(); }));
-      picker.appendChild(stage('Exam', '',
-        allExams().map(function (e) { return { value: e, label: examName(e), count: countFor(T, e, state.topic), seen: seenCount(T, e, state.topic), current: e === state.exam }; }),
+      // One page per exam is the plan (Ian's boss, 2026-11-04), so a page
+      // carrying a single exam has it chosen already and shows no row for it.
+      var exams = allExams();
+      if (exams.length === 1 && !state.exam) state.exam = exams[0];
+      if (exams.length > 1) picker.appendChild(stage('Exam', '',
+        exams.map(function (e) { return { value: e, label: examName(e), count: countFor(T, e, state.topic), seen: seenCount(T, e, state.topic), current: e === state.exam }; }),
         function (v) { state.exam = v; state.idx = 0; maybeStart(); }));
       picker.appendChild(stage('Topic', '',
-        [{ value: '', label: 'Whole exam, in order', count: countFor(T, E, ''), seen: seenCount(T, E, ''), current: !!state.topicChosen && !state.topic }].concat(
+        [{ value: '', label: 'Full Exam', count: countFor(T, E, ''), seen: seenCount(T, E, ''), current: !!state.topicChosen && !state.topic }].concat(
           allTopics(T, E).map(function (t) { return { value: t, label: t, count: countFor(T, E, t), seen: seenCount(T, E, t), current: t === state.topic }; })),
         function (v) { state.topic = v; state.topicChosen = true; state.idx = 0; maybeStart(); }));
 
@@ -232,7 +237,7 @@
         if (show && s.hidden) { s.classList.remove('sol-in'); void s.offsetWidth; s.classList.add('sol-in'); }
         s.hidden = !show;
       });
-      statusText.innerHTML = '<strong>' + termName(state.term) + '</strong> \u00b7 ' + examName(state.exam) + ' \u00b7 ' + (state.topic || 'Whole exam, in order');
+      statusText.innerHTML = '<strong>' + termName(state.term) + '</strong> \u00b7 ' + examName(state.exam) + ' \u00b7 ' + (state.topic || 'Full Exam');
       count.textContent = list.length ? 'Question ' + (state.idx + 1) + ' of ' + list.length : '';
       progressBar.style.width = list.length ? (100 * (state.idx + 1) / list.length).toFixed(1) + '%' : '0%';
       groups.forEach(function (g) { g.hidden = !g.querySelector('section.sol:not([hidden])'); });

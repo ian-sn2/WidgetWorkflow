@@ -46,9 +46,9 @@ The body is:
 The shell reads `data-term`, `data-exam` and `data-topic` off the sections and
 opens on a **menu**: a greeting and a panel of buttons, three rows of cards,
 **Semester, then Exam, then Topic** (Ian, 2026-11-04: a home screen that goes
-away once chosen, to save vertical space). All three rows show at once and
-nothing is lit until it is clicked; the questions open once a semester, an
-exam and a topic have all been chosen, in any order, and Back to menu clears
+away once chosen, to save vertical space). The rows show at once (the exam row only on a page carrying more than one
+exam; otherwise that exam is chosen already) and nothing is lit until it is
+clicked; the questions open once a semester and a topic have been chosen, in any order, and Back to menu clears
 the selection. Each
 card naming its choice and how many questions it holds, the chosen one
 filled navy; a later row lists only what the earlier choices allow. Topics
