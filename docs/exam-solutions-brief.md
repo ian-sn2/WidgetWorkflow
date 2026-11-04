@@ -46,7 +46,9 @@ The body is:
 The shell reads `data-term`, `data-exam` and `data-topic` off the sections and
 opens on a **menu**: a greeting and a panel of buttons, three rows of cards,
 **Semester, then Exam, then Topic** (Ian, 2026-11-04: a home screen that goes
-away once chosen, to save vertical space), each
+away once chosen, to save vertical space). Nothing is lit until it is
+clicked: the exam row appears once a semester is chosen and the topic row
+once an exam is. Each
 card naming its choice and how many questions it holds, the chosen one
 filled navy; a later row lists only what the earlier choices allow. Topics
 run in Ian's order (The PPF first, then Supply and Demand, Elasticity,
