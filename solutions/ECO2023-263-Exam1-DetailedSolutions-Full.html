@@ -1729,23 +1729,45 @@
 })();
 </script>
 <style>
-.sol-shell { font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; }
-/* The box itself is the house .toc-box; these lay out its three stages:
-   a label, then that stage's choices in a row that wraps. */
-.sol-shell .sol-box { margin:10px 0; padding:10px 20px 6px; }
-.sol-shell .sol-stage { margin:10px 0 4px; }
-.sol-shell .sol-stage-k { margin:0 0 2px; font-weight:800; color:#002060; font-size:.95rem; }
-.sol-shell .sol-stage ul { list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px 8px; }
-.sol-shell .sol-stage li { margin:0; }
-.sol-shell .sol-stage a { display:inline-block; padding:6px 12px; border:1px solid #c9d2e3; border-radius:6px; background:#fff; color:#333; line-height:1.2; }
-.sol-shell .sol-stage li.sol-current > a { background:#002060; border-color:#002060; color:#fff; font-weight:700; }
-.sol-shell .sol-stage a:hover { text-decoration:none; border-color:#002060; }
-@media (max-width:640px){ .sol-shell .sol-stage a { min-height:44px; display:flex; align-items:center; } }
-.sol-shell .sol-count { margin:4px 0 16px; font-size:.85rem; color:#333; }
+.sol-shell { font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; --navy:#002060; --ink:#1c2a44; --rule:#c9d2e3; --paper:#f6f8fc; --red:#d62828; }
+/* The picker: a panel of cards, always open. Each row names its stage and
+   the cards name the choices with their question counts; the chosen card is
+   filled navy. */
+.sol-shell .sol-picker { border:1px solid var(--rule); border-radius:14px; background:#fff; padding:14px 18px 6px; margin:0 0 14px; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+.sol-shell .sol-stage { display:flex; align-items:flex-start; gap:14px; padding:8px 0 10px; border-bottom:1px solid #edf1f8; }
+.sol-shell .sol-stage:last-child { border-bottom:0; }
+.sol-shell .sol-stage-k { flex:0 0 120px; padding-top:9px; }
+.sol-shell .sol-stage-k span { display:block; font-weight:800; color:var(--navy); font-size:.95rem; text-transform:uppercase; letter-spacing:.04em; }
+.sol-shell .sol-stage-k small { display:block; color:#6b7590; font-size:.78rem; line-height:1.3; margin-top:2px; }
+.sol-shell .sol-cards { display:flex; flex-wrap:wrap; gap:8px; flex:1 1 auto; }
+.sol-shell .sol-card { display:flex; flex-direction:column; align-items:flex-start; gap:1px; min-height:44px; padding:7px 14px; border:1px solid var(--rule); border-radius:10px;
+  background:#fff; color:var(--navy); font:inherit; cursor:pointer; text-align:left; transition:background .15s, border-color .15s, transform .15s, box-shadow .15s; }
+.sol-shell .sol-card:hover { border-color:var(--navy); box-shadow:0 2px 6px rgba(0,32,96,0.12); transform:translateY(-1px); }
+.sol-shell .sol-card:focus-visible { outline:3px solid #8fb3ff; outline-offset:2px; }
+.sol-shell .sol-card-l { font-weight:700; font-size:.95rem; line-height:1.2; }
+.sol-shell .sol-card-n { font-size:.74rem; color:#6b7590; line-height:1.2; }
+.sol-shell .sol-card[aria-pressed="true"] { background:var(--navy); border-color:var(--navy); color:#fff; box-shadow:0 2px 8px rgba(0,32,96,0.25); }
+.sol-shell .sol-card[aria-pressed="true"] .sol-card-n { color:#c9d6f2; }
+/* The status line and progress bar above the question. */
+.sol-shell .sol-status { margin:0 0 10px; }
+.sol-shell .sol-status-text { display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; font-size:.9rem; color:var(--ink); }
+.sol-shell .sol-status-text strong { color:var(--navy); }
+.sol-shell .sol-status-n { margin-left:auto; font-weight:700; color:var(--navy); }
+.sol-shell .sol-progress { height:6px; border-radius:3px; background:#e4e9f4; margin-top:6px; overflow:hidden; }
+.sol-shell .sol-progress-bar { height:100%; background:var(--navy); border-radius:3px; transition:width .25s ease; }
+@media (max-width:640px){
+  .sol-shell .sol-picker { padding:10px 12px 4px; }
+  .sol-shell .sol-stage { flex-direction:column; gap:6px; }
+  .sol-shell .sol-stage-k { flex-basis:auto; padding-top:0; }
+  .sol-shell .sol-card { flex:1 1 44%; }
+}
 /* The current question sits in its own box under the picker; the groups'
    headings stay in the page for structure but are not shown. */
 .sol-group > h2 { display:none; }
-section.sol { margin:10px 0 0; padding:12px 20px 14px; border:1px solid #DEDEDE; border-radius:12px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+section.sol { margin:0; padding:14px 20px 16px; border:1px solid #DEDEDE; border-radius:14px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+@keyframes sol-fade { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+section.sol.sol-in { animation:sol-fade .22s ease-out; }
+@media (prefers-reduced-motion: reduce) { section.sol.sol-in { animation:none; } .sol-shell .sol-card { transition:none; } }
 .sol-shell .sol-nav { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0 20px; }
 .sol-shell .sol-nav > button { flex:0 0 auto; white-space:nowrap; border:1px solid #002060; background:#fff; color:#002060; padding:8px 16px; min-height:44px; font:inherit; font-size:.95rem; font-weight:700; cursor:pointer; border-radius:6px; }
 .sol-shell .sol-nav > button:disabled { opacity:.35; cursor:default; }
@@ -1804,7 +1826,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.14 =====
+/* ===== exam-solutions.js v0.15 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -1896,25 +1918,50 @@ section.sol .sol-table table { margin:0; }
       if (state.topic && topicsFor(state.term, state.exam).indexOf(state.topic) < 0) state.topic = '';
     }
 
-    // One collapsible box, built the way the house script builds its table of
-    // contents (a <details class="toc-box"> with a bold summary), holding three
-    // stages in order: semester, then exam, then topic (Ian, 2026-10-26: "1
-    // toc, and then you select the semester, which then makes you select an
-    // exam, and then topics"). A later stage lists only what the earlier
-    // choices allow, and the summary names the whole selection.
-    var box = document.createElement('details'); box.className = 'toc-box sol-box';
-    var summary = document.createElement('summary'); box.appendChild(summary);
-    var nav = document.createElement('nav'); box.appendChild(nav);
-    mount.appendChild(box);
-    // One question at a time (Ian, 2026-10-26: "a self-contained box ... that
-    // would not require any scrolling"): the picker, then the current
-    // question in its own box, then Previous / Next. The page holds every
-    // section; the shell shows one.
-    var bar = document.createElement('div'); bar.className = 'sol-nav';
-    var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
+    // The picker is a panel of buttons, always open (Ian, 2026-11-04: "make
+    // it more interactive ... buttons of which exams to go to"): three rows
+    // of cards -- semester, exam, topic -- each card naming its choice and
+    // how many questions it holds, the chosen one filled navy. Under it a
+    // status line names the selection and a bar shows how far along the
+    // reader is.
+    var picker = document.createElement('div'); picker.className = 'sol-picker';
+    mount.appendChild(picker);
+    var status = document.createElement('div'); status.className = 'sol-status';
+    var statusText = document.createElement('div'); statusText.className = 'sol-status-text';
+    var progress = document.createElement('div'); progress.className = 'sol-progress';
+    var progressBar = document.createElement('div'); progressBar.className = 'sol-progress-bar';
+    progress.appendChild(progressBar); status.appendChild(statusText); status.appendChild(progress);
+    mount.appendChild(status);
+
+    function countFor(term, exam, topic) {
+      return secs.filter(function (s) {
+        return s.dataset.term === term && (!exam || s.dataset.exam === exam) && (!topic || s.dataset.topic === topic);
+      }).length;
+    }
+    function stage(name, hint, items, pick) {
+      var d = document.createElement('div'); d.className = 'sol-stage';
+      var h = document.createElement('div'); h.className = 'sol-stage-k';
+      h.innerHTML = '<span>' + name + '</span>' + (hint ? '<small>' + hint + '</small>' : '');
+      d.appendChild(h);
+      var row = document.createElement('div'); row.className = 'sol-cards';
+      items.forEach(function (it) {
+        var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-card';
+        btn.setAttribute('aria-pressed', it.current ? 'true' : 'false');
+        btn.innerHTML = '<span class="sol-card-l">' + it.label + '</span>' +
+          (it.count != null ? '<span class="sol-card-n">' + it.count + ' question' + (it.count === 1 ? '' : 's') + '</span>' : '');
+        btn.addEventListener('click', function () { pick(it.value); });
+        row.appendChild(btn);
+      });
+      d.appendChild(row);
+      return d;
+    }
+
+
     // A strip of question numbers under the box (Ian, 2026-10-27), the
     // current one filled, a bookmarked one wearing the ribbon. Previous and
     // Next sit at its ends.
+    var bar = document.createElement('div'); bar.className = 'sol-nav';
+    var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
     var strip = document.createElement('div'); strip.className = 'sol-strip';
     var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
     bar.appendChild(prev); bar.appendChild(strip); bar.appendChild(next);
@@ -1926,38 +1973,18 @@ section.sol .sol-table table { margin:0; }
       if (e.key === 'ArrowLeft' && state.idx > 0) { state.idx--; render(); }
     });
 
-    function stage(n, name, items, pick) {
-      var d = document.createElement('div'); d.className = 'sol-stage';
-      var h = document.createElement('p'); h.className = 'sol-stage-k';
-      h.textContent = n + '. ' + name; d.appendChild(h);
-      var ul = document.createElement('ul');
-      items.forEach(function (it) {
-        var li = document.createElement('li'), a = document.createElement('a');
-        a.href = '#'; a.textContent = it.label;
-        if (it.current) { li.className = 'sol-current'; a.setAttribute('aria-current', 'true'); }
-        a.addEventListener('click', function (e) { e.preventDefault(); pick(it.value); });
-        li.appendChild(a); ul.appendChild(li);
-      });
-      d.appendChild(ul);
-      return d;
-    }
-
     function render() {
       settle();
-      summary.innerHTML = '';
-      var st = document.createElement('strong');
-      st.textContent = '\ud83d\udcd8 ' + termName(state.term) + ' \u00b7 ' + examName(state.exam) + ' \u00b7 ' + (state.topic || 'All topics');
-      summary.appendChild(st);
-      nav.innerHTML = '';
-      nav.appendChild(stage(1, 'Semester',
-        terms.map(function (t) { return { value: t, label: termName(t), current: t === state.term }; }),
+      picker.innerHTML = '';
+      picker.appendChild(stage('Semester', 'the term the paper was set in',
+        terms.map(function (t) { return { value: t, label: termName(t), count: countFor(t, '', ''), current: t === state.term }; }),
         function (v) { state.term = v; state.exam = ''; state.topic = ''; state.idx = 0; render(); }));
-      nav.appendChild(stage(2, 'Exam',
-        examsFor(state.term).map(function (e) { return { value: e, label: examName(e), current: e === state.exam }; }),
+      picker.appendChild(stage('Exam', '',
+        examsFor(state.term).map(function (e) { return { value: e, label: examName(e), count: countFor(state.term, e, ''), current: e === state.exam }; }),
         function (v) { state.exam = v; state.topic = ''; state.idx = 0; render(); }));
-      nav.appendChild(stage(3, 'Topic',
-        [{ value: '', label: 'All topics', current: !state.topic }].concat(
-          topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t, current: t === state.topic }; })),
+      picker.appendChild(stage('Topic', 'in the order the course teaches them',
+        [{ value: '', label: 'All topics', count: countFor(state.term, state.exam, ''), current: !state.topic }].concat(
+          topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t, count: countFor(state.term, state.exam, t), current: t === state.topic }; })),
         function (v) { state.topic = v; state.idx = 0; render(); }));
 
       var list = secs.filter(function (s) {
@@ -1965,7 +1992,14 @@ section.sol .sol-table table { margin:0; }
                (!state.topic || s.dataset.topic === state.topic);
       });
       if (state.idx >= list.length) state.idx = Math.max(0, list.length - 1);
-      secs.forEach(function (s) { s.hidden = s !== list[state.idx]; });
+      secs.forEach(function (s) {
+        var show = s === list[state.idx];
+        if (show && s.hidden) { s.classList.remove('sol-in'); void s.offsetWidth; s.classList.add('sol-in'); }
+        s.hidden = !show;
+      });
+      statusText.innerHTML = '<strong>' + termName(state.term) + '</strong> \u00b7 ' + examName(state.exam) + ' \u00b7 ' +
+        (state.topic || 'All topics') + (list.length ? ' <span class="sol-status-n">Question ' + (state.idx + 1) + ' of ' + list.length + '</span>' : '');
+      progressBar.style.width = list.length ? (100 * (state.idx + 1) / list.length).toFixed(1) + '%' : '0%';
       groups.forEach(function (g) { g.hidden = !g.querySelector('section.sol:not([hidden])'); });
       // the box for the question goes under the picker, the nav under it
       if (list[state.idx]) mount.appendChild(list[state.idx]);

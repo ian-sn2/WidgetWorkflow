@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.14 =====
+/* ===== exam-solutions.js v0.15 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -90,25 +90,50 @@
       if (state.topic && topicsFor(state.term, state.exam).indexOf(state.topic) < 0) state.topic = '';
     }
 
-    // One collapsible box, built the way the house script builds its table of
-    // contents (a <details class="toc-box"> with a bold summary), holding three
-    // stages in order: semester, then exam, then topic (Ian, 2026-10-26: "1
-    // toc, and then you select the semester, which then makes you select an
-    // exam, and then topics"). A later stage lists only what the earlier
-    // choices allow, and the summary names the whole selection.
-    var box = document.createElement('details'); box.className = 'toc-box sol-box';
-    var summary = document.createElement('summary'); box.appendChild(summary);
-    var nav = document.createElement('nav'); box.appendChild(nav);
-    mount.appendChild(box);
-    // One question at a time (Ian, 2026-10-26: "a self-contained box ... that
-    // would not require any scrolling"): the picker, then the current
-    // question in its own box, then Previous / Next. The page holds every
-    // section; the shell shows one.
-    var bar = document.createElement('div'); bar.className = 'sol-nav';
-    var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
+    // The picker is a panel of buttons, always open (Ian, 2026-11-04: "make
+    // it more interactive ... buttons of which exams to go to"): three rows
+    // of cards -- semester, exam, topic -- each card naming its choice and
+    // how many questions it holds, the chosen one filled navy. Under it a
+    // status line names the selection and a bar shows how far along the
+    // reader is.
+    var picker = document.createElement('div'); picker.className = 'sol-picker';
+    mount.appendChild(picker);
+    var status = document.createElement('div'); status.className = 'sol-status';
+    var statusText = document.createElement('div'); statusText.className = 'sol-status-text';
+    var progress = document.createElement('div'); progress.className = 'sol-progress';
+    var progressBar = document.createElement('div'); progressBar.className = 'sol-progress-bar';
+    progress.appendChild(progressBar); status.appendChild(statusText); status.appendChild(progress);
+    mount.appendChild(status);
+
+    function countFor(term, exam, topic) {
+      return secs.filter(function (s) {
+        return s.dataset.term === term && (!exam || s.dataset.exam === exam) && (!topic || s.dataset.topic === topic);
+      }).length;
+    }
+    function stage(name, hint, items, pick) {
+      var d = document.createElement('div'); d.className = 'sol-stage';
+      var h = document.createElement('div'); h.className = 'sol-stage-k';
+      h.innerHTML = '<span>' + name + '</span>' + (hint ? '<small>' + hint + '</small>' : '');
+      d.appendChild(h);
+      var row = document.createElement('div'); row.className = 'sol-cards';
+      items.forEach(function (it) {
+        var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-card';
+        btn.setAttribute('aria-pressed', it.current ? 'true' : 'false');
+        btn.innerHTML = '<span class="sol-card-l">' + it.label + '</span>' +
+          (it.count != null ? '<span class="sol-card-n">' + it.count + ' question' + (it.count === 1 ? '' : 's') + '</span>' : '');
+        btn.addEventListener('click', function () { pick(it.value); });
+        row.appendChild(btn);
+      });
+      d.appendChild(row);
+      return d;
+    }
+
+
     // A strip of question numbers under the box (Ian, 2026-10-27), the
     // current one filled, a bookmarked one wearing the ribbon. Previous and
     // Next sit at its ends.
+    var bar = document.createElement('div'); bar.className = 'sol-nav';
+    var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
     var strip = document.createElement('div'); strip.className = 'sol-strip';
     var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
     bar.appendChild(prev); bar.appendChild(strip); bar.appendChild(next);
@@ -120,38 +145,18 @@
       if (e.key === 'ArrowLeft' && state.idx > 0) { state.idx--; render(); }
     });
 
-    function stage(n, name, items, pick) {
-      var d = document.createElement('div'); d.className = 'sol-stage';
-      var h = document.createElement('p'); h.className = 'sol-stage-k';
-      h.textContent = n + '. ' + name; d.appendChild(h);
-      var ul = document.createElement('ul');
-      items.forEach(function (it) {
-        var li = document.createElement('li'), a = document.createElement('a');
-        a.href = '#'; a.textContent = it.label;
-        if (it.current) { li.className = 'sol-current'; a.setAttribute('aria-current', 'true'); }
-        a.addEventListener('click', function (e) { e.preventDefault(); pick(it.value); });
-        li.appendChild(a); ul.appendChild(li);
-      });
-      d.appendChild(ul);
-      return d;
-    }
-
     function render() {
       settle();
-      summary.innerHTML = '';
-      var st = document.createElement('strong');
-      st.textContent = '\ud83d\udcd8 ' + termName(state.term) + ' \u00b7 ' + examName(state.exam) + ' \u00b7 ' + (state.topic || 'All topics');
-      summary.appendChild(st);
-      nav.innerHTML = '';
-      nav.appendChild(stage(1, 'Semester',
-        terms.map(function (t) { return { value: t, label: termName(t), current: t === state.term }; }),
+      picker.innerHTML = '';
+      picker.appendChild(stage('Semester', 'the term the paper was set in',
+        terms.map(function (t) { return { value: t, label: termName(t), count: countFor(t, '', ''), current: t === state.term }; }),
         function (v) { state.term = v; state.exam = ''; state.topic = ''; state.idx = 0; render(); }));
-      nav.appendChild(stage(2, 'Exam',
-        examsFor(state.term).map(function (e) { return { value: e, label: examName(e), current: e === state.exam }; }),
+      picker.appendChild(stage('Exam', '',
+        examsFor(state.term).map(function (e) { return { value: e, label: examName(e), count: countFor(state.term, e, ''), current: e === state.exam }; }),
         function (v) { state.exam = v; state.topic = ''; state.idx = 0; render(); }));
-      nav.appendChild(stage(3, 'Topic',
-        [{ value: '', label: 'All topics', current: !state.topic }].concat(
-          topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t, current: t === state.topic }; })),
+      picker.appendChild(stage('Topic', 'in the order the course teaches them',
+        [{ value: '', label: 'All topics', count: countFor(state.term, state.exam, ''), current: !state.topic }].concat(
+          topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t, count: countFor(state.term, state.exam, t), current: t === state.topic }; })),
         function (v) { state.topic = v; state.idx = 0; render(); }));
 
       var list = secs.filter(function (s) {
@@ -159,7 +164,14 @@
                (!state.topic || s.dataset.topic === state.topic);
       });
       if (state.idx >= list.length) state.idx = Math.max(0, list.length - 1);
-      secs.forEach(function (s) { s.hidden = s !== list[state.idx]; });
+      secs.forEach(function (s) {
+        var show = s === list[state.idx];
+        if (show && s.hidden) { s.classList.remove('sol-in'); void s.offsetWidth; s.classList.add('sol-in'); }
+        s.hidden = !show;
+      });
+      statusText.innerHTML = '<strong>' + termName(state.term) + '</strong> \u00b7 ' + examName(state.exam) + ' \u00b7 ' +
+        (state.topic || 'All topics') + (list.length ? ' <span class="sol-status-n">Question ' + (state.idx + 1) + ' of ' + list.length + '</span>' : '');
+      progressBar.style.width = list.length ? (100 * (state.idx + 1) / list.length).toFixed(1) + '%' : '0%';
       groups.forEach(function (g) { g.hidden = !g.querySelector('section.sol:not([hidden])'); });
       // the box for the question goes under the picker, the nav under it
       if (list[state.idx]) mount.appendChild(list[state.idx]);

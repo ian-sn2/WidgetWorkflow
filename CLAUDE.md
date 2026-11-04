@@ -21,9 +21,9 @@ per container; Chromium is already under `/opt/pw-browsers`, so never run
 **A second kind of page lives in `solutions/`** since 2026-10-26: detailed
 solutions to past exam questions, with a widget wherever the reasoning is a
 graph, the question restated in our own words with its right choice marked
-and the solution in the open, and one collapsible picker styled
-like the table of contents with three stages: semester, exam, topic, then one
-question at a time in a box with Previous / Next. Read
+and the solution in the open, and a panel of card buttons for
+semester, exam and topic, then one question at a time in a box with
+Previous / Next. Read
 `docs/exam-solutions-brief.md` before touching one. The toggles are
 `engine/exam-solutions.js` + `.css`, embedded by `embed_engine.py` in place of
 `<!--SOL-SHELL-->`; the graphs are ordinary widgets and every rule below

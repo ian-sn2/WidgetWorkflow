@@ -44,13 +44,14 @@ The body is:
 ```
 
 The shell reads `data-term`, `data-exam` and `data-topic` off the sections and
-builds one collapsible box styled like the house table of contents -- a
-`<details class="toc-box">` whose summary names the whole selection -- with
-three stages inside it in order, **Semester, then Exam, then Topic**, each a
-row of choices with the current one filled navy; a later stage lists only
-what the earlier choices allow. Topics run in Ian's order (The PPF first, then
-Supply and Demand, Elasticity, Efficiency and Equity, Government Intervention,
-International Trade).
+builds a panel of buttons: three rows of cards, **Semester, then Exam, then
+Topic** (Ian, 2026-11-04: buttons and cards rather than a folding list), each
+card naming its choice and how many questions it holds, the chosen one
+filled navy; a later row lists only what the earlier choices allow. Topics
+run in Ian's order (The PPF first, then Supply and Demand, Elasticity,
+Efficiency and Equity, Government Intervention, International Trade). Under
+the panel a status line names the selection and a bar shows how far through
+it the reader is.
 
 Under the picker the shell shows **one question at a time** in its own box
 (Ian, 2026-10-26: a self-contained box that needs no scrolling until a
