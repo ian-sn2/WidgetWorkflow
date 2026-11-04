@@ -1827,7 +1827,7 @@ section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
 /* A figure inside a solution is read beside its working, not as the page's
    centrepiece: no box of its own, a narrower plot, and a Fullscreen button
    that lifts it into an overlay (Ian, 2026-11-04). */
-section.sol .sdg { --fig:400px; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
+section.sol .sdg { --fig:50%; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
 section.sol .sdg h4 { font-size:.95rem; padding-right:330px; }
 /* The engine lets a plot with its working beside it grow past --fig; in a
    solution the size control decides, so the cap holds there too. */
@@ -1853,7 +1853,8 @@ section.sol .sdg .sol-tools .sdg-ctrl button:nth-of-type(3)::before, .sol-fs-pan
 section.sol .sdg .sol-tools .sdg-step, .sol-fs-panel .sdg .sol-tools .sdg-step { margin:0 4px 0 2px; font-size:.78rem; white-space:nowrap; }
 /* Two panels side by side: the size steps cap the pair, which the engine's
    own cap (one figure at --fig) never reached. */
-section.sol .sdg .sdg-body.two, .sol-fs-panel .sdg .sdg-body.two { max-width:calc(var(--fig) * 2.2); margin:0 auto; }
+section.sol .sdg .sdg-body.two { max-width:min(100%, calc(var(--fig) * 1.5)); margin:0 auto; }
+.sol-fs-panel .sdg .sdg-body.two { max-width:100%; margin:0 auto; }
 /* The overlay: the widget at full size on a white panel over a dimmed page. */
 body.sol-fs-open { overflow:hidden; }
 .sol-fs { position:fixed; inset:0; z-index:9000; background:rgba(10,20,50,0.55); display:flex; align-items:center; justify-content:center; padding:16px; }
@@ -1875,7 +1876,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.24 =====
+/* ===== exam-solutions.js v0.25 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -2153,15 +2154,18 @@ section.sol .sol-table table { margin:0; }
     // kept in this browser and applies to every figure on the page.
     // The middle of five sizes by default, two steps either way (Ian,
     // 2026-11-04).
-    // The key changed with the default: a size pressed under an earlier
-    // build stayed in the browser and overrode the new default.
-    var SIZES = [260, 320, 400, 520, 660], SIZE_KEY = 'sol-size-2';
+    // Sizes are shares of the solution box's width (Ian, 2026-11-04): the
+    // fifth fills it, the fourth is 75% of it, the third -- the default -- is
+    // half, then 37.5% and 25%. A share, not a pixel count, so the same
+    // setting looks the same on every screen. The stored key changed with the
+    // default: a size pressed under an earlier build stayed in the browser.
+    var SIZES = [25, 37.5, 50, 75, 100], SIZE_KEY = 'sol-size-3';
     var sizeIdx = 2;
     try { var sv = parseInt(localStorage.getItem(SIZE_KEY), 10); if (sv >= 0 && sv < SIZES.length) sizeIdx = sv; } catch (e) {}
     var allWidgets = [].slice.call(document.querySelectorAll('section.sol .sdg'));
     function applySize() {
       allWidgets.forEach(function (w) {
-        w.style.setProperty('--fig', SIZES[sizeIdx] + 'px');
+        w.style.setProperty('--fig', SIZES[sizeIdx] + '%');
         var ctl = w.querySelector('.sol-size');
         if (ctl) { ctl.querySelector('.sol-minus').disabled = sizeIdx === 0; ctl.querySelector('.sol-plus').disabled = sizeIdx === SIZES.length - 1; }
       });

@@ -96,7 +96,7 @@ section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
 /* A figure inside a solution is read beside its working, not as the page's
    centrepiece: no box of its own, a narrower plot, and a Fullscreen button
    that lifts it into an overlay (Ian, 2026-11-04). */
-section.sol .sdg { --fig:400px; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
+section.sol .sdg { --fig:50%; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
 section.sol .sdg h4 { font-size:.95rem; padding-right:330px; }
 /* The engine lets a plot with its working beside it grow past --fig; in a
    solution the size control decides, so the cap holds there too. */
@@ -122,7 +122,8 @@ section.sol .sdg .sol-tools .sdg-ctrl button:nth-of-type(3)::before, .sol-fs-pan
 section.sol .sdg .sol-tools .sdg-step, .sol-fs-panel .sdg .sol-tools .sdg-step { margin:0 4px 0 2px; font-size:.78rem; white-space:nowrap; }
 /* Two panels side by side: the size steps cap the pair, which the engine's
    own cap (one figure at --fig) never reached. */
-section.sol .sdg .sdg-body.two, .sol-fs-panel .sdg .sdg-body.two { max-width:calc(var(--fig) * 2.2); margin:0 auto; }
+section.sol .sdg .sdg-body.two { max-width:min(100%, calc(var(--fig) * 1.5)); margin:0 auto; }
+.sol-fs-panel .sdg .sdg-body.two { max-width:100%; margin:0 auto; }
 /* The overlay: the widget at full size on a white panel over a dimmed page. */
 body.sol-fs-open { overflow:hidden; }
 .sol-fs { position:fixed; inset:0; z-index:9000; background:rgba(10,20,50,0.55); display:flex; align-items:center; justify-content:center; padding:16px; }

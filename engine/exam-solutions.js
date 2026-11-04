@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.24 =====
+/* ===== exam-solutions.js v0.25 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -276,15 +276,18 @@
     // kept in this browser and applies to every figure on the page.
     // The middle of five sizes by default, two steps either way (Ian,
     // 2026-11-04).
-    // The key changed with the default: a size pressed under an earlier
-    // build stayed in the browser and overrode the new default.
-    var SIZES = [260, 320, 400, 520, 660], SIZE_KEY = 'sol-size-2';
+    // Sizes are shares of the solution box's width (Ian, 2026-11-04): the
+    // fifth fills it, the fourth is 75% of it, the third -- the default -- is
+    // half, then 37.5% and 25%. A share, not a pixel count, so the same
+    // setting looks the same on every screen. The stored key changed with the
+    // default: a size pressed under an earlier build stayed in the browser.
+    var SIZES = [25, 37.5, 50, 75, 100], SIZE_KEY = 'sol-size-3';
     var sizeIdx = 2;
     try { var sv = parseInt(localStorage.getItem(SIZE_KEY), 10); if (sv >= 0 && sv < SIZES.length) sizeIdx = sv; } catch (e) {}
     var allWidgets = [].slice.call(document.querySelectorAll('section.sol .sdg'));
     function applySize() {
       allWidgets.forEach(function (w) {
-        w.style.setProperty('--fig', SIZES[sizeIdx] + 'px');
+        w.style.setProperty('--fig', SIZES[sizeIdx] + '%');
         var ctl = w.querySelector('.sol-size');
         if (ctl) { ctl.querySelector('.sol-minus').disabled = sizeIdx === 0; ctl.querySelector('.sol-plus').disabled = sizeIdx === SIZES.length - 1; }
       });
