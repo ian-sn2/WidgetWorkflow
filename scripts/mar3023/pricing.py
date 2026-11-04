@@ -178,10 +178,15 @@ def bcg_fig():
     b += f'<ellipse cx="{cx - 34}" cy="{cy + 4}" rx="12" ry="24" fill="#a9754a"/><ellipse cx="{cx + 34}" cy="{cy + 4}" rx="12" ry="24" fill="#a9754a"/>'
     b += f'<circle cx="{cx}" cy="{cy}" r="34" fill="#d9ab7c" stroke="#a9754a" stroke-width="2"/>'
     b += f'<circle cx="{cx - 12}" cy="{cy - 6}" r="4" fill="#2b343c"/><circle cx="{cx + 12}" cy="{cy - 6}" r="4" fill="#2b343c"/><ellipse cx="{cx}" cy="{cy + 10}" rx="7" ry="5" fill="#2b343c"/>'
-    # the cash cow: a coin
-    cx, cy = x0 + 1.5 * c, y0 + 1.5 * c - 8
-    b += f'<circle cx="{cx}" cy="{cy}" r="40" fill="#3f8fa6" stroke="#2b6f84" stroke-width="3"/><circle cx="{cx}" cy="{cy}" r="30" fill="none" stroke="#9fd3e0" stroke-width="2"/>'
-    b += f'<text x="{cx}" y="{cy + 16}" text-anchor="middle" font-size="46" font-weight="800" fill="#fff">$</text>'
+    # the cash cow, in the dog's style: a round white face with black patches, ears and horns, a pink muzzle, a coin held under its chin
+    cx, cy = x0 + 1.5 * c, y0 + 1.5 * c - 12
+    b += f'<ellipse cx="{cx - 36}" cy="{cy - 4}" rx="13" ry="9" fill="#e8c7c7" stroke="#2b343c" stroke-width="1.5"/><ellipse cx="{cx + 36}" cy="{cy - 4}" rx="13" ry="9" fill="#e8c7c7" stroke="#2b343c" stroke-width="1.5"/>'
+    b += f'<path d="M {cx - 22} {cy - 26} q -14 -16 -4 -28 q 10 10 12 22 z" fill="#e9d8a6" stroke="#2b343c" stroke-width="1.5"/><path d="M {cx + 22} {cy - 26} q 14 -16 4 -28 q -10 10 -12 22 z" fill="#e9d8a6" stroke="#2b343c" stroke-width="1.5"/>'
+    b += f'<ellipse cx="{cx}" cy="{cy}" rx="34" ry="32" fill="#fff" stroke="#2b343c" stroke-width="2"/>'
+    b += f'<path d="M {cx - 30} {cy - 14} q 10 -12 22 -4 q -2 14 -14 16 q -10 -2 -8 -12 z" fill="#2b343c"/><path d="M {cx + 10} {cy - 28} q 14 2 18 14 q -8 6 -16 2 q -6 -8 -2 -16 z" fill="#2b343c"/>'
+    b += f'<circle cx="{cx - 11}" cy="{cy - 4}" r="4" fill="#2b343c"/><circle cx="{cx + 11}" cy="{cy - 4}" r="4" fill="#2b343c"/>'
+    b += f'<ellipse cx="{cx}" cy="{cy + 14}" rx="18" ry="11" fill="#f2b8c6" stroke="#2b343c" stroke-width="1.5"/><circle cx="{cx - 6}" cy="{cy + 14}" r="2.2" fill="#2b343c"/><circle cx="{cx + 6}" cy="{cy + 14}" r="2.2" fill="#2b343c"/>'
+    b += f'<circle cx="{cx + 26}" cy="{cy + 30}" r="15" fill="#3f8fa6" stroke="#2b6f84" stroke-width="2"/><text x="{cx + 26}" y="{cy + 36}" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">$</text>'
     # the axes
     b += text(x0 + c, 24, "Relative Market Share (RMS)", 15)
     b += f'<text x="{x0 + c/2}" y="52" text-anchor="middle" font-size="13" fill="{INK}"><tspan font-weight="800">Low</tspan> (&lt; 1)</text><text x="{x0 + 1.5*c}" y="52" text-anchor="middle" font-size="13" fill="{INK}"><tspan font-weight="800">High</tspan> (&gt; 1)</text>'
