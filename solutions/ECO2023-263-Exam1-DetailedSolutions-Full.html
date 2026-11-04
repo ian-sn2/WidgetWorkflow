@@ -1875,7 +1875,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.23 =====
+/* ===== exam-solutions.js v0.24 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -2153,7 +2153,9 @@ section.sol .sol-table table { margin:0; }
     // kept in this browser and applies to every figure on the page.
     // The middle of five sizes by default, two steps either way (Ian,
     // 2026-11-04).
-    var SIZES = [260, 320, 400, 520, 660], SIZE_KEY = 'sol-size';
+    // The key changed with the default: a size pressed under an earlier
+    // build stayed in the browser and overrode the new default.
+    var SIZES = [260, 320, 400, 520, 660], SIZE_KEY = 'sol-size-2';
     var sizeIdx = 2;
     try { var sv = parseInt(localStorage.getItem(SIZE_KEY), 10); if (sv >= 0 && sv < SIZES.length) sizeIdx = sv; } catch (e) {}
     var allWidgets = [].slice.call(document.querySelectorAll('section.sol .sdg'));
@@ -2163,9 +2165,9 @@ section.sol .sol-table table { margin:0; }
         var ctl = w.querySelector('.sol-size');
         if (ctl) { ctl.querySelector('.sol-minus').disabled = sizeIdx === 0; ctl.querySelector('.sol-plus').disabled = sizeIdx === SIZES.length - 1; }
       });
-      try { localStorage.setItem(SIZE_KEY, String(sizeIdx)); } catch (e) {}
     }
-    function stepSize(d) { sizeIdx = Math.max(0, Math.min(SIZES.length - 1, sizeIdx + d)); applySize(); }
+    // only a press is remembered, never the default
+    function stepSize(d) { sizeIdx = Math.max(0, Math.min(SIZES.length - 1, sizeIdx + d)); applySize(); try { localStorage.setItem(SIZE_KEY, String(sizeIdx)); } catch (e) {} }
     // The widget's own step controls (Back, Next step, Start over and the
     // counter) are docked into the same strip as the size buttons, as arrow
     // and restart icons, so nothing sits under the plot (Ian, 2026-11-04).
