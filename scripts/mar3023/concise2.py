@@ -6,6 +6,8 @@ import sys, re
 src, out = sys.argv[1:3]; keep_svg = "--bcg-svg" in sys.argv
 t = open(src, encoding="utf-8").read()
 head = t[:t.index("<body>") + len("<body>")]
+# the Concise is mostly tables: on a phone they scroll inside themselves rather than pushing the page sideways
+head = head.replace("</head>", "<style>\n@media (max-width: 600px) { table { display: block; overflow-x: auto; } table th, table td { padding: 8px 10px; font-size: 15px; } }\n</style>\n</head>", 1)
 videos = re.findall(r"<details class=\"video-section\">.*?</details>", t, re.S); assert len(videos) == 2
 vstyle = re.search(r"<style>\n\.video-section \{.*?</style>", t, re.S).group(0)
 bcg_svg = re.search(r'<figure class="sk-fig[^"]*"[^>]*><svg[^>]*aria-label="The BCG matrix.*?</figure>', t, re.S)
