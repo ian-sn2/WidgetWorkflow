@@ -158,6 +158,37 @@ def modern_head(t):
     t = re.sub(r'<script src="https://smokinnotes\.s3\.us-east-1\.amazonaws\.com/content/sn25-v5\.js"></script>', '<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>', t, 1)
     assert "sn25-v6.css" in t and "studyguide/sn25-v2.js" in t, "head"
     return t
+def bcg_fig():
+    """The BCG matrix drawn: the four quadrants in the picture's own tints, a simple icon in each."""
+    x0, y0, c = 120, 70, 150; b = ""
+    tints = ["#d9d3ea", "#f8c9ad", "#e8dbb6", "#bfe0ea"]; names = ["Question Mark", "Star", "Dog", "Cash Cow"]
+    for i in range(4):
+        x = x0 + (i % 2) * c; y = y0 + (i // 2) * c
+        b += f'<rect x="{x}" y="{y}" width="{c}" height="{c}" fill="{tints[i]}" stroke="#fff" stroke-width="3"/>'
+        b += text(x + c / 2, y + c - 16, names[i], 15)
+    cx, cy = x0 + c / 2, y0 + c / 2
+    b += f'<text x="{cx}" y="{cy + 22}" text-anchor="middle" font-size="78" font-weight="800" fill="#7a6ea6">?</text>'
+    import math
+    cx, cy = x0 + 1.5 * c, y0 + c / 2 - 6; pts = []
+    for k in range(10):
+        r = 44 if k % 2 == 0 else 18; a = -math.pi / 2 + k * math.pi / 5; pts.append(f"{cx + r*math.cos(a):.1f},{cy + r*math.sin(a):.1f}")
+    b += f'<polygon points="{" ".join(pts)}" fill="#f26b1f" stroke="#c74e0e" stroke-width="2"/>'
+    # the dog: a round head, two floppy ears, eyes, a nose
+    cx, cy = x0 + c / 2, y0 + 1.5 * c - 8
+    b += f'<ellipse cx="{cx - 34}" cy="{cy + 4}" rx="12" ry="24" fill="#a9754a"/><ellipse cx="{cx + 34}" cy="{cy + 4}" rx="12" ry="24" fill="#a9754a"/>'
+    b += f'<circle cx="{cx}" cy="{cy}" r="34" fill="#d9ab7c" stroke="#a9754a" stroke-width="2"/>'
+    b += f'<circle cx="{cx - 12}" cy="{cy - 6}" r="4" fill="#2b343c"/><circle cx="{cx + 12}" cy="{cy - 6}" r="4" fill="#2b343c"/><ellipse cx="{cx}" cy="{cy + 10}" rx="7" ry="5" fill="#2b343c"/>'
+    # the cash cow: a coin
+    cx, cy = x0 + 1.5 * c, y0 + 1.5 * c - 8
+    b += f'<circle cx="{cx}" cy="{cy}" r="40" fill="#3f8fa6" stroke="#2b6f84" stroke-width="3"/><circle cx="{cx}" cy="{cy}" r="30" fill="none" stroke="#9fd3e0" stroke-width="2"/>'
+    b += f'<text x="{cx}" y="{cy + 16}" text-anchor="middle" font-size="46" font-weight="800" fill="#fff">$</text>'
+    # the axes
+    b += text(x0 + c, 24, "Relative Market Share (RMS)", 15)
+    b += f'<text x="{x0 + c/2}" y="52" text-anchor="middle" font-size="13" fill="{INK}"><tspan font-weight="800">Low</tspan> (&lt; 1)</text><text x="{x0 + 1.5*c}" y="52" text-anchor="middle" font-size="13" fill="{INK}"><tspan font-weight="800">High</tspan> (&gt; 1)</text>'
+    b += f'<text transform="translate(36 {y0 + c}) rotate(-90)" text-anchor="middle" font-size="15" font-weight="800" fill="{INK}">Market Growth Rate</text>'
+    b += f'<text transform="translate(92 {y0 + c/2}) rotate(-90)" text-anchor="middle" font-size="13" fill="{INK}"><tspan font-weight="800">High</tspan> (&gt; 10%)</text><text transform="translate(92 {y0 + 1.5*c}) rotate(-90)" text-anchor="middle" font-size="13" fill="{INK}"><tspan font-weight="800">Low</tspan> (&lt; 10%)</text>'
+    return fig(440, 390, b, "The BCG matrix: question marks and stars in high-growth markets, dogs and cash cows in low-growth ones; stars and cash cows hold high relative market share", 400, "narrow", True)
+
 def chapter2(src, outA, outB):
     t = modern_head(open(src, encoding="utf-8").read())
     t = sub1(t, "Dr. Cooke noted that Google restructured under Alphabet", "Google restructured under Alphabet", "cooke ch2")
@@ -166,7 +197,8 @@ def chapter2(src, outA, outB):
     i = t.index('<p id="intro-note">'); j = t.index("</p>", i); t = t[:j] + "</i></p>" + t[j + 4:]
     t = sub1(t, "</head>", "<script>document.addEventListener('DOMContentLoaded', function () { var b = document.getElementById('intro-note'), t = document.querySelector('details.toc-box'); if (b && t) b.parentNode.insertBefore(t, b); });</script>\n</head>", "ch2 blurb script")
     open(outA, "w", encoding="utf-8").write(t)   # version A: as it is, images kept
-    b = replace_img(t, "02-experience-curve.png", widget(EXPERIENCE))
+    b = replace_img(t, "01-bcg-matrix.png", bcg_fig()["html"])
+    b = replace_img(b, "02-experience-curve.png", widget(EXPERIENCE))
     b = replace_img(b, "03-sales-response-curve.png", widget(SALES))
     finish(b, outB)
 
