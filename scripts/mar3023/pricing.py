@@ -183,7 +183,8 @@ def bcg_fig():
     b += f'<ellipse cx="{cx - 36}" cy="{cy - 4}" rx="13" ry="9" fill="#e8c7c7" stroke="#2b343c" stroke-width="1.5"/><ellipse cx="{cx + 36}" cy="{cy - 4}" rx="13" ry="9" fill="#e8c7c7" stroke="#2b343c" stroke-width="1.5"/>'
     b += f'<path d="M {cx - 22} {cy - 26} q -14 -16 -4 -28 q 10 10 12 22 z" fill="#e9d8a6" stroke="#2b343c" stroke-width="1.5"/><path d="M {cx + 22} {cy - 26} q 14 -16 4 -28 q -10 10 -12 22 z" fill="#e9d8a6" stroke="#2b343c" stroke-width="1.5"/>'
     b += f'<ellipse cx="{cx}" cy="{cy}" rx="34" ry="32" fill="#fff" stroke="#2b343c" stroke-width="2"/>'
-    b += f'<path d="M {cx - 30} {cy - 14} q 10 -12 22 -4 q -2 14 -14 16 q -10 -2 -8 -12 z" fill="#2b343c"/><path d="M {cx + 10} {cy - 28} q 14 2 18 14 q -8 6 -16 2 q -6 -8 -2 -16 z" fill="#2b343c"/>'
+    # one patch over each eye, mirror images of each other
+    b += f'<path d="M {cx - 28} {cy - 16} q 8 -14 22 -8 q 2 12 -8 18 q -12 2 -14 -10 z" fill="#2b343c"/><path d="M {cx + 28} {cy - 16} q -8 -14 -22 -8 q -2 12 8 18 q 12 2 14 -10 z" fill="#2b343c"/>'
     b += f'<circle cx="{cx - 11}" cy="{cy - 4}" r="4" fill="#2b343c"/><circle cx="{cx + 11}" cy="{cy - 4}" r="4" fill="#2b343c"/>'
     b += f'<ellipse cx="{cx}" cy="{cy + 14}" rx="18" ry="11" fill="#f2b8c6" stroke="#2b343c" stroke-width="1.5"/><circle cx="{cx - 6}" cy="{cy + 14}" r="2.2" fill="#2b343c"/><circle cx="{cx + 6}" cy="{cy + 14}" r="2.2" fill="#2b343c"/>'
     b += f'<circle cx="{cx + 26}" cy="{cy + 30}" r="15" fill="#3f8fa6" stroke="#2b6f84" stroke-width="2"/><text x="{cx + 26}" y="{cy + 36}" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">$</text>'
