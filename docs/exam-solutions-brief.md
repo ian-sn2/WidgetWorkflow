@@ -44,14 +44,16 @@ The body is:
 ```
 
 The shell reads `data-term`, `data-exam` and `data-topic` off the sections and
-builds a panel of buttons: three rows of cards, **Semester, then Exam, then
-Topic** (Ian, 2026-11-04: buttons and cards rather than a folding list), each
+opens on a **menu**: a greeting and a panel of buttons, three rows of cards,
+**Semester, then Exam, then Topic** (Ian, 2026-11-04: a home screen that goes
+away once chosen, to save vertical space), each
 card naming its choice and how many questions it holds, the chosen one
 filled navy; a later row lists only what the earlier choices allow. Topics
 run in Ian's order (The PPF first, then Supply and Demand, Elasticity,
-Efficiency and Equity, Government Intervention, International Trade). Under
-the panel a status line names the selection and a bar shows how far through
-it the reader is.
+Efficiency and Equity, Government Intervention, International Trade). Picking
+a topic card opens the **questions view**: the menu is gone and a bar at the
+top carries a "Back to menu" button, a status line naming the selection, and
+a progress bar. A link with a selection in its hash opens on the questions.
 
 Under the picker the shell shows **one question at a time** in its own box
 (Ian, 2026-10-26: a self-contained box that needs no scrolling until a

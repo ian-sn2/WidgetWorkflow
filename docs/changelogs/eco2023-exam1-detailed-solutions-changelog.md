@@ -123,12 +123,14 @@ through; the counts are in the build log and the tags are on each section.
 * **Every question is paraphrased**: stem and choices restated, numbers and
   choice order kept. The build checks that every number in the original
   stem survives, and that each question keeps its count of choices.
-* **The picker is a panel of cards** (2026-11-04; it was a folding box in
-  the table-of-contents style): Semester, then Exam, then Topic, each card
-  with its question count, the topics in Ian's order with The PPF first (his
-  list did not name it; it is the course's first chapter, so it leads -- his
-  call if it should go elsewhere). A status line and progress bar sit between
-  the panel and the question, and the question fades in when it changes.
+* **The page opens on a menu** (2026-11-04): a greeting in Ian's words and a
+  panel of cards, Semester, then Exam, then Topic, each card with its
+  question count, the topics in Ian's order with The PPF first (his list did
+  not name it; it is the course's first chapter, so it leads -- his call if it
+  should go elsewhere). Picking a topic replaces the menu with the questions,
+  under a bar carrying "Back to menu", the selection and a progress bar; the
+  question fades in when it changes. The greeting says "practice", as Ian
+  wrote it; the heading says Detailed Solutions, as his manager asked.
 * **One question at a time**, in its own box, with Previous / Next, a strip
   of question numbers between them (the current one filled navy, an answered
   one green or red, a bookmarked one carrying a ribbon; Ian, 2026-10-27) and the arrow

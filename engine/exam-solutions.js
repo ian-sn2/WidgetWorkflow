@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.15 =====
+/* ===== exam-solutions.js v0.16 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -72,7 +72,7 @@
 
     var terms = uniq(secs.map(function (s) { return s.dataset.term; }))
       .sort(function (a, b) { return b.localeCompare(a); });            // newest first
-    var state = { term: terms[0], exam: '', topic: '', idx: 0 };
+    var state = { term: terms[0], exam: '', topic: '', idx: 0, view: 'menu' };
 
     function examsFor(term) {
       return uniq(secs.filter(function (s) { return s.dataset.term === term; })
@@ -96,14 +96,26 @@
     // how many questions it holds, the chosen one filled navy. Under it a
     // status line names the selection and a bar shows how far along the
     // reader is.
+    // Two views (Ian, 2026-11-04): the menu -- a greeting and the card panel,
+    // which is the page as it opens -- and the questions, where the panel is
+    // gone and a bar at the top carries "Back to menu", the selection and
+    // the progress. Picking a topic card is what starts the questions.
+    var menu = document.createElement('div'); menu.className = 'sol-menu';
+    var hello = document.createElement('p'); hello.className = 'sol-hello';
+    hello.textContent = 'Hello! Select which semester, exam, and topics you would like to practice.';
     var picker = document.createElement('div'); picker.className = 'sol-picker';
-    mount.appendChild(picker);
+    menu.appendChild(hello); menu.appendChild(picker);
+    mount.appendChild(menu);
+    var top = document.createElement('div'); top.className = 'sol-top';
+    var back = document.createElement('button'); back.type = 'button'; back.className = 'sol-back'; back.textContent = '\u2039 Back to menu';
+    back.addEventListener('click', function () { state.view = 'menu'; render(); });
     var status = document.createElement('div'); status.className = 'sol-status';
     var statusText = document.createElement('div'); statusText.className = 'sol-status-text';
     var progress = document.createElement('div'); progress.className = 'sol-progress';
     var progressBar = document.createElement('div'); progressBar.className = 'sol-progress-bar';
     progress.appendChild(progressBar); status.appendChild(statusText); status.appendChild(progress);
-    mount.appendChild(status);
+    top.appendChild(back); top.appendChild(status);
+    mount.appendChild(top);
 
     function countFor(term, exam, topic) {
       return secs.filter(function (s) {
@@ -157,15 +169,17 @@
       picker.appendChild(stage('Topic', 'in the order the course teaches them',
         [{ value: '', label: 'All topics', count: countFor(state.term, state.exam, ''), current: !state.topic }].concat(
           topicsFor(state.term, state.exam).map(function (t) { return { value: t, label: t, count: countFor(state.term, state.exam, t), current: t === state.topic }; })),
-        function (v) { state.topic = v; state.idx = 0; render(); }));
+        function (v) { state.topic = v; state.idx = 0; state.view = 'questions'; render(); window.scrollTo(0, 0); }));
 
+      var inMenu = state.view === 'menu';
+      menu.hidden = !inMenu; top.hidden = inMenu; bar.hidden = inMenu;
       var list = secs.filter(function (s) {
         return s.dataset.term === state.term && s.dataset.exam === state.exam &&
                (!state.topic || s.dataset.topic === state.topic);
       });
       if (state.idx >= list.length) state.idx = Math.max(0, list.length - 1);
       secs.forEach(function (s) {
-        var show = s === list[state.idx];
+        var show = !inMenu && s === list[state.idx];
         if (show && s.hidden) { s.classList.remove('sol-in'); void s.offsetWidth; s.classList.add('sol-in'); }
         s.hidden = !show;
       });
@@ -191,7 +205,7 @@
       });
       prev.disabled = state.idx <= 0; next.disabled = state.idx >= list.length - 1;
 
-      var hash = '#' + state.term + '/' + state.exam + '/' + encodeURIComponent(state.topic || '') + '/' + (state.idx + 1);
+      var hash = inMenu ? '#' : '#' + state.term + '/' + state.exam + '/' + encodeURIComponent(state.topic || '') + '/' + (state.idx + 1);
       if (location.hash !== hash && history.replaceState) history.replaceState(null, '', hash);
     }
 
@@ -208,6 +222,7 @@
         if (src) {
           state.term = src.dataset.term; state.exam = src.dataset.exam; state.topic = '';
           state.idx = secs.filter(function (s) { return s.dataset.term === state.term && s.dataset.exam === state.exam; }).indexOf(src);
+          state.view = 'questions';
           render();
           return true;
         }
@@ -215,6 +230,7 @@
       }
       var parts = h.split('/');
       if (terms.indexOf(parts[0]) < 0) return false;
+      state.view = 'questions';
       state.term = parts[0]; state.exam = parts[1] || ''; state.topic = parts[2] || '';
       state.idx = Math.max(0, (parseInt(parts[3], 10) || 1) - 1);
       render();
