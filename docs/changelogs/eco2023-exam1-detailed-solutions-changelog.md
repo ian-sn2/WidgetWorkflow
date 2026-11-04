@@ -192,6 +192,6 @@ results are in the commit message of the push that carried them.
 * **No exam row (shell v0.30).** One page per exam is the plan, so a page
   carrying a single exam has it chosen already and the menu shows only the
   semester and topic rows. A page with two or more exams still shows the row.
-* **Counter and strip agree (shell v0.32).** The counter names the real question
-  number, as the strip does, and under a topic filter adds the position
-  ("Question 4 · 1 of 8"). The strip is centred.
+* **Counter is progress only (shell v0.33).** It reads "1 of 8": position in
+  the set chosen. The question's own number is in the box heading and the
+  lit strip button. The strip is centred.

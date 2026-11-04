@@ -35,7 +35,7 @@
 .sol-shell .sol-status { flex:1 1 auto; min-width:0; }
 .sol-shell .sol-status-text { display:flex; justify-content:flex-start; align-items:baseline; gap:10px; flex-wrap:wrap; font-size:.9rem; color:var(--ink); }
 .sol-shell .sol-status-text strong { color:var(--navy); }
-.sol-shell .sol-status-n { font-weight:700; color:var(--navy); white-space:nowrap; min-width:9em; text-align:center; }
+.sol-shell .sol-status-n { font-weight:700; color:var(--navy); white-space:nowrap; min-width:4.5em; text-align:center; }
 /* Previous and Next either side of the count. The first question keeps
    Previous's room but not the button, so the count does not jump. */
 .sol-shell .sol-pager { flex:0 0 auto; display:flex; align-items:center; gap:8px; margin-left:auto; }
