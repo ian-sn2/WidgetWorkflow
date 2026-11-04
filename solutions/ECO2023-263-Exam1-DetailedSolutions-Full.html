@@ -1766,7 +1766,7 @@
 .sol-shell .sol-status { flex:1 1 auto; min-width:0; }
 .sol-shell .sol-status-text { display:flex; justify-content:flex-start; align-items:baseline; gap:10px; flex-wrap:wrap; font-size:.9rem; color:var(--ink); }
 .sol-shell .sol-status-text strong { color:var(--navy); }
-.sol-shell .sol-status-n { font-weight:700; color:var(--navy); white-space:nowrap; min-width:7.5em; text-align:center; }
+.sol-shell .sol-status-n { font-weight:700; color:var(--navy); white-space:nowrap; min-width:9em; text-align:center; }
 /* Previous and Next either side of the count. The first question keeps
    Previous's room but not the button, so the count does not jump. */
 .sol-shell .sol-pager { flex:0 0 auto; display:flex; align-items:center; gap:8px; margin-left:auto; }
@@ -1792,7 +1792,7 @@ section.sol { margin:0 0 20px; padding:14px 20px 16px; border:1px solid #DEDEDE;
 section.sol.sol-in { animation:sol-fade .22s ease-out; }
 @media (prefers-reduced-motion: reduce) { section.sol.sol-in { animation:none; } .sol-shell .sol-card { transition:none; } }
 /* The strip is the top bar's second row. */
-.sol-shell .sol-strip { display:flex; flex-wrap:wrap; gap:4px; flex-basis:100%; padding-top:8px; border-top:1px solid #e4e9f4; }
+.sol-shell .sol-strip { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; flex-basis:100%; padding-top:8px; border-top:1px solid #e4e9f4; }
 .sol-shell .sol-strip:empty { display:none; }
 .sol-shell .sol-strip .sol-num { display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; line-height:1;
   min-width:32px; height:32px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
@@ -1899,7 +1899,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.31 =====
+/* ===== exam-solutions.js v0.32 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -2139,7 +2139,12 @@ section.sol .sol-table table { margin:0; }
         s.hidden = !show;
       });
       statusText.innerHTML = '<strong>' + termName(state.term) + '</strong> \u00b7 ' + examName(state.exam) + ' \u00b7 ' + (state.topic || 'Full Exam');
-      count.textContent = list.length ? 'Question ' + (state.idx + 1) + ' of ' + list.length : '';
+      // The counter names the real question, as the strip does; under a
+      // topic filter it adds the position, since question 4 may be the first
+      // of eight shown (Ian, 2026-11-04).
+      var cur = list[state.idx], qm = cur && /-q(\d+)$/.exec(cur.id);
+      var qn = qm ? qm[1] : String(state.idx + 1);
+      count.textContent = !list.length ? '' : state.topic ? 'Question ' + qn + ' \u00b7 ' + (state.idx + 1) + ' of ' + list.length : 'Question ' + qn + ' of ' + list.length;
       progressBar.style.width = list.length ? (100 * (state.idx + 1) / list.length).toFixed(1) + '%' : '0%';
       groups.forEach(function (g) { g.hidden = !g.querySelector('section.sol:not([hidden])'); });
       // the box for the question goes under the picker, the nav under it

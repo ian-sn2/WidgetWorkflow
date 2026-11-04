@@ -35,7 +35,7 @@
 .sol-shell .sol-status { flex:1 1 auto; min-width:0; }
 .sol-shell .sol-status-text { display:flex; justify-content:flex-start; align-items:baseline; gap:10px; flex-wrap:wrap; font-size:.9rem; color:var(--ink); }
 .sol-shell .sol-status-text strong { color:var(--navy); }
-.sol-shell .sol-status-n { font-weight:700; color:var(--navy); white-space:nowrap; min-width:7.5em; text-align:center; }
+.sol-shell .sol-status-n { font-weight:700; color:var(--navy); white-space:nowrap; min-width:9em; text-align:center; }
 /* Previous and Next either side of the count. The first question keeps
    Previous's room but not the button, so the count does not jump. */
 .sol-shell .sol-pager { flex:0 0 auto; display:flex; align-items:center; gap:8px; margin-left:auto; }
@@ -61,7 +61,7 @@ section.sol { margin:0 0 20px; padding:14px 20px 16px; border:1px solid #DEDEDE;
 section.sol.sol-in { animation:sol-fade .22s ease-out; }
 @media (prefers-reduced-motion: reduce) { section.sol.sol-in { animation:none; } .sol-shell .sol-card { transition:none; } }
 /* The strip is the top bar's second row. */
-.sol-shell .sol-strip { display:flex; flex-wrap:wrap; gap:4px; flex-basis:100%; padding-top:8px; border-top:1px solid #e4e9f4; }
+.sol-shell .sol-strip { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; flex-basis:100%; padding-top:8px; border-top:1px solid #e4e9f4; }
 .sol-shell .sol-strip:empty { display:none; }
 .sol-shell .sol-strip .sol-num { display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; line-height:1;
   min-width:32px; height:32px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;

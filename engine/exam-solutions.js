@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.31 =====
+/* ===== exam-solutions.js v0.32 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -238,7 +238,12 @@
         s.hidden = !show;
       });
       statusText.innerHTML = '<strong>' + termName(state.term) + '</strong> \u00b7 ' + examName(state.exam) + ' \u00b7 ' + (state.topic || 'Full Exam');
-      count.textContent = list.length ? 'Question ' + (state.idx + 1) + ' of ' + list.length : '';
+      // The counter names the real question, as the strip does; under a
+      // topic filter it adds the position, since question 4 may be the first
+      // of eight shown (Ian, 2026-11-04).
+      var cur = list[state.idx], qm = cur && /-q(\d+)$/.exec(cur.id);
+      var qn = qm ? qm[1] : String(state.idx + 1);
+      count.textContent = !list.length ? '' : state.topic ? 'Question ' + qn + ' \u00b7 ' + (state.idx + 1) + ' of ' + list.length : 'Question ' + qn + ' of ' + list.length;
       progressBar.style.width = list.length ? (100 * (state.idx + 1) / list.length).toFixed(1) + '%' : '0%';
       groups.forEach(function (g) { g.hidden = !g.querySelector('section.sol:not([hidden])'); });
       // the box for the question goes under the picker, the nav under it
