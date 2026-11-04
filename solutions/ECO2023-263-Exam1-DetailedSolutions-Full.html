@@ -1759,19 +1759,26 @@
 .sol-shell .sol-strip .sol-num.is-seen { background:#f1f6f3; border-color:#9fcdb1; }
 /* The menu's greeting, and the bar at the top of the questions view. */
 .sol-shell .sol-hello { font-size:1.15rem; font-weight:600; color:var(--navy); margin:0 0 12px; line-height:1.4; }
-.sol-shell .sol-top { display:flex; align-items:center; gap:14px; margin:0 0 12px; padding:10px 14px; border:1px solid var(--rule); border-radius:12px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+.sol-shell .sol-top { display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin:0 0 12px; padding:10px 14px; border:1px solid var(--rule); border-radius:12px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
 .sol-shell .sol-back { flex:0 0 auto; white-space:nowrap; border:1px solid var(--navy); background:var(--navy); color:#fff; padding:8px 14px; min-height:40px; border-radius:8px; font:inherit; font-size:.9rem; font-weight:700; cursor:pointer; }
 .sol-shell .sol-back:hover { background:#0b3a8a; }
 /* The status line and progress bar beside it. */
 .sol-shell .sol-status { flex:1 1 auto; min-width:0; }
-.sol-shell .sol-status-text { display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; font-size:.9rem; color:var(--ink); }
+.sol-shell .sol-status-text { display:flex; justify-content:flex-start; align-items:baseline; gap:10px; flex-wrap:wrap; font-size:.9rem; color:var(--ink); }
 .sol-shell .sol-status-text strong { color:var(--navy); }
-.sol-shell .sol-status-n { margin-left:auto; font-weight:700; color:var(--navy); }
+.sol-shell .sol-status-n { font-weight:700; color:var(--navy); white-space:nowrap; min-width:7.5em; text-align:center; }
+/* Previous and Next either side of the count. The first question keeps
+   Previous's room but not the button, so the count does not jump. */
+.sol-shell .sol-pager { flex:0 0 auto; display:flex; align-items:center; gap:8px; margin-left:auto; }
+.sol-shell .sol-pager > button { flex:0 0 auto; white-space:nowrap; border:1px solid #002060; background:#fff; color:#002060; padding:6px 12px; min-height:36px; font:inherit; font-size:.88rem; font-weight:700; cursor:pointer; border-radius:6px; }
+.sol-shell .sol-pager > button.is-off { visibility:hidden; }
+.sol-shell .sol-pager > button.sol-finish { background:#002060; color:#fff; }
 .sol-shell .sol-progress { height:6px; border-radius:3px; background:#e4e9f4; margin-top:6px; overflow:hidden; }
 .sol-shell .sol-progress-bar { height:100%; background:var(--navy); border-radius:3px; transition:width .25s ease; }
 @media (max-width:640px){
-  .sol-shell .sol-top { flex-wrap:wrap; }
-  .sol-shell .sol-status { flex-basis:100%; }
+  .sol-shell .sol-status { flex-basis:100%; order:2; }
+  .sol-shell .sol-pager { order:1; }
+  .sol-shell .sol-strip { order:3; }
   .sol-shell .sol-picker { padding:10px 12px 4px; }
   .sol-shell .sol-stage { flex-direction:column; gap:6px; }
   .sol-shell .sol-stage-k { flex-basis:auto; padding-top:0; }
@@ -1780,22 +1787,17 @@
 /* The current question sits in its own box under the picker; the groups'
    headings stay in the page for structure but are not shown. */
 .sol-group > h2 { display:none; }
-section.sol { margin:0; padding:14px 20px 16px; border:1px solid #DEDEDE; border-radius:14px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+section.sol { margin:0 0 20px; padding:14px 20px 16px; border:1px solid #DEDEDE; border-radius:14px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
 @keyframes sol-fade { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
 section.sol.sol-in { animation:sol-fade .22s ease-out; }
 @media (prefers-reduced-motion: reduce) { section.sol.sol-in { animation:none; } .sol-shell .sol-card { transition:none; } }
-.sol-shell .sol-nav { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0 20px; }
-.sol-shell .sol-nav > button { flex:0 0 auto; white-space:nowrap; border:1px solid #002060; background:#fff; color:#002060; padding:8px 16px; min-height:44px; font:inherit; font-size:.95rem; font-weight:700; cursor:pointer; border-radius:6px; }
-.sol-shell .sol-nav > button:disabled { opacity:.35; cursor:default; }
-.sol-shell .sol-nav > button[hidden] { display:none; }
-.sol-shell .sol-nav > button.sol-finish { background:#002060; color:#fff; }
-.sol-shell .sol-strip { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; flex:1 1 auto; }
-.sol-shell .sol-strip .sol-num { min-width:34px; min-height:34px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
-  color:#002060; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
+/* The strip is the top bar's second row. */
+.sol-shell .sol-strip { display:flex; flex-wrap:wrap; gap:4px; flex-basis:100%; padding-top:8px; border-top:1px solid #e4e9f4; }
+.sol-shell .sol-strip:empty { display:none; }
+.sol-shell .sol-strip .sol-num { min-width:32px; min-height:32px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
+  color:#002060; font:inherit; font-size:.82rem; font-weight:700; cursor:pointer; }
 .sol-shell .sol-strip .sol-num[aria-pressed="true"] { background:#002060; border-color:#002060; color:#fff; }
 @media (max-width:640px){
-  .sol-shell .sol-nav { flex-wrap:wrap; }
-  .sol-shell .sol-strip { order:3; flex-basis:100%; }
   .sol-shell .sol-strip .sol-num { min-width:40px; min-height:40px; }
 }
 section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; display:flex; align-items:center; gap:8px; }
@@ -1896,7 +1898,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.28 =====
+/* ===== exam-solutions.js v0.29 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -2031,7 +2033,16 @@ section.sol .sol-table table { margin:0; }
     var progress = document.createElement('div'); progress.className = 'sol-progress';
     var progressBar = document.createElement('div'); progressBar.className = 'sol-progress-bar';
     progress.appendChild(progressBar); status.appendChild(statusText); status.appendChild(progress);
-    top.appendChild(back); top.appendChild(status);
+    // Previous and Next flank the question count at the bar's right, and the
+    // strip of question numbers runs along the bar's second row, so nothing
+    // sits under the question box (Ian, 2026-11-04).
+    var pager = document.createElement('div'); pager.className = 'sol-pager';
+    var prev = document.createElement('button'); prev.type = 'button'; prev.className = 'sol-prev'; prev.textContent = '\u2039 Prev';
+    var count = document.createElement('span'); count.className = 'sol-status-n';
+    var next = document.createElement('button'); next.type = 'button'; next.className = 'sol-next'; next.textContent = 'Next \u203a';
+    pager.appendChild(prev); pager.appendChild(count); pager.appendChild(next);
+    var strip = document.createElement('div'); strip.className = 'sol-strip';
+    top.appendChild(back); top.appendChild(status); top.appendChild(pager); top.appendChild(strip);
     mount.appendChild(top);
 
     function countFor(term, exam, topic) {
@@ -2070,14 +2081,8 @@ section.sol .sol-table table { margin:0; }
     }
 
 
-    // A strip of question numbers under the box (Ian, 2026-10-27), the
-    // current one filled, a bookmarked one wearing the ribbon. Previous and
-    // Next sit at its ends.
-    var bar = document.createElement('div'); bar.className = 'sol-nav';
-    var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
-    var strip = document.createElement('div'); strip.className = 'sol-strip';
-    var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
-    bar.appendChild(prev); bar.appendChild(strip); bar.appendChild(next);
+    // The strip of question numbers (Ian, 2026-10-27): the current one
+    // filled, a bookmarked one wearing the ribbon, a reviewed one tinted.
     // On the first question Previous has nothing to go to and is not drawn;
     // on the last, Next becomes Finish and returns to the menu, where the
     // cards show what has been reviewed (Ian, 2026-11-04).
@@ -2110,12 +2115,12 @@ section.sol .sol-table table { margin:0; }
         allExams().map(function (e) { return { value: e, label: examName(e), count: countFor(T, e, state.topic), seen: seenCount(T, e, state.topic), current: e === state.exam }; }),
         function (v) { state.exam = v; state.idx = 0; maybeStart(); }));
       picker.appendChild(stage('Topic', '',
-        [{ value: '', label: 'All topics', count: countFor(T, E, ''), seen: seenCount(T, E, ''), current: !!state.topicChosen && !state.topic }].concat(
+        [{ value: '', label: 'Whole exam, in order', count: countFor(T, E, ''), seen: seenCount(T, E, ''), current: !!state.topicChosen && !state.topic }].concat(
           allTopics(T, E).map(function (t) { return { value: t, label: t, count: countFor(T, E, t), seen: seenCount(T, E, t), current: t === state.topic }; })),
         function (v) { state.topic = v; state.topicChosen = true; state.idx = 0; maybeStart(); }));
 
       var inMenu = state.view === 'menu';
-      menu.hidden = !inMenu; top.hidden = inMenu; bar.hidden = inMenu;
+      menu.hidden = !inMenu; top.hidden = inMenu;
       var list = secs.filter(function (s) {
         return state.term && state.exam && s.dataset.term === state.term && s.dataset.exam === state.exam &&
                (!state.topic || s.dataset.topic === state.topic);
@@ -2127,13 +2132,12 @@ section.sol .sol-table table { margin:0; }
         if (show && s.hidden) { s.classList.remove('sol-in'); void s.offsetWidth; s.classList.add('sol-in'); }
         s.hidden = !show;
       });
-      statusText.innerHTML = '<strong>' + termName(state.term) + '</strong> \u00b7 ' + examName(state.exam) + ' \u00b7 ' +
-        (state.topic || 'All topics') + (list.length ? ' <span class="sol-status-n">Question ' + (state.idx + 1) + ' of ' + list.length + '</span>' : '');
+      statusText.innerHTML = '<strong>' + termName(state.term) + '</strong> \u00b7 ' + examName(state.exam) + ' \u00b7 ' + (state.topic || 'Whole exam, in order');
+      count.textContent = list.length ? 'Question ' + (state.idx + 1) + ' of ' + list.length : '';
       progressBar.style.width = list.length ? (100 * (state.idx + 1) / list.length).toFixed(1) + '%' : '0%';
       groups.forEach(function (g) { g.hidden = !g.querySelector('section.sol:not([hidden])'); });
       // the box for the question goes under the picker, the nav under it
       if (list[state.idx]) mount.appendChild(list[state.idx]);
-      mount.appendChild(bar);
       strip.innerHTML = '';
       // Each button carries the question's own number (from its id, ...-q24),
       // not its position in the selection: under a topic filter the ninth
@@ -2148,7 +2152,7 @@ section.sol .sol-table table { margin:0; }
         strip.appendChild(btn);
       });
       lastIdx = list.length - 1;
-      prev.hidden = state.idx <= 0;
+      prev.classList.toggle('is-off', state.idx <= 0);
       var atEnd = state.idx >= lastIdx;
       next.textContent = atEnd ? 'Finish \u2713' : 'Next \u203a';
       next.classList.toggle('sol-finish', atEnd);

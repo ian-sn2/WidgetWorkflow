@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.28 =====
+/* ===== exam-solutions.js v0.29 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -133,7 +133,16 @@
     var progress = document.createElement('div'); progress.className = 'sol-progress';
     var progressBar = document.createElement('div'); progressBar.className = 'sol-progress-bar';
     progress.appendChild(progressBar); status.appendChild(statusText); status.appendChild(progress);
-    top.appendChild(back); top.appendChild(status);
+    // Previous and Next flank the question count at the bar's right, and the
+    // strip of question numbers runs along the bar's second row, so nothing
+    // sits under the question box (Ian, 2026-11-04).
+    var pager = document.createElement('div'); pager.className = 'sol-pager';
+    var prev = document.createElement('button'); prev.type = 'button'; prev.className = 'sol-prev'; prev.textContent = '\u2039 Prev';
+    var count = document.createElement('span'); count.className = 'sol-status-n';
+    var next = document.createElement('button'); next.type = 'button'; next.className = 'sol-next'; next.textContent = 'Next \u203a';
+    pager.appendChild(prev); pager.appendChild(count); pager.appendChild(next);
+    var strip = document.createElement('div'); strip.className = 'sol-strip';
+    top.appendChild(back); top.appendChild(status); top.appendChild(pager); top.appendChild(strip);
     mount.appendChild(top);
 
     function countFor(term, exam, topic) {
@@ -172,14 +181,8 @@
     }
 
 
-    // A strip of question numbers under the box (Ian, 2026-10-27), the
-    // current one filled, a bookmarked one wearing the ribbon. Previous and
-    // Next sit at its ends.
-    var bar = document.createElement('div'); bar.className = 'sol-nav';
-    var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '\u2039 Previous';
-    var strip = document.createElement('div'); strip.className = 'sol-strip';
-    var next = document.createElement('button'); next.type = 'button'; next.textContent = 'Next \u203a';
-    bar.appendChild(prev); bar.appendChild(strip); bar.appendChild(next);
+    // The strip of question numbers (Ian, 2026-10-27): the current one
+    // filled, a bookmarked one wearing the ribbon, a reviewed one tinted.
     // On the first question Previous has nothing to go to and is not drawn;
     // on the last, Next becomes Finish and returns to the menu, where the
     // cards show what has been reviewed (Ian, 2026-11-04).
@@ -212,12 +215,12 @@
         allExams().map(function (e) { return { value: e, label: examName(e), count: countFor(T, e, state.topic), seen: seenCount(T, e, state.topic), current: e === state.exam }; }),
         function (v) { state.exam = v; state.idx = 0; maybeStart(); }));
       picker.appendChild(stage('Topic', '',
-        [{ value: '', label: 'All topics', count: countFor(T, E, ''), seen: seenCount(T, E, ''), current: !!state.topicChosen && !state.topic }].concat(
+        [{ value: '', label: 'Whole exam, in order', count: countFor(T, E, ''), seen: seenCount(T, E, ''), current: !!state.topicChosen && !state.topic }].concat(
           allTopics(T, E).map(function (t) { return { value: t, label: t, count: countFor(T, E, t), seen: seenCount(T, E, t), current: t === state.topic }; })),
         function (v) { state.topic = v; state.topicChosen = true; state.idx = 0; maybeStart(); }));
 
       var inMenu = state.view === 'menu';
-      menu.hidden = !inMenu; top.hidden = inMenu; bar.hidden = inMenu;
+      menu.hidden = !inMenu; top.hidden = inMenu;
       var list = secs.filter(function (s) {
         return state.term && state.exam && s.dataset.term === state.term && s.dataset.exam === state.exam &&
                (!state.topic || s.dataset.topic === state.topic);
@@ -229,13 +232,12 @@
         if (show && s.hidden) { s.classList.remove('sol-in'); void s.offsetWidth; s.classList.add('sol-in'); }
         s.hidden = !show;
       });
-      statusText.innerHTML = '<strong>' + termName(state.term) + '</strong> \u00b7 ' + examName(state.exam) + ' \u00b7 ' +
-        (state.topic || 'All topics') + (list.length ? ' <span class="sol-status-n">Question ' + (state.idx + 1) + ' of ' + list.length + '</span>' : '');
+      statusText.innerHTML = '<strong>' + termName(state.term) + '</strong> \u00b7 ' + examName(state.exam) + ' \u00b7 ' + (state.topic || 'Whole exam, in order');
+      count.textContent = list.length ? 'Question ' + (state.idx + 1) + ' of ' + list.length : '';
       progressBar.style.width = list.length ? (100 * (state.idx + 1) / list.length).toFixed(1) + '%' : '0%';
       groups.forEach(function (g) { g.hidden = !g.querySelector('section.sol:not([hidden])'); });
       // the box for the question goes under the picker, the nav under it
       if (list[state.idx]) mount.appendChild(list[state.idx]);
-      mount.appendChild(bar);
       strip.innerHTML = '';
       // Each button carries the question's own number (from its id, ...-q24),
       // not its position in the selection: under a topic filter the ninth
@@ -250,7 +252,7 @@
         strip.appendChild(btn);
       });
       lastIdx = list.length - 1;
-      prev.hidden = state.idx <= 0;
+      prev.classList.toggle('is-off', state.idx <= 0);
       var atEnd = state.idx >= lastIdx;
       next.textContent = atEnd ? 'Finish \u2713' : 'Next \u203a';
       next.classList.toggle('sol-finish', atEnd);

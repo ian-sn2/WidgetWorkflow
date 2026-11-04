@@ -184,3 +184,8 @@ results are in the commit message of the push that carried them.
 * **Ends of the list (shell v0.28).** Previous is not drawn on the first question,
   and on the last question Next becomes Finish, which returns to the menu where
   the cards show what has been reviewed. The right-arrow key does the same.
+* **Strip into the top bar (shell v0.29).** The question-number strip is the
+  top bar's second row, and Prev / Next flank "Question x of y" at the bar's
+  right, so nothing sits under the question box. The first topic card reads
+  "Whole exam, in order": it walks the exam by question number, which is
+  the linear path the boss asked for.
