@@ -17,30 +17,29 @@ def widget(cfg): return '<div class="sdg"><script type="application/json">' + js
 # TR = q, TC = 35 + 0.5q: they cross at (70, 70)
 BREAKEVEN = {"title": "Breakeven Analysis", "lede": "Total revenue against total cost as quantity sold rises.",
     "axes": AX("\nQuantity sold", "Revenue\nand cost ($)"),
-    "curves": [{"id": "tr", "label": "Total revenue", "pts": [[0, 0], [92, 92]], "color": "gold", "ldy": -10},
-               {"id": "tc", "label": "Total cost", "pts": [[0, 35], [84, 77]], "color": "ink", "ldx": 12, "ldy": -8},
-               {"id": "pl", "label": "", "pts": [[78, 92.5], [81, 82.5]], "leader": True, "at": 2}],   # the hairline from the name to the wedge it names
-    "points": [{"q": 70, "p": 70, "pl": "Breakeven\nprice", "ql": "Breakeven\nquantity", "label": "Breakeven\npoint", "dx": -72, "dy": -14, "at": 1},
-               {"q": 0, "p": 35, "dot": True, "guides": False, "showQ": False, "pl": "Fixed\ncost", "at": 0}],
-    "areas": [{"pts": [[70, 70], [84, 84], [84, 77]], "color": "teal", "opacity": 0.45, "label": "Profit", "lp": [77, 95], "at": 2},
-              {"pts": [[0, 0], [70, 70], [0, 35]], "color": "red", "opacity": 0.35, "label": "Loss", "lp": [18, 30], "at": 2}],
-    "vbraces": [{"p1": 35, "p2": 77, "q": 95, "label": "Variable\ncosts", "at": 0}, {"p1": 0, "p2": 35, "q": 95, "label": "Fixed\ncosts", "at": 0}],
+    "curves": [{"id": "tr", "label": "Total revenue", "pts": [[0, 0], [95, 95]], "color": "gold", "ldy": -10},
+               {"id": "tc", "label": "Total cost", "pts": [[0, 30], [95, 68]], "color": "ink", "ldx": 12, "ldy": -8}],
+    "points": [{"q": 50, "p": 50, "pl": "Breakeven\nprice", "ql": "Breakeven\nquantity", "label": "Breakeven\npoint", "dx": -72, "dy": -14, "at": 1},
+               {"q": 0, "p": 30, "dot": True, "guides": False, "showQ": False, "pl": "Fixed\ncost", "at": 0}],
+    "areas": [{"pts": [[50, 50], [95, 95], [95, 68]], "color": "teal", "opacity": 0.45, "label": "Profit", "lp": [84, 74], "at": 2},
+              {"pts": [[0, 0], [50, 50], [0, 30]], "color": "red", "opacity": 0.35, "label": "Loss", "lp": [15, 26], "at": 2}],
+    "vbraces": [{"p1": 30, "p2": 68, "q": 98, "label": "Variable\ncosts", "at": 0}, {"p1": 0, "p2": 30, "q": 98, "label": "Fixed\ncosts", "at": 0}],
     "steps": [cap("Total revenue starts at the origin, since every unit made is sold; total cost starts at the fixed cost and climbs at the unit variable cost."),
               cap("Where the two lines cross, revenue just covers cost: that quantity and that price are the breakeven point."),
               cap("Left of the breakeven point the firm loses money; right of it, every extra unit sold adds to profit.")]}
-SK = [[x, round(50 + 50 * 2.718 ** (-(x - 3) / 14), 2)] for x in range(3, 101, 4)]
-PEN = [[x, round(50 - 44 * 2.718 ** (-(x - 3) / 14), 2)] for x in range(3, 101, 4)]
+SK = [[x, round(54 + 46 * 2.718 ** (-(x - 3) / 14), 2)] for x in range(3, 97, 4)]
+PEN = [[x, round(46 - 40 * 2.718 ** (-(x - 3) / 14), 2)] for x in range(3, 97, 4)]
 SKIM = {"title": "Market Skimming and Market Penetration", "lede": "Two starting points for a price that moves toward the same equilibrium.",
     "axes": AX("Time", "Price"),
     "curves": [{"id": "s", "label": "Market\nSkimming", "pts": SK, "curved": True, "color": "gold", "lstart": True, "ldx": 44, "ldy": 0},
                {"id": "p", "label": "Market\nPenetration", "pts": PEN, "curved": True, "color": "ink", "lstart": True, "ldx": 48, "ldy": -22}],
     "hlines": [{"p": 50, "label": "Eventual\nequilibrium\nprice", "dashed": True, "color": "grey"}],
     "caption": cap("Skimming starts high and lowers the price as the least price-sensitive buyers are served; penetration starts low and raises it as the brand takes hold.")}
-BB = [[22, 100], [30, 84], [40, 70], [52, 58], [64, 48], [72, 38], [72, 28], [64, 18], [56, 12], [50, 10]]
+BB = [[26, 98], [34, 84], [44, 70], [54, 58], [62, 46], [65, 34], [61, 22], [52, 13], [42, 8]]
 PRESTIGE = {"title": "The Backward-Bending Demand Curve", "lede": "For a prestige good, cutting the price only raises demand up to a point.",
     "axes": AX("Quantity demanded", "Price"),
     "curves": [{"id": "d", "label": "Demand", "pts": BB, "curved": True, "color": "ink", "ldx": 40, "ldy": 0}],
-    "areas": [{"pts": [[18, 104], [30, 104], [52, 72], [62, 58], [58, 46], [44, 56], [26, 76], [14, 96]], "color": "gold", "opacity": 0.35, "label": "The firm wants to keep its\nprice in this part of the curve", "lp": [60, 96]}],
+    "areas": [{"pts": [[61.4, 53.6], [63.3, 56.7], [63.4, 61.3], [61.9, 66.9], [58.8, 73.0], [54.4, 79.1], [49.2, 84.4], [43.7, 88.5], [38.5, 91.0], [33.9, 91.7], [30.6, 90.4], [28.7, 87.3], [28.6, 82.7], [30.1, 77.1], [33.2, 71.0], [37.6, 64.9], [42.8, 59.6], [48.3, 55.5], [53.5, 53.0], [58.1, 52.3]], "color": "gold", "opacity": 0.35, "label": "The firm wants to keep its\nprice in this part of the curve", "lp": [76, 94]}],
     "caption": cap("Above the bend, a lower price sells more; below it, a lower price makes buyers doubt the product and demand falls away.")}
 CHANNEL = {"flow": {"vertical": True, "nodes": ["Manufacturer", "Wholesaler", "Retailer", "Consumer"], "links": ["", "", ""]}, "title": "A Longer Channel",
     "caption": "The manufacturer sells through a distributor, so two markups sit between its price and the consumer's."}
@@ -134,11 +133,12 @@ def chapter13(src, out):
     t = sub1(t, 'called <strong>sticker shock</strong>.</p>\n</li>\n', 'called <strong>sticker shock</strong>.</p>\n', "stray li")
     # student-facing text does not attribute content to its source (CLAUDE.md rule 4)
     t = sub1(t, "Dr. Cooke noted that pricing has been intentionally taught at the end", "Pricing is intentionally taught at the end", "cooke 1")
+    t = sub1(t, "<p><i>This segment is on the final marketing mix variable: price.", '<p id="intro-note"><i>This segment is on the final marketing mix variable: price.', "blurb id")
+    # the house script puts its table of contents before the first <h1>, which leaves the blurb above it; this
+    # handler is registered after that one, so it runs after it and moves the box above the blurb
+    t = sub1(t, "</head>", "<script>document.addEventListener('DOMContentLoaded', function () { var b = document.getElementById('intro-note'), t = document.querySelector('details.toc-box'); if (b && t) b.parentNode.insertBefore(t, b); });</script>\n</head>", "blurb script")
     t = sub1(t, "The lecture solves for price given a quantity;", "Here we solve for price given a quantity;", "lecture")
     t = sub1(t, "<li><em>Backlash</em> – Dr. Cooke noted that a year or two ago Wendy's", "<li><em>Backlash</em> – A year or two ago Wendy's", "cooke 2")
-    # the video boxes in the house blue instead of maroon
-    vs = t.index("<style>\n.video-section {"); ve = t.index("</style>", vs) + len("</style>")
-    t = t[:vs] + "<style>\n" + VIDEO_CSS + "\n</style>" + t[ve:]
     finish(t, out)
 
 # ---------------------------------------------------------------- chapter 2, the two graphs
