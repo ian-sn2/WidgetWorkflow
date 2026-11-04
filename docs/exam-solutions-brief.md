@@ -90,12 +90,17 @@ papers.
 item 10px to 20px of margin at 1.6 line height, which made a worked answer
 twice as tall as it needed to be; inside `.sol-answer` the shell's stylesheet
 halves that. **A figure in a solution has no box of its own** (Ian,
-2026-11-04): no border, no paper ground, a 400px plot by default, and three
-controls at its top right: − and + step the plot through 300, 400, 520 and
-660px (remembered in the browser, for every figure on the page), and
-Fullscreen lifts the widget into an overlay at 760px with its step and
-scenario state intact, closed by its button, Escape, a click outside, or
-moving to another question.
+2026-11-04): no border, no paper ground, a 320px plot by default (small, so
+the page stays short; a reader presses + for more), and one strip of
+controls at its top right: the widget's own Back, Next step and Start over
+docked there as ‹ › ↻ icons with the step counter, then − and + stepping the
+plot through 260, 320, 400, 520 and 660px (remembered in the browser, for
+every figure on the page; a two-panel figure is capped as a pair), and
+Fullscreen, which lifts the widget into an overlay at 760px with its step
+and scenario state intact, closed by its button, Escape, a click outside, or
+moving to another question. The engine rebuilds a widget when its scenario
+changes, so the strip is re-inserted and the new control row re-docked by a
+mutation observer.
 
 ## Where the widgets go
 

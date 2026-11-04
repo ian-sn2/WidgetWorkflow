@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.19 =====
+/* ===== exam-solutions.js v0.21 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -274,7 +274,8 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeFs(); });
     // A - / + pair steps the figure size (Ian, 2026-11-04); the choice is
     // kept in this browser and applies to every figure on the page.
-    var SIZES = [300, 400, 520, 660], SIZE_KEY = 'sol-size';
+    // Small by default; a reader who wants more presses + (Ian, 2026-11-04).
+    var SIZES = [260, 320, 400, 520, 660], SIZE_KEY = 'sol-size';
     var sizeIdx = 1;
     try { var sv = parseInt(localStorage.getItem(SIZE_KEY), 10); if (sv >= 0 && sv < SIZES.length) sizeIdx = sv; } catch (e) {}
     var allWidgets = [].slice.call(document.querySelectorAll('section.sol .sdg'));
@@ -287,8 +288,25 @@
       try { localStorage.setItem(SIZE_KEY, String(sizeIdx)); } catch (e) {}
     }
     function stepSize(d) { sizeIdx = Math.max(0, Math.min(SIZES.length - 1, sizeIdx + d)); applySize(); }
+    // The widget's own step controls (Back, Next step, Start over and the
+    // counter) are docked into the same strip as the size buttons, as arrow
+    // and restart icons, so nothing sits under the plot (Ian, 2026-11-04).
+    // The engine rebuilds a widget when its scenario changes, which makes a
+    // fresh control row, so an observer docks it again each time.
+    function dock(w) {
+      // the engine's rebuild empties the widget, strip included: put it back
+      var tools = w.solTools;
+      if (tools.parentNode !== w) w.insertBefore(tools, w.firstChild);
+      // the engine's new row is the one to dock; a row left in the strip by
+      // an earlier build is stale and goes
+      var rows = [].slice.call(w.querySelectorAll('.sdg-ctrl'));
+      var fresh = rows.filter(function (r) { return r.parentNode !== tools; })[0];
+      if (!fresh) return;
+      rows.forEach(function (r) { if (r !== fresh && r.parentNode === tools) r.remove(); });
+      tools.insertBefore(fresh, tools.firstChild);
+    }
     allWidgets.forEach(function (w) {
-      var ctl = document.createElement('div'); ctl.className = 'sol-size';
+      var ctl = document.createElement('div'); ctl.className = 'sol-tools';
       var minus = document.createElement('button'); minus.type = 'button'; minus.className = 'sol-minus'; minus.textContent = '\u2212'; minus.title = 'Smaller'; minus.setAttribute('aria-label', 'Smaller figure');
       var plus = document.createElement('button'); plus.type = 'button'; plus.className = 'sol-plus'; plus.textContent = '+'; plus.title = 'Larger'; plus.setAttribute('aria-label', 'Larger figure');
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-fs-btn';
@@ -296,8 +314,12 @@
       minus.addEventListener('click', function () { stepSize(-1); });
       plus.addEventListener('click', function () { stepSize(1); });
       btn.addEventListener('click', function () { openFs(w); });
-      ctl.appendChild(minus); ctl.appendChild(plus); ctl.appendChild(btn);
-      w.insertBefore(ctl, w.firstChild);
+      var size = document.createElement('div'); size.className = 'sol-size';
+      size.appendChild(minus); size.appendChild(plus); size.appendChild(btn);
+      ctl.appendChild(size);
+      w.solTools = ctl;
+      dock(w);
+      new MutationObserver(function () { dock(w); }).observe(w, { childList: true, subtree: true });
     });
     applySize();
     // leaving the question closes an overlay with it

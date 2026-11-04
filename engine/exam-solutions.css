@@ -96,33 +96,43 @@ section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
 /* A figure inside a solution is read beside its working, not as the page's
    centrepiece: no box of its own, a narrower plot, and a Fullscreen button
    that lifts it into an overlay (Ian, 2026-11-04). */
-section.sol .sdg { --fig:400px; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
-section.sol .sdg h4 { font-size:.95rem; padding-right:190px; }
+section.sol .sdg { --fig:320px; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
+section.sol .sdg h4 { font-size:.95rem; padding-right:330px; }
 /* The engine lets a plot with its working beside it grow past --fig; in a
    solution the size control decides, so the cap holds there too. */
 section.sol .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure,
 .sol-fs-panel .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure { max-width:var(--fig); }
 section.sol .sdg .sdg-lede { margin-bottom:6px; font-size:.86rem; }
-/* Back / Next step / Start over sit centred under the plot in a solution,
-   with the step counter beside them (Ian, 2026-11-04). */
-section.sol .sdg .sdg-ctrl, .sol-fs-panel .sdg .sdg-ctrl { justify-content:center; }
-section.sol .sdg .sdg-ctrl > *:last-child:not(button), .sol-fs-panel .sdg .sdg-ctrl > *:last-child:not(button) { margin-left:8px; }
-/* The size controls sit at the figure's top right: - / + and Fullscreen. */
-section.sol .sdg .sol-size { position:absolute; top:0; right:0; display:flex; gap:4px; }
-section.sol .sdg .sol-size button { display:inline-flex; align-items:center; justify-content:center; gap:5px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
-  color:#002060; font:inherit; font-size:.78rem; font-weight:700; padding:4px 9px; min-width:28px; min-height:28px; cursor:pointer; line-height:1; }
-section.sol .sdg .sol-size button:hover { border-color:#002060; }
-section.sol .sdg .sol-size button:disabled { opacity:.35; cursor:default; }
-section.sol .sdg .sol-minus, section.sol .sdg .sol-plus { font-size:1rem; }
+/* One strip at the figure's top right: the widget's own step controls as
+   icons (back, next, restart) with the counter, then - / + and Fullscreen. */
+section.sol .sdg .sol-tools, .sol-fs-panel .sdg .sol-tools { position:absolute; top:0; right:0; display:flex; align-items:center; gap:10px; }
+section.sol .sdg .sol-size, .sol-fs-panel .sdg .sol-size { display:flex; gap:4px; }
+section.sol .sdg .sol-tools button, .sol-fs-panel .sdg .sol-tools button { display:inline-flex; align-items:center; justify-content:center; gap:5px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
+  color:#002060; font:inherit; font-size:.78rem; font-weight:700; padding:4px 9px; min-width:28px; min-height:28px; cursor:pointer; line-height:1; margin:0; }
+section.sol .sdg .sol-tools button:hover, .sol-fs-panel .sdg .sol-tools button:hover { border-color:#002060; }
+section.sol .sdg .sol-tools button:disabled, .sol-fs-panel .sdg .sol-tools button:disabled { opacity:.35; cursor:default; }
+section.sol .sdg .sol-minus, section.sol .sdg .sol-plus, .sol-fs-panel .sdg .sol-minus, .sol-fs-panel .sdg .sol-plus { font-size:1rem; }
+/* The docked control row: its three buttons become glyphs, its counter stays. */
+section.sol .sdg .sol-tools .sdg-ctrl, .sol-fs-panel .sdg .sol-tools .sdg-ctrl { display:flex; align-items:center; gap:4px; margin:0; }
+section.sol .sdg .sol-tools .sdg-ctrl button, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button { font-size:0; padding:0; width:28px; }
+section.sol .sdg .sol-tools .sdg-ctrl button::before, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button::before { font-size:1.05rem; font-weight:700; line-height:1; }
+section.sol .sdg .sol-tools .sdg-ctrl button:nth-of-type(1)::before, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button:nth-of-type(1)::before { content:"\2039"; }
+section.sol .sdg .sol-tools .sdg-ctrl button:nth-of-type(2)::before, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button:nth-of-type(2)::before { content:"\203A"; }
+section.sol .sdg .sol-tools .sdg-ctrl button:nth-of-type(3)::before, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button:nth-of-type(3)::before { content:"\21BB"; font-size:.95rem; }
+section.sol .sdg .sol-tools .sdg-step, .sol-fs-panel .sdg .sol-tools .sdg-step { margin:0 4px 0 2px; font-size:.78rem; white-space:nowrap; }
+/* Two panels side by side: the size steps cap the pair, which the engine's
+   own cap (one figure at --fig) never reached. */
+section.sol .sdg .sdg-body.two, .sol-fs-panel .sdg .sdg-body.two { max-width:calc(var(--fig) * 1.75); margin:0 auto; }
 /* The overlay: the widget at full size on a white panel over a dimmed page. */
 body.sol-fs-open { overflow:hidden; }
 .sol-fs { position:fixed; inset:0; z-index:9000; background:rgba(10,20,50,0.55); display:flex; align-items:center; justify-content:center; padding:16px; }
 .sol-fs-panel { position:relative; background:#fff; border-radius:14px; padding:44px 20px 16px; width:min(100%, 960px); max-height:100%; overflow:auto; box-shadow:0 12px 40px rgba(0,0,0,0.35); }
 .sol-fs-panel .sdg { --fig:760px !important; width:100%; margin:0; padding:0; border:0; background:transparent; }
 .sol-fs-panel .sdg .sol-size { display:none; }
+.sol-fs-panel .sdg h4 { padding-right:170px; }
 .sol-fs-panel .sdg h4 { padding-right:0; font-size:1.05rem; }
 .sol-fs-close { position:absolute; top:10px; right:12px; border:1px solid #002060; background:#002060; color:#fff; border-radius:8px; padding:7px 12px; min-height:36px; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
-@media (max-width:640px){ .sol-fs { padding:8px; } .sol-fs-panel { padding:44px 10px 12px; } section.sol .sdg h4 { padding-right:0; margin-top:34px; } }
+@media (max-width:640px){ .sol-fs { padding:8px; } .sol-fs-panel { padding:44px 10px 12px; } section.sol .sdg h4 { padding-right:0; margin-top:38px; } section.sol .sdg .sol-tools { right:auto; left:0; flex-wrap:wrap; gap:6px; } .sol-fs-panel .sdg h4 { padding-right:0; margin-top:38px; } .sol-fs-panel .sdg .sol-tools { right:auto; left:0; } }
 section.sol .sol-table { overflow-x:auto; margin:8px 0; }
 section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
