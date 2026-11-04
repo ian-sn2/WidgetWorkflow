@@ -1,7 +1,7 @@
 """Concise edition of MAR3023 Exam 3 Chapter 2 Part 1 (2026-11-04): the Full file's
 head, the prose rewritten as tables and short lists, formulas and tips kept, the
 curves dropped (simple diagrams the text explains), Glossary and Key Takeaways.
-    python concise2.py FULL.html OUT.html [--bcg-svg]   (keep the drawn BCG matrix)"""
+    python concise2.py FULL.html OUT.html   (--bcg-svg keeps the drawn BCG matrix; Ian wants the table, 2026-11-04)"""
 import sys, re
 src, out = sys.argv[1:3]; keep_svg = "--bcg-svg" in sys.argv
 t = open(src, encoding="utf-8").read()
