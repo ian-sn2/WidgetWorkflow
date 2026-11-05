@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.34 =====
+/* ===== exam-solutions.js v0.35 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -120,7 +120,7 @@
     // the progress. Picking a topic card is what starts the questions.
     var menu = document.createElement('div'); menu.className = 'sol-menu';
     var hello = document.createElement('p'); hello.className = 'sol-hello';
-    hello.textContent = 'Hello! Select which semester, exam, and topics you would like to practice.';
+    hello.textContent = 'Hello! Select which semester and topics you would like to review.';
     var picker = document.createElement('div'); picker.className = 'sol-picker';
     menu.appendChild(hello); menu.appendChild(picker);
     mount.appendChild(menu);
