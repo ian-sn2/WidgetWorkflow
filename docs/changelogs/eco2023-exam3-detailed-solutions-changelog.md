@@ -90,3 +90,5 @@ as Exam 1 (`docs/exam-solutions-brief.md`).
 
 * `check_file.py`: 0 FAIL. The warnings are listed in the session reply; most
   are shared Exam 1 shapes (tariff revenue, the PPF points, tax readings).
+
+* **Labels nothing covers (engine v2.57, 2026-11-05).** Every dashed guide is cut out around each label inside the plot and carries on past it, every in-plot label has a halo in the plot colour, and curve and area names are drawn above the curves and points. This came from the review marks on the tax, rent-ceiling and trade figures.

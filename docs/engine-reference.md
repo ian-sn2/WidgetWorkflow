@@ -1,4 +1,4 @@
-# Engine reference — `engine/sd-graph.js` v2.56
+# Engine reference — `engine/sd-graph.js` v2.57
 
 Written from the engine source. The conversion prompt carries a shorter version
 of this in its own "Engine reference" section; that one is what the model needs
@@ -647,6 +647,28 @@ pressed against a dashed guide, warns.
 Animation: elements cross-fade over 0.45s and shifted curves slide over 0.6s,
 both disabled under `prefers-reduced-motion`. A screenshot taken sooner than
 that catches a curve mid-slide.
+
+## Labels over the drawing (v2.57)
+
+Nothing is drawn over a name, and no dashed guide runs through one:
+
+* **Guides break around text.** Every label inside the plot -- a curve's name,
+  an area's name, a point's label, a brace's or price line's tag -- records a
+  box, sized with the same per-character width table the margins and
+  `check_file` use. The panel's dashed guides (the points' elbows and the
+  braces' drop lines) are drawn through an SVG mask with each box cut out, so
+  a guide stops at the text and carries on past it. A cut-out is on screen
+  only on the steps its label is, so no step shows a gap with nothing in it.
+* **A halo on in-plot text.** Those labels take a 3px outline in the plot's
+  own colour (`.knk`), which knocks a curve or a solid line out of the
+  letters it passes under. A boxed label keeps its box instead.
+* **Names go in last.** Curve names and area names are drawn after the
+  points, in their own layer, keeping their curve's or area's step window and
+  `dimAt` fade, so a later curve or a point's guide cannot cover one.
+
+`check_file` no longer tests a label against the dashed guides, since the
+drawing no longer lets them touch. It still tests the axis lines, price
+lines, curves, arrows, points and other labels. (Ian, 2026-11-05.)
 
 ## What the engine does not do
 

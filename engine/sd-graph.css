@@ -111,6 +111,10 @@
    Fainter than `dim`, which only marks a curve a shift has moved on from. */
 .sdg .curve-g.faint .curve { stroke-width:2; opacity:.26; }
 .sdg .curve-g.faint .clbl { opacity:.5; }
+.sdg .clbl-g.faint .clbl { opacity:.5; }
+/* v2.57: a halo in the plot's own colour round every name inside the plot,
+   so a curve or a line passing under the letters is knocked out of them. */
+.sdg .knk { paint-order:stroke fill; stroke:var(--plot); stroke-width:3px; stroke-linejoin:round; }
 /* A measure named inside the plot is usually two or three words on as
    many lines, and it has to share the space with the curves it spans. */
 .sdg .tag.vin { font-size:11px; }

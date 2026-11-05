@@ -129,7 +129,12 @@ def ceilings_compare(title, lede):
     rent axis is in dollars ($1,500 at 50 on the engine's scale); quantities
     are symbolic."""
     def sc(label, dollars, caption):
-        p = round(dollars / 30.0, 1)          # $1,500 -> 50
+        # $1,500 at 50 and $12.50 a unit either side of it. At $30 a unit (a
+        # scale from zero) the $1,400 ceiling sat 3 units under the market
+        # rent and its deadweight loss was a sliver (Ian, 2026-11-05). The
+        # axis names only $1,500, so its scale is the figure's to choose.
+        # ($10 a unit put the $1,200 ceiling's shortage brace on the Q axis.)
+        p = round(50 + (dollars - 1500) / 12.5, 1)
         base = {"label": label, "caption": caption,
                 "curves": [{"id": "D", "label": "D", "pts": D_pts(), **D_label()}, {"id": "S", "label": "S", "pts": S_pts()}],
                 "points": [{"q": 50, "p": 50, "pl": "$1,500", "ql": "Q₁"}]}
@@ -140,7 +145,7 @@ def ceilings_compare(title, lede):
             base["points"] += [{"q": qs, "p": p, "guides": "q", "ql": "Qₛ", "showP": False}, {"q": 100 - p, "p": p, "guides": "q", "ql": "Qᴅ", "showP": False},
                                {"q": qs, "p": 100 - qs, "guides": False, "showP": False, "showQ": False}]
             # a ceiling just under the market rent leaves a sliver, named from outside
-            base["areas"] = [{"pts": [[qs, p], [qs, 100 - qs], [50, 50]], "label": "DWL", "color": "red", **({"lp": [38, 50]} if p > 44 else {})}]
+            base["areas"] = [{"pts": [[qs, p], [qs, 100 - qs], [50, 50]], "label": "DWL", "color": "red", **({"lp": [p - 7, 50]} if p > 38 else {})}]
             base["braces"] = [{"p": p, "q1": qs, "q2": 100 - p, "label": "Shortage", "below": "in"}]
         elif p > 50:
             base["hlines"] = [{"p": min(p, 92), "tag": "$%s ceiling" % format(dollars, ","), "tagq": 28, "showP": False}]

@@ -381,6 +381,10 @@ economics instead of label placement.
   first clear candidate happened to be there, and outside is where a label
   stops naming its own shape. The fallback is for a sliver; anywhere else,
   centred is the answer and a label that is not centred is a drawing to fix.
+* **Nothing covers a name (v2.57).** The engine cuts every dashed guide
+  around each in-plot label and gives the label a halo, so place labels for
+  the curves and points they must clear, not for the guides; the checker no
+  longer reports a guide against a label (Ian, 2026-11-05).
 * **An area's name is drawn over the curves, so let it be -- and leave the
   box off.** From v2.46 the name goes on top of the lines, which is how the
   printed figures name a deadweight wedge: solid fill, the word straight on
@@ -713,7 +717,7 @@ not enough to reproduce an implementation.
   `embed_engine.py`'s paths reproduce the delivered file byte-for-byte; all 20
   prototype widgets render with no engine errors; `check_file.py` runs the
   geometric label test over 74 labels in the 263 file with no overlaps.
-* **Engine is v2.56.** Since v2.6: `areas` shade a polygon (v2.11) with
+* **Engine is v2.57.** Since v2.6: `areas` shade a polygon (v2.11) with
   `edge` to outline it (v2.18) and labels centred on their anchor (v2.13);
   `dot:false` drops a marker but keeps the axis label (v2.12); points take
   `guides:"p"`/`"q"` for one leg of the elbow (v2.14); braces take
@@ -819,7 +823,11 @@ not enough to reproduce an implementation.
   at its own maximum so it never moved (v2.52). A shift arrow's ends are inset
   for the curve's slope, so the head clears the line it points at by 3.5px
   rather than 2.7px on every symbolic preset, and the presets choose a clear
-  arrow height instead of a fixed 88 or 32 (v2.56).
+  arrow height instead of a fixed 88 or 32 (v2.56). Every label inside the
+  plot cuts the dashed guides around itself, carries a halo in the plot's
+  colour, and is drawn above the curves and points (v2.57): Ian asked for
+  names that nothing covers and guides that stop at the text and carry on
+  past it, and `check_file` stopped testing labels against guides with it.
 
 * **PPF works.** The first chapter of Exam 1 material converted to seven widgets
   with no engine gaps hit: frontiers, a combinations table, points on/inside/

@@ -199,3 +199,6 @@ results are in the commit message of the push that carried them.
   alone; the topic row appears for the chosen semester and lists only the
   topics it has (no PPF card for a semester with no PPF question), with that
   semester's counts. Back to menu returns to the semester row.
+
+* **Labels nothing covers (engine v2.57, 2026-11-05).** Every dashed guide is cut out around each label inside the plot and carries on past it, every in-plot label has a halo in the plot colour, and curve and area names are drawn above the curves and points. This came from the review marks on the tax, rent-ceiling and trade figures.
+* **Four rent ceilings drawn further apart.** The rent axis now runs $12.50 a unit either side of $1,500 rather than $30 a unit from zero, so the $1,400 and $1,200 ceilings sit well below the market rent and their deadweight-loss wedges are visible. Its only label is $1,500, so no stated number moves. Its DWL sits just outside the narrow $1,400 wedge.
