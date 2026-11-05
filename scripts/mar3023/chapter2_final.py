@@ -19,6 +19,14 @@ BANNER = re.compile(r'\s*<p style="text-align: center; font-size: 125%;"><strong
 MJX = '<style>mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }</style>\n</head>'
 
 # ---------------------------------------------------------------- today's figures, in the source's own tints
+def clear_labels(s):
+    """The grid sets its column and row labels in 13px italic at weight 500, which reads thin (Ian, 2026-11-05):
+    upright, 15px, weight 700 here, and the two axis titles a size up. Only these figures; the helper is shared."""
+    n = s.count('font-size="13" font-weight="500" fill="#1c2a44" font-style="italic"') + s.count('font-size="13" font-style="italic" fill="#1c2a44"')
+    assert n == 4, n
+    s = s.replace('font-size="13" font-weight="500" fill="#1c2a44" font-style="italic"', 'font-size="15" font-weight="700" fill="#1c2a44"')
+    s = s.replace('font-size="13" font-style="italic" fill="#1c2a44"', 'font-size="15" font-weight="700" fill="#1c2a44"')
+    return s.replace('font-size="15" font-weight="800"', 'font-size="17" font-weight="800"')
 def porter():
     return grid2x2(["Cost\nLeadership", "Differentiation", "Cost\nFocus", "Differentiation\nFocus"],
                    fills=["#fbe3d4", "#e4f1f4", "#f8c9ad", "#cfe6ea"], fs=16,
@@ -62,8 +70,8 @@ PIES_GROW = lambda: pies((30, 10, "Desired Growth\nin Market Share", "+10%"), (3
                          "Growth objective: growing market share by 10 points, from 30 to 40 percent, needs 15 more points of share of voice, from 30 to 45 percent")
 
 def draw(t):
-    t = replace_img(t, "04-porter-generic-strategies.png", porter())
-    t = replace_img(t, "05-swot-matrix.png", swot())
+    t = replace_img(t, "04-porter-generic-strategies.png", clear_labels(porter()))
+    t = replace_img(t, "05-swot-matrix.png", clear_labels(swot()))
     t = replace_img(t, "06-market-share-roi-correlation.png", widget(ROI))
     t = replace_img(t, "07-maintenance-objective-pies.png", PIES_KEEP())
     t = replace_img(t, "08-growth-objective-pies.png", PIES_GROW())
