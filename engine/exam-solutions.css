@@ -22,6 +22,15 @@
 .sol-shell .sol-card { position:relative; overflow:hidden; padding-bottom:9px; }
 .sol-shell .sol-card-bar { position:absolute; left:0; right:0; bottom:0; height:4px; background:#edf1f8; }
 .sol-shell .sol-card-bar > span { display:block; height:100%; background:#2e8b57; transition:width .25s ease; }
+/* A bookmark count on a menu card: the ribbon from the strip, red, in the
+   card's top right (Ian, 2026-11-05). */
+.sol-shell .sol-card-bm { position:absolute; top:6px; right:8px; display:inline-flex; align-items:center; gap:3px; font-size:.72rem; font-weight:700; color:#d62828; line-height:1; }
+.sol-shell .sol-card-bm svg, .sol-shell .sol-bookmarks .sol-stage-k svg { fill:#d62828; }
+.sol-shell .sol-card[aria-pressed="true"] .sol-card-bm { color:#ffb3b3; }
+.sol-shell .sol-card[aria-pressed="true"] .sol-card-bm svg { fill:#ffb3b3; }
+.sol-shell .sol-card:has(.sol-card-bm) { padding-right:34px; }
+.sol-shell .sol-bookmarks .sol-stage-k span { display:inline-flex; align-items:center; gap:5px; }
+.sol-shell .sol-bm-card { border-left:3px solid #d62828; }
 .sol-shell .sol-card[aria-pressed="true"] .sol-card-bar { background:rgba(255,255,255,0.18); }
 .sol-shell .sol-card[aria-pressed="true"] .sol-card-bar > span { background:#7fd49a; }
 .sol-shell .sol-card.is-done { border-color:#2e8b57; }

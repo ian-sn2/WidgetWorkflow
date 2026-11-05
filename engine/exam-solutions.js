@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.38 =====
+/* ===== exam-solutions.js v0.39 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -85,6 +85,17 @@
         return (!term || s.dataset.term === term) && (!exam || s.dataset.exam === exam) && (!topic || s.dataset.topic === topic) && seen[s.id];
       }).length;
     }
+
+    // Bookmarks are counted the same way, so the menu can show them on the
+    // semester, the Full Exam and the topic a bookmarked question belongs to
+    // (Ian, 2026-11-05).
+    function qNum(s) { var m = /-q(\d+)$/.exec(s.id); return m ? +m[1] : 0; }
+    function starCount(term, exam, topic) {
+      return secs.filter(function (s) {
+        return (!term || s.dataset.term === term) && (!exam || s.dataset.exam === exam) && (!topic || s.dataset.topic === topic) && stars[s.id];
+      }).length;
+    }
+    var RIBBON = '<svg viewBox="0 0 16 20" width="9" height="11" aria-hidden="true"><path d="M3 1.5h10a1 1 0 0 1 1 1V18l-6-4-6 4V2.5a1 1 0 0 1 1-1z"/></svg>';
 
     var terms = uniq(secs.map(function (s) { return s.dataset.term; }))
       .sort(function (a, b) { return b.localeCompare(a); });            // newest first
@@ -177,6 +188,12 @@
             (it.seen ? ' \u00b7 ' + pct + '% reviewed' : '') + '</span>' +
             '<span class="sol-card-bar"><span style="width:' + pct + '%"></span></span>' : '');
         if (it.seen && it.seen === it.count) btn.classList.add('is-done');
+        if (it.stars) {
+          var bm = document.createElement('span'); bm.className = 'sol-card-bm';
+          bm.innerHTML = RIBBON + '<span>' + it.stars + '</span>';
+          bm.title = it.stars + ' bookmarked'; btn.appendChild(bm);
+          btn.setAttribute('aria-label', btn.textContent.replace(/\s+/g, ' ').trim() + ', ' + it.stars + ' bookmarked');
+        }
         btn.addEventListener('click', function () { pick(it.value); });
         row.appendChild(btn);
       });
@@ -221,15 +238,40 @@
       // semester has -- no PPF card for a semester with no PPF question
       // (Ian, 2026-11-05).
       picker.appendChild(stage('Semester', '',
-        terms.map(function (t) { return { value: t, label: termName(t), count: countFor(t, '', ''), seen: seenCount(t, '', ''), current: t === state.term }; }),
+        terms.map(function (t) { return { value: t, label: termName(t), count: countFor(t, '', ''), seen: seenCount(t, '', ''), stars: starCount(t, '', ''), current: t === state.term }; }),
         function (v) { state.term = v; state.exam = ''; state.topic = ''; state.topicChosen = false; state.idx = 0; maybeStart(); }));
       if (T && exams.length > 1) picker.appendChild(stage('Exam', '',
-        examsFor(T).map(function (e) { return { value: e, label: examName(e), count: countFor(T, e, ''), seen: seenCount(T, e, ''), current: e === state.exam }; }),
+        examsFor(T).map(function (e) { return { value: e, label: examName(e), count: countFor(T, e, ''), seen: seenCount(T, e, ''), stars: starCount(T, e, ''), current: e === state.exam }; }),
         function (v) { state.exam = v; state.topic = ''; state.topicChosen = false; state.idx = 0; maybeStart(); }));
       if (T && E) picker.appendChild(stage('Topic', '',
-        [{ value: '', label: 'Full Exam', count: countFor(T, E, ''), seen: seenCount(T, E, ''), current: !!state.topicChosen && !state.topic }].concat(
-          allTopics(T, E).map(function (t) { return { value: t, label: t, count: countFor(T, E, t), seen: seenCount(T, E, t), current: t === state.topic }; })),
+        [{ value: '', label: 'Full Exam', count: countFor(T, E, ''), seen: seenCount(T, E, ''), stars: starCount(T, E, ''), current: !!state.topicChosen && !state.topic }].concat(
+          allTopics(T, E).map(function (t) { return { value: t, label: t, count: countFor(T, E, t), seen: seenCount(T, E, t), stars: starCount(T, E, t), current: t === state.topic }; })),
         function (v) { state.topic = v; state.topicChosen = true; state.idx = 0; maybeStart(); }));
+      // Every bookmarked question, across all semesters, as its own card:
+      // semester and question number, and the topic it sits in. A click
+      // opens it in that semester's Full Exam, so Previous and Next walk the
+      // exam in order from there (Ian, 2026-11-05).
+      var marked = secs.filter(function (s) { return stars[s.id]; })
+        .sort(function (a, b) { return b.dataset.term.localeCompare(a.dataset.term) || qNum(a) - qNum(b); });
+      if (marked.length) {
+        var bd = document.createElement('div'); bd.className = 'sol-stage sol-bookmarks';
+        var bh = document.createElement('div'); bh.className = 'sol-stage-k';
+        bh.innerHTML = '<span>' + RIBBON + ' Bookmarks</span>'; bd.appendChild(bh);
+        var brow = document.createElement('div'); brow.className = 'sol-cards';
+        marked.forEach(function (s) {
+          var b = document.createElement('button'); b.type = 'button'; b.className = 'sol-card sol-bm-card';
+          b.innerHTML = '<span class="sol-card-l"></span><span class="sol-card-n"></span>';
+          b.firstChild.textContent = termName(s.dataset.term) + ' \u00b7 Question ' + qNum(s);
+          b.lastChild.textContent = s.dataset.topic;
+          b.addEventListener('click', function () {
+            state.term = s.dataset.term; state.exam = s.dataset.exam; state.topic = ''; state.topicChosen = true;
+            var full = secs.filter(function (x) { return x.dataset.term === s.dataset.term && x.dataset.exam === s.dataset.exam; });
+            state.idx = Math.max(0, full.indexOf(s)); state.view = 'questions'; render(); window.scrollTo(0, 0);
+          });
+          brow.appendChild(b);
+        });
+        bd.appendChild(brow); picker.appendChild(bd);
+      }
 
       var inMenu = state.view === 'menu';
       menu.hidden = !inMenu; top.hidden = inMenu;

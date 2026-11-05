@@ -92,3 +92,5 @@ as Exam 1 (`docs/exam-solutions-brief.md`).
   are shared Exam 1 shapes (tariff revenue, the PPF points, tax readings).
 
 * **Labels nothing covers (engine v2.57, 2026-11-05).** Every dashed guide is cut out around each label inside the plot and carries on past it, every in-plot label has a halo in the plot colour, and curve and area names are drawn above the curves and points. This came from the review marks on the tax, rent-ceiling and trade figures.
+
+* **Bookmarks in the menu (shell v0.39, 2026-11-05).** A bookmarked question puts a ribbon count on its semester card, on Full Exam and on its topic card, and the menu gains a Bookmarks row listing each one by semester, question number and topic. A click there opens the question in its semester's Full Exam.

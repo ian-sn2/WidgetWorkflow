@@ -174,3 +174,12 @@ inequality, externalities). A new paper on chapters already covered needs a
 paraphrase file and a widget map choosing a shape per question, not new
 drawing code. Before 2026-11-05 these lived only in a session's scratch
 folder and would have been lost with it.
+
+## Bookmarks
+
+A question's ribbon button bookmarks it, in the browser's localStorage. A
+bookmark shows three ways: on the question's number in the strip, as a
+ribbon count on the menu cards for its semester, its Full Exam and its topic,
+and as a card in the menu's Bookmarks row naming the semester, question
+number and topic. That card opens the question in its semester's Full Exam.
+
