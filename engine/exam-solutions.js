@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.33 =====
+/* ===== exam-solutions.js v0.34 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -208,18 +208,22 @@
     function render() {
       settle();
       picker.innerHTML = '';
-      var T = state.term, E = state.exam;
-      picker.appendChild(stage('Semester', '',
-        terms.map(function (t) { return { value: t, label: termName(t), count: countFor(t, E, state.topic), seen: seenCount(t, E, state.topic), current: t === state.term }; }),
-        function (v) { state.term = v; state.idx = 0; maybeStart(); }));
       // One page per exam is the plan (Ian's boss, 2026-11-04), so a page
       // carrying a single exam has it chosen already and shows no row for it.
       var exams = allExams();
-      if (exams.length === 1 && !state.exam) state.exam = exams[0];
-      if (exams.length > 1) picker.appendChild(stage('Exam', '',
-        exams.map(function (e) { return { value: e, label: examName(e), count: countFor(T, e, state.topic), seen: seenCount(T, e, state.topic), current: e === state.exam }; }),
-        function (v) { state.exam = v; state.idx = 0; maybeStart(); }));
-      picker.appendChild(stage('Topic', '',
+      if (exams.length === 1) state.exam = exams[0];
+      var T = state.term, E = state.exam;
+      // Semester first: its card counts the whole semester, and the rows
+      // below it appear once it is chosen, so they list only what that
+      // semester has -- no PPF card for a semester with no PPF question
+      // (Ian, 2026-11-05).
+      picker.appendChild(stage('Semester', '',
+        terms.map(function (t) { return { value: t, label: termName(t), count: countFor(t, '', ''), seen: seenCount(t, '', ''), current: t === state.term }; }),
+        function (v) { state.term = v; state.exam = ''; state.topic = ''; state.topicChosen = false; state.idx = 0; maybeStart(); }));
+      if (T && exams.length > 1) picker.appendChild(stage('Exam', '',
+        examsFor(T).map(function (e) { return { value: e, label: examName(e), count: countFor(T, e, ''), seen: seenCount(T, e, ''), current: e === state.exam }; }),
+        function (v) { state.exam = v; state.topic = ''; state.topicChosen = false; state.idx = 0; maybeStart(); }));
+      if (T && E) picker.appendChild(stage('Topic', '',
         [{ value: '', label: 'Full Exam', count: countFor(T, E, ''), seen: seenCount(T, E, ''), current: !!state.topicChosen && !state.topic }].concat(
           allTopics(T, E).map(function (t) { return { value: t, label: t, count: countFor(T, E, t), seen: seenCount(T, E, t), current: t === state.topic }; })),
         function (v) { state.topic = v; state.topicChosen = true; state.idx = 0; maybeStart(); }));

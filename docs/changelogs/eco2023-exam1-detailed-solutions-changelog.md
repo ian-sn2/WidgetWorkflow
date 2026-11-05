@@ -195,3 +195,7 @@ results are in the commit message of the push that carried them.
 * **Counter is progress only (shell v0.33).** It reads "1 of 8": position in
   the set chosen. The question's own number is in the box heading and the
   lit strip button. The strip is centred.
+* **Semester first again (shell v0.34).** The menu opens on the semester row
+  alone; the topic row appears for the chosen semester and lists only the
+  topics it has (no PPF card for a semester with no PPF question), with that
+  semester's counts. Back to menu returns to the semester row.
