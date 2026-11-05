@@ -220,7 +220,8 @@ def mkt_firm(kind, title, lede, steps):
             q3 = (2 * P0 + 24 - pmin) / sl                 # D2 at the old price
             d = q3 - pmin / sl
             S2 = [[R(8 + d), R(sl * 8)], [110, R(sl * (110 - d))]]
-            mkt["curves"].append({"id": "S2", "label": "S₂", "pts": S2, "color": "red", "from": "S1", "at": 3, "arrowP": 30})
+            # above every guide: at 30 the arrow ran across Q₁'s
+            mkt["curves"].append({"id": "S2", "label": "S₂", "pts": S2, "color": "red", "from": "S1", "at": 3, "arrowP": 72})
             mkt["points"].append({"q": R(q3), "p": R(pmin), "pl": "P₁", "ql": "Q₃", "color": "red", "at": 4, "showP": False})
             seq.append((pmin, 4))
     else:

@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.36 =====
+/* ===== exam-solutions.js v0.38 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -343,19 +343,24 @@
     // half, then 37.5% and 25%. A share, not a pixel count, so the same
     // setting looks the same on every screen. The stored key changed with the
     // default: a size pressed under an earlier build stayed in the browser.
-    var SIZES = [25, 37.5, 50, 75, 100], SIZE_KEY = 'sol-size-3';
-    var sizeIdx = 2;
-    try { var sv = parseInt(localStorage.getItem(SIZE_KEY), 10); if (sv >= 0 && sv < SIZES.length) sizeIdx = sv; } catch (e) {}
+    // Each widget keeps its own size and opens at the third step every time
+    // (Ian, 2026-11-05): one shared size, remembered in the browser, meant a
+    // single press on any figure changed every other one, and kept doing so
+    // after a reload, so most widgets no longer opened at size 3.
+    var SIZES = [25, 37.5, 50, 75, 100], DEFAULT_SIZE = 2;
+    try { localStorage.removeItem('sol-size-3'); } catch (e) {}
     var allWidgets = [].slice.call(document.querySelectorAll('section.sol .sdg'));
-    function applySize() {
-      allWidgets.forEach(function (w) {
-        w.style.setProperty('--fig', SIZES[sizeIdx] + '%');
-        var ctl = w.querySelector('.sol-size');
-        if (ctl) { ctl.querySelector('.sol-minus').disabled = sizeIdx === 0; ctl.querySelector('.sol-plus').disabled = sizeIdx === SIZES.length - 1; }
-      });
+    function applySize(w) {
+      var i = w.solSize;
+      // In the widget's own width (cqw: the widget is the engine's named
+      // container), not a percent of whatever column the plot sits in --
+      // with working beside it that column is capped at 780px, so "50%"
+      // came out at 39% of the box (Ian, 2026-11-05).
+      w.style.setProperty('--fig', SIZES[i] + 'cqw');
+      var ctl = w.solTools && w.solTools.querySelector('.sol-size');
+      if (ctl) { ctl.querySelector('.sol-minus').disabled = i === 0; ctl.querySelector('.sol-plus').disabled = i === SIZES.length - 1; }
     }
-    // only a press is remembered, never the default
-    function stepSize(d) { sizeIdx = Math.max(0, Math.min(SIZES.length - 1, sizeIdx + d)); applySize(); try { localStorage.setItem(SIZE_KEY, String(sizeIdx)); } catch (e) {} }
+    function stepSize(w, d) { w.solSize = Math.max(0, Math.min(SIZES.length - 1, w.solSize + d)); applySize(w); }
     // The widget's own step controls (Back, Next step, Start over and the
     // counter) are docked into the same strip as the size buttons, as arrow
     // and restart icons, so nothing sits under the plot (Ian, 2026-11-04).
@@ -379,17 +384,17 @@
       var plus = document.createElement('button'); plus.type = 'button'; plus.className = 'sol-plus'; plus.textContent = '+'; plus.title = 'Larger'; plus.setAttribute('aria-label', 'Larger figure');
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-fs-btn';
       btn.innerHTML = '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg> Fullscreen';
-      minus.addEventListener('click', function () { stepSize(-1); });
-      plus.addEventListener('click', function () { stepSize(1); });
+      minus.addEventListener('click', function () { stepSize(w, -1); });
+      plus.addEventListener('click', function () { stepSize(w, 1); });
       btn.addEventListener('click', function () { openFs(w); });
       var size = document.createElement('div'); size.className = 'sol-size';
       size.appendChild(minus); size.appendChild(plus); size.appendChild(btn);
       ctl.appendChild(size);
-      w.solTools = ctl;
+      w.solTools = ctl; w.solSize = DEFAULT_SIZE;
       dock(w);
       new MutationObserver(function () { dock(w); }).observe(w, { childList: true, subtree: true });
     });
-    applySize();
+    allWidgets.forEach(applySize);
     // leaving the question closes an overlay with it
     prev.addEventListener('click', closeFs); next.addEventListener('click', closeFs); back.addEventListener('click', closeFs);
     window.addEventListener('hashchange', function () { fromHash(); });

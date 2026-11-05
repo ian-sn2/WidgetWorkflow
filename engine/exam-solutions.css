@@ -110,10 +110,11 @@ section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
 /* A figure inside a solution is read beside its working, not as the page's
    centrepiece: no box of its own, a narrower plot, and a Fullscreen button
    that lifts it into an overlay (Ian, 2026-11-04). */
-section.sol .sdg { --fig:50%; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
+section.sol .sdg { --fig:50cqw; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
 section.sol .sdg h4 { font-size:.95rem; padding-right:330px; }
 /* The engine lets a plot with its working beside it grow past --fig; in a
    solution the size control decides, so the cap holds there too. */
+section.sol .sdg .sdg-main.has-calc > .sdg-body { max-width:none; }
 section.sol .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure,
 .sol-fs-panel .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure { max-width:var(--fig); }
 section.sol .sdg .sdg-lede { margin-bottom:6px; font-size:.86rem; }
@@ -121,6 +122,9 @@ section.sol .sdg .sdg-lede { margin-bottom:6px; font-size:.86rem; }
    icons (back, next, restart) with the counter, then - / + and Fullscreen. */
 section.sol .sdg .sol-tools, .sol-fs-panel .sdg .sol-tools { position:absolute; top:0; right:0; display:flex; align-items:center; gap:10px; }
 section.sol .sdg .sol-size, .sol-fs-panel .sdg .sol-size { display:flex; gap:4px; }
+/* A payoff matrix is a table, not a plot: the size steps cannot change it, so
+   they are not offered. Fullscreen still is. */
+section.sol .sdg:has(.sdg-mx) .sol-minus, section.sol .sdg:has(.sdg-mx) .sol-plus { display:none; }
 section.sol .sdg .sol-tools button, .sol-fs-panel .sdg .sol-tools button { display:inline-flex; align-items:center; justify-content:center; gap:5px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
   color:#002060; font:inherit; font-size:.78rem; font-weight:700; padding:4px 9px; min-width:28px; min-height:28px; cursor:pointer; line-height:1; margin:0; }
 section.sol .sdg .sol-tools button:hover, .sol-fs-panel .sdg .sol-tools button:hover { border-color:#002060; }
