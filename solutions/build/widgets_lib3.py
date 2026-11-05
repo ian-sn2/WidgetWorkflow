@@ -118,16 +118,16 @@ atc_f = lambda q: 0.032 * (q - _atc_min[0]) ** 2 + _atc_min[1]
 avc_f = lambda q: 0.018 * (q - _avc_min[0]) ** 2 + _avc_min[1]
 q_at_price = lambda P: _h + math.sqrt((P - _k) / _a)       # on MC's rising arm
 
-def _firm_curves(extra_q=(), avc=False):
+def _firm_curves(extra_q=(), avc=False, ymax=104):
     qs = list(extra_q)
     avcs, atcs, mcs = cost_family(_avc_min, _atc_min,
                                   avc_xs=[14, 24, 32, 40, 50, 58, 66] + qs,
                                   atc_xs=[13, 23, 35, 45, 55, 67, 79, 93] + qs,
                                   mc_xs=[10, 18, 24, 32, 40, 48, 55, 65, 73] + qs)
     srt = lambda l: sorted({tuple(p) for p in l})
-    cur = [{"id": "MC", "label": "MC", "pts": [list(p) for p in srt(mcs) if p[1] <= 104], "curved": True},
-           {"id": "ATC", "label": "ATC", "pts": [list(p) for p in srt(atcs) if p[1] <= 104], "curved": True}]
-    if avc: cur.append({"id": "AVC", "label": "AVC", "pts": [list(p) for p in srt(avcs)], "curved": True})
+    cur = [{"id": "MC", "label": "MC", "pts": [list(p) for p in srt(mcs) if p[1] <= ymax], "curved": True},
+           {"id": "ATC", "label": "ATC", "pts": [list(p) for p in srt(atcs) if p[1] <= ymax], "curved": True}]
+    if avc: cur.append({"id": "AVC", "label": "AVC", "pts": [list(p) for p in srt(avcs) if p[1] <= ymax], "curved": True})
     return cur
 
 def _price_line(P, ident, label, at=None, until=None, color=None):
@@ -192,6 +192,17 @@ def mkt_firm(kind, title, lede, steps):
           'exit'  a loss drives exit and price rises, the loss shrinking (4)."""
     pmin = _atc_min[1]                     # 45: the long-run price
     sl = 0.9
+    # Every price here sits between about 30 and 57, so both panels clip
+    # their price axis to 72 rather than 110: on the full axis the loss left
+    # after exit was a sliver and P₁ and P₂ crowded each other (Ian,
+    # 2026-11-05). Lines are cut where they leave the plot.
+    YM = 72.0
+    def seg(a, m, qlo=4.0, qhi=116.0, plo=3.0, phi=YM - 2):
+        """p = a + m q, clipped to the box."""
+        lo, hi = sorted(((plo - a) / m, (phi - a) / m))
+        q0, q1 = max(qlo, lo), min(qhi, hi)
+        assert q0 < q1, (a, m)
+        return [[R(q0), R(a + m * q0)], [R(q1), R(a + m * q1)]]
     if kind == "exit":
         P0 = 32.0
     elif kind == "entry":
@@ -199,29 +210,29 @@ def mkt_firm(kind, title, lede, steps):
     else:
         P0 = pmin
     # market: S p = sl*q, D p = 2*P0 - sl*q, so the two cross at (P0/sl, P0)
-    S1 = [[8, R(sl * 8)], [110, R(sl * 110)]]
-    Dm = lambda top: [[4, R(top - sl * 4)], [R(top / sl - 4), R(sl * 4)]]
+    S1 = seg(0.0, sl, qlo=8.0)
+    Dm = lambda top: seg(top, -sl)
     D1 = Dm(2 * P0)
     e1 = cross(D1, S1)
-    mkt = {"heading": "The Market", "axes": {"xmax": 120, "ymax": 110},
+    mkt = {"heading": "The Market", "axes": {"xmax": 120, "ymax": YM},
            "curves": [{"id": "S1", "label": "S₁" if kind != "up_sr" else "S", "pts": S1},
                       {"id": "D1", "label": "D₁" if kind in ("up_sr", "up_lr") else "D", "pts": D1}],
            "points": [{"q": R(e1[0]), "p": R(e1[1]), "pl": "P₁", "ql": "Q₁"}]}
-    firm = {"heading": "One Firm", "axes": {"xmax": 110, "ymax": 110, "y": "Price and Cost"}, "curves": [], "points": [], "areas": []}
+    firm = {"heading": "One Firm", "axes": {"xmax": 110, "ymax": YM, "y": "Price and Cost"}, "curves": [], "points": [], "areas": []}
     seq = []                                # (price, step it arrives)
     if kind in ("up_sr", "up_lr"):
         D2 = Dm(2 * P0 + 24)
         e2 = cross(D2, S1); P1 = e2[1]
-        mkt["curves"].append({"id": "D2", "label": "D₂", "pts": D2, "color": "red", "from": "D1", "at": 1, "arrowP": 70})
+        mkt["curves"].append({"id": "D2", "label": "D₂", "pts": D2, "color": "red", "from": "D1", "at": 1, "arrowP": 62})
         mkt["points"].append({"q": R(e2[0]), "p": R(P1), "pl": "P₂", "ql": "Q₂", "color": "red", "at": 1, **({"until": 4} if kind == "up_lr" else {})})
         seq = [(P0, 0), (P1, 2)]                # the firm answers the new price a step later
         if kind == "up_lr":
             # entry until the price is back at the minimum of ATC
             q3 = (2 * P0 + 24 - pmin) / sl                 # D2 at the old price
             d = q3 - pmin / sl
-            S2 = [[R(8 + d), R(sl * 8)], [110, R(sl * (110 - d))]]
+            S2 = seg(-sl * d, sl, qlo=8.0 + d)
             # above every guide: at 30 the arrow ran across Q₁'s
-            mkt["curves"].append({"id": "S2", "label": "S₂", "pts": S2, "color": "red", "from": "S1", "at": 3, "arrowP": 72})
+            mkt["curves"].append({"id": "S2", "label": "S₂", "pts": S2, "color": "red", "from": "S1", "at": 3, "arrowP": 60})
             mkt["points"].append({"q": R(q3), "p": R(pmin), "pl": "P₁", "ql": "Q₃", "color": "red", "at": 4, "showP": False})
             seq.append((pmin, 4))
     else:
@@ -229,15 +240,15 @@ def mkt_firm(kind, title, lede, steps):
         # the loss left was a sliver under the new price line (Ian, 2026-11-05).
         target = pmin if kind == "entry" else 39.0
         dq = (2 * P0 - target) / sl - target / sl              # the supply shift that lands there
-        S2 = [[R(max(8, 8 + dq)), R(sl * max(8, 8 + dq) - sl * dq)], [110, R(sl * (110 - dq))]]
+        S2 = seg(-sl * dq, sl, qlo=max(8.0, 8.0 + dq))
         e2 = cross(D1, S2); P1 = e2[1]
-        mkt["curves"].append({"id": "S2", "label": "S₂", "pts": S2, "color": "red", "from": "S1", "at": 1, "arrowP": 30 if kind == "entry" else 70})
+        mkt["curves"].append({"id": "S2", "label": "S₂", "pts": S2, "color": "red", "from": "S1", "at": 1, "arrowP": 30 if kind == "entry" else 55})
         mkt["points"].append({"q": R(e2[0]), "p": R(P1), "pl": "P₂", "ql": "Q₂", "color": "red", "at": 2})
         seq = [(P0, 0), (P1, 2)]
         if kind == "entry": assert abs(P1 - pmin) < 0.6, P1
         else: assert P0 < P1 < pmin, P1
     qx = [R(q_at_price(P)) for P, _ in seq]
-    firm["curves"] = _firm_curves(qx)
+    firm["curves"] = _firm_curves(qx, ymax=YM - 2)
     for k, ((P, at), q) in enumerate(zip(seq, qx)):
         until = seq[k + 1][1] if k + 1 < len(seq) else None
         lab = "P₁" if abs(P - P0) < 0.01 else "P₂"
