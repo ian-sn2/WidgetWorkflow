@@ -1,4 +1,4 @@
-/* ===== exam-solutions.js v0.35 =====
+/* ===== exam-solutions.js v0.36 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -21,8 +21,11 @@
   function examName(e) { return /^\d+$/.test(e) ? 'Exam ' + e : e; }
   function examOrder(e) { return /^\d+$/.test(e) ? +e : 99; }
   // Ian's order for the topics (2026-10-26); the frontier comes first because
-  // it is the course's first chapter. Anything else sorts after, by name.
-  var TOPIC_ORDER = ['The PPF', 'Supply and Demand', 'Elasticity', 'Efficiency and Equity', 'Government Intervention', 'International Trade'];
+  // it is the course's first chapter. Exam 3's chapters follow in the
+  // textbook's order (2026-11-05). Anything else sorts after, by name.
+  var TOPIC_ORDER = ['The PPF', 'Supply and Demand', 'Elasticity', 'Efficiency and Equity', 'Government Intervention', 'International Trade',
+                     'Perfect Competition', 'Monopoly', 'Monopolistic Competition', 'Oligopoly',
+                     'Externalities', 'Public Goods and Common Resources', 'Labor Markets', 'Inequality'];
   function topicRank(t) { var i = TOPIC_ORDER.indexOf(t); return i < 0 ? TOPIC_ORDER.length : i; }
   function uniq(list) {
     var out = [];
