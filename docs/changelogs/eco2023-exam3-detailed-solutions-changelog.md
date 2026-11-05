@@ -37,12 +37,15 @@ as Exam 1 (`docs/exam-solutions-brief.md`).
   figures MC is the derivative of total cost, so MR = MC at the marked output
   and the long-run demand curve touches ATC exactly there. Both are asserted.
   The competitive-firm figures use `curve_shapes.cost_family`.
-* **Payoff games replace the solution's pictures.** Each of the eight game
-  questions had five images of the grid, one per step of the written
-  argument. One stepped payoff-matrix widget takes the first image's place
-  and the other four go. Its captions are computed from the payoffs, and the
-  dominant strategies it finds are asserted against the solution's letter.
-  The paper's own table stays in the question.
+* **Payoff games replace both the paper's table and the solution's
+  pictures.** Each of the eight game questions had the grid as a table in the
+  question and again as five images in the solution, one per step of the
+  written argument. One stepped payoff-matrix widget now sits in the question
+  where the table was, opening on the same grid, and the five images go. Its
+  captions are computed from the payoffs, and the dominant strategies it
+  finds are asserted against the solution's letter. The grid heads its rows
+  and columns "Cut prices / Don't cut" or "Low prices / High prices", because
+  the papers' longer phrases ran together in the cell headings.
 * **The three four-panel figures** (Fall 2020 Q3, Spring 2020 Q3, Spring 2021
   Q25) are the Exam 1 "Figure A–D" widget in place of the image.
 * **Numbers from the question only.** Jane's Garage (Spring 2020 Q17) is
@@ -63,6 +66,10 @@ as Exam 1 (`docs/exam-solutions-brief.md`).
   parts and the solution's three answers, under the Labor Markets topic.
 * **`<u>` removed** from the game solutions' "Step 1:" labels, which are
   already bold. The house format never underlines.
+* **One sentence of the solutions reworded, eight times.** Each game solution
+  opened with "The payoff matrix we were given was as follows:" over a
+  picture that is now gone. It reads "The payoff matrix is the one shown with
+  the question."
 * **Profit is shaded teal and a loss red.** No convention existed for either.
 
 ## Flagged for Ian, not changed
