@@ -53,6 +53,10 @@ VERB = {"Lower prices": "cutting", "Don't lower prices": "not cutting",
         "Set low prices": "with low prices", "Set high prices": "with high prices"}
 IF = {"Lower prices": "cuts its prices", "Don't lower prices": "does not cut",
       "Set low prices": "sets low prices", "Set high prices": "sets high prices"}
+# What the grid itself prints: the papers' phrases are too long for a cell
+# heading, and "Set low prices" ran into "Set high prices" beside it.
+GRID = {"Lower prices": "Cut prices", "Don't lower prices": "Don't cut",
+        "Set low prices": "Low prices", "Set high prices": "High prices"}
 PICK = {"Lower prices": "cuts", "Don't lower prices": "does not cut",
         "Set low prices": "sets low prices", "Set high prices": "sets high prices"}
 
@@ -98,8 +102,8 @@ def game(cells, labels, answer):
     for s in steps: assert len(s) <= 200, (len(s), s)
     return {"title": "The Pricing Game Between Target and Walmart",
             "lede": "Hold one firm's choice fixed and compare the other firm's two payoffs.",
-            "matrix": {"rows": {"player": "WALMART", "labels": list(labels)},
-                       "cols": {"player": "TARGET", "labels": list(labels)},
+            "matrix": {"rows": {"player": "WALMART", "labels": [GRID[l] for l in labels]},
+                       "cols": {"player": "TARGET", "labels": [GRID[l] for l in labels]},
                        "cells": grid, "marks": marks},
             "steps": steps}
 
@@ -408,7 +412,7 @@ def lorenz_move(title, lede, steps, direction="away"):
             "curves": [{"id": "EQ", "label": "", "pts": [[0, 0], [100, 100]], "thin": True},
                        {"id": "L1", "label": "", "pts": first, "curved": True},
                        {"id": "L2", "label": "", "pts": second, "curved": True, "color": "red", "at": 1}],
-            "points": [{"q": 75, "p": 75, "label": "Line of equality", "boxed": True, "dot": False, "dx": -12, "dy": -12, "guides": False, "showP": False, "showQ": False},
+            "points": [{"q": 50, "p": 50, "label": "Line of equality", "boxed": True, "dot": False, "dx": -12, "dy": -12, "guides": False, "showP": False, "showQ": False},
                        {"q": first[4][0], "p": first[4][1], "label": "L₁", "boxed": True, "dot": False, "dx": 6, "dy": -4, "guides": False, "showP": False, "showQ": False},
                        {"q": second[7][0], "p": second[7][1], "label": "L₂", "boxed": True, "dot": False, "dx": 6, "dy": -4, "guides": False, "showP": False, "showQ": False, "at": 1}],
             "steps": steps}

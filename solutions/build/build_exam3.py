@@ -68,7 +68,9 @@ def section(term, q, sol, wmap):
             assert w and w[0] == "stem", (term, n)
             pre.append(widget(w[1]))
         elif p.startswith("<table"):
-            pre.append(table_html(p))
+            # A payoff game's table becomes the stepped widget: its opening
+            # step is the same grid, so the paper's table would say it twice.
+            pre.append(widget(w[1]) if w and w[0] == "matrix" else table_html(p))
     stem, choices = PARA[term][n]
     body = sol.strip()
     if not body.startswith("<p"):
@@ -80,14 +82,12 @@ def section(term, q, sol, wmap):
     imgs = IMG.findall(body)
     if w and w[0] == "matrix":
         # The written solution walks the game through five pictures of the
-        # grid; the widget steps through the same five, so it takes the first
-        # picture's place and the other four go.
+        # grid. The widget above, in the question, steps through the same
+        # five, so the pictures go.
         assert len(imgs) == 5, (term, n, len(imgs))
-        first = [True]
-        def sub(m):
-            if first[0]: first[0] = False; return widget(w[1])
-            return ""
-        body = IMG.sub(sub, body)
+        assert any(p.startswith("<table") for p in q["pre"]), (term, n, "game with no table")
+        body = IMG.sub("", body)
+        body = body.replace("The payoff matrix we were given was as follows:", "The payoff matrix is the one shown with the question.")
     else:
         assert not imgs, (term, n, "unplaced solution images")
     if w and w[0] == "solution":
