@@ -225,7 +225,9 @@ def mkt_firm(kind, title, lede, steps):
             mkt["points"].append({"q": R(q3), "p": R(pmin), "pl": "P₁", "ql": "Q₃", "color": "red", "at": 4, "showP": False})
             seq.append((pmin, 4))
     else:
-        target = pmin if kind == "entry" else 43.0          # exit: losses shrink, not vanish
+        # exit: losses shrink, not vanish -- and stay tall enough to see. At 43
+        # the loss left was a sliver under the new price line (Ian, 2026-11-05).
+        target = pmin if kind == "entry" else 39.0
         dq = (2 * P0 - target) / sl - target / sl              # the supply shift that lands there
         S2 = [[R(max(8, 8 + dq)), R(sl * max(8, 8 + dq) - sl * dq)], [110, R(sl * (110 - dq))]]
         e2 = cross(D1, S2); P1 = e2[1]
