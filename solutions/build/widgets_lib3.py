@@ -408,7 +408,7 @@ def lorenz_move(title, lede, steps, direction="away"):
             "curves": [{"id": "EQ", "label": "", "pts": [[0, 0], [100, 100]], "thin": True},
                        {"id": "L1", "label": "", "pts": first, "curved": True},
                        {"id": "L2", "label": "", "pts": second, "curved": True, "color": "red", "at": 1}],
-            "points": [{"q": 25, "p": 25, "label": "Line of equality", "boxed": True, "dot": False, "dx": -8, "dy": -10, "guides": False, "showP": False, "showQ": False},
+            "points": [{"q": 75, "p": 75, "label": "Line of equality", "boxed": True, "dot": False, "dx": -12, "dy": -12, "guides": False, "showP": False, "showQ": False},
                        {"q": first[4][0], "p": first[4][1], "label": "L₁", "boxed": True, "dot": False, "dx": 6, "dy": -4, "guides": False, "showP": False, "showQ": False},
                        {"q": second[7][0], "p": second[7][1], "label": "L₂", "boxed": True, "dot": False, "dx": 6, "dy": -4, "guides": False, "showP": False, "showQ": False, "at": 1}],
             "steps": steps}
@@ -486,8 +486,8 @@ def jane(title, lede, steps):
     mc = [p for p in curve_of(C.mc, [26, 30, 34, 40, 46, 52, 58, 64, 70]) if p[1] <= 62]
     return {"title": title, "lede": lede, "axes": {"xmax": 90, "ymax": 64, "y": "Price and Cost", "x": "Garages per Week", "money": True},
             "curves": [{"id": "MC", "label": "MC", "pts": mc, "curved": True}, {"id": "ATC", "label": "ATC", "pts": atc, "curved": True},
-                       {"id": "P", "label": "P = MR", "pts": [[3, 35], [86, 35]]}],
-            "points": [{"q": 40, "p": 35, "pl": "$35", "ql": "40"},
-                       {"q": 40, "p": 40, "label": "ATC = $40", "dx": 10, "dy": -8, "guides": False, "showP": False, "showQ": False, "at": 1}],
+                       {"id": "P", "label": "P = MR = $35", "pts": [[3, 35], [86, 35]]}],
+            "points": [{"q": 40, "p": 35, "ql": "40", "showP": False, "guides": "q"},
+                       {"q": 40, "p": 40, "pl": "$40", "guides": "p", "showQ": False, "at": 1}],
             "areas": [{"pts": [[0, 40], [40, 40], [40, 35], [0, 35]], "label": "Loss", "color": "red", "edge": True, "at": 1}],
             "steps": steps}
