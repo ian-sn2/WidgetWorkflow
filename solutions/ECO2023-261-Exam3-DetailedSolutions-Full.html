@@ -1841,10 +1841,11 @@ section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
 /* A figure inside a solution is read beside its working, not as the page's
    centrepiece: no box of its own, a narrower plot, and a Fullscreen button
    that lifts it into an overlay (Ian, 2026-11-04). */
-section.sol .sdg { --fig:50%; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
+section.sol .sdg { --fig:50cqw; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
 section.sol .sdg h4 { font-size:.95rem; padding-right:330px; }
 /* The engine lets a plot with its working beside it grow past --fig; in a
    solution the size control decides, so the cap holds there too. */
+section.sol .sdg .sdg-main.has-calc > .sdg-body { max-width:none; }
 section.sol .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure,
 .sol-fs-panel .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure { max-width:var(--fig); }
 section.sol .sdg .sdg-lede { margin-bottom:6px; font-size:.86rem; }
@@ -1852,6 +1853,9 @@ section.sol .sdg .sdg-lede { margin-bottom:6px; font-size:.86rem; }
    icons (back, next, restart) with the counter, then - / + and Fullscreen. */
 section.sol .sdg .sol-tools, .sol-fs-panel .sdg .sol-tools { position:absolute; top:0; right:0; display:flex; align-items:center; gap:10px; }
 section.sol .sdg .sol-size, .sol-fs-panel .sdg .sol-size { display:flex; gap:4px; }
+/* A payoff matrix is a table, not a plot: the size steps cannot change it, so
+   they are not offered. Fullscreen still is. */
+section.sol .sdg:has(.sdg-mx) .sol-minus, section.sol .sdg:has(.sdg-mx) .sol-plus { display:none; }
 section.sol .sdg .sol-tools button, .sol-fs-panel .sdg .sol-tools button { display:inline-flex; align-items:center; justify-content:center; gap:5px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
   color:#002060; font:inherit; font-size:.78rem; font-weight:700; padding:4px 9px; min-width:28px; min-height:28px; cursor:pointer; line-height:1; margin:0; }
 section.sol .sdg .sol-tools button:hover, .sol-fs-panel .sdg .sol-tools button:hover { border-color:#002060; }
@@ -1899,7 +1903,7 @@ section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
 </style>
 <script>
-/* ===== exam-solutions.js v0.36 =====
+/* ===== exam-solutions.js v0.38 =====
    The shell around a page of worked exam questions. Each question is a
    <section class="sol"> carrying data-term, data-exam and data-topic, grouped
    under a <div class="sol-group"> (one per term and exam) whose <h2> the house
@@ -2244,19 +2248,24 @@ section.sol .sol-table table { margin:0; }
     // half, then 37.5% and 25%. A share, not a pixel count, so the same
     // setting looks the same on every screen. The stored key changed with the
     // default: a size pressed under an earlier build stayed in the browser.
-    var SIZES = [25, 37.5, 50, 75, 100], SIZE_KEY = 'sol-size-3';
-    var sizeIdx = 2;
-    try { var sv = parseInt(localStorage.getItem(SIZE_KEY), 10); if (sv >= 0 && sv < SIZES.length) sizeIdx = sv; } catch (e) {}
+    // Each widget keeps its own size and opens at the third step every time
+    // (Ian, 2026-11-05): one shared size, remembered in the browser, meant a
+    // single press on any figure changed every other one, and kept doing so
+    // after a reload, so most widgets no longer opened at size 3.
+    var SIZES = [25, 37.5, 50, 75, 100], DEFAULT_SIZE = 2;
+    try { localStorage.removeItem('sol-size-3'); } catch (e) {}
     var allWidgets = [].slice.call(document.querySelectorAll('section.sol .sdg'));
-    function applySize() {
-      allWidgets.forEach(function (w) {
-        w.style.setProperty('--fig', SIZES[sizeIdx] + '%');
-        var ctl = w.querySelector('.sol-size');
-        if (ctl) { ctl.querySelector('.sol-minus').disabled = sizeIdx === 0; ctl.querySelector('.sol-plus').disabled = sizeIdx === SIZES.length - 1; }
-      });
+    function applySize(w) {
+      var i = w.solSize;
+      // In the widget's own width (cqw: the widget is the engine's named
+      // container), not a percent of whatever column the plot sits in --
+      // with working beside it that column is capped at 780px, so "50%"
+      // came out at 39% of the box (Ian, 2026-11-05).
+      w.style.setProperty('--fig', SIZES[i] + 'cqw');
+      var ctl = w.solTools && w.solTools.querySelector('.sol-size');
+      if (ctl) { ctl.querySelector('.sol-minus').disabled = i === 0; ctl.querySelector('.sol-plus').disabled = i === SIZES.length - 1; }
     }
-    // only a press is remembered, never the default
-    function stepSize(d) { sizeIdx = Math.max(0, Math.min(SIZES.length - 1, sizeIdx + d)); applySize(); try { localStorage.setItem(SIZE_KEY, String(sizeIdx)); } catch (e) {} }
+    function stepSize(w, d) { w.solSize = Math.max(0, Math.min(SIZES.length - 1, w.solSize + d)); applySize(w); }
     // The widget's own step controls (Back, Next step, Start over and the
     // counter) are docked into the same strip as the size buttons, as arrow
     // and restart icons, so nothing sits under the plot (Ian, 2026-11-04).
@@ -2280,17 +2289,17 @@ section.sol .sol-table table { margin:0; }
       var plus = document.createElement('button'); plus.type = 'button'; plus.className = 'sol-plus'; plus.textContent = '+'; plus.title = 'Larger'; plus.setAttribute('aria-label', 'Larger figure');
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sol-fs-btn';
       btn.innerHTML = '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg> Fullscreen';
-      minus.addEventListener('click', function () { stepSize(-1); });
-      plus.addEventListener('click', function () { stepSize(1); });
+      minus.addEventListener('click', function () { stepSize(w, -1); });
+      plus.addEventListener('click', function () { stepSize(w, 1); });
       btn.addEventListener('click', function () { openFs(w); });
       var size = document.createElement('div'); size.className = 'sol-size';
       size.appendChild(minus); size.appendChild(plus); size.appendChild(btn);
       ctl.appendChild(size);
-      w.solTools = ctl;
+      w.solTools = ctl; w.solSize = DEFAULT_SIZE;
       dock(w);
       new MutationObserver(function () { dock(w); }).observe(w, { childList: true, subtree: true });
     });
-    applySize();
+    allWidgets.forEach(applySize);
     // leaving the question closes an overlay with it
     prev.addEventListener('click', closeFs); next.addEventListener('click', closeFs); back.addEventListener('click', closeFs);
     window.addEventListener('hashchange', function () { fromHash(); });
@@ -3287,7 +3296,7 @@ section.sol .sol-table table { margin:0; }
      "color": "red",
      "from": "S1",
      "at": 3,
-     "arrowP": 30
+     "arrowP": 72
     }
    ],
    "points": [
