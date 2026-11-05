@@ -164,3 +164,13 @@ them on that.
   `sol-group` with its `data-exam`, and the Exam row grows a button.
 * A `check_file.py` mode for a solutions page, so `images` and `dates` stay
   quiet and the step and label checks run on the opened copy.
+
+## Building one
+
+The builders and the widget shapes live in `solutions/build/`; its README
+gives the commands. `widgets_lib.py` holds the Exam 1 shapes and
+`widgets_lib3.py` the Exam 3 ones (firms, market structures, games, labor,
+inequality, externalities). A new paper on chapters already covered needs a
+paraphrase file and a widget map choosing a shape per question, not new
+drawing code. Before 2026-11-05 these lived only in a session's scratch
+folder and would have been lost with it.

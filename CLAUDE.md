@@ -45,6 +45,8 @@ docs/
   archive/                    ← prompt-variant conventions
 solutions/
   ECO2023-263-Exam1-DetailedSolutions-Full.html ← five semesters of Exam 1, 120 widgets
+  ECO2023-261-Exam3-DetailedSolutions-Full.html ← four semesters of Exam 3, 78 widgets
+  build/                      ← the builders and the widget SHAPE LIBRARY. A new exam reuses these.
 engine/exam-solutions.js, .css  ← the solutions shell (the semester / exam / topic picker)
 docs/exam-solutions-brief.md    ← what a solutions page is and how it is checked
 examples/
