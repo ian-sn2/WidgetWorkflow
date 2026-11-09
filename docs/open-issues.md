@@ -169,7 +169,16 @@ in brackets.
       are 28px, under the 44px tap minimum, on every solutions widget; and the
       Exam 3 payoff matrices are 14–43px wider than a 390px column. Both are
       in `scripts/ci_phone_baseline.json`. The fix is a phone-width rule in
-      `engine/exam-solutions.css`.
+      `engine/exam-solutions.css`. One display equation on the Exam 3 page
+      also still pushes it sideways.
+- [ ] **Equations push three example chapters sideways on a phone** once
+      MathJax has typeset them (Government Intervention, Tradeoffs, ECO2023
+      Elasticity), and at 320px the Tradeoffs page zooms out far enough that
+      its step buttons cannot be pressed. Found by the first CI run of the
+      phone check, 2026-11-09; this container never loads MathJax, so no
+      earlier check saw it. The house stylesheet's call, like the wide prose
+      tables: `mjx-container[display="true"] { overflow-x: auto }` in
+      `sn25-v6.css` would fix every chapter at once.
 
 ## Environment
 
