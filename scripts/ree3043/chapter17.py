@@ -49,7 +49,7 @@ CSS = r"""<style>
 .crev .cv-tabs button[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); color:#fff; }
 .crev .cv-read { min-height:2.9em; margin:12px 0 0; padding:6px 10px; border-left:4px solid var(--rule); font-size:.92rem; line-height:1.35; }
 .crev .cv-read b { font-weight:800; }
-.crev .cv-read:empty { border-left-color:transparent; }
+.crev .cv-read:empty { border-left-color:transparent; min-height:0; margin:0; padding:0; }
 .aside-box .crev { margin:14px 0 4px; max-width:none; }
 .crev .cv-src { font-size:.76rem; color:var(--muted); text-align:right; margin:10px 0 0; }
 .crev svg, .crev svg * { outline:none; }
@@ -123,15 +123,13 @@ CSS = r"""<style>
 .crev .cv-tree li { position:relative; }
 .crev .cv-node { line-height:1.2; }
 @media (min-width:800px) {   /* left to right: each level a column, joined by a spine */
-  .crev .cv-tree { overflow-x:auto; }
-  .crev .cv-tree ul { display:flex; flex-direction:column; justify-content:center; gap:6px; padding-left:28px; }
-  .crev .cv-tree > ul { padding-left:0; }
+  .crev .cv-tree { padding:4px 4px 4px 3px; }   /* room for a lit node's ring; no overflow clipping */
+  .crev .cv-tree ul { display:flex; flex-direction:column; justify-content:center; gap:6px; padding-left:24px; }
   .crev .cv-tree li { display:flex; align-items:center; padding-left:14px; }
   .crev .cv-tree > ul > li { padding-left:0; }
   .crev .cv-tree .cv-node { white-space:nowrap; padding:4px 9px; font-size:.8rem; }
-  .crev .cv-tree ul { padding-left:24px; }
   .crev .cv-tree > ul { padding-left:0; }
-  .crev .cv-tree ul ul::before { content:""; position:absolute; left:0; top:50%; width:14px; border-top:2px solid var(--rule); }
+  .crev .cv-tree ul ul::before { content:""; position:absolute; left:0; top:50%; width:24px; border-top:2px solid var(--rule); }   /* parent to spine: the full column gap */
   .crev .cv-tree ul ul > li::before { content:""; position:absolute; left:0; top:-3px; bottom:-3px; border-left:2px solid var(--rule); }
   .crev .cv-tree ul ul > li:first-child::before { top:50%; }
   .crev .cv-tree ul ul > li:last-child::before { bottom:50%; }
@@ -139,11 +137,12 @@ CSS = r"""<style>
   .crev .cv-tree ul ul > li::after { content:""; position:absolute; left:0; top:50%; width:14px; border-top:2px solid var(--rule); }
 }
 @media (max-width:799px) {   /* stacked: indented, joined on the left */
+  .crev .cv-tree { padding:3px; }
   .crev .cv-tree ul ul { padding-left:22px; }
   .crev .cv-tree li { padding:4px 0; }
   .crev .cv-tree ul ul li::before { content:""; position:absolute; left:-14px; top:0; bottom:0; border-left:2px solid var(--rule); }
   .crev .cv-tree ul ul li:last-child::before { bottom:auto; height:18px; }
-  .crev .cv-tree ul ul li::after { content:""; position:absolute; left:-14px; top:18px; width:12px; border-top:2px solid var(--rule); }
+  .crev .cv-tree ul ul li::after { content:""; position:absolute; left:-14px; top:18px; width:14px; border-top:2px solid var(--rule); }
 }
 .crev .cv-node { display:inline-block; padding:4px 10px; border-radius:6px; background:var(--soft); border:1px solid var(--rule); font-weight:600; }
 .crev .cv-node.hot { background:#1d4f94; border-color:#1d4f94; color:#fff; }
@@ -305,7 +304,8 @@ RUNTIME = r"""<script>
         li.querySelectorAll('.cv-node').forEach(function (n) { n.classList.add('lit'); });
         for (var p = li.parentElement.closest('li'); p; p = p.parentElement.closest('li')) p.querySelector(':scope > .cv-node').classList.add('lit');
       }
-      read.innerHTML = '<b>' + el.textContent.replace(/85% to 90% of CRE equity/, '').trim() + ':</b> ' + D.notes[k];
+      var name = el.cloneNode(true); name.querySelectorAll('small').forEach(function (s) { s.remove(); }); name.querySelectorAll('br').forEach(function (b) { b.replaceWith(' '); });
+      read.innerHTML = '<b>' + name.textContent.replace(/\s+/g, ' ').trim() + ':</b> ' + D.notes[k];
     }
     nodes.forEach(function (el) {
       el.addEventListener('mouseenter', function () { if (pinned === null) light(el); });
