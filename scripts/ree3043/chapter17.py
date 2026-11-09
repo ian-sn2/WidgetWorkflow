@@ -49,6 +49,7 @@ CSS = r"""<style>
 .crev .cv-tabs button[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); color:#fff; }
 .crev .cv-read { min-height:2.9em; margin:12px 0 0; padding:6px 10px; border-left:4px solid var(--rule); font-size:.92rem; line-height:1.35; }
 .crev .cv-read b { font-weight:800; }
+.aside-box .crev { margin:14px 0 4px; max-width:none; }
 .crev .cv-src { font-size:.76rem; color:var(--muted); text-align:right; margin:10px 0 0; }
 .crev svg, .crev svg * { outline:none; }
 /* pie */
@@ -111,7 +112,12 @@ CSS = r"""<style>
 .crev .cv-fig { width:100%; height:auto; display:block; }
 .crev .cv-classes { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:0 0 12px; font-size:.84rem; color:var(--muted); }
 .crev .cv-classes .cv-node { font-size:.78rem; padding:2px 8px; }
-.crev .cv-classes .cv-plain { font-weight:700; color:var(--ink); }
+.crev .cv-classes .cv-node.cv-plain { font-weight:700; color:var(--ink); background:transparent; border-color:transparent; }
+.crev #cre-tree .cv-node[data-k] { cursor:pointer; outline:none; transition:opacity .15s, box-shadow .15s; }
+.crev .cv-classes.dim .cv-node:not(.lit), .crev .cv-tree.dim .cv-node:not(.lit) { opacity:.3; }
+.crev .cv-node.lit { box-shadow:0 0 0 2px #2a78d6; }
+.crev .cv-node.cv-plain.lit { box-shadow:none; text-decoration:underline; text-decoration-color:#2a78d6; text-underline-offset:3px; }
+.crev #cre-tree .cv-node[data-k]:focus-visible { box-shadow:0 0 0 3px #2a78d6; }
 .crev .cv-tree { font-size:.84rem; }
 .crev .cv-tree ul { list-style:none; margin:0; padding:0; position:relative; }
 .crev .cv-tree li { position:relative; }
@@ -286,10 +292,43 @@ RUNTIME = r"""<script>
     }
     wire(root, segs, show); show(null);
   }
+  function tree(root, D) {
+    var read = root.querySelector('.cv-read'), nodes = Array.prototype.slice.call(root.querySelectorAll('.cv-node[data-k]')), pinned = null;
+    var strip = root.querySelector('.cv-classes'), diagram = root.querySelector('.cv-tree');
+    var LIGHTS = { 'c:alts': ['c:cre', 'c:hedge', 'c:infra', '*'], 'c:cre': ['*'] };
+    function light(el) {
+      nodes.forEach(function (n) { n.classList.remove('lit'); });
+      strip.classList.toggle('dim', !!el); diagram.classList.toggle('dim', !!el);
+      if (!el) { read.innerHTML = D.rest; return; }
+      var k = el.dataset.k; el.classList.add('lit');
+      if (k.indexOf('c:') === 0) {   // a tag in the strip: itself, plus what it covers below
+        (LIGHTS[k] || []).forEach(function (x) {
+          if (x === '*') diagram.querySelectorAll('.cv-node').forEach(function (n) { n.classList.add('lit'); });
+          else { var s = strip.querySelector('[data-k="' + x + '"]'); if (s) s.classList.add('lit'); }
+        });
+        if (k === 'c:cre' || k === 'c:alts') strip.querySelector('[data-k="c:cre"]').classList.add('lit');
+      } else {   // a box in the diagram: its path back to the root and everything that branches from it
+        var li = el.closest('li');
+        li.querySelectorAll('.cv-node').forEach(function (n) { n.classList.add('lit'); });
+        for (var p = li.parentElement.closest('li'); p; p = p.parentElement.closest('li')) p.querySelector(':scope > .cv-node').classList.add('lit');
+        strip.querySelector('[data-k="c:cre"]').classList.add('lit');
+      }
+      read.innerHTML = '<b>' + el.textContent.replace(/85% to 90% of CRE equity/, '').replace(/:$/, '').trim() + ':</b> ' + D.notes[k.replace('c:', '')];
+    }
+    nodes.forEach(function (el) {
+      el.addEventListener('mouseenter', function () { if (pinned === null) light(el); });
+      el.addEventListener('mouseleave', function () { if (pinned === null) light(null); });
+      el.addEventListener('click', function () { pinned = (pinned === el) ? null : el; light(pinned); });
+      el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pinned = (pinned === el) ? null : el; light(pinned); } });
+      el.addEventListener('focus', function () { if (pinned === null) light(el); });
+      el.addEventListener('blur', function () { if (pinned === null) light(null); });
+    });
+    light(null);
+  }
   document.querySelectorAll('.crev[data-kind]').forEach(function (root) {
     try {
       var D = JSON.parse(root.querySelector('script[type="application/json"]').textContent);
-      ({ pie: pie, bars: bars, split: split })[root.dataset.kind](root, D);
+      ({ pie: pie, bars: bars, split: split, tree: tree })[root.dataset.kind](root, D);
     } catch (e) { if (window.console) console.error('chart', root.id, e); }
   });
 })();
@@ -363,21 +402,47 @@ def debt_holders():
     return box("cre-debt", "bars", "Who Holds U.S. Commercial Real Estate Debt?", "Investment holdings, not loan originations; year-end 2024, in billions of dollars (Exhibit 17-4).", D,
                '<div class="cv-tabs" role="group" aria-label="Filter"></div>\n<div class="cv-rows"></div>\n' + key + '\n<div class="cv-read" aria-live="polite"></div>')
 
+TREE_NOTES = {   # one line per node, paraphrased from the chapter
+    "cash": "A traditional asset class. It is not one of the routes into commercial real estate traced below.",
+    "bonds": "A traditional asset class. It is not one of the routes into commercial real estate traced below.",
+    "stocks": "A traditional asset class. It is not one of the routes into commercial real estate traced below.",
+    "alts": "The alternative asset classes: commercial real estate, hedge funds and infrastructure. Only commercial real estate is traced below.",
+    "hedge": "Another alternative asset class. It is not traced below.",
+    "infra": "Another alternative asset class. It is not traced below.",
+    "cre": "An alternative asset class. Investors can own it through private markets or public markets.",
+    "private": "Vehicles that do not trade on a stock exchange. They hold about 85% to 90% of the ownership interests in U.S. CRE.",
+    "direct": "The investor holds title itself: complete control, but it must supply the expertise. Most common for large institutions and high-net-worth investors.",
+    "inter": "Entities that invest in real estate and sell partial claims to it. They supply expertise, diversification and shared risk, in exchange for fees.",
+    "jv": "Syndications that pool equity capital, usually organized as LLCs or limited partnerships.",
+    "pere": "Private equity real estate funds, which pool capital from institutions and high-net-worth investors.",
+    "open": "No fixed end date; investors can buy in or redeem quarterly; mostly core properties. The manager usually invests none of its own equity.",
+    "closed": "A finite life of 7 to 10 years and very illiquid. The manager co-invests 1% to 5% and earns carried interest.",
+    "public": "Shares that trade on a stock exchange, with more liquidity and lower transaction costs than private markets.",
+    "reits": "Corporations that avoid entity-level tax by meeting requirements such as paying out at least 90% of taxable income. About $1.5 trillion of CRE equity.",
+}
+
 def tree():
-    """The other asset classes as one line; commercial real estate's routes as a tree that reads left to right."""
-    N = lambda s, c="": f'<span class="cv-node {c}">{s}</span>'
-    return ('<div class="crev" id="cre-tree">\n<p class="cv-title">Where CRE Equity Fits in the Capital Markets</p>\n'
+    """The other asset classes as one line; commercial real estate's routes as a tree that reads left to right.
+    Hovering a tag in the strip lights what it covers below; hovering a node lights its path and its branches."""
+    def N(s, k, c="", strip=False):
+        return f'<span class="cv-node {c}" data-k="{("c:" if strip else "") + k}" tabindex="0" role="button">{s}</span>'
+    strip = (N("Cash", "cash", strip=True) + N("Bonds", "bonds", strip=True) + N("Stocks", "stocks", strip=True)
+             + N("Alternatives:", "alts", "cv-plain", strip=True) + N("Commercial real estate", "cre", "hot", strip=True)
+             + N("Hedge funds", "hedge", strip=True) + N("Infrastructure", "infra", strip=True))
+    D = {"notes": TREE_NOTES, "rest": "Hover over or tap an asset class above, or any box in the diagram."}
+    return ('<div class="crev" id="cre-tree" data-kind="tree">\n<p class="cv-title">Where CRE Equity Fits in the Capital Markets</p>\n'
             '<p class="cv-lede">Commercial real estate is an alternative asset class, owned through private or public markets.</p>\n'
-            '<div class="cv-classes">Asset classes: ' + N("Cash") + N("Bonds") + N("Stocks") + '<span class="cv-plain">Alternatives:</span>' + N("Commercial real estate", "hot") + N("Hedge funds") + N("Infrastructure") + '</div>\n'
-            '<div class="cv-tree"><ul><li>' + N("Commercial<br>real estate", "hot wrap") + '<ul>'
-            '<li>' + N("Private market<br><small>85% to 90% of CRE equity</small>", "warm wrap") + '<ul>'
-            '<li>' + N("Direct investment") + '</li>'
-            '<li>' + N("Through<br>intermediaries", "wrap") + '<ul>'
-            '<li>' + N("JVs, LLCs, etc.") + '</li>'
-            '<li>' + N("PERE funds") + '<ul><li>' + N("Open-end funds") + '</li><li>' + N("Closed-end funds") + '</li></ul></li>'
+            '<div class="cv-classes">Asset classes: ' + strip + '</div>\n'
+            '<div class="cv-tree"><ul><li>' + N("Commercial<br>real estate", "cre", "hot wrap") + '<ul>'
+            '<li>' + N("Private market<br><small>85% to 90% of CRE equity</small>", "private", "warm wrap") + '<ul>'
+            '<li>' + N("Direct investment", "direct") + '</li>'
+            '<li>' + N("Through<br>intermediaries", "inter", "wrap") + '<ul>'
+            '<li>' + N("JVs, LLCs, etc.", "jv") + '</li>'
+            '<li>' + N("PERE funds", "pere") + '<ul><li>' + N("Open-end funds", "open") + '</li><li>' + N("Closed-end funds", "closed") + '</li></ul></li>'
             '</ul></li></ul></li>'
-            '<li>' + N("Public market", "warm") + '<ul><li>' + N("Listed REITs") + '</li></ul></li>'
-            '</ul></li></ul></div>\n</div>')
+            '<li>' + N("Public market", "public", "warm") + '<ul><li>' + N("Listed REITs", "reits") + '</li></ul></li>'
+            '</ul></li></ul></div>\n<div class="cv-read" aria-live="polite"></div>\n'
+            f'<script type="application/json">{json.dumps(D, ensure_ascii=False)}</script>\n</div>')
 
 def risk_return():
     """A ladder in HTML rather than a scaled drawing: on a phone a drawing's captions shrink to about 8px."""
@@ -435,8 +500,8 @@ def charts(t):
     t = put(t, "<li>8% in publicly traded mortgage debt</li>\n</ul>", quadrants(), "quadrants")
     t = put(t, "are held by vehicles that do not trade on a stock exchange.</p>", tree(), "tree")
     t = put(t, "<h4>Life-Cycle of a Closed-End Fund</h4>", "", "noop") if False else t
-    i = t.index("<h4>Life-Cycle of a Closed-End Fund</h4>"); j = t.index("</div>", i) + 6
-    t = t[:j] + "\n\n" + lifecycle() + "\n" + t[j:]
+    i = t.index("<h4>Life-Cycle of a Closed-End Fund</h4>"); j = t.index("</div>", i)   # inside the box: the figure draws its phases, which only the box describes
+    t = t[:j] + "\n" + lifecycle() + "\n        " + t[j:]
     t = put(t, "The general partner's share is disproportionate to its small equity co-investment by design—tying general partner pay to performance.</p>", waterfall(), "waterfall")
     t = put(t, "Their investments include development projects and distressed situations.</li>\n        </ul>", risk_return(), "risk")
     t = put(t, "or non-institutional quality properties:</p>", private_split(), "private")
