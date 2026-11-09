@@ -60,6 +60,7 @@ def pie_widget():
 .phage-pie svg {{ flex:0 0 46%; width:46%; height:auto; display:block; overflow:visible; }}
 .phage-pie .pp-s path {{ stroke:#fff; stroke-width:2; transition:opacity .15s, transform .15s; cursor:pointer; }}
 .phage-pie .pp-s text {{ font-size:14px; font-weight:800; fill:#fff; pointer-events:none; transition:opacity .15s; paint-order:stroke; stroke:rgba(0,0,0,.25); stroke-width:2px; }}
+.phage-pie svg, .phage-pie svg *, .phage-pie svg:focus, .phage-pie .pp-s:focus, .phage-pie .pp-s path:focus {{ outline:none; }}
 .phage-pie .pp-s.on path {{ transform:translate(var(--dx), var(--dy)); }}
 .phage-pie.has-on .pp-s:not(.on) {{ opacity:.28; }}
 .phage-pie .pp-side {{ flex:1 1 auto; min-width:0; }}
