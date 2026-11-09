@@ -381,7 +381,7 @@ economics instead of label placement.
   first clear candidate happened to be there, and outside is where a label
   stops naming its own shape. The fallback is for a sliver; anywhere else,
   centred is the answer and a label that is not centred is a drawing to fix.
-* **Nothing covers a name (v2.57).** The engine cuts every dashed guide
+* **Nothing covers a name (v2.69).** The engine cuts every dashed guide
   around each in-plot label and gives the label a halo, so place labels for
   the curves and points they must clear, not for the guides; the checker no
   longer reports a guide against a label (Ian, 2026-11-05).
@@ -598,6 +598,49 @@ economics instead of label placement.
   shifted curve arrives, which is the printed grey-original convention; that
   is the only weight change a shift pair gets. `thin` is for a line that is
   genuinely secondary in the drawing, such as the 45-degree line.
+* **A shaded area's name goes where the source puts it, and never on a
+  solid line.** Ian, 2026-10-14, from the Exam 3 review's profit and loss
+  rectangles. A rectangle against the price axis is named at its left end,
+  beside the axis, where no cost curve runs; a thin one takes the name on one
+  line. Where the name cannot fit inside the shape at all, it goes beside the
+  shape **over the dashed guides** rather than over a curve (the
+  monopolistic-competition DWL wedge), and where a solid line crosses the
+  only inside spot (MR through a monopoly's profit rectangle) the name sits
+  above the shape with a `leader` hairline into it, as the source draws it.
+  A numeric figure the source hatches without a name, stating the amount in
+  the text, carries no in-plot name either. `place_labels.py` still finds the
+  centroid; these are the cases where the centroid is wrong.
+* **A brace goes where the source draws its arrow.** The buyers' tax arrow
+  sits between D and D_TAX at the lower right, past Q*; drawn at the upper
+  left it collided with the P_T guide and read as a different figure (Ian,
+  2026-10-14). Check each brace against the artwork, not against the
+  sellers' case it was copied from.
+* **A vertical shift gets a `moves` arrow.** The engine's shift arrow is
+  horizontal, so a frontier whose corn intercept moves up and whose TV
+  intercept stays put had no arrow at all ("why is there no up arrow",
+  Ian, 2026-10-12). Draw it as a `moves` arrow between the two lines at
+  the widest point of the gap, standing 7 units clear of each.
+* **A figure whose numbers change each semester is a widget, table and
+  all.** The comparative-advantage production figures (two frontiers with a
+  total-production table beside them) were kept as images for want of a
+  two-panel table; Ian's call (2026-10-12) is that people, goods and numbers
+  are exactly what changes, so they are two panels with the totals as a
+  `calcs` block under the plots.
+* **A circular flow is a `flow` widget with `cycle: true`, an open-market
+  diagram a chain `flow` with a two-way link, and a figure's own table a
+  `table.plain` beside the plot** (2026-10-19, redoing the seven UCF ECO
+  images left as pictures before the 2026-10-16 "anything drawable" rule).
+  A picture of a calculation (the midpoint formula) becomes the calculation
+  in HTML through `apply_widgets.py`'s `{"html": block}` entry. What still
+  stays an image: a tree diagram (the population hierarchy).
+* **A chain that the page reads top to bottom is a vertical `flow`**
+  (`vertical: true`, 2026-10-21): the channel figures say "upstream" and
+  "downstream" in the prose beside them, so a horizontal chain contradicts
+  the page. Braces grouping a run of boxes are `spans` (`brace: true` in a
+  horizontal chain; always braces in a vertical one). A pictorial diagram
+  that is not a chain or a ring (a shipping network, a conflict tree, a
+  spectrum arrow) is a static HTML figure placed through `{"html": block}`,
+  not a hand-written drawing inside a widget.
 * **An image that stays an image says why.** `<!-- KEEP: why -->` immediately
   before the `<img>`, declared the way a point declares `divider` or `boxed`,
   and `check_file.py` stops reporting it as a graph. The macro chapters are
@@ -717,7 +760,7 @@ not enough to reproduce an implementation.
   `embed_engine.py`'s paths reproduce the delivered file byte-for-byte; all 20
   prototype widgets render with no engine errors; `check_file.py` runs the
   geometric label test over 74 labels in the 263 file with no overlaps.
-* **Engine is v2.57.** Since v2.6: `areas` shade a polygon (v2.11) with
+* **Engine is v2.69** (v2.69 cuts every dashed guide round each in-plot label, gives those labels a halo and draws names last, so nothing covers a name -- see the engine reference, Ian 2026-11-05; v2.68 pulls a network node's four times in against the node, 5px out and 1px above or below, after Ian's review of the MAR3203 passes, 2026-10-26; v2.67 adds `axes.years` so a year tick prints without a thousands separator; v2.66 adds the `network` widget: a project network with ES/EF/LS/LF and the critical path revealed by step, AON or AOA, from the MAR3203 project-management chapter, 2026-10-23; v2.65 drops a wrapped quantity title below the tick row on a crossed-axis panel; v2.64 adds `gold` to the palette, `opacity` on an area and a colour on a `moves` arrow, so a UCF figure can be drawn in the school's gold, white and black -- the rejection-region bells, 2026-10-21; v2.63 adds `axes.xmin` and `axes.ymin`, so a plot need not start at the origin -- the GRE scatter starts at 2.8 GPA and 240 points, the profit parabola runs below zero -- from the QMB3200 set, 2026-10-21; v2.60 to v2.62 add a `pipe` node and a vertical `flow` chain, its links headed downward, with brace spans, plain-arrow links and auto-fitted node names, from the MAR3023 channels chapter; a `flow` chain-of-boxes widget, a shield against the host page's own CSS, and `axes.cross` for axes that meet inside the plot, all from the FIN3403 set, v2.57/v2.58; then `flow.cycle` for the circular flow of income, two-way and arrowless links with `plain` nodes for the open-market diagrams, and `table.plain` for a figure's own non-schedule table beside its plot, from the UCF ECO redo of 2026-10-19; the rest below is unchanged). Since v2.6: `areas` shade a polygon (v2.11) with
   `edge` to outline it (v2.18) and labels centred on their anchor (v2.13);
   `dot:false` drops a marker but keeps the axis label (v2.12); points take
   `guides:"p"`/`"q"` for one leg of the elbow (v2.14); braces take
@@ -825,7 +868,7 @@ not enough to reproduce an implementation.
   rather than 2.7px on every symbolic preset, and the presets choose a clear
   arrow height instead of a fixed 88 or 32 (v2.56). Every label inside the
   plot cuts the dashed guides around itself, carries a halo in the plot's
-  colour, and is drawn above the curves and points (v2.57): Ian asked for
+  colour, and is drawn above the curves and points (v2.69): Ian asked for
   names that nothing covers and guides that stop at the text and carry on
   past it, and `check_file` stopped testing labels against guides with it.
 
@@ -985,6 +1028,98 @@ Ian changed this rule on 2026-09-17, and the change applies **here only**:
   finish the output. This file governs work done here, with Ian present. If v6
   is ever given a question-asking step, it needs a bump to v7 and a note about
   unattended runs.
+
+### Converting another publisher's files (the UCF / StudyKnight set, 2026-10-12)
+
+* **Only the widgets change.** The head keeps its own stylesheet
+  (`sk26-v1.css`) and `<title>`; the one head change is swapping
+  `content/sn25-v5.js` for the live `studyguide/sn25-v2.js`, which builds the
+  table of contents (Ian: "one thing you can fix is the toc"). No prose,
+  markup or heading edits, however wrong they look: those go on the
+  checklist. `scripts/apply_widgets.py` replaces each mapped `<img>` with its
+  widget, anchors widgets into a Concise edition, and refuses to write a file
+  that differs from its source in anything else; `check_file.py --no-head`
+  checks the widgets without the Smokin' Notes head rules.
+* **A Concise edition carries a widget only where the text is hard to grasp
+  without it.** The test, in Ian's words (2026-10-26, confirmed after two
+  tightenings the same day): *if it is complex, keep it in the Concise; if
+  it is already explained sufficiently in the tables or text, the widget is
+  not needed.* His fuller statement: "the widget should only be there if it is needed to comprehend the
+  text, like the financial calculator; a simple diagram of something being
+  described is most likely not needed unless it is very complex"). So a CPM
+  pass with its four times stays and a bell curve, a cost band or a
+  break-even chart does not, whatever tip sits beside it; a figure with data
+  becomes a table, one without is dropped. The MAR3203 set ended with one
+  Concise widget in twelve chapters. The older wording: Cases of one lesson that the text introduces together (surplus and
+  shortage, the two taxes, the four surplus areas) become one widget with
+  scenario buttons; a widget the Concise text never introduces is dropped,
+  and not replaced by a table of its numbers either (Ian, 2026-10-12: the
+  Concise exists to save vertical space, and Full and Balanced carry the
+  figure). Two widgets back to back with no text between them is never
+  acceptable; `concise_runs.py` in the build area lists any such run.
+* **Deliveries.** The full set goes as one zip: `c - ECO2013 UCF Widgets/`
+  and `d - ECO2023 UCF - Widgets/` with `Exam N/` and chapter subfolders (no
+  "- DONE" suffix), new files only, plus `CHECKLIST.md` and one changelog per
+  chapter. A redone chapter goes as the three files on their own, or one flat
+  folder, never a path tree. The finished UCF files are not committed here;
+  Ian reviews them first.
+
+### Calculator widgets (the FIN3403 UCF set, 2026-10-16)
+
+* **A calculator screenshot becomes an HP 10bII+ widget, not a graph.** The
+  engine is `engine/hp10bii.css` + `engine/hp10bii.js` (the sample Ian sent,
+  extended); `apply_widgets.py` embeds both after the house script whenever a
+  map entry carries `"hp"`, and keeps the original `<img>` inside the widget
+  as a `<noscript>` fallback, so the file's proof still holds. Kinds: `tvm`
+  (N, I/YR, PV, PMT, FV, `EFF%`), `cf` (CFj, Nj as `50000x5`, NPV, IRR,
+  `PI` with `io`), `amort` (INPUT, AMORT, = = =), `stat` (Σ+, x̄, Sx), `keys`
+  (a static picture with keys glowing). `alt` gives one widget a row of
+  buttons for cases of one lesson; `then` chains a second calculation that
+  starts from the answer on the display; `occurrence` replaces one use of a
+  picture the file carries twice.
+* **Follow the notes' convention, not the sample's.** The sample typed
+  `5/12` into I/YR with P/YR at 1; these notes set P/YR (`12 [orange] P/YR`),
+  count N in periods and leave I/YR annual, and the engine now does the same,
+  because the prose beside each widget says so ("we didn't change the interest
+  rate because I/YR refers to an annual rate"). Amortization rounds the
+  payment and each period's interest to four places, which is the only way
+  the notes' PRIN/INT/BAL (and the 0.0250 residual) come out to the cent.
+* **Every number comes from the screenshot's own register boxes or the
+  prose**, and every widget's result is checked in Chromium against the
+  number the notes print: `python scripts/check_calc_widgets.py FILE` drives
+  each widget to its last step and compares `data-expect` (kept in the test
+  build, stripped from the delivery with `--strip-expect`). 162 runs, 0
+  mismatches on the first delivery.
+* **Concise: a widget only where the Concise's own text states the numbers**,
+  placed after that line or table, cases merged under `alt`, never two in a
+  row (the UCF rule above, applied to calculators). A keystroke list with no
+  values beside it (the Σ+ keys, the deferred-annuity methods) gets nothing,
+  and neither does a bare example bullet: the Cost of Capital Concise's
+  "Bond with flotation example: … → kd = 8.6045%" line had a widget under it
+  and Ian pulled it ("there's no context for this widget", 2026-10-16). The
+  text has to introduce the calculation, not just list its inputs.
+* **Every chart or graph the sd-graph engine can draw is an sd-graph figure
+  too** (Ian, 2026-10-16: "anything that can be converted from chart/graph to
+  SDG"), static with a caption where the picture is static -- to Ian a widget
+  means interaction, but a drawn figure is wanted either way. Steps only
+  where the picture genuinely builds. Conceptual finance graphs are
+  symbolic: word axis titles wrapped on `\n`, no numbers unless the source
+  prints them, `grey` for a faded series, histograms and bar charts as
+  rectangular `areas`. What stays a picture: timelines (the calculator
+  widget draws its own), the annotated button legend, income-statement tables, the stock
+  quote table. Flow charts (the leverage chains) are the `flow` widget.
+* **A chapter's own `<style>` can restyle the plot.** The risk chapter's
+  `.brace { transform: scaleX(.65) }` squeezed every upright brace into the
+  margin while `check_file` and the DOM both said they were fine; the
+  engine's stylesheet now pins layout properties on its SVG classes
+  (v2.57). When a widget looks wrong only on one page, grep that page's
+  `<style>` for the engine's class names first.
+* The build lives in `scripts/fin3403/` (`fin_maps.py` writes every chapter's
+  map and merges the graph overlays from `graphs/*.json`, which
+  `build_risk.py` and `build_other.py` write; `fin_assemble.py` applies them
+  to a folder holding the unpacked P1/P2 zips and writes `FIN3403
+  Widgets/Exam N/<chapter>/`). The finished files are not committed; Ian
+  reviews them first.
 
 ### Reviewing Ian's work
 

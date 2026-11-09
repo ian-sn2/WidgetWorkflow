@@ -103,7 +103,7 @@ case("two axis values crowded together", lambda r: C.check_labels(widget(
             {"q": 60, "p": 58, "showQ": False}]), r)
     or r.has("WARN", "labels", "crowded"))
 
-# From engine v2.57 a dashed guide is cut out round every in-plot label, so a
+# From engine v2.69 a dashed guide is cut out round every in-plot label, so a
 # label against a guide is no longer a collision on the drawing and must not
 # be reported as one. The solid axis lines and price lines are still tested.
 case("label against a guide is not reported", lambda r: C.check_labels(widget(
@@ -129,6 +129,20 @@ case("label over a curve that is still there", lambda r: C.check_labels(widget(
     braces=[{"p": 50, "q1": 20, "q2": 80, "label": "Shortage of 400", "below": "in", "at": 3}],
     steps=["a.", "b.", "c.", "d."]), r)
     or r.has("FAIL", "labels", "sits on curve D\u2081"))
+
+# A circular flow's loops are what its steps bring in (engine v2.59): a
+# step that adds a loop changes the drawing, and one that adds nothing does not.
+case("a circular flow's loop counts as a step change", lambda r: C.check_steps(
+    [(1, {"flow": {"cycle": True, "nodes": ["A", "B", "C", "D"],
+                   "loops": [{"side": "inner", "dir": "cw", "at": 1, "labels": ["a", "b", "c", "d"]}]},
+          "steps": ["boxes.", "the loop."]}, "")], r)
+    or not r.has("FAIL", "steps", "changes nothing"))
+
+case("a circular flow step that adds no loop", lambda r: C.check_steps(
+    [(1, {"flow": {"cycle": True, "nodes": ["A", "B", "C", "D"],
+                   "loops": [{"side": "inner", "dir": "cw", "labels": ["a", "b", "c", "d"]}]},
+          "steps": ["boxes.", "still boxes."]}, "")], r)
+    or r.has("FAIL", "steps", "changes nothing"))
 
 # ---- the arrow tests -------------------------------------------------------
 

@@ -1,0 +1,168 @@
+<title>UCF Accounting Review</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800&display=swap">
+<style>
+/* layout: one live widget at a time in a flashcard, the filter bar above, the verdict row below, a rail of titles to jump */
+:root { --bg:#f5f3ec; --card:#ffffff; --fg:#1c2a44; --mute:#6b7280; --line:#d9d4c3; --gold:#c9a633; --pale:#f6edcd; --pass:#1f7a4d; --fail:#b3261e; --warn:#a0620d;
+  --display:"Red Hat Display","Segoe UI",system-ui,sans-serif; --mono:ui-monospace,SFMono-Regular,Menlo,monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#15181f; --card:#1f2430; --fg:#e8e6df; --mute:#9aa0ad; --line:#363c4b; --gold:#d8b84a; --pale:#3a3320; --pass:#5cc48c; --fail:#f08a82; --warn:#e2a24a; color-scheme:dark } }
+:root[data-theme="dark"] { --bg:#15181f; --card:#1f2430; --fg:#e8e6df; --mute:#9aa0ad; --line:#363c4b; --gold:#d8b84a; --pale:#3a3320; --pass:#5cc48c; --fail:#f08a82; --warn:#e2a24a; color-scheme:dark }
+body { background:var(--bg); color:var(--fg); font-family:var(--display); padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); padding-block:14px 28px; }
+.wrap { max-width:960px; margin:0 auto; }
+h1 { font-size:1.25rem; margin:0 0 2px; text-wrap:balance; }
+.sub { color:var(--mute); font-size:.9rem; margin:0 0 12px; }
+.bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+.bar select, .bar button, .verdict button, .nav button { font:inherit; font-size:.86rem; border:1px solid var(--line); background:var(--card); color:var(--fg); border-radius:999px; padding:6px 12px; cursor:pointer; min-height:36px; }
+.bar button[aria-pressed="true"] { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+.counts { margin-left:auto; font-size:.86rem; color:var(--mute); font-variant-numeric:tabular-nums; }
+.counts b { color:var(--fg); }
+.card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; min-width:0; }
+.meta { display:flex; flex-wrap:wrap; gap:6px 14px; align-items:baseline; margin-bottom:8px; }
+.meta .ch { font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; color:var(--mute); }
+.meta .t { font-weight:700; font-size:1.05rem; }
+.meta .s { color:var(--mute); font-size:.9rem; }
+.pill { display:inline-block; font-size:.74rem; padding:2px 8px; border-radius:999px; border:1px solid var(--line); color:var(--mute); }
+.pill.flag { border-color:var(--warn); color:var(--warn); font-weight:700; }
+.pill.pass { border-color:var(--pass); color:var(--pass); font-weight:700; }
+.pill.fail { border-color:var(--fail); color:var(--fail); font-weight:700; }
+/* the widget stage is always on the page's light paper, the way the notes page is, whatever the viewer's theme */
+.stage { background:#f6f8fc; color:#1c2a44; border:1px solid var(--line); border-radius:8px; padding:10px 8px; overflow-x:auto; color-scheme:light; }
+.slot { max-width:900px; margin:0 auto; }
+.flags { margin:10px 0 0; padding:0; list-style:none; display:grid; gap:4px; }
+.flags li { font-size:.84rem; font-family:var(--mono); padding:6px 10px; border-radius:6px; background:var(--pale); color:var(--fg); }
+.flags li b { color:var(--warn); }
+.verdict { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:14px; }
+.verdict button.pass[aria-pressed="true"] { background:var(--pass); border-color:var(--pass); color:#fff; }
+.verdict button.fail[aria-pressed="true"] { background:var(--fail); border-color:var(--fail); color:#fff; }
+.verdict input { flex:1 1 220px; min-width:0; font:inherit; font-size:.88rem; border:1px solid var(--line); border-radius:8px; padding:7px 10px; background:var(--bg); color:var(--fg); }
+.nav { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:12px; }
+.nav .pos { color:var(--mute); font-size:.9rem; font-variant-numeric:tabular-nums; }
+.rail { display:flex; flex-wrap:wrap; gap:6px; padding:10px 0 4px; }
+.rail button { font:inherit; font-size:.74rem; border:1px solid var(--line); border-radius:999px; background:var(--card); color:var(--fg); padding:3px 9px; cursor:pointer; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.rail button[aria-current="true"] { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+.rail button.flag { border-color:var(--warn); color:var(--warn); }
+.rail button.pass { border-color:var(--pass); color:var(--pass); }
+.rail button.fail { border-color:var(--fail); color:var(--fail); }
+.rail button[aria-current="true"].flag, .rail button[aria-current="true"].pass, .rail button[aria-current="true"].fail { color:var(--bg); }
+.note { font-size:.84rem; color:var(--mute); margin-top:10px; }
+.empty { padding:40px; text-align:center; color:var(--mute); }
+button:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid var(--gold); outline-offset:2px; }
+/*ENGINE_CSS*/
+/*FIG_CSS*/
+.pair { display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start; }
+@media (max-width: 760px) { .pair { grid-template-columns:1fr; } }
+.pair > div { min-width:0; }
+.pair h5 { margin:0 0 6px; font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; color:#6b7280; }
+.ctx { font-size:.86rem; color:#4b5563; margin:10px 0 0; line-height:1.45; }
+.ctx code { font-family:var(--mono); font-size:.8rem; }
+.sv { border-collapse:collapse; margin:8px 0; font-size:.88rem; } .sv th, .sv td { border:1px solid #d9d4c3; padding:4px 10px; text-align:center; } .sv th { background:#f6edcd; }
+.stage details { margin-top:8px; font-size:.84rem; } .stage pre { font-size:.76rem; white-space:pre-wrap; background:#fff; padding:8px; border:1px solid #ddd; }
+.stage .sk-fig.right { float:none; width:100%; max-width:420px; margin:0 auto; }
+.stage .sdg { margin:0 auto; }
+</style>
+<div class="wrap">
+<h1>ACG2021 · ACG2071 · ACG3173 · MAN3025 — proposed changes</h1>
+<p class="sub">Each card is one proposed change: the page as it is now on the left, the proposal on the right (widgets are live). Approve or disapprove, leave a comment, and it moves on. The last three cards are the page-wide spacing options and the head fix.</p>
+<div class="bar" role="group" aria-label="Filters">
+  <button id="f-all" aria-pressed="true">All</button>
+  
+  <button id="f-unmarked" aria-pressed="false">Unmarked</button>
+  <button id="f-pass" aria-pressed="false">Approved</button>
+  <button id="f-fail" aria-pressed="false">Disapproved</button>
+  <select id="chapter" aria-label="Chapter"><option value="">All chapters</option></select>
+  <span class="counts" id="counts"></span>
+</div>
+<div class="card">
+  <div class="meta" id="meta"></div>
+  <div class="stage" id="stage"><!--SLOTS--></div>
+  <div id="flags"></div>
+  <div class="verdict" id="verdict"></div>
+</div>
+<div class="nav">
+  <button id="prev">← Previous</button>
+  <span class="pos" id="pos"></span>
+  <button id="next">Next →</button>
+</div>
+<div class="rail" id="rail" aria-label="Jump to a card"></div>
+<p class="note" id="status">Loading saved verdicts…</p>
+</div>
+<script>/*ENGINE_JS*/</script>
+<script>
+const CARDS = /*META*/;
+const state = { filter: "all", chapter: "", i: 0, marks: {}, db: null };
+const $ = id => document.getElementById(id);
+const sel = $("chapter");
+[...new Set(CARDS.map(c => c.chapter))].forEach(ch => { const o = document.createElement("option"); o.value = ch; o.textContent = ch; sel.appendChild(o); });
+function visible() {
+  return CARDS.map((c, k) => ({ c, k })).filter(({ c }) => {
+    if (state.chapter && c.chapter !== state.chapter) return false;
+    const m = state.marks[c.id];
+    if (state.filter === "flag") return c.flags.length > 0;
+    if (state.filter === "unmarked") return !m || !m.verdict;
+    if (state.filter === "pass") return m && m.verdict === "pass";
+    if (state.filter === "fail") return m && m.verdict === "fail";
+    return true;
+  });
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch])); }
+function render() {
+  const list = visible();
+  if (state.i >= list.length) state.i = Math.max(0, list.length - 1);
+  const np = CARDS.filter(x => state.marks[x.id] && state.marks[x.id].verdict === "pass").length;
+  const nf = CARDS.filter(x => state.marks[x.id] && state.marks[x.id].verdict === "fail").length;
+  $("counts").innerHTML = `<b>${CARDS.length}</b> cards · <b>${np}</b> approved · <b>${nf}</b> disapproved · <b>${CARDS.length - np - nf}</b> unmarked`;
+  document.querySelectorAll(".slot").forEach(s => s.hidden = true);
+  const cur = list[state.i];
+  if (!cur) { $("meta").innerHTML = ""; $("flags").innerHTML = '<div class="empty">Nothing matches this filter.</div>'; $("verdict").innerHTML = ""; $("pos").textContent = ""; $("rail").innerHTML = ""; return; }
+  const c = cur.c, m = state.marks[c.id] || {};
+  $("slot-" + cur.k).hidden = false;
+  $("meta").innerHTML = `<span class="ch">${esc(c.chapter)} · ${c.edition}${c.kind === "figure" ? "" : " · " + c.kind}</span><span class="t">${esc(c.title)}</span>
+    ${c.scenarios ? `<span class="s">${c.scenarios} scenario buttons</span>` : ""}${c.steps > 1 ? `<span class="s">${c.steps} steps</span>` : ""}
+    ${c.flags.length ? '<span class="pill flag">flagged</span>' : ""}${m.verdict ? `<span class="pill ${m.verdict}">${m.verdict === "pass" ? "approved" : "disapproved"}</span>` : ""}`;
+  $("flags").innerHTML = c.desc ? `<p class="note">${esc(c.desc)}</p>` : "";
+  // the verdict row is rebuilt only when the card changes, so typing a comment is never interrupted by a save or a store echo
+  if (state.shownId !== c.id) {
+    state.shownId = c.id;
+    $("verdict").innerHTML = `<button class="pass" id="v-pass" aria-pressed="${m.verdict === "pass"}">✓ Approve</button><button class="fail" id="v-fail" aria-pressed="${m.verdict === "fail"}">✗ Disapprove</button><input id="v-note" placeholder="Comment (what to change) — saved as you type" value="${esc(m.note || "")}">`;
+    $("v-pass").onclick = () => mark(c, "pass"); $("v-fail").onclick = () => mark(c, "fail");
+    let t; $("v-note").oninput = e => { clearTimeout(t); t = setTimeout(() => save(c, { note: e.target.value }, true), 500); };
+    $("v-note").onkeydown = e => { if (e.key === "Enter") { clearTimeout(t); save(c, { note: e.target.value }, true); $("next").click(); } };
+  } else {
+    $("v-pass").setAttribute("aria-pressed", m.verdict === "pass"); $("v-fail").setAttribute("aria-pressed", m.verdict === "fail");
+    if (document.activeElement !== $("v-note") && $("v-note").value !== (m.note || "")) $("v-note").value = m.note || "";
+  }
+  $("pos").textContent = `${state.i + 1} / ${list.length}`;
+  const rail = $("rail"); rail.innerHTML = "";
+  list.forEach(({ c: x }, k) => { const b = document.createElement("button"); b.textContent = x.title; b.title = x.chapter + " · " + x.title;
+    const mk = state.marks[x.id]; b.className = (mk && mk.verdict) || (x.flags.length ? "flag" : ""); b.setAttribute("aria-current", k === state.i); b.onclick = () => { state.i = k; render(); }; rail.appendChild(b); });
+}
+function mark(c, v) {
+  // approve or disapprove, keep whatever comment is in the box, and move on to the next card (Ian, 2026-10-26)
+  const note = $("v-note") ? $("v-note").value : (state.marks[c.id] || {}).note;
+  save(c, { verdict: v, note: note || "" });
+  const list = visible(); const k = list.findIndex(x => x.c.id === c.id);
+  if (k >= 0 && k < list.length - 1) { state.i = k + 1; render(); } else if (state.filter === "unmarked" && list.length) { state.i = Math.min(k, list.length - 1); render(); }
+}
+const pending = {};
+async function save(c, patch, quiet) {
+  const prev = state.marks[c.id] || {}; const next = { ...prev, ...patch, title: c.title, chapter: c.chapter, edition: c.edition, at: new Date().toISOString() };
+  state.marks[c.id] = next; if (!quiet) render();
+  try { localStorage.setItem("ucf-acc-review", JSON.stringify(state.marks)); } catch (e) {}
+  if (!state.db) { $("status").textContent = "Verdicts are kept in this browser only: the shared store is not available here."; return; }
+  const chain = (pending[c.id] || Promise.resolve()).then(() => state.db.doc("reviews/" + c.id).set(next)).then(() => { $("status").textContent = "Saved."; }).catch(e => { $("status").textContent = "Could not save (" + e.code + "). Your marks stay on this page until it is reloaded."; }).finally(() => { if (pending[c.id] === chain) chain.busy = false; });
+  chain.busy = true; pending[c.id] = chain;
+}
+document.querySelectorAll(".bar button").forEach(b => b.onclick = () => { document.querySelectorAll(".bar button").forEach(x => x.setAttribute("aria-pressed", "false")); b.setAttribute("aria-pressed", "true"); state.filter = b.id.slice(2); state.i = 0; render(); });
+sel.onchange = () => { state.chapter = sel.value; state.i = 0; render(); };
+$("prev").onclick = () => { if (state.i > 0) { state.i--; render(); } };
+$("next").onclick = () => { if (state.i < visible().length - 1) { state.i++; render(); } };
+document.addEventListener("keydown", e => { if (e.target.tagName === "INPUT") return; if (e.key === "ArrowRight") $("next").click(); if (e.key === "ArrowLeft") $("prev").click(); });
+try { state.marks = JSON.parse(localStorage.getItem("ucf-acc-review") || "{}"); } catch (e) {}
+render();
+(async () => {
+  const db = await (window.claude && claude.use ? claude.use("db") : Promise.resolve(null));
+  if (!db) { $("status").textContent = "The shared store is not available in this view; marks are kept in this browser only."; return; }
+  state.db = db;
+  db.collection("reviews").onSnapshot(snap => { snap.docs.forEach(d => { if (d.exists && !(pending[d.id] && pending[d.id].busy)) state.marks[d.id] = d.data(); }); $("status").textContent = "Saved verdicts loaded. Approve or Disapprove moves to the next card; Enter in the comment box does too."; if (document.activeElement !== $("v-note")) render(); }, e => { $("status").textContent = "Could not load saved verdicts (" + e.code + ")."; });
+})();
+</script>

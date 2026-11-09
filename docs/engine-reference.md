@@ -1,4 +1,12 @@
-# Engine reference — `engine/sd-graph.js` v2.57
+# Engine reference — `engine/sd-graph.js` v2.69
+
+**v2.69:** nothing covers a name. Dashed guides break round every in-plot label, in-plot labels carry a halo in the plot's colour, and curve and area names are drawn last; see *Labels over the drawing* below (Ian, 2026-11-05).
+
+**v2.68:** a network node's four times sit 5px out from its side and 1px above or below it, rather than 11px and 5px off, so they read as the node's own (Ian, 2026-10-26). Clear the arrows by spreading the nodes, not by moving the times.
+
+**v2.67:** `axes.years: true` prints quantity ticks as written (a year is 2010, not 2,010).
+
+**v2.65:** a quantity title that starts with `\n` sits below the tick row at the plot's foot even when `axes.cross` puts the axis line higher; it was measured from the crossing and sat above the numbers.
 
 Written from the engine source. The conversion prompt carries a shorter version
 of this in its own "Engine reference" section; that one is what the model needs
@@ -198,6 +206,120 @@ what the schedule is indexed by.
 A widget carrying one needs no `steps` and no `caption`: the reading the
 student scrubs to is what it is for.
 
+### `flow`
+
+A chain of boxes (**v2.57**): the leverage chapter's "Sales → Operating
+Income (EBIT) → EPS", with the kind of leverage named on each link, a thick
+arrow above a box for a change in it, and a thin red arrow from one change to
+the next carrying the multiplier. Drawn as one SVG, like a plot, and it takes
+the same step controls.
+
+```json
+{"flow": {"nodes": ["Sales", "Operating\nIncome (EBIT)", "EPS"],
+          "links": ["Operating\nLeverage", "Financial\nLeverage"],
+          "changes": [{"node": 0, "text": "+10%", "dir": "up", "at": 1},
+                      {"node": 1, "text": "+20%", "dir": "up", "at": 2}],
+          "spans": [{"from": 0, "to": 1, "label": "DOL_{S} = 2", "at": 2}]}}
+```
+
+`nodes` and `links` are strings or `{text, at, until}`; text wraps on `\n`
+and takes `_{...}`. A `change` is a solid arrow above its node, `dir: "up"`
+or `"down"`, with its text beside it; a `span` runs between the tops of two
+change arrows (or just above the boxes where there are none, which is how
+the DOL/DFL/DCL triangle is drawn as a row). `check_file.py` counts nodes,
+links, changes and spans as what a step can change.
+
+**v2.59**, from the UCF macro chapters: a link takes `back` for a second
+arrow running the other way, named under it (the Fed sends `$$$`, the bank
+sends back `U.S. Treasury Securities`), `gap` for the room the pair and their
+names need (150 for that figure, against the default 34), and `arrow: false`
+for a plain space; a node takes `plain: true` to be text with no box (the
+three outcomes listed beside the bank, one per line) and `w` for its share
+of the width (the boxes 0.9 each, the list 1.3).
+
+```json
+{"flow": {"nodes": [{"text": "FED", "w": 0.9}, {"text": "Bank", "w": 0.9},
+                    {"text": "↑ Money Supply\n↓ Interest Rates\n↑ GDP", "plain": true, "w": 1.3, "at": 2}],
+          "links": [{"text": "$$$", "back": "U.S. Treasury Securities", "gap": 150, "at": 1}, {"arrow": false}]}}
+```
+
+And `cycle: true` lays four nodes out as a ring, the circular flow of
+income: `nodes` are top, right, bottom, left (the two markets top and
+bottom, the two actors at the sides, drawn black as the artwork does), and
+each of `loops` is four elbow arrows between neighbours, named at their
+corners. A loop's `labels` are in arrow order starting from the top node:
+`dir: "cw"` runs top → right → bottom → left → top, `"ccw"` the other way.
+An `outer` loop's names sit outside its corners and an `inner` loop's
+inside, against the vertical leg. Each loop takes `at`/`until`, which is
+what a step changes (`check_file.py` counts `loops`).
+
+```json
+{"flow": {"cycle": true,
+          "nodes": ["Product Market", "HOUSEHOLDS", "Resource Market", "FIRMS"],
+          "loops": [{"side": "inner", "dir": "cw", "at": 1,
+                     "labels": ["Goods and\nservices bought", "Labor, land,\ncapital", "Factors of\nproduction", "Goods and\nservices sold"]},
+                    {"side": "outer", "dir": "ccw", "at": 2,
+                     "labels": ["Revenue", "Wages, Rent,\nProfit (Income)", "Income", "Consumption\nExpenditures"]}]}}
+```
+
+The ring is a fixed 420 × 322 layout: four boxes, two legs a side, and a
+label of up to four short lines at each corner. A fifth node or a third loop
+is a new feature, not a config.
+
+**v2.60**, from the MAR3023 channels chapter: `vertical: true` stacks the
+chain top to bottom -- the marketing-channel figures run that way, and the
+prose beside them says "upstream" and "downstream" -- with a link's name to
+the left of its arrow and `spans` drawn as braces down the right, named
+beside them and stacking outward by `row` ("Supplier network" and
+"Marketing channel" in row 0, "Supply Chain" over both in row 1). `changes`
+are not drawn in this layout. Each downward link carries an arrowhead at its
+foot (**v2.61**): a chain motif alone reads as a two-way join, and these
+channels run one way (Ian, 2026-10-21). A horizontal node takes `pipe: true` (**v2.62**)
+to be drawn as a tube with a dark open end, the old "pipeline" view's
+channel; give it the row's largest `w`. In the horizontal chain a span takes
+`brace: true` for the same bracket drawn over a run of boxes, a link takes
+`style: "arrow"` for a plain arrow where the chain motif would say the
+wrong thing (the old "pipeline" view of a channel) and `size` to set its
+name larger (the `+` between a value-added chain's links), and a node's
+name wider than its box is set smaller rather than clipped.
+
+```json
+{"flow": {"vertical": true, "nodes": ["Supplier", "Manufacturer", "Consumer"],
+          "links": ["Raw\nmaterials/parts", "Finished\nproducts"],
+          "spans": [{"from": 0, "to": 1, "label": "Supplier\nnetwork", "at": 1},
+                    {"from": 1, "to": 2, "label": "Marketing\nchannel", "at": 2},
+                    {"from": 0, "to": 2, "label": "Supply\nChain", "row": 1, "at": 3}]}}
+```
+
+### `network`
+
+A project network (**v2.66**), from the MAR3203 project-management chapter:
+activities as circles on a 100 × 100 grid, precedence as arrows, the four
+times at a node's corners (ES top-left, EF top-right, LS bottom-left, LF
+bottom-right), the critical path in gold. `show` names the step at which
+the forward pass (`ef`: ES and EF), the backward pass (`lf`: LS and LF) and
+the critical path (`crit`) arrive, so one widget walks the whole CPM
+example the printed chapter needs four figures for. Nodes and edges take
+`at`/`until` too.
+
+```json
+{"network": {"legend": true, "show": {"ef": 1, "lf": 2, "crit": 3},
+             "nodes": [{"id": "A", "x": 4, "y": 50, "es": 0, "ef": 3, "ls": 0, "lf": 3}, ...],
+             "edges": [{"from": "A", "to": "B", "crit": true}, ...]},
+ "steps": ["The network.", "A forward pass…", "A backward pass…", "The critical path…"]}
+```
+
+`style: "ellipse"` draws each node as the textbook's compartment ellipse
+(times inside, `dur` under the name). `aoa: true` draws the
+activity-on-arrow convention: blank nodes, activities named on the arrows
+(`label`), a dashed arrow (`dashed: true`) for a dummy. `panels` sets
+networks side by side, each with a `heading`; give each a `w` of about 280
+so the circles keep their size at half width. `w`/`h` set the viewBox
+(560 × 240 by default), `r` the circle radius (20). A scenario can replace
+the whole `network` (the crashed project).
+`check_file.py` counts nodes, edges and each `show` mark as what a step can
+change.
+
 ### `axes`
 
 ```json
@@ -209,6 +331,19 @@ student scrubs to is what it is for.
 `money` prefixes prices with `$`; `cents` forces two decimals; `k` renders
 quantities of 1000+ as `12k`. `grid` draws the dashed gridlines at every tick —
 the schedule-graph look. `bg:false` removes the tinted plot rectangle.
+
+`cross: [q, p]` draws the two axis lines through that data point instead of
+along the plot's left and bottom edges (**v2.58**): a scatter of a stock's
+returns against the market's has four quadrants and its axes meet at the
+origin in the middle. Pick a scale with the origin at the centre (`[55, 55]`
+on a 110 axis) and leave the ticks out. `check_file.py` tests labels against
+the lines where they are drawn.
+
+`xmin` and `ymin` (**v2.63**) put the plot's corner somewhere other than 0:
+a scatter of GPAs from 2.9 to 3.9 on an axis from 0 is a smear in one corner,
+and a profit that goes negative needs the axis to go below 0 (with
+`cross: [0, 0]` to draw the axis lines through the origin, the way Excel
+does). Ticks, points, guides and the checker's geometry all honour them.
 
 `x` and `y` are the axis **titles**, defaulting to `P` and `Q`, which is what
 the printed artwork uses. A production possibilities frontier names its axes with
@@ -360,6 +495,12 @@ pixel apart. `scripts/check_file.py` tests for this.
   a schedule row already highlighted its dots.
 
 ### `areas`
+
+**v2.64:** `opacity` on an area overrides the sheet's .18 wash (a body the
+source prints solid, such as the UCF gold bell whose tails are left pale);
+`color: "gold"` is the UCF theme's gold (`--gold`, #c9a633), usable on
+areas, curves, points and moves; and a `moves[]` arrow with a `color`
+is drawn in it, where the sheet used to paint every movement arrow red.
 
 ```json
 {"pts": [[0,11],[0,21],[8,11]], "label": "CS", "color": "teal", "at": 2}
@@ -555,6 +696,19 @@ quantity to its second — the per-row shift arrows.
 **Hovering a table row highlights its dots on the graph**, and vice versa. That
 interaction is the point of putting the schedule next to the curve.
 
+`plain: true` (**v2.59**) sets the table as written and plots nothing from
+it: any first column, cells as given, no hover. It is for a figure whose own
+table is not a schedule -- the MB = MC figure's `Q, MB, MC, TB, TC, WB`
+table, which the prose reads from ("the table to the right of the graph").
+`side: "right"` puts the table after the plot, where that figure prints it;
+the default is before. On a phone both collapse under the plot.
+
+```json
+{"table": {"plain": true, "side": "right",
+           "cols": ["Q", "MB", "MC", "TB", "TC", "WB"],
+           "rows": [[0, 0, 0, 0, 0, 0], [1, 9, 1, 9, 1, 8], [2, 8, 2, 17, 3, 14]]}}
+```
+
 ## Colours
 
 `ink` (the default, a black-navy), `red` (shifted or new), `teal`, `orange`,
@@ -648,7 +802,20 @@ Animation: elements cross-fade over 0.45s and shifted curves slide over 0.6s,
 both disabled under `prefers-reduced-motion`. A screenshot taken sooner than
 that catches a curve mid-slide.
 
-## Labels over the drawing (v2.57)
+## The page's own stylesheet
+
+The plot's SVG uses short class names (`brace`, `tag`, `grid`, `arrow`,
+`area`, `guide`, `pt`, `curve`), and a chapter's own `<style>` block can
+target the same names: the FIN3403 risk chapter sets `.brace { position:
+absolute; transform: scaleX(.65) }` for a CSS diagram of its own, and every
+upright brace in the widgets on that page was squeezed into the left margin
+while the DOM said they were in the right place (**v2.57**). The stylesheet
+now pins `transform`, `position`, `margin`, `padding`, `border` and
+`visibility` on those elements. `check_file.py` cannot see this -- it is a
+render-only defect -- so a widget that looks wrong on a page that has its own
+CSS is a stylesheet collision until proved otherwise.
+
+## Labels over the drawing (v2.69)
 
 Nothing is drawn over a name, and no dashed guide runs through one:
 
