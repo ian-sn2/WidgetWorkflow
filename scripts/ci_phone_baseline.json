@@ -1,12 +1,18 @@
 {
  "390x844": {
-  "examples/ECO2013-263-GovernmentIntervention.html": [],
+  "examples/ECO2013-263-GovernmentIntervention.html": [
+   "page scrolls sideways by #px (widest: <mjx-container class='MathJax CtxtMenu_Attached_0'>)"
+  ],
   "examples/ECO2013-263-InternationalTrade.html": [],
   "examples/ECO2013-263-SupplyAndDemand.html": [],
-  "examples/ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html": [],
+  "examples/ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html": [
+   "page scrolls sideways by #px (widest: <mjx-math class='MJX-TEX'>)"
+  ],
   "examples/ECO2013-Widgets-All.html": [],
   "examples/ECO2023-263-AllocativeEfficiency.html": [],
-  "examples/ECO2023-263-Elasticity.html": [],
+  "examples/ECO2023-263-Elasticity.html": [
+   "page scrolls sideways by #px (widest: <mjx-math class='MJX-TEX'>)"
+  ],
   "examples/ECO2023-263-SupplyAndDemand.html": [
    "page scrolls sideways by #px (widest: <table class=''>)"
   ],
@@ -20,6 +26,7 @@
    "fit w67 table #px",
    "fit w78 table #px",
    "fit w8 table #px",
+   "page scrolls sideways by #px (widest: <math class=''>)",
    "tap w1 under #px: Back 28x28; Next step 28x28; Start over 28x28; − 28x28; + 28x28; Fullscreen 96x28",
    "tap w10 under #px: Back 28x28; Next step 28x28; Start over 28x28; − 28x28; + 28x28; Fullscreen 96x28",
    "tap w11 under #px: Back 28x28; Next step 28x28; Start over 28x28; − 28x28; + 28x28; Fullscreen 96x28",
@@ -223,7 +230,9 @@
   ]
  },
  "320x568": {
-  "examples/ECO2013-263-GovernmentIntervention.html": [],
+  "examples/ECO2013-263-GovernmentIntervention.html": [
+   "page scrolls sideways by #px (widest: <mjx-container class='MathJax CtxtMenu_Attached_0'>)"
+  ],
   "examples/ECO2013-263-InternationalTrade.html": [
    "page scrolls sideways by #px (widest: <table class=''>)"
   ],
@@ -231,11 +240,22 @@
    "page scrolls sideways by #px (widest: <table class=''>)"
   ],
   "examples/ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html": [
-   "page scrolls sideways by #px (widest: <table class=''>)"
+   "live w1 Next step not tappable at step 1: Locator.click: Timeout #ms exceeded.",
+   "live w2 Next step not tappable at step 1: Locator.click: Timeout #ms exceeded.",
+   "live w3 Next step not tappable at step 1: Locator.click: Timeout #ms exceeded.",
+   "live w4 Next step not tappable at step 1: Locator.click: Timeout #ms exceeded.",
+   "live w5 Next step not tappable at step 1: Locator.click: Timeout #ms exceeded.",
+   "live w5 scenario 2: Locator.click: Timeout #ms exceeded.",
+   "live w5 scenario 3: Locator.click: Timeout #ms exceeded.",
+   "live w6 Next step not tappable at step 1: Locator.click: Timeout #ms exceeded.",
+   "live w7 Next step not tappable at step 1: Locator.click: Timeout #ms exceeded.",
+   "page scrolls sideways by #px (widest: <mjx-math class='MJX-TEX'>)"
   ],
   "examples/ECO2013-Widgets-All.html": [],
   "examples/ECO2023-263-AllocativeEfficiency.html": [],
-  "examples/ECO2023-263-Elasticity.html": [],
+  "examples/ECO2023-263-Elasticity.html": [
+   "page scrolls sideways by #px (widest: <mjx-math class='MJX-TEX'>)"
+  ],
   "examples/ECO2023-263-SupplyAndDemand.html": [
    "page scrolls sideways by #px (widest: <table class=''>)"
   ],
@@ -249,6 +269,7 @@
    "fit w67 table #px",
    "fit w78 table #px",
    "fit w8 table #px",
+   "page scrolls sideways by #px (widest: <math class=''>)",
    "tap w1 under #px: Back 28x28; Next step 28x28; Start over 28x28; − 28x28; + 28x28; Fullscreen 96x28",
    "tap w10 under #px: Back 28x28; Next step 28x28; Start over 28x28; − 28x28; + 28x28; Fullscreen 96x28",
    "tap w11 under #px: Back 28x28; Next step 28x28; Start over 28x28; − 28x28; + 28x28; Fullscreen 96x28",
