@@ -101,6 +101,14 @@ itself still forbids questions outright.
    `docs/engine-reference.md`, and re-embed into every example with
    `scripts/embed_engine.py`. The model never types the engine: it emits
    `<!--SDG-ENGINE-->` and the script fills it in.
+
+   **One session changes the engine at a time** (Ian, 2026-11-09). Two
+   sessions moved it in parallel to v2.57 and v2.68 in November, and merging
+   them meant porting one onto the other by hand. Before changing
+   `engine/`, check open pull requests and other sessions for engine work;
+   if one is in flight, wait for it to merge, then start from the default
+   branch. CI fails a page whose embedded engine differs from `engine/`, so
+   a clash shows at the pull request, but this rule is what avoids it.
 2. **Widgets are JSON, never bespoke code.** If a graph can't be expressed with
    the engine's schema, that is an engine feature request
    (`docs/open-issues.md`), not a reason to hand-write SVG/JS in a notes file.
