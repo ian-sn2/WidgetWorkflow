@@ -969,6 +969,11 @@ Full list with checkboxes: `docs/open-issues.md`.
   and Back button pressed, against `scripts/ci_phone_baseline.json`. It is the
   only check that drives the widgets. It takes about five minutes a size, so
   run it locally once the static checks are clean, not between edits.
+  **Locally, set `MATHJAX_DIR` first** (`npm pack mathjax@3`, unpack, point
+  it at `package/es5`): this container cannot reach the CDN the pages load
+  MathJax from, a runner can, and a page measured without its equations is
+  not the page CI measures. The first CI run failed on exactly that -- an
+  840px equation that only exists once MathJax has typeset it.
 * After any change to `scripts/check_file.py`: `python scripts/test_check_file.py`
   (must be 0 failing). Its checks have been narrowed repeatedly, and a rule
   narrowed once too often stops firing silently while every file still reports
