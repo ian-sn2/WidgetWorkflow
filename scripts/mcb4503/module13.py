@@ -6,7 +6,7 @@ whose legend row lists them: slivers under 1% cannot be hovered or read.
 
     python scripts/mcb4503/module13.py SRC.html OUT.html
 """
-import sys, math, html
+import sys, os, math, html
 
 HD = ["01-mycovirus-genome-types", "02-giant-virus-structure", "04-bacteriophage-diversity", "09-archaeal-virus-morphologies2"]
 PIE_IMG = "mcb4503-253-exam4-module13-05-phage-family-pie-chart.png"
@@ -116,6 +116,13 @@ def pie_widget():
 
 def build(src, out):
     t = open(src, encoding="utf-8").read()
+    # the current house head: font links and the v6 stylesheet in place of v5, and the live study-guide script,
+    # which builds the table of contents, in place of content/sn25-v5.js
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "mar3023"))
+    from pricing import modern_head
+    t = modern_head(t)
+    assert "sn25-v5" not in t, "old head left"
+    assert t.count("<u>not</u>") == 1; t = t.replace("<u>not</u>", "<b>not</b>")   # the house format never underlines
     for n in HD:
         old = f"mcb4503-253-exam4-module13-{n}.png"; assert t.count(old) == 1, old
         t = t.replace(old, f"mcb4503-253-exam4-module13-{n}-hd.png")
