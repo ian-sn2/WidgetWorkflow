@@ -109,24 +109,19 @@ itself still forbids questions outright.
    one. Authority order: user message > notes prose > notes labels > transcript >
    image > alt text.
 4. **Student-facing text never mentions its source.** No "the transcript", "the
-   lecture", "the recording", "on the board", "the slides", "his slide", "in
-   class", "the class", "the file" — in captions, labels, or prose. Attributing content to whoever taught
-   it ("the professor said") is the same violation whoever they are. This is
+   lecture", "the recording", "on the board", "the slides", "his slide", "the
+   file" — in captions, labels, or prose. This is
    also Ian's standing preference for all study-guide work: paraphrase in
    original wording, never copy textbook/printed phrasing, and flag anything
    that closely mirrors a source.
 
-   **Naming a person is a separate question, and it is Ian's call.** Some
-   professors are happy to be credited; others must never appear in a published
-   file, and getting that wrong costs more than any typo here. There is no list
-   in this repo, by Ian's choice — so no script, and no session, should decide
-   it. `scripts/check_file.py` raises a WARN on any "Professor X" / "Dr. X" in
-   student-facing text and never fails the file; the judgement stays with Ian
-   every time. If you are converting material that names someone, keep the name
-   (prompt v6 step 0 transcribes named people exactly) and list it in the
-   changelog so it is reviewed before publication. Note the checker only sees a
-   name that carries a title: a person named by surname alone passes silently,
-   so read the prose too.
+   **A professor, named or not, and what happened in class are fine** (Ian,
+   2026-11-09: "get rid of the professor and in class warnings, the text in
+   the notes should be fine"). The notes Ian sends mention both on purpose, so
+   keep them as written. `check_file.py` no longer tests for a named person,
+   "the professor", "the instructor", "in class" or "the class"; it still
+   fails "the transcript", "the lecture", "the recording", "on the board",
+   "the slides" and "his slide".
 5. **No label touches a curve, an axis line, or a curve's own name.**
    The axis lines were the last thing on a panel that nothing tested against,
    and a curve that runs down to the axis parks its label right on it — which

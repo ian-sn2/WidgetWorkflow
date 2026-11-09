@@ -57,32 +57,20 @@ PLACEHOLDER = "<!--SDG-ENGINE-->"
 # that are only a giveaway in context: a "class" of goods and the "board" of a
 # company are both ordinary economics.
 #
-# Naming a person is a different question from naming the source, and it is not
-# a rule a script can settle: some professors are happy to be credited and
-# others must never appear. So attributing content to whoever taught it is a
-# FAIL here ("the professor said"), while a name itself is only ever a WARN --
-# see check_names below and hard rule 4 in CLAUDE.md. "your professor" is left
-# alone: it addresses the student rather than sourcing the material.
+# A professor, named or not, and what happened "in class" are not tested
+# (Ian, 2026-11-09: "get rid of the professor and in class warnings, the text in
+# the notes should be fine"). The notes Ian sends mention both on purpose.
 SOURCE_NOUNS = ["transcript", "lecture", "recording", "classroom"]
 # "on the board" and not "the board": a company has one of those too, and the
 # rule is about the classroom whiteboard. "the class" likewise skips "the class
 # of goods", which is ordinary economics.
 SOURCE_PHRASES = ["the slides",
                   "the handout", "the video", "the notes say", "the reading",
-                  "he said", "she said", "they said in",
-                  "the professor", "our professor", "the instructor",
-                  "the lecturer"]
-# "the class" and "in class" are ordinary English for a student -- a class
-# average, sitting in class -- and only give the source away when something is
-# attributed to what happened there.
+                  "he said", "she said", "they said in"]
 SOURCE_GUARDED = [
-    (r"the class\b(?!\s+(?:average|of\b))", "the class"),
     # the whiteboard, not a seat "on the Board of Governors" (the Money chapter
     # has a Fed chair's 14-year term there) or "on the board of directors"
     (r"(?:on|at) the board\b(?!\s+of\b)", "on the board"),
-    (r"(?:said|says|noted|explained|mentioned|covered|discussed|showed|drew|"
-     r"went over)[^.]{0,40}\bin class\b", "in class"),
-    (r"\bin class\b[^.]{0,40}(?:said|says|noted|explained|mentioned)", "in class"),
     # "his slide" / "her slides": the deck belongs to whoever taught it, which
     # names the source as surely as "the slides" (Ian, 2026-10-12)
     (r"(?:his|her|their) slides?\b", "his slide"),
@@ -2070,29 +2058,6 @@ def check_source(src, cfgs, r):
         r.ok("source", "no student-facing text names its source")
 
 
-NAME_RE = re.compile(r"\b(?:Professor|Prof\.|Dr\.|Mr\.|Mrs\.|Ms\.)\s+[A-Z][\w'\u2019-]+")
-
-
-def check_names(src, cfgs, r):
-    """Report people named in student-facing text. Never fails.
-
-    Whether a given professor may be named is Ian's call, not a rule a script
-    can hold, so this only ever raises a hand. It also only catches a name that
-    carries a title -- a bare surname is indistinguishable from any other
-    capitalised word, so a person named without one will pass silently."""
-    found = {}
-    for t in visible_text(src, cfgs):
-        for m in NAME_RE.finditer(t):
-            i = max(0, m.start() - 40)
-            found.setdefault(m.group(0), " ".join(t[i:m.end() + 40].split()))
-    if not found:
-        r.ok("names", "no person is named with a title in student-facing text")
-        return
-    for who, ctx in sorted(found.items()):
-        r.warn("names", "%r is named -- check whether this one may be: ...%s..."
-               % (who, ctx))
-
-
 DATE_RE = re.compile(r'<p class="date">(.*?)</p>', re.S)
 
 
@@ -2210,7 +2175,6 @@ def main():
     check_captions(cfgs, r)
     check_caption_prose(src, cfgs, r)
     check_source(src, cfgs, r)
-    check_names(src, cfgs, r)
     check_images(src, r)
     check_dates(src, r, pathlib.Path(args.source).read_text(encoding="utf-8")
                 if args.source else None)
