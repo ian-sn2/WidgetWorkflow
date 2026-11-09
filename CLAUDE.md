@@ -64,6 +64,8 @@ scripts/
   test_widget_text.py         ← tests for it. Run after changing it.
   transcript_diff.py          ← does a new term's transcript change this file? Run it BEFORE swapping.
   test_check_file.py          ← tests for check_file.py. Run after changing it.
+  ci_check.py                 ← what every pull request runs (.github/workflows/checks.yml)
+  ci_baseline.json            ← the examples' known failures, so CI blocks only new ones
   render_widgets.py           ← Playwright: screenshot every widget × scenario × step for collision review
   mobile_check.py             ← does it fit and still work on a phone? Drives every button at 390/320px
   place_labels.py             ← put every shaded area's label where it is clear, and centred
@@ -946,6 +948,13 @@ Full list with checkboxes: `docs/open-issues.md`.
   through every numbered point. A point's axis labels are automatic: it prints
   its own price and quantity unless they are already ticks, and `pl`/`ql` replace
   them with `P₁`/`Q₁` on symbolic graphs.
+* **Every pull request runs `python scripts/ci_check.py`** (GitHub Actions,
+  `.github/workflows/checks.yml`; Ian, 2026-11-09). It fails on a failing test
+  suite, an embedded engine that is not byte-identical to `engine/`, or any
+  `check_file.py` FAIL not already in `scripts/ci_baseline.json`. A new page
+  has no baseline, so it must be at 0 FAIL. Run it locally before pushing;
+  after fixing failures, or accepting one Ian has agreed to, run it with
+  `--update-baseline` and commit the new baseline with the change.
 * After any change to `scripts/check_file.py`: `python scripts/test_check_file.py`
   (must be 0 failing). Its checks have been narrowed repeatedly, and a rule
   narrowed once too often stops firing silently while every file still reports
