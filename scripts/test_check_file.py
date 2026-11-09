@@ -127,6 +127,20 @@ case("label over a curve that is still there", lambda r: C.check_labels(widget(
     steps=["a.", "b.", "c.", "d."]), r)
     or r.has("FAIL", "labels", "sits on curve D\u2081"))
 
+# A circular flow's loops are what its steps bring in (engine v2.59): a
+# step that adds a loop changes the drawing, and one that adds nothing does not.
+case("a circular flow's loop counts as a step change", lambda r: C.check_steps(
+    [(1, {"flow": {"cycle": True, "nodes": ["A", "B", "C", "D"],
+                   "loops": [{"side": "inner", "dir": "cw", "at": 1, "labels": ["a", "b", "c", "d"]}]},
+          "steps": ["boxes.", "the loop."]}, "")], r)
+    or not r.has("FAIL", "steps", "changes nothing"))
+
+case("a circular flow step that adds no loop", lambda r: C.check_steps(
+    [(1, {"flow": {"cycle": True, "nodes": ["A", "B", "C", "D"],
+                   "loops": [{"side": "inner", "dir": "cw", "labels": ["a", "b", "c", "d"]}]},
+          "steps": ["boxes.", "still boxes."]}, "")], r)
+    or r.has("FAIL", "steps", "changes nothing"))
+
 # ---- the arrow tests -------------------------------------------------------
 
 case("two arrows abutting", lambda r: C.check_labels(widget(

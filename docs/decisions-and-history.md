@@ -813,3 +813,241 @@ and that `x-ignore` folders are skipped. The repo's new home
 (`ian-sn2/WidgetWorkflow`) and default branch are in `CLAUDE.md`'s head.
 The one open item from the review that is outside this repo — uploading the
 stylesheet with the phone table rule to S3 — is in `docs/open-issues.md`.
+
+## 2026-10-12 to 14 — the UCF project: 24 chapters in three editions
+
+Ian sent 24 StudyKnight chapters (ECO2013 and ECO2023, Full, Balanced and
+Concise), 190 unique figures, and asked for a copy of each edition with the
+graph images replaced by widgets and nothing else changed. Six agents built
+the chapters in parallel from a shared brief, review chapters reusing the
+base chapters' configs verbatim so one figure is drawn one way everywhere;
+`scripts/apply_widgets.py` applied the maps and proved byte-identity outside
+the widgets, and `--no-head` let `check_file.py` check StudyKnight pages.
+The decisions, in the order Ian made them:
+
+* The TOC script is the one head change (`content/sn25-v5.js` →
+  `studyguide/sn25-v2.js`); the text is never touched, and the source's
+  defects (underline tags, "in the class", wrong titles, a 252 term code,
+  reversed elasticity ranges, a $20 that should be $15) stay on the
+  checklist, which also lives as an interactive page with saved ticks.
+* A vertical frontier shift gets a `moves` arrow; the production-table
+  figures of the comparative-advantage chapter are widgets with `calcs`
+  totals, because their numbers change each semester.
+* The Concise editions were pruned: a widget stays only where the Concise
+  text introduces it, cases merge into scenario buttons, and nothing is
+  tabled in place of a dropped widget. 148 Concise widgets became 110.
+* The buyers' tax brace sits where the source draws its arrow; a shaded
+  rectangle is named at its left end beside the axis; a name that cannot
+  fit its shape goes over dashed guides rather than a solid line, or above
+  the shape with a leader where a solid line crosses the only inside spot;
+  a hatched numeric figure with its amount in the text carries no name.
+* Redone chapters are delivered as the three files alone, not a path tree;
+  the finished files are not committed until Ian has reviewed them.
+
+Also found on the way: the BSC2010 question boxes become click-to-check
+quizzes only when a chapter carries the `<style>`/`<script>` block the
+Molecular Genetics file has before `</body>`; the Mutations files lacked it.
+
+## 2026-10-16 — FIN3403: calculator screenshots become HP 10bII+ widgets
+
+Ian sent the UCF finance set (four exams, 15 chapters, three editions each)
+with a sample page carrying an interactive HP 10bII+ calculator widget, and
+asked for the same treatment as the economics set: calculator widgets in
+place of the screenshots, the TOC script swap as the only head change, the
+text untouched, and no widgets back to back in the Concise editions.
+
+What was built: `engine/hp10bii.js`/`.css` (the sample, extended with P/YR,
+EFF%, AMORT, Nj, PI, a chained second stage, alternatives buttons and Σ+
+statistics, because the notes use every one of those); `apply_widgets.py`
+grew `"hp"` map entries, the hp embed and `occurrence`; and the proof learned
+to cut replaced tags out by position, since the TVM chapter uses one picture
+twice. 76 screenshots in seven chapters became widgets (27 in TVM alone),
+25 Concise placements were made where the Concise text states the numbers,
+and every widget was driven in Chromium against the number the notes print:
+162 runs, 0 mismatches. Kept as pictures: timelines, charts, the annotated
+button legend, the hand-added breakdowns. Source findings (a 2015/2018 year
+mismatch in the Exam 2 Review's GM bond, 34.33 vs 34.31 years, alt texts
+calling P/YR "PMT", fixed-width diagrams wider than a phone) went on the
+checklist unchanged. The delivery is a zip, not a commit; Ian reviews first.
+
+Later the same day Ian asked for more: every chart or graph that can be
+drawn in sd-graph, static or not ("to me a widget involves some kind of
+interaction", but he wants the figures drawn either way), and the flow
+charts too. So the risk chapter's eight figures, the yield curves, the
+capital-structure pair, the break-even figures and the IRR bar chart became
+sd-graph figures; the leverage chains became a new `flow` widget (engine
+v2.57); the project-ranking cash-flow diagrams, the hand-added present
+values and the amortization diagram became calculator widgets and an
+amortization explorer. Two things learned: a Concise widget needs a sentence
+that introduces the figure, not a bullet of inputs (the cost-of-capital
+example came out); and a page's own `<style>` can restyle the plot's short
+class names -- `.brace { transform: scaleX(.65) }` in the risk chapter
+squeezed every upright brace into the margin with every check passing, so
+the engine's CSS now pins those properties.
+
+## 2026-10-19 -- the UCF ECO sets after the "anything drawable" rule (v2.59)
+
+Ian's 2026-10-16 rule (every chart or graph the engine can draw becomes an
+sd-graph figure, static or not) came after the UCF ECO2013/ECO2023 sets had
+shipped, so the nine images still in those 24 chapters were reviewed against
+it. Seven were redone, in five chapters; the population hierarchy (a tree)
+and nothing else stays an image.
+
+* **Three circular flows (two artworks) are a `flow` widget with
+  `cycle: true`** -- four boxes round a ring, the goods-and-factors loop
+  clockwise inside and the money loop counter-clockwise outside, each loop
+  arriving on its own step. The chain layout of v2.57 could not draw a ring,
+  and the rule for a figure the schema cannot express is an engine feature,
+  not hand-written SVG in a notes file. The ThinkingLikeAnEconomist figure
+  and the PPF/Exam 1 Review figure name their markets and flows differently,
+  and each widget follows its own artwork.
+* **The two open-market diagrams are chain `flow` widgets** with a two-way
+  link (`back`), a wider `gap`, a `plain` node for the three outcomes and
+  `w` weights. Two widgets rather than one with buttons: the source puts a
+  paragraph between them and each sits beside its own.
+* **The MB = MC graph is a plot with its own table beside it** (`table.plain`,
+  `side: "right"`): the one real plot still an image, kept in October because
+  the engine's `table` was a price schedule. The dot is on the figure from
+  the start and its name arrives on step 1; the Q axis drops its 5 tick for
+  the point's own reading and the price axis keeps the even ticks, because
+  eleven `$` ticks crowd a 268px panel (check_file's rule either way).
+* **The midpoint-formula picture is the calculation it shows, in HTML**: two
+  MathJax lines with `\bbox` round the midpoint denominators and the callout
+  as a bordered paragraph. `apply_widgets.py` takes `{"html": block}` as an
+  image entry for this. It prints −66.67% where the picture rounds to −67%,
+  because the prose beside it does (rule 3). Not verified typeset here: the
+  MathJax CDN is unreachable from this container, so the `\bbox` lines were
+  checked by eye against MathJax 3's syntax only.
+* **Concise editions**: the circular flow goes in where the Concise has its
+  own Circular Flow section (ThinkingLikeAnEconomist, PPF, Exam 1 Review);
+  the Money Concise names open-market operations in one cell of a five-tool
+  table and gets nothing; the Elasticity Concise already carries the
+  midpoint formulas.
+
+The phone check reports the same sideways scroll on these files as before
+(source tables and a source `<div>`), and the PPF Full's untappable buttons
+at 320px are in the delivered file from October too.
+
+## 2026-10-21 -- MAR3023 chapter 15 (channels): ten images, none left (v2.60)
+
+Ian asked for the chapter's images "as html / sdg" and the TOC fixed. Five
+of the ten are chain diagrams and became `flow` widgets; the engine grew a
+vertical layout for them, because the figures run top to bottom and the
+prose beside them says "upstream" and "downstream" -- a horizontal chain
+would have contradicted the page. The supply-chain figure's three braces
+are `spans` drawn as brackets, arriving one per step. The old "pipeline"
+view takes plain-arrow links and the value-added chain the chain motif with
+a `+` between links, which is the figure's own argument.
+
+The other five are not chains and are static HTML: the old-system /
+cross-docking pair as two inline SVG panels drawn on the prose's own
+numbers (four manufacturers and three stores, twelve routes against seven;
+the picture shows three and three), the coverage spectrum as one SVG
+arrow, the wholesaler matrix as a table, and the channel-conflict tree as
+an SVG. These are drawings rather than widgets, placed through
+`apply_widgets.py`'s `{"html": block}` entries with their stylesheet riding
+in the first block, the way the chapter's own video section carries its
+`<style>` in the body. The head's `content/sn25-v5.js` became the live
+`studyguide/sn25-v2.js` (the TOC).
+
+Left as they are, and flagged: the source's `<u>` on the BOPUS/BORIS
+letters, the checker's "recording" hit on "a ledger for recording
+transactions" (a word, not a source), and the franchising table that
+scrolls a phone sideways.
+
+## 2026-10-21 — QMB3200 (UCF statistics): engine v2.63, `axes.xmin`/`ymin`
+
+The QMB3200 set (Exam 1 and Exam 2, Parts 1–3, three editions each) is the
+first statistics course through the pipeline. Its 26 images are bells,
+shaded tails, scatterplots, two Excel charts and nine Excel screenshots.
+Everything drew on the existing engine except two plots that do not start
+at the origin: the GRE scatter (GPA 2.8–4.0 against 240–325 points) and the
+profit parabola (profit −30 to 28). `axes.xmin` and `axes.ymin` (v2.63) let
+a panel clip its axes to the region the figure uses, the same rule the
+guide already gave for `xmax`; `check_file.py`'s `geom()` carries the same
+two numbers. The Excel screenshots became HTML tables in Excel's layout
+(class `financial`, the highlighted cells outlined in the screenshot's
+colours, the annotations as small notes beside the value), a shape worth
+reusing for any regression-output image. Build: `scripts/qmb3200/`.
+
+**Same day, v2.64 — UCF theme colours.** Ian: "most of the UCF things are
+colored in their theme colors, aka gold white and black", and a gradient of
+those rather than pure black. The source draws a rejection-region figure as
+a solid gold bell with a white tail and a black leader arrow to it. The
+engine had no gold, washed every area at .18 and painted every movement
+arrow red by stylesheet, so: `gold` in the palette, `opacity` on an area,
+and a `moves` colour that beats the sheet. The QMB3200 set uses gold at two
+opacities (body .55, tail .22) with ink curves and ink leaders.
+
+**Same day, v2.65.** A wrapped quantity title was placed from the axis
+crossing, so on the profit parabola (axes crossing at the origin) it sat
+above the tick numbers; it sits below the tick row at the plot's foot now,
+which is where `check_file` had been measuring it all along. The checker's
+one-line case now follows the crossing, as the engine does.
+
+## 2026-10-23 — MAR3203 (UCF operations management): engine v2.66, the `network` widget
+
+Eleven chapters, 67 figures. The project-management chapter draws its CPM
+example as a run of five network diagrams (the bare network, a forward
+pass, a backward pass, the critical path, the crashed project), which no
+existing widget kind could carry: `flow` is a chain or a ring, not a graph.
+`network` (v2.66) lays activities on a grid, draws precedence arrows, and
+reveals ES/EF, LS/LF and the critical path by step, so the five figures are
+one widget with four steps and a scenario button. The AON/AOA example
+pairs are the same widget twice side by side (`panels`), the AOA half with
+blank nodes and named, sometimes dashed, arrows.
+
+**Delivered 2026-10-23** as `MAR3203-UCF-Widgets.zip`: twelve chapters
+(the Operations & Productivity chapter arrived separately with its Word,
+PDF and image folder), thirty-six files, 59 of 66 images converted. The
+seven not converted are duplicates folded into one scenario widget (the
+three demand patterns, the four capacity strategies); they stay in the file
+as pictures, and `apply_widgets.py` now writes the `<!-- KEEP: why -->`
+comment in front of a kept image itself, counted as an insertion so the
+"only the widgets differ" proof still holds -- before this a `keep` entry
+left the tag bare and `check_file` went on reporting it as a graph. The
+build is `scripts/mar3203/` (`common.py` for the theme, SVG and table
+helpers; `exam1.py`, `exam2.py`, `exam34.py` write the maps;
+`apply_all.sh` applies them). Two more engine changes came out of it:
+v2.67's `axes.years` (Bob's River Place attendance printed 2,013 on the
+axis), and the network widget's corner times moved 11px outside the node so
+a 45-degree arrow never runs through them. The phone check found the same
+thing as QMB3200: the sources' fixed-width `.financial` tables push every
+page sideways and, zoomed to fit, leave widget buttons unresponsive; the
+same file passes with those tables allowed to scroll. Reported on the
+checklist, not changed.
+
+## 2026-10-26 — The frameless look for the UCF sets, without touching the engine
+
+Ian set a colleague's QMB3200 file beside ours: his figures are transparent
+inline SVGs with nothing around them, and ours sat in a navy frame on paper
+with an inner box, a red-barred caption and full-width navy buttons. He
+asked for ours to be "transparent and seamless", the buttons "less out
+there", and the static captions gone ("they take up too much space"), and
+separately that the engine not be modified without his say-so. So the look
+is not an engine flag: `apply_widgets.py` takes a `style` key in the map
+and writes it as one `<style>` after the engine's own blocks, counted as an
+insertion for the proof. `scripts/mar3203/common.py` holds the sheet
+(`LOOK`) and every MAR3203 map carries it. A static widget's caption is
+hidden by the sheet, not deleted from the JSON, so `check_file` still reads
+it and a stepped widget keeps its live caption. The preview built the same
+way for QMB3200 Exam 2 Part 2 measured the eleven figures at 4,436px
+against 5,931px framed. The engine stays at v2.67. The same day's other
+change: the project-management cycle's canvas was 30px too short for its
+bottom arc.
+
+**2026-10-26, review rounds.** Ian reviewed every MAR3203 widget on a
+live flashcard page (an artifact with a shared store for his verdicts
+and comments, read back with `ArtifactData`). Two rounds, all answered
+in the build scripts bar one: the network's corner times are engine
+geometry, and his "close to the nodes but not too close" is v2.68 --
+the times sit 5px out and 1px above or below the node instead of 11 and
+5, and the arrows are cleared by spreading the nodes, not by moving the
+times. The rest: a pie label pulled in from the rim, a grid title
+centred over the grid, an arrow ending inside its shading, break-even
+signs carried on the braces, cost-band names in ink, TQM rows spaced
+for a real arrow, the Clorox bell sampled to five decimals (three made
+the spline zig-zag), decision-tree names clear of their lines, the
+example network spread wide and shallow, two cost labels swapped, the
+max-profit brace replaced by a two-headed arrow, and a stray stub cut
+from the lab flowchart.

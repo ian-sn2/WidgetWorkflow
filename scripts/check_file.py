@@ -8,7 +8,8 @@ Groups, in order:
   steps     every step changes the drawing, not just the caption
   steady    a curve shared between scenarios keeps its label in one place
   head      house format -- a <title> exists, the Red Hat Display link,
-            sn25-v6.css, and a current house script
+            sn25-v6.css, and a current house script (--no-head skips this
+            for a page in another house format, such as StudyKnight's)
   engine    <!--SDG-ENGINE--> exactly once, or an engine already embedded whose
             bytes match engine/; and no <link>/<script src> to a hosted copy
   markup    no <u>, <h3> only on Concise pages, <strong> used for vocabulary
@@ -261,6 +262,14 @@ MATRIX_STEPPABLE = ("marks",)
 # A years table's steps bring in a year, an arrow, or the running total
 # (engine v2.48). `total` is one object rather than a list, so it is wrapped.
 PLAYS_STEPPABLE = ("years", "arrows", "total")
+# A flow chart's steps bring in a change arrow or a multiplier arrow, and a
+# box or a link may arrive late too (engine v2.57).
+# A circular flow's loops arrive one at a time (v2.59).
+FLOW_STEPPABLE = ("nodes", "links", "changes", "spans", "loops")
+# A project network (v2.66) steps its nodes and edges, and its `show` marks
+# -- the forward pass, the backward pass, the critical path -- which the
+# signature below turns into one element each.
+NETWORK_STEPPABLE = ("nodes", "edges", "_show")
 
 
 def check_steps(cfgs, r):
@@ -306,6 +315,14 @@ def check_steps(cfgs, r):
                     if isinstance(pl.get("total"), dict):
                         pl["total"] = [pl["total"]]
                     sources.append((-2, pl, PLAYS_STEPPABLE))
+                if v.get("flow"):
+                    sources.append((-3, v["flow"], FLOW_STEPPABLE))
+                if v.get("network"):
+                    for pi2, net in enumerate(v["network"].get("panels") or [v["network"]]):
+                        net = dict(net)
+                        show = net.get("show") or v["network"].get("show") or {}
+                        net["_show"] = [{"at": a} for a in show.values()]
+                        sources.append((-4 - pi2, net, NETWORK_STEPPABLE))
                 for pi, pn, keys in sources:
                     for key in keys:
                         for ei, e in enumerate(pn.get(key) or []):
@@ -533,7 +550,7 @@ def check_schema(cfgs, r):
         # An amortization explorer is the third way a widget earns its place:
         # no steps and no static caption, but a reading the student scrubs to
         # (v2.50).
-        if not (has_steps or cfg.get("caption") or cfg.get("amort") or static_preset
+        if not (has_steps or cfg.get("caption") or cfg.get("amort") or cfg.get("flow") or cfg.get("network") or static_preset
                 or titled_scenarios
                 or cfg.get("lede")
                 or any(v.get("caption") or (isinstance(v.get("steps"), list)
@@ -686,6 +703,8 @@ def geom(pn, ax):
         left += 30.0
     xmax = float(ax.get("xmax") or 1)
     ymax = float(ax.get("ymax") or 1)
+    xmin = float(ax.get("xmin") or 0)   # v2.63: the plot's corner need not be 0
+    ymin = float(ax.get("ymin") or 0)
     # Engine v2.28 sizes the right margin to the curve labels, the same way
     # v2.27 sizes the left to the price labels, and for the same reason: a
     # label anchored at a curve's end had nowhere to go and was drawn cut off.
@@ -703,7 +722,7 @@ def geom(pn, ax):
             text = c.get("label")
             text = c.get("id") if text is None else text
             chars = max(label_len(row) for row in str(text).split("\n"))
-            ends = left + (lp[0] / xmax) * pw_try + (6 if c.get("ldx") is None
+            ends = left + ((lp[0] - xmin) / (xmax - xmin)) * pw_try + (6 if c.get("ldx") is None
                                                      else c.get("ldx"))
             over = ends + 13.0 * chars + 4 - W
             if over > 0:
@@ -714,8 +733,8 @@ def geom(pn, ax):
     right = min(right, W - left - 120.0)
     ox, oy = left, 205.0
     pw, ph = W - left - right, 178.0
-    return (lambda q: ox + (q / xmax) * pw,
-            lambda p: oy - (p / ymax) * ph, ox, oy)
+    return (lambda q: ox + ((q - xmin) / (xmax - xmin)) * pw,
+            lambda p: oy - ((p - ymin) / (ymax - ymin)) * ph, ox, oy)
 
 
 def fmt_p(v, ax):
@@ -733,6 +752,8 @@ def fmt_q(v, ax):
     # pct:true is both axes; pct:"y" is the price axis alone (engine v2.50)
     if ax.get("pct") is True:
         return "%s%%" % v
+    if ax.get("years"):          # a year prints as written (engine v2.67)
+        return str(v)
     if ax.get("k") and v >= 1000:
         return "%gk" % (v / 1000.0)
     return "{:,}".format(v)
@@ -1000,8 +1021,14 @@ def guide_segments(pn, X, Y, ox, oy, ax):
     # parked at the end of a curve that runs down to the axis lands on the axis
     # itself, which is exactly where "D" sat in the Piesanos figure. Always on
     # screen, so no visibility window.
-    out.append(([(ox, 14.0), (ox, oy), (ox + pw + 14, oy)], "the axis lines",
-                (0, None)))
+    if ax.get("cross"):
+        # axes.cross puts the crossing inside the plot (engine v2.58)
+        cx, cy = X(float(ax["cross"][0])), Y(float(ax["cross"][1]))
+        out.append(([(cx, 14.0), (cx, oy)], "the axis lines", (0, None)))
+        out.append(([(ox, cy), (ox + pw + 14, cy)], "the axis lines", (0, None)))
+    else:
+        out.append(([(ox, 14.0), (ox, oy), (ox + pw + 14, oy)], "the axis lines",
+                    (0, None)))
     for p in pn.get("points") or []:
         if p.get("guides") is False:
             continue
@@ -1081,8 +1108,12 @@ def check_labels(cfgs, r):
                 yt_ttl = ax.get("y") or "P"
                 pw = X(float(ax.get("xmax") or 1)) - ox
                 _xw = len(str(xt_ttl).split("\n")) > 1
+                # a one-line title sits at the end of the axis line, which
+                # with axes.cross is inside the plot; a wrapped one below
+                # the tick row at the plot's foot (engine v2.65)
+                _axy = Y(float(ax["cross"][1])) if ax.get("cross") else oy
                 boxes.append((title_box(xt_ttl, ox + pw + 34,
-                                        oy + (36.0 if _xw else 16.0), "end"),
+                                        oy + 36.0 if _xw else _axy + 16.0, "end"),
                               "the %r axis title" % xt_ttl, (0, None)))
                 _yw = len(str(yt_ttl).split("\n")) > 1
                 boxes.append((title_box(yt_ttl,
@@ -2152,6 +2183,12 @@ def main():
                     help="the file this one was built from (the full edition, "
                          "the chapter as sent). Its class dates must all "
                          "survive into FILE.")
+    ap.add_argument("--no-head", action="store_true",
+                    help="skip the house-head checks. For a page in another "
+                         "house format (the StudyKnight files carry "
+                         "sk26-v1.css and content/sn25-v5.js) where the head "
+                         "is not the conversion's to change; the widgets are "
+                         "still checked in full.")
     args = ap.parse_args()
     path = pathlib.Path(args.file)
     if not path.exists():
@@ -2160,7 +2197,10 @@ def main():
     r = Report()
 
     print("checking %s\n" % path)
-    check_head(src, r)
+    if args.no_head:
+        r.skip("head", "--no-head: the head is another house format's")
+    else:
+        check_head(src, r)
     check_engine(src, r)
     check_markup(src, r, concise="concise" in path.name.lower())
     check_toc(src, r)
