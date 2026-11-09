@@ -66,6 +66,7 @@ scripts/
   test_check_file.py          ← tests for check_file.py. Run after changing it.
   ci_check.py                 ← what every pull request runs (.github/workflows/checks.yml)
   ci_baseline.json            ← the examples' known failures, so CI blocks only new ones
+  ci_phone_baseline.json      ← the same for the phone check (mobile_check.py), per screen size
   render_widgets.py           ← Playwright: screenshot every widget × scenario × step for collision review
   mobile_check.py             ← does it fit and still work on a phone? Drives every button at 390/320px
   place_labels.py             ← put every shaded area's label where it is clear, and centred
@@ -955,6 +956,11 @@ Full list with checkboxes: `docs/open-issues.md`.
   has no baseline, so it must be at 0 FAIL. Run it locally before pushing;
   after fixing failures, or accepting one Ian has agreed to, run it with
   `--update-baseline` and commit the new baseline with the change.
+  A second job, `phone`, runs `ci_check.py --phone 390x844` and
+  `--phone 320x568`: `mobile_check.py` on every page, every scenario, step
+  and Back button pressed, against `scripts/ci_phone_baseline.json`. It is the
+  only check that drives the widgets. It takes about five minutes a size, so
+  run it locally once the static checks are clean, not between edits.
 * After any change to `scripts/check_file.py`: `python scripts/test_check_file.py`
   (must be 0 failing). Its checks have been narrowed repeatedly, and a rule
   narrowed once too often stops firing silently while every file still reports
@@ -976,8 +982,12 @@ Full list with checkboxes: `docs/open-issues.md`.
   measured rather than assumed — a button that is disabled or already pressed is
   doing its job when nothing happens, so neither is counted against it. Run
   `--width 320 --height 568` too; that is the size everything is tightest at.
-  All six example files pass at both, and the worst widget leaves 53px of
-  headroom on the small screen.
+  **Until 2026-11-09 it printed a figure too wide or a button too small only
+  when the widget also failed the fit-on-screen test**, an indentation slip,
+  so "all examples pass" meant less than it said. Fixed; the examples still
+  pass at 390, and the solutions pages' 28px tool buttons and wide payoff
+  matrices showed up at once (`docs/open-issues.md`). On a solutions page it
+  opens every question first, since a widget behind the menu cannot be tapped.
 * **An arrow does not lie over the dashed guides.** Ian's rule. A converging
   pair belongs *inside* the box the guides fence off, not across it, which
   usually means starting it a few units in from the point and keeping it short.

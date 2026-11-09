@@ -52,6 +52,16 @@ def launch_kwargs():
     return kw
 
 
+REVEAL = r"""
+() => {
+  const qs = document.querySelectorAll('section.sol, .sol-group');
+  qs.forEach(e => { e.hidden = false; });
+  document.querySelectorAll('.sol-menu').forEach(e => { e.hidden = true; });
+  return qs.length;
+}
+"""
+
+
 PROBE = r"""
 () => {
   const out = {page: {}, widgets: []};
@@ -117,6 +127,8 @@ def main():
     ap.add_argument("--width", type=int, default=390, help="viewport width (default 390)")
     ap.add_argument("--height", type=int, default=844)
     ap.add_argument("--shots", type=pathlib.Path, help="save a screenshot per widget here")
+    ap.add_argument("--settle", type=int, default=SETTLE_MS,
+                    help="ms to wait after each click (default %d; CI uses less)" % SETTLE_MS)
     a = ap.parse_args()
 
     probe = PROBE.replace("%TAP%", str(TAP_MIN))
@@ -130,6 +142,10 @@ def main():
             pg.on("pageerror", lambda e: errs.append(str(e)))
             pg.goto(f.absolute().as_uri())
             pg.wait_for_timeout(SETTLE_MS)
+            # A solutions page opens on its menu with every question hidden, and
+            # a hidden widget cannot be tapped. Show them all, the way picking
+            # each question in turn would, so every widget is driven.
+            pg.evaluate(REVEAL)
             r = pg.evaluate(probe)
 
             print("=== %s  @%dpx" % (f.name, a.width))
@@ -155,7 +171,7 @@ def main():
                     before = w.inner_html()
                     try:
                         scen.nth(k).click(timeout=2500)
-                        pg.wait_for_timeout(SETTLE_MS)
+                        pg.wait_for_timeout(a.settle)
                     except Exception as e:
                         dead.append("w%d scenario %d: %s"
                                     % (n, k + 1, str(e).split("\n")[0][:56]))
@@ -179,7 +195,7 @@ def main():
                         dead.append("w%d Next step not tappable at step %d: %s"
                                     % (n, steps + 1, str(e).split("\n")[0][:56]))
                         break
-                    pg.wait_for_timeout(SETTLE_MS)
+                    pg.wait_for_timeout(a.settle)
                     after = w.inner_html()
                     if after == before:
                         dead.append("w%d step %d drew nothing new" % (n, steps + 1))
@@ -190,7 +206,7 @@ def main():
                     before = w.inner_html()
                     try:
                         back.click(timeout=2500)
-                        pg.wait_for_timeout(SETTLE_MS)
+                        pg.wait_for_timeout(a.settle)
                         if w.inner_html() == before:
                             dead.append("w%d Back changed nothing" % n)
                     except Exception as e:
@@ -207,12 +223,12 @@ def main():
                           % (rec["scenarios"], rec["span"], a.height,
                              rec["span"] - a.height))
                     problems += 1
-                    if rec["over"]:
-                        print("      fit  %s" % "; ".join(sorted(set(rec["over"]))))
-                        problems += 1
-                    if rec["taps"]:
-                        print("      tap  under %gpx: %s" % (TAP_MIN, "; ".join(rec["taps"])))
-                        problems += 1
+                if rec["over"]:
+                    print("      fit  %s" % "; ".join(sorted(set(rec["over"]))))
+                    problems += 1
+                if rec["taps"]:
+                    print("      tap  under %gpx: %s" % (TAP_MIN, "; ".join(rec["taps"])))
+                    problems += 1
                 if a.shots:
                     a.shots.mkdir(parents=True, exist_ok=True)
                     try:

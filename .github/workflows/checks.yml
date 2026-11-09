@@ -1,7 +1,10 @@
-# Runs on every pull request and on every push to the default branch:
-# the three test suites, and check_file.py on every page that embeds the
-# engine, against the known failures in scripts/ci_baseline.json.
-# See scripts/ci_check.py. Standard library only, so nothing is installed.
+# Runs on every pull request and on every push to the default branch.
+#   checks: the three test suites, and check_file.py on every page that embeds
+#           the engine, against the known failures in scripts/ci_baseline.json.
+#           Standard library only, so nothing is installed.
+#   phone:  mobile_check.py at both phone sizes, pressing every scenario, step
+#           and Back button, against scripts/ci_phone_baseline.json.
+# See scripts/ci_check.py.
 name: checks
 
 on:
@@ -23,3 +26,22 @@ jobs:
           python-version: "3.12"
       - name: Tests, and every page against its baseline
         run: python scripts/ci_check.py
+
+  phone:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        size: [390x844, 320x568]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Playwright and Chromium
+        run: |
+          pip install playwright==1.64.1
+          python -m playwright install --with-deps chromium
+      - name: Every page at ${{ matrix.size }}, every button pressed
+        run: python scripts/ci_check.py --phone ${{ matrix.size }}
