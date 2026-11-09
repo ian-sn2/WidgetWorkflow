@@ -448,3 +448,19 @@ or "unattainable" dot) whose exact coordinates are not the lesson.
       fits 3.5px clear of both lines in that gap. A larger `dS`, or no supply
       arrow, would settle both if Ian wants them gone. (2026-10-07)
 
+
+## Exam solutions (`solutions/`, from 2026-10-26)
+
+- [x] Widgets on the other four Exam 1 papers (2026-10-26, 104 of them from
+      eighteen generated shapes; the changelog lists them).
+- [ ] Topic tags on the four earlier exams are from the keyword pass and not
+      yet read through; Fall 2024's are read and listed in the changelog.
+- [ ] The generators behind the solutions widgets (`widgets_lib.py`) live in
+      the session's scratch space with the exam papers, not in the repo, because
+      they are keyed to the papers' layout. Bring them in under `scripts/` once
+      a second exam shows which parts are general.
+- [ ] A solutions mode for `check_file.py`: quiet `images` and `dates`, and
+      run the browser scripts on an opened, unfiltered copy without making one
+      by hand.
+- [ ] Exams 2 and 3, and ECO2013 -- the shell needs nothing new for them.
+- [ ] Whether the solutions should start open (`<details open>`): Ian's call.

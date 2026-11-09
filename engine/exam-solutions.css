@@ -1,0 +1,181 @@
+.sol-shell { font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; --navy:#002060; --ink:#1c2a44; --rule:#c9d2e3; --paper:#f6f8fc; --red:#d62828; }
+/* The picker: a panel of cards, always open. Each row names its stage and
+   the cards name the choices with their question counts; the chosen card is
+   filled navy. */
+.sol-shell .sol-picker { border:1px solid var(--rule); border-radius:14px; background:#fff; padding:14px 18px 6px; margin:0 0 14px; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+.sol-shell .sol-stage { display:flex; align-items:flex-start; gap:14px; padding:8px 0 10px; border-bottom:1px solid #edf1f8; }
+.sol-shell .sol-stage:last-child { border-bottom:0; }
+.sol-shell .sol-stage-k { flex:0 0 120px; padding-top:9px; }
+.sol-shell .sol-stage-k span { display:block; font-weight:800; color:var(--navy); font-size:.95rem; text-transform:uppercase; letter-spacing:.04em; }
+.sol-shell .sol-stage-k small { display:block; color:#6b7590; font-size:.78rem; line-height:1.3; margin-top:2px; }
+.sol-shell .sol-cards { display:flex; flex-wrap:wrap; gap:8px; flex:1 1 auto; }
+.sol-shell .sol-card { display:flex; flex-direction:column; align-items:flex-start; gap:1px; min-height:44px; padding:7px 14px; border:1px solid var(--rule); border-radius:10px;
+  background:#fff; color:var(--navy); font:inherit; cursor:pointer; text-align:left; transition:background .15s, border-color .15s, transform .15s, box-shadow .15s; }
+.sol-shell .sol-card:hover { border-color:var(--navy); box-shadow:0 2px 6px rgba(0,32,96,0.12); transform:translateY(-1px); }
+.sol-shell .sol-card:focus-visible { outline:3px solid #8fb3ff; outline-offset:2px; }
+.sol-shell .sol-card-l { font-weight:700; font-size:.95rem; line-height:1.2; }
+.sol-shell .sol-card-n { font-size:.74rem; color:#6b7590; line-height:1.2; }
+.sol-shell .sol-card[aria-pressed="true"] { background:var(--navy); border-color:var(--navy); color:#fff; box-shadow:0 2px 8px rgba(0,32,96,0.25); }
+.sol-shell .sol-card[aria-pressed="true"] .sol-card-n { color:#c9d6f2; }
+/* How much of a card has been reviewed: a thin bar along its foot, and a
+   green edge once every question in it has been opened. */
+.sol-shell .sol-card { position:relative; overflow:hidden; padding-bottom:9px; }
+.sol-shell .sol-card-bar { position:absolute; left:0; right:0; bottom:0; height:4px; background:#edf1f8; }
+.sol-shell .sol-card-bar > span { display:block; height:100%; background:#2e8b57; transition:width .25s ease; }
+/* A bookmark count on a menu card: the ribbon from the strip, red, in the
+   card's top right (Ian, 2026-11-05). */
+.sol-shell .sol-card-bm { position:absolute; top:6px; right:8px; display:inline-flex; align-items:center; gap:3px; font-size:.72rem; font-weight:700; color:#d62828; line-height:1; }
+.sol-shell .sol-card-bm svg, .sol-shell .sol-bookmarks .sol-stage-k svg { fill:#d62828; }
+.sol-shell .sol-card[aria-pressed="true"] .sol-card-bm { color:#ffb3b3; }
+.sol-shell .sol-card[aria-pressed="true"] .sol-card-bm svg { fill:#ffb3b3; }
+.sol-shell .sol-card:has(.sol-card-bm) { padding-right:34px; }
+.sol-shell .sol-bookmarks .sol-stage-k span { display:inline-flex; align-items:center; gap:5px; }
+.sol-shell .sol-bm-card { border-left:3px solid #d62828; }
+.sol-shell .sol-card[aria-pressed="true"] .sol-card-bar { background:rgba(255,255,255,0.18); }
+.sol-shell .sol-card[aria-pressed="true"] .sol-card-bar > span { background:#7fd49a; }
+.sol-shell .sol-card.is-done { border-color:#2e8b57; }
+.sol-shell .sol-strip .sol-num.is-seen { background:#f1f6f3; border-color:#9fcdb1; }
+/* The menu's greeting, and the bar at the top of the questions view. */
+.sol-shell .sol-hello { font-size:1.15rem; font-weight:600; color:var(--navy); margin:0 0 12px; line-height:1.4; }
+.sol-shell .sol-top { display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin:0 0 12px; padding:10px 14px; border:1px solid var(--rule); border-radius:12px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+.sol-shell .sol-back { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; line-height:1; white-space:nowrap; border:1px solid var(--navy); background:var(--navy); color:#fff; padding:8px 14px; min-height:40px; border-radius:8px; font:inherit; font-size:.9rem; font-weight:700; cursor:pointer; }
+.sol-shell .sol-back:hover { background:#0b3a8a; }
+/* The status line and progress bar beside it. */
+.sol-shell .sol-status { flex:1 1 auto; min-width:0; }
+.sol-shell .sol-status-text { display:flex; justify-content:flex-start; align-items:baseline; gap:10px; flex-wrap:wrap; font-size:.9rem; color:var(--ink); }
+.sol-shell .sol-status-text strong { color:var(--navy); }
+.sol-shell .sol-status-n { font-weight:700; color:var(--navy); white-space:nowrap; min-width:4.5em; text-align:center; }
+/* Previous and Next either side of the count. The first question keeps
+   Previous's room but not the button, so the count does not jump. */
+.sol-shell .sol-pager { flex:0 0 auto; display:flex; align-items:center; gap:8px; margin-left:auto; }
+.sol-shell .sol-pager > button { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; line-height:1; white-space:nowrap; border:1px solid #002060; background:#fff; color:#002060; padding:6px 12px; min-height:36px; font:inherit; font-size:.88rem; font-weight:700; cursor:pointer; border-radius:6px; }
+.sol-shell .sol-pager > button.is-off { visibility:hidden; }
+.sol-shell .sol-pager > button.sol-finish { background:#002060; color:#fff; }
+.sol-shell .sol-progress { height:6px; border-radius:3px; background:#e4e9f4; margin-top:6px; overflow:hidden; }
+.sol-shell .sol-progress-bar { height:100%; background:var(--navy); border-radius:3px; transition:width .25s ease; }
+@media (max-width:640px){
+  .sol-shell .sol-status { flex-basis:100%; order:2; }
+  .sol-shell .sol-pager { order:1; }
+  .sol-shell .sol-strip { order:3; }
+  .sol-shell .sol-picker { padding:10px 12px 4px; }
+  .sol-shell .sol-stage { flex-direction:column; gap:6px; }
+  .sol-shell .sol-stage-k { flex-basis:auto; padding-top:0; }
+  .sol-shell .sol-card { flex:1 1 44%; }
+}
+/* The current question sits in its own box under the picker; the groups'
+   headings stay in the page for structure but are not shown. */
+.sol-group > h2 { display:none; }
+section.sol { margin:0 0 20px; padding:14px 20px 16px; border:1px solid #DEDEDE; border-radius:14px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+@keyframes sol-fade { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+section.sol.sol-in { animation:sol-fade .22s ease-out; }
+@media (prefers-reduced-motion: reduce) { section.sol.sol-in { animation:none; } .sol-shell .sol-card { transition:none; } }
+/* The strip is the top bar's second row. */
+.sol-shell .sol-strip { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; flex-basis:100%; padding-top:8px; border-top:1px solid #e4e9f4; }
+.sol-shell .sol-strip:empty { display:none; }
+.sol-shell .sol-strip .sol-num { display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; line-height:1;
+  min-width:32px; height:32px; padding:0 6px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
+  color:#002060; font:inherit; font-size:.82rem; font-weight:700; cursor:pointer; }
+.sol-shell .sol-strip .sol-num[aria-pressed="true"] { background:#002060; border-color:#002060; color:#fff; }
+@media (max-width:640px){
+  .sol-shell .sol-strip .sol-num { min-width:40px; height:40px; }
+}
+section.sol .sol-q { font-weight:800; color:#002060; margin:0 0 4px; font-size:1.05rem; display:flex; align-items:center; gap:8px; }
+/* The bookmark button is boxed exactly like a strip number: same border,
+   radius and size; bookmarked, the same pale red ground and red ribbon. */
+section.sol .sol-star { flex:0 0 auto; width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid #c9d2e3; border-radius:6px; background:#fff; cursor:pointer; padding:0; }
+section.sol .sol-star svg path { fill:none; stroke:#8a94a6; stroke-width:1.6; stroke-linejoin:round; }
+section.sol .sol-star:hover svg path { stroke:#d62828; }
+section.sol .sol-star[aria-pressed="true"] { border-color:#d62828; background:#fbe5e5; }
+section.sol .sol-star[aria-pressed="true"] svg path { fill:#d62828; stroke:#d62828; }
+/* A bookmarked number in the strip wears the ribbon draped over its top
+   edge, hanging past the border the way a ribbon marks a page. */
+.sol-shell .sol-strip .sol-num { position:relative; }
+.sol-shell .sol-strip .sol-num.is-starred::after { content:""; position:absolute; top:-5px; right:3px; width:9px; height:15px; background:#d62828;
+  -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 22"><path d="M1 0h14v21l-7-5-7 5z"/></svg>') center/contain no-repeat;
+  mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 22"><path d="M1 0h14v21l-7-5-7 5z"/></svg>') center/contain no-repeat;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,0.18)); }
+/* The ribbon is the only thing a bookmark adds: the box keeps its colour
+   from the answer (green or red) or from being current (navy), so a
+   bookmarked question and a wrong one never look alike (Ian, 2026-10-27). */
+section.sol ol.sol-sub { margin:2px 0 4px 2em; padding:0; }
+section.sol ol.sol-sub li { margin:0; line-height:1.45; }
+/* The choices are read, not clicked: the right one is marked green. */
+section.sol ol.sol-choices { margin:6px 0 8px; padding:0; list-style:none; counter-reset:choice; }
+section.sol ol.sol-choices li { margin:0 0 3px; padding:3px 8px; line-height:1.4; border:1px solid transparent; border-radius:4px; }
+section.sol ol.sol-choices li::before { counter-increment:choice; content:counter(choice, upper-alpha) ".\00a0\00a0"; font-weight:600; }
+section.sol ol.sol-choices li.sol-right { background:#e3f5e8; border-color:#2e8b57; color:#1d5e3a; font-weight:600; }
+/* The solution, written tight: the house sheet gives every paragraph and
+   list item 10px to 20px of margin at 1.6 line height, which is right for a
+   chapter and makes a worked answer twice as tall as it needs to be. */
+section.sol .sol-answer { box-sizing:border-box; border:1px solid #002060; background:#fff; padding:6px 12px 8px; margin:6px 0 0; width:100%; }
+section.sol .sol-answer .sol-answer-k { margin:0 0 4px; font-weight:800; color:#002060; }
+section.sol .sol-answer p { margin:5px 0; line-height:1.4; }
+section.sol .sol-answer ul, section.sol .sol-answer ol { margin:3px 0 5px; padding-left:1.4em; }
+section.sol .sol-answer li { margin:0 0 3px; line-height:1.4; }
+section.sol .sol-answer li p { margin:3px 0; }
+section.sol .sol-answer ul[style*="center"] { padding-left:0; }
+section.sol .sol-answer ul[style*="center"] p { margin:2px 0; }
+/* A figure inside a solution is read beside its working, not as the page's
+   centrepiece: no box of its own, a narrower plot, and a Fullscreen button
+   that lifts it into an overlay (Ian, 2026-11-04). */
+section.sol .sdg { --fig:50cqw; width:100%; margin:6px 0 4px; padding:0; border:0; background:transparent; position:relative; }
+section.sol .sdg h4 { font-size:.95rem; padding-right:330px; }
+/* The engine lets a plot with its working beside it grow past --fig; in a
+   solution the size control decides, so the cap holds there too. */
+section.sol .sdg .sdg-main.has-calc > .sdg-body { max-width:none; }
+section.sol .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure,
+.sol-fs-panel .sdg .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure { max-width:var(--fig); }
+section.sol .sdg .sdg-lede { margin-bottom:6px; font-size:.86rem; }
+/* One strip at the figure's top right: the widget's own step controls as
+   icons (back, next, restart) with the counter, then - / + and Fullscreen. */
+section.sol .sdg .sol-tools, .sol-fs-panel .sdg .sol-tools { position:absolute; top:0; right:0; display:flex; align-items:center; gap:10px; }
+section.sol .sdg .sol-size, .sol-fs-panel .sdg .sol-size { display:flex; gap:4px; }
+/* A payoff matrix is a table, not a plot: the size steps cannot change it, so
+   they are not offered. Fullscreen still is. */
+section.sol .sdg:has(.sdg-mx) .sol-minus, section.sol .sdg:has(.sdg-mx) .sol-plus { display:none; }
+section.sol .sdg .sol-tools button, .sol-fs-panel .sdg .sol-tools button { display:inline-flex; align-items:center; justify-content:center; gap:5px; border:1px solid #c9d2e3; border-radius:6px; background:#fff;
+  color:#002060; font:inherit; font-size:.78rem; font-weight:700; padding:4px 9px; min-width:28px; min-height:28px; cursor:pointer; line-height:1; margin:0; }
+section.sol .sdg .sol-tools button:hover, .sol-fs-panel .sdg .sol-tools button:hover { border-color:#002060; }
+section.sol .sdg .sol-tools button:disabled, .sol-fs-panel .sdg .sol-tools button:disabled { opacity:.35; cursor:default; }
+section.sol .sdg .sol-minus, section.sol .sdg .sol-plus, .sol-fs-panel .sdg .sol-minus, .sol-fs-panel .sdg .sol-plus { font-size:1rem; }
+/* The docked control row: its three buttons become glyphs, its counter stays. */
+section.sol .sdg .sol-tools .sdg-ctrl, .sol-fs-panel .sdg .sol-tools .sdg-ctrl { display:flex; align-items:center; gap:4px; margin:0; }
+section.sol .sdg .sol-tools .sdg-ctrl button, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button { font-size:0; padding:0; width:28px; }
+section.sol .sdg .sol-tools .sdg-ctrl button::before, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button::before { font-size:1.05rem; font-weight:700; line-height:1; }
+section.sol .sdg .sol-tools .sdg-ctrl button:nth-of-type(1)::before, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button:nth-of-type(1)::before { content:"\2039"; }
+section.sol .sdg .sol-tools .sdg-ctrl button:nth-of-type(2)::before, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button:nth-of-type(2)::before { content:"\203A"; }
+section.sol .sdg .sol-tools .sdg-ctrl button:nth-of-type(3)::before, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button:nth-of-type(3)::before { content:"\21BB"; font-size:.95rem; }
+section.sol .sdg .sol-tools .sdg-step, .sol-fs-panel .sdg .sol-tools .sdg-step { margin:0 4px 0 2px; font-size:.78rem; white-space:nowrap; }
+/* Two panels side by side: the size steps cap the pair, which the engine's
+   own cap (one figure at --fig) never reached. */
+section.sol .sdg .sdg-body.two { max-width:min(100%, calc(var(--fig) * 1.5)); margin:0 auto; }
+.sol-fs-panel .sdg .sdg-body.two { max-width:100%; margin:0 auto; }
+/* The overlay: the widget at full size on a white panel over a dimmed page.
+   Its controls get a bar of their own across the top -- in the flow, centred,
+   at a tap size -- with Close at the bar's right; floated at the figure's
+   corner they sat half under the Close button (Ian, 2026-11-04). */
+body.sol-fs-open { overflow:hidden; }
+.sol-fs { position:fixed; inset:0; z-index:9000; background:rgba(10,20,50,0.55); display:flex; align-items:center; justify-content:center; padding:16px; }
+.sol-fs-panel { position:relative; background:#fff; border-radius:14px; padding:12px 20px 16px; width:min(100%, 960px); max-height:100%; overflow:auto; box-shadow:0 12px 40px rgba(0,0,0,0.35); }
+.sol-fs-panel .sdg { --fig:760px !important; width:100%; margin:0; padding:0; border:0; background:transparent; }
+.sol-fs-panel .sdg .sol-size { display:none; }
+.sol-fs-panel .sdg h4 { padding-right:0; font-size:1.05rem; margin-top:0; }
+.sol-fs-panel .sdg .sol-tools { position:static; justify-content:center; gap:8px; padding:0 96px 10px; margin:0 0 10px; border-bottom:1px solid #e3e8f1; min-height:44px; }
+.sol-fs-panel .sdg .sol-tools .sdg-ctrl { gap:8px; }
+.sol-fs-panel .sdg .sol-tools .sdg-ctrl button { width:44px; min-height:40px; border-radius:8px; }
+.sol-fs-panel .sdg .sol-tools .sdg-ctrl button::before { font-size:1.4rem; }
+.sol-fs-panel .sdg .sol-tools .sdg-ctrl button:nth-of-type(3)::before { font-size:1.25rem; }
+.sol-fs-panel .sdg .sol-tools .sdg-step { font-size:.9rem; margin:0 6px; }
+.sol-fs-close { position:absolute; top:12px; right:16px; border:1px solid #002060; background:#002060; color:#fff; border-radius:8px; padding:7px 12px; min-height:40px; font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; }
+/* On a phone the strip sits in the flow above the title, wrapping as it
+   needs to, rather than floating over it. */
+@media (max-width:640px){
+  .sol-fs { padding:8px; } .sol-fs-panel { padding:10px 10px 12px; }
+  section.sol .sdg h4, .sol-fs-panel .sdg h4 { padding-right:0; margin-top:0; }
+  section.sol .sdg .sol-tools, .sol-fs-panel .sdg .sol-tools { position:static; flex-wrap:wrap; gap:6px; margin:0 0 8px; }
+  .sol-fs-panel .sdg .sol-tools { justify-content:flex-start; padding:0 90px 8px 0; }
+}
+section.sol .sol-table { overflow-x:auto; margin:8px 0; }
+section.sol .sol-table table { margin:0; }
+[hidden] { display:none !important; }

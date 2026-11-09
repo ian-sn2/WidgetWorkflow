@@ -18,6 +18,17 @@ per container; Chromium is already under `/opt/pw-browsers`, so never run
 
 ## What is in this repo
 
+**A second kind of page lives in `solutions/`** since 2026-10-26: detailed
+solutions to past exam questions, with a widget wherever the reasoning is a
+graph, the question restated in our own words with its right choice marked
+and the solution in the open, opening on a menu of card
+buttons for semester, exam and topic, then one question at a time in a box
+with Previous / Next under a Back-to-menu bar. Read
+`docs/exam-solutions-brief.md` before touching one. The toggles are
+`engine/exam-solutions.js` + `.css`, embedded by `embed_engine.py` in place of
+`<!--SOL-SHELL-->`; the graphs are ordinary widgets and every rule below
+applies to them.
+
 ```
 CLAUDE.md                     ← you are here
 README.md                     ← short human-facing overview
@@ -32,6 +43,12 @@ docs/
   open-issues.md              ← bugs, gaps, next steps (checkboxes)
   changelogs/                 ← one changelog per conversion
   archive/                    ← prompt-variant conventions
+solutions/
+  ECO2023-263-Exam1-DetailedSolutions-Full.html ← five semesters of Exam 1, 120 widgets
+  ECO2023-261-Exam3-DetailedSolutions-Full.html ← four semesters of Exam 3, 78 widgets
+  build/                      ← the builders and the widget SHAPE LIBRARY. A new exam reuses these.
+engine/exam-solutions.js, .css  ← the solutions shell (the semester / exam / topic picker)
+docs/exam-solutions-brief.md    ← what a solutions page is and how it is checked
 examples/
   ECO2013-263-SupplyAndDemand.html ← FINISHED OUTPUT (Fall '26, transcript-only, 9 widgets)
   ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html ← FINISHED OUTPUT (Exam 1 ch. 1, 7 widgets)
@@ -364,6 +381,10 @@ economics instead of label placement.
   first clear candidate happened to be there, and outside is where a label
   stops naming its own shape. The fallback is for a sliver; anywhere else,
   centred is the answer and a label that is not centred is a drawing to fix.
+* **Nothing covers a name (v2.69).** The engine cuts every dashed guide
+  around each in-plot label and gives the label a halo, so place labels for
+  the curves and points they must clear, not for the guides; the checker no
+  longer reports a guide against a label (Ian, 2026-11-05).
 * **An area's name is drawn over the curves, so let it be -- and leave the
   box off.** From v2.46 the name goes on top of the lines, which is how the
   printed figures name a deadweight wedge: solid fill, the word straight on
@@ -739,7 +760,7 @@ not enough to reproduce an implementation.
   `embed_engine.py`'s paths reproduce the delivered file byte-for-byte; all 20
   prototype widgets render with no engine errors; `check_file.py` runs the
   geometric label test over 74 labels in the 263 file with no overlaps.
-* **Engine is v2.68** (v2.68 pulls a network node's four times in against the node, 5px out and 1px above or below, after Ian's review of the MAR3203 passes, 2026-10-26; v2.67 adds `axes.years` so a year tick prints without a thousands separator; v2.66 adds the `network` widget: a project network with ES/EF/LS/LF and the critical path revealed by step, AON or AOA, from the MAR3203 project-management chapter, 2026-10-23; v2.65 drops a wrapped quantity title below the tick row on a crossed-axis panel; v2.64 adds `gold` to the palette, `opacity` on an area and a colour on a `moves` arrow, so a UCF figure can be drawn in the school's gold, white and black -- the rejection-region bells, 2026-10-21; v2.63 adds `axes.xmin` and `axes.ymin`, so a plot need not start at the origin -- the GRE scatter starts at 2.8 GPA and 240 points, the profit parabola runs below zero -- from the QMB3200 set, 2026-10-21; v2.60 to v2.62 add a `pipe` node and a vertical `flow` chain, its links headed downward, with brace spans, plain-arrow links and auto-fitted node names, from the MAR3023 channels chapter; a `flow` chain-of-boxes widget, a shield against the host page's own CSS, and `axes.cross` for axes that meet inside the plot, all from the FIN3403 set, v2.57/v2.58; then `flow.cycle` for the circular flow of income, two-way and arrowless links with `plain` nodes for the open-market diagrams, and `table.plain` for a figure's own non-schedule table beside its plot, from the UCF ECO redo of 2026-10-19; the rest below is unchanged). Since v2.6: `areas` shade a polygon (v2.11) with
+* **Engine is v2.69** (v2.69 cuts every dashed guide round each in-plot label, gives those labels a halo and draws names last, so nothing covers a name -- see the engine reference, Ian 2026-11-05; v2.68 pulls a network node's four times in against the node, 5px out and 1px above or below, after Ian's review of the MAR3203 passes, 2026-10-26; v2.67 adds `axes.years` so a year tick prints without a thousands separator; v2.66 adds the `network` widget: a project network with ES/EF/LS/LF and the critical path revealed by step, AON or AOA, from the MAR3203 project-management chapter, 2026-10-23; v2.65 drops a wrapped quantity title below the tick row on a crossed-axis panel; v2.64 adds `gold` to the palette, `opacity` on an area and a colour on a `moves` arrow, so a UCF figure can be drawn in the school's gold, white and black -- the rejection-region bells, 2026-10-21; v2.63 adds `axes.xmin` and `axes.ymin`, so a plot need not start at the origin -- the GRE scatter starts at 2.8 GPA and 240 points, the profit parabola runs below zero -- from the QMB3200 set, 2026-10-21; v2.60 to v2.62 add a `pipe` node and a vertical `flow` chain, its links headed downward, with brace spans, plain-arrow links and auto-fitted node names, from the MAR3023 channels chapter; a `flow` chain-of-boxes widget, a shield against the host page's own CSS, and `axes.cross` for axes that meet inside the plot, all from the FIN3403 set, v2.57/v2.58; then `flow.cycle` for the circular flow of income, two-way and arrowless links with `plain` nodes for the open-market diagrams, and `table.plain` for a figure's own non-schedule table beside its plot, from the UCF ECO redo of 2026-10-19; the rest below is unchanged). Since v2.6: `areas` shade a polygon (v2.11) with
   `edge` to outline it (v2.18) and labels centred on their anchor (v2.13);
   `dot:false` drops a marker but keeps the axis label (v2.12); points take
   `guides:"p"`/`"q"` for one leg of the elbow (v2.14); braces take
@@ -845,7 +866,11 @@ not enough to reproduce an implementation.
   at its own maximum so it never moved (v2.52). A shift arrow's ends are inset
   for the curve's slope, so the head clears the line it points at by 3.5px
   rather than 2.7px on every symbolic preset, and the presets choose a clear
-  arrow height instead of a fixed 88 or 32 (v2.56).
+  arrow height instead of a fixed 88 or 32 (v2.56). Every label inside the
+  plot cuts the dashed guides around itself, carries a halo in the plot's
+  colour, and is drawn above the curves and points (v2.69): Ian asked for
+  names that nothing covers and guides that stop at the text and carry on
+  past it, and `check_file` stopped testing labels against guides with it.
 
 * **PPF works.** The first chapter of Exam 1 material converted to seven widgets
   with no engine gaps hit: frontiers, a combinations table, points on/inside/

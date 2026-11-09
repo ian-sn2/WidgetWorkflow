@@ -1,4 +1,6 @@
-# Engine reference — `engine/sd-graph.js` v2.68
+# Engine reference — `engine/sd-graph.js` v2.69
+
+**v2.69:** nothing covers a name. Dashed guides break round every in-plot label, in-plot labels carry a halo in the plot's colour, and curve and area names are drawn last; see *Labels over the drawing* below (Ian, 2026-11-05).
 
 **v2.68:** a network node's four times sit 5px out from its side and 1px above or below it, rather than 11px and 5px off, so they read as the node's own (Ian, 2026-10-26). Clear the arrows by spreading the nodes, not by moving the times.
 
@@ -812,6 +814,28 @@ now pins `transform`, `position`, `margin`, `padding`, `border` and
 `visibility` on those elements. `check_file.py` cannot see this -- it is a
 render-only defect -- so a widget that looks wrong on a page that has its own
 CSS is a stylesheet collision until proved otherwise.
+
+## Labels over the drawing (v2.69)
+
+Nothing is drawn over a name, and no dashed guide runs through one:
+
+* **Guides break around text.** Every label inside the plot -- a curve's name,
+  an area's name, a point's label, a brace's or price line's tag -- records a
+  box, sized with the same per-character width table the margins and
+  `check_file` use. The panel's dashed guides (the points' elbows and the
+  braces' drop lines) are drawn through an SVG mask with each box cut out, so
+  a guide stops at the text and carries on past it. A cut-out is on screen
+  only on the steps its label is, so no step shows a gap with nothing in it.
+* **A halo on in-plot text.** Those labels take a 3px outline in the plot's
+  own colour (`.knk`), which knocks a curve or a solid line out of the
+  letters it passes under. A boxed label keeps its box instead.
+* **Names go in last.** Curve names and area names are drawn after the
+  points, in their own layer, keeping their curve's or area's step window and
+  `dimAt` fade, so a later curve or a point's guide cannot cover one.
+
+`check_file` no longer tests a label against the dashed guides, since the
+drawing no longer lets them touch. It still tests the axis lines, price
+lines, curves, arrows, points and other labels. (Ian, 2026-11-05.)
 
 ## What the engine does not do
 

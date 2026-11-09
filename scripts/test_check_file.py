@@ -103,9 +103,12 @@ case("two axis values crowded together", lambda r: C.check_labels(widget(
             {"q": 60, "p": 58, "showQ": False}]), r)
     or r.has("WARN", "labels", "crowded"))
 
-case("label pressed against a guide", lambda r: C.check_labels(widget(
+# From engine v2.69 a dashed guide is cut out round every in-plot label, so a
+# label against a guide is no longer a collision on the drawing and must not
+# be reported as one. The solid axis lines and price lines are still tested.
+case("label against a guide is not reported", lambda r: C.check_labels(widget(
     points=[{"q": 50, "p": 50, "label": "E", "dx": -18, "dy": 3}]), r)
-    or r.has("WARN", "labels", "close to the guides"))
+    or not r.has("WARN", "labels", "close to the guides"))
 
 # ---- steps and what is on screen -------------------------------------------
 

@@ -1029,16 +1029,11 @@ def guide_segments(pn, X, Y, ox, oy, ax):
     else:
         out.append(([(ox, 14.0), (ox, oy), (ox + pw + 14, oy)], "the axis lines",
                     (0, None)))
-    for p in pn.get("points") or []:
-        if p.get("guides") is False:
-            continue
-        # v2.14: "p" draws only the leg to the price axis, "q" only the leg to
-        # the quantity axis. Testing the whole elbow either way invents a guide
-        # that is not on the drawing, and misses nothing when it is.
-        elbow = [(ox, Y(p["p"])), (X(p["q"]), Y(p["p"])), (X(p["q"]), oy)]
-        leg = {"p": elbow[:2], "q": elbow[1:]}.get(p.get("guides"), elbow)
-        out.append((leg, "the guides from (%s, %s)" % (p["q"], p["p"]),
-                    (p.get("at", 0), p.get("until"))))
+    # The points' dashed guides are not obstacles for a label any more: from
+    # engine v2.69 every guide is drawn through a mask with each in-plot
+    # label's box cut out of it, so a guide stops at the text and carries on
+    # past it, and nothing in the drawing touches. Testing them reported a
+    # collision the reader cannot see (Ian, 2026-11-05).
     for h in pn.get("hlines") or []:
         out.append(([(ox, Y(h["p"])), (ox + pw + 8, Y(h["p"]))],
                     "the %s price line" % h.get("label", h["p"]),
@@ -1047,12 +1042,8 @@ def guide_segments(pn, X, Y, ox, oy, ax):
         win = (b.get("at", 0), b.get("until"))
         # the engine draws the drop guides for every brace that is not outside
         # the axis -- below:"in" included
-        if b.get("below") is not True:
-            for q in (b.get("q1"), b.get("q2")):
-                if q is None:
-                    continue
-                out.append(([(X(q), Y(b["p"])), (X(q), oy)],
-                            "a guide under the %r brace" % b.get("label"), win))
+        # its drop guides are dashed, so the v2.69 mask cuts them round any
+        # label they would cross, as it does the points' guides
         # the bracket itself
         y, d = brace_y(b, Y, oy)
         x1, x2 = X(min(b["q1"], b["q2"])), X(max(b["q1"], b["q2"]))
