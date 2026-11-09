@@ -49,6 +49,7 @@ CSS = r"""<style>
 .crev .cv-tabs button[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); color:#fff; }
 .crev .cv-read { min-height:2.9em; margin:12px 0 0; padding:6px 10px; border-left:4px solid var(--rule); font-size:.92rem; line-height:1.35; }
 .crev .cv-read b { font-weight:800; }
+.crev .cv-read:empty { border-left-color:transparent; }
 .aside-box .crev { margin:14px 0 4px; max-width:none; }
 .crev .cv-src { font-size:.76rem; color:var(--muted); text-align:right; margin:10px 0 0; }
 .crev svg, .crev svg * { outline:none; }
@@ -346,14 +347,14 @@ def asset_classes():
              ("Commercial real estate", 17.8), ("Corporate and foreign bonds", 16.1), ("Municipal securities", 4.2)]
     D = {"unit": "T", "items": [{"l": l, "v": v, "c": ORANGE_D if l.startswith("Commercial") else GREY,
                                  "n": "Investible CRE only: it leaves out property owned by governments and by companies outside real estate." if l.startswith("Commercial") else ""} for l, v in items],
-         "rest": "<b>Commercial real estate</b> is a large market, about a quarter the size of the stock market. Hover over or tap a bar."}
+         "rest": "<b>Commercial real estate</b> is a large market, about a quarter the size of the stock market."}
     return box("cre-assets", "bars", "U.S. Asset Classes by Market Value", "Year-end 2024, in trillions of dollars (Exhibit 17-1).", D,
                '<div class="cv-rows"></div>\n<div class="cv-read" aria-live="polite"></div>')
 
 def quadrants():
     PE, PD, UE, UD = 9654, 5278, 1461, 1454
     D = {"views": [
-        {"name": "Four quadrants", "rest": "Hover over or tap a slice. <b>Private equity</b> is the largest quadrant by far; the two public quadrants are about 8% each.",
+        {"name": "Four quadrants", "rest": "<b>Private equity</b> is the largest quadrant by far; the two public quadrants are about 8% each.",
          "slices": [{"l": "Public equity", "v": UE, "c": BLUE, "n": "Mostly listed REITs."},
                     {"l": "Private equity", "v": PE, "c": BLUE_D, "n": "The largest category of CRE ownership."},
                     {"l": "Public debt", "v": UD, "c": ORANGE, "n": "CMBS and REIT unsecured debt."},
@@ -372,7 +373,7 @@ def private_split():
     I, N = 2783, 6871; T = I + N; assert T == 9654
     D = {"total": T, "items": [{"l": "Institutional-quality properties", "v": I, "c": BLUE_D, "n": "Pension funds, foreign investors, life insurers, PERE funds, endowments and other large investors."},
                                {"l": "Non-institutional properties", "v": N, "c": BLUE, "n": "Owned mostly by the \"great investor masses\" through local LLC syndications."}],
-         "rest": "Of <b>$9.65 trillion</b> in private CRE equity, less than a third is in institutional-quality property. Hover over or tap a segment."}
+         "rest": "Of <b>$9.65 trillion</b> in private CRE equity, less than a third is in institutional-quality property."}
     segs = (f'<div class="cv-split"><div class="cv-seg" data-i="0" tabindex="0" role="button" style="flex:{I};background:{BLUE_D}">29%</div>'
             f'<div class="cv-seg" data-i="1" tabindex="0" role="button" style="flex:{N};background:{BLUE}">71%</div></div>'
             f'<div class="cv-key"><span style="--c:{BLUE_D}">Institutional quality ($2.78T)</span><span style="--c:{BLUE}">Non-institutional ($6.87T)</span></div>')
@@ -394,7 +395,7 @@ def debt_holders():
     assert sum(v for _, v, g, _ in items if g == "pri") == 5278 and sum(v for _, v, g, _ in items if g == "pub") == 1454
     D = {"unit": "B", "total": 6732, "share": "all CRE debt",
          "items": [{"l": l, "v": v, "g": g, "c": ORANGE_D if g == "pri" else ORANGE, "n": n} for l, v, g, n in items],
-         "rest": "<b>$6.73 trillion</b> of CRE debt: 78% is held privately, 22% trades publicly. Hover over or tap a bar.",
+         "rest": "<b>$6.73 trillion</b> of CRE debt: 78% is held privately, 22% trades publicly.",
          "filters": [{"name": "All holders", "g": ""},
                      {"name": "Private (78%)", "g": "pri", "of": "private CRE debt", "rest": "<b>Private CRE debt: $5.28 trillion.</b> Banks and savings associations hold 57% of it. Each bar shows its share of private debt."},
                      {"name": "Public (22%)", "g": "pub", "of": "public CRE debt", "rest": "<b>Public CRE debt: $1.45 trillion,</b> split almost evenly three ways. Each bar shows its share of public debt."}]}
@@ -429,7 +430,7 @@ def tree():
     strip = (N("Cash", "cash", strip=True) + N("Bonds", "bonds", strip=True) + N("Stocks", "stocks", strip=True)
              + N("Alternatives:", "alts", "cv-plain", strip=True) + N("Commercial real estate", "cre", "hot", strip=True)
              + N("Hedge funds", "hedge", strip=True) + N("Infrastructure", "infra", strip=True))
-    D = {"notes": TREE_NOTES, "rest": "Hover over or tap an asset class above, or any box in the diagram."}
+    D = {"notes": TREE_NOTES, "rest": ""}
     return ('<div class="crev" id="cre-tree" data-kind="tree">\n<p class="cv-title">Where CRE Equity Fits in the Capital Markets</p>\n'
             '<p class="cv-lede">Commercial real estate is an alternative asset class, owned through private or public markets.</p>\n'
             '<div class="cv-classes">Asset classes: ' + strip + '</div>\n'
@@ -486,6 +487,12 @@ def waterfall():
     return ('<div class="crev" id="cre-waterfall">\n<p class="cv-title">A Standard Distribution Waterfall</p>\n<p class="cv-lede">Each tier is paid in full before cash flows to the next.</p>\n'
             f'<div class="cv-steps">{cells}</div>\n</div>')
 
+def split_after(t, sentence, html):
+    """End the paragraph after `sentence`, put `html` there, and carry on the paragraph after it."""
+    assert t.count(sentence) == 1, sentence
+    i = t.index(sentence) + len(sentence); rest = t[i:].lstrip(" ")
+    return t[:i] + "</p>\n\n" + html + "\n\n<p>" + rest
+
 def charts(t):
     t = normal(t)
     first = True
@@ -496,7 +503,7 @@ def charts(t):
         assert i is not None, (what, t.count(anchor))
         j = i + len(anchor) if after else i
         return t[:j] + "\n\n" + block + "\n\n" + t[j:]
-    t = put(t, "because they are not available for investors to purchase.</p>", asset_classes(), "assets")
+    t = split_after(t, "you do need to know the relative size of each asset class.", CSS + "\n" + asset_classes()); first = False
     t = put(t, "<li>8% in publicly traded mortgage debt</li>\n</ul>", quadrants(), "quadrants")
     t = put(t, "are held by vehicles that do not trade on a stock exchange.</p>", tree(), "tree")
     t = put(t, "<h4>Life-Cycle of a Closed-End Fund</h4>", "", "noop") if False else t
