@@ -66,7 +66,7 @@ CSS = r"""<style>
 .crev .cv-v, .crev .cv-p { text-align:right; font-variant-numeric:tabular-nums; }
 .crev .cv-p { color:var(--muted); }
 /* bars */
-.crev .cv-bar { display:grid; grid-template-columns:minmax(0, 13em) 1fr 5.2em; gap:10px; align-items:center; padding:4px 6px; border-radius:6px; font-size:.88rem; cursor:pointer; outline:none; }
+.crev .cv-bar { display:grid; grid-template-columns:minmax(0, 13em) 1fr minmax(5.2em, auto); gap:10px; align-items:center; padding:4px 6px; border-radius:6px; font-size:.88rem; cursor:pointer; outline:none; }
 .crev .cv-bar:hover, .crev .cv-bar.on { background:var(--soft); }
 .crev .cv-bar:focus-visible { box-shadow:0 0 0 2px #2a78d6 inset; }
 .crev .cv-bar .cv-l { line-height:1.25; }
@@ -74,6 +74,7 @@ CSS = r"""<style>
 .crev .cv-bar .cv-fill { height:100%; border-radius:0 4px 4px 0; min-width:3px; transition:opacity .15s; }
 .crev.has-on .cv-bar:not(.on) .cv-fill { opacity:.3; }
 .crev .cv-bar.hide { display:none; }
+.crev .cv-sh { display:inline-block; min-width:2.6em; margin-left:6px; padding:1px 6px; border-radius:999px; background:var(--soft); color:var(--ink); font-weight:700; font-size:.8rem; text-align:center; }
 .crev .cv-key { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; font-size:.82rem; color:var(--muted); margin:8px 0 0; }
 .crev .cv-key span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; background:var(--c); vertical-align:-1px; }
 /* split bar */
@@ -154,7 +155,7 @@ CSS = r"""<style>
   .crev .cv-body { flex-direction:column; gap:10px; }
   .crev .cv-pie { width:76%; flex-basis:auto; }
   .crev .cv-side { width:100%; }
-  .crev .cv-bar { grid-template-columns:minmax(0, 8.5em) 1fr 4.6em; font-size:.82rem; }
+  .crev .cv-bar { grid-template-columns:minmax(0, 8.5em) 1fr minmax(4.6em, auto); font-size:.82rem; }
   .crev .cv-steps { grid-template-columns:1fr; }
   .crev .cv-rung { margin-left:0; }
   .crev .cv-axis span { font-size:.68rem; }
@@ -237,22 +238,28 @@ RUNTIME = r"""<script>
   }
   function bars(root, D) {
     var box = root.querySelector('.cv-rows'), read = root.querySelector('.cv-read'), tabs = root.querySelector('.cv-tabs');
-    var tot = D.total || D.items.reduce(function (s, x) { return s + x.v; }, 0), rest = D.rest;
+    var tot = D.total || D.items.reduce(function (s, x) { return s + x.v; }, 0), rest = D.rest, grp = null;   // grp: the filter showing, if any
+    function share(v, t) { var s = 100 * v / t; return s >= 1 ? Math.round(s) + '%' : '<1%'; }
     D.items.forEach(function (x, i) {
       var row = document.createElement('div'); row.className = 'cv-bar'; row.dataset.i = i; row.dataset.g = x.g || ''; row.tabIndex = 0; row.setAttribute('role', 'button');
       var val = D.unit === 'T' ? '$' + x.v.toFixed(1) + 'T' : '$' + x.v.toLocaleString('en-US') + 'B';
       row.setAttribute('aria-label', x.l + ': ' + val);
-      row.innerHTML = '<span class="cv-l">' + x.l + '</span><span class="cv-track"><span class="cv-fill" style="display:block;background:' + x.c + '"></span></span><span class="cv-v">' + val + '</span>';
+      row.innerHTML = '<span class="cv-l">' + x.l + '</span><span class="cv-track"><span class="cv-fill" style="display:block;background:' + x.c + '"></span></span><span class="cv-v" data-val="' + val + '">' + val + '</span>';
       box.appendChild(row);
     });
     function show(i) {
       mark(root, i);
       if (i === null) { read.innerHTML = rest; read.style.borderLeftColor = ''; return; }
-      var x = D.items[i]; read.innerHTML = '<b>' + x.l + '</b>: ' + (D.unit === 'T' ? fmtT(x.v) : fmtB(x.v)) + (D.share ? ', ' + pct(x.v, tot) + ' of ' + D.share : '') + '. ' + (x.n || ''); read.style.borderLeftColor = x.c;
+      var x = D.items[i], of = grp ? share(x.v, grp.t) + ' of ' + grp.of : (D.share ? pct(x.v, tot) + ' of ' + D.share : '');
+      read.innerHTML = '<b>' + x.l + '</b>: ' + (D.unit === 'T' ? fmtT(x.v) : fmtB(x.v)) + (of ? ', ' + of : '') + '. ' + (x.n || ''); read.style.borderLeftColor = x.c;
     }
     function scale() {   // each bar against the longest one showing, so a filtered view uses the full width
       var rows = Array.prototype.slice.call(box.querySelectorAll('.cv-bar:not(.hide)')), max = Math.max.apply(null, rows.map(function (r) { return D.items[+r.dataset.i].v; }));
-      rows.forEach(function (r) { r.querySelector('.cv-fill').style.width = (100 * D.items[+r.dataset.i].v / max).toFixed(1) + '%'; });
+      rows.forEach(function (r) {
+        var v = D.items[+r.dataset.i].v, cell = r.querySelector('.cv-v');
+        r.querySelector('.cv-fill').style.width = (100 * v / max).toFixed(1) + '%';
+        cell.innerHTML = cell.dataset.val + (grp ? ' <span class="cv-sh">' + share(v, grp.t) + '</span>' : '');   // in a filtered view, the share of that group
+      });
     }
     scale();
     var reset = wire(root, Array.prototype.slice.call(box.children), show); show(null);
@@ -262,7 +269,9 @@ RUNTIME = r"""<script>
         b.addEventListener('click', function () {
           tabs.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
           box.querySelectorAll('.cv-bar').forEach(function (r) { r.classList.toggle('hide', !!f.g && r.dataset.g !== f.g); });
-          rest = f.rest || D.rest; scale(); reset(); show(null);
+          rest = f.rest || D.rest;
+          grp = f.g ? { of: f.of, t: D.items.filter(function (x) { return x.g === f.g; }).reduce(function (s, x) { return s + x.v; }, 0) } : null;
+          scale(); reset(); show(null);
         });
         tabs.appendChild(b);
       });
@@ -348,8 +357,8 @@ def debt_holders():
          "items": [{"l": l, "v": v, "g": g, "c": ORANGE_D if g == "pri" else ORANGE, "n": n} for l, v, g, n in items],
          "rest": "<b>$6.73 trillion</b> of CRE debt: 78% is held privately, 22% trades publicly. Hover over or tap a bar.",
          "filters": [{"name": "All holders", "g": ""},
-                     {"name": "Private (78%)", "g": "pri", "rest": "<b>Private CRE debt: $5.28 trillion.</b> Banks and savings associations hold 57% of it."},
-                     {"name": "Public (22%)", "g": "pub", "rest": "<b>Public CRE debt: $1.45 trillion.</b> CMBS make up about two-thirds; REIT unsecured bonds the rest."}]}
+                     {"name": "Private (78%)", "g": "pri", "of": "private CRE debt", "rest": "<b>Private CRE debt: $5.28 trillion.</b> Banks and savings associations hold 57% of it. Each bar shows its share of private debt."},
+                     {"name": "Public (22%)", "g": "pub", "of": "public CRE debt", "rest": "<b>Public CRE debt: $1.45 trillion,</b> split almost evenly three ways. Each bar shows its share of public debt."}]}
     key = f'<div class="cv-key"><span style="--c:{ORANGE_D}">Privately held</span><span style="--c:{ORANGE}">Publicly traded</span></div>'
     return box("cre-debt", "bars", "Who Holds U.S. Commercial Real Estate Debt?", "Investment holdings, not loan originations; year-end 2024, in billions of dollars (Exhibit 17-4).", D,
                '<div class="cv-tabs" role="group" aria-label="Filter"></div>\n<div class="cv-rows"></div>\n' + key + '\n<div class="cv-read" aria-live="polite"></div>')
