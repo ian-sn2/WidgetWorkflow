@@ -80,11 +80,27 @@ CSS = r"""<style>
 .crev .cv-split { display:flex; gap:2px; height:56px; border-radius:6px; overflow:hidden; }
 .crev .cv-seg { display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:.95rem; cursor:pointer; outline:none; transition:opacity .15s; text-align:center; line-height:1.2; padding:0 6px; }
 .crev.has-on .cv-seg:not(.on) { opacity:.35; }
+/* timeline */
+.crev .cv-tl { position:relative; margin:4px 4px 0; font-size:.82rem; }
+.crev .cv-tl-row { position:relative; height:1.5em; }
+.crev .cv-tl-lab { position:absolute; top:0; white-space:nowrap; color:var(--muted); }
+.crev .cv-tl-lab b { color:var(--ink); font-weight:800; margin-right:4px; }
+.crev .cv-tl-lab.cv-r { left:auto; }
+.crev .cv-tl-bar { position:relative; height:26px; margin:4px 0; }
+.crev .cv-tl-seg { position:absolute; top:0; bottom:0; border-radius:4px; border-right:2px solid #fff; }
+.crev .cv-tl-ext { background:repeating-linear-gradient(135deg, #c9d6e8 0 6px, #eef3fa 6px 12px); border:1px dashed #9fb6d6; }
+.crev .cv-tl-end { position:absolute; top:-6px; bottom:-6px; border-left:2px dashed #b8400f; border-right:2px dashed #b8400f; background:rgba(184,64,15,.07); pointer-events:none; }
+.crev .cv-tl-ticks { position:relative; height:1.3em; border-top:1px solid var(--rule); margin-top:6px; }
+.crev .cv-tl-tick { position:absolute; top:3px; transform:translateX(-50%); font-size:.74rem; color:var(--muted); font-variant-numeric:tabular-nums; }
+.crev .cv-tl-tick:first-child { transform:none; }
+.crev .cv-tl-tick:last-child { transform:translateX(-100%); }
+.crev .cv-tl-axis { text-align:center; font-size:.74rem; color:var(--muted); margin-top:2px; }
 /* risk ladder */
 .crev .cv-ladder { display:flex; gap:14px; align-items:stretch; }
-.crev .cv-axis { flex:0 0 26px; position:relative; border-radius:13px; background:linear-gradient(to top, #cfe0f7, #1d4f94); }
-.crev .cv-axis::before { content:""; position:absolute; top:-10px; left:50%; transform:translateX(-50%); border:8px solid transparent; border-bottom:10px solid #1d4f94; border-top:0; }
-.crev .cv-axis span { position:absolute; left:50%; top:50%; transform:translate(-50%, -50%) rotate(-90deg); white-space:nowrap; font-size:.72rem; font-weight:700; color:#fff; text-align:center; line-height:1.15; }
+.crev .cv-axis { flex:0 0 30px; position:relative; }
+.crev .cv-axis::after { content:""; position:absolute; left:50%; top:8px; bottom:0; width:4px; transform:translateX(-50%); border-radius:2px; background:linear-gradient(to top, #e3edfb, #9ec0ee); }
+.crev .cv-axis::before { content:""; position:absolute; top:0; left:50%; transform:translateX(-50%); border:7px solid transparent; border-bottom:10px solid #9ec0ee; border-top:0; }
+.crev .cv-axis span { position:absolute; left:50%; top:50%; transform:translate(-50%, -50%) rotate(-90deg); white-space:nowrap; font-size:.74rem; font-weight:700; color:var(--muted); text-align:center; line-height:1.15; background:#fff; padding:2px 6px; z-index:1; }
 .crev .cv-rungs { flex:1 1 auto; display:flex; flex-direction:column; gap:8px; }
 .crev .cv-rung { display:grid; grid-template-columns:14px 1fr; gap:10px; align-items:start; margin-left:calc(var(--k) * 6%); padding:8px 12px; border-radius:8px; background:var(--soft); border-left:4px solid var(--c); font-size:.88rem; line-height:1.35; }
 .crev .cv-dot { width:12px; height:12px; border-radius:50%; background:var(--c); margin-top:4px; }
@@ -92,13 +108,36 @@ CSS = r"""<style>
 .crev .cv-desc { color:var(--muted); }
 /* static figures */
 .crev .cv-fig { width:100%; height:auto; display:block; }
-.crev .cv-tree { font-size:.86rem; }
-.crev .cv-tree ul { list-style:none; margin:0; padding:0 0 0 22px; position:relative; }
-.crev .cv-tree > ul { padding-left:0; }
-.crev .cv-tree li { position:relative; padding:4px 0 4px 0; }
-.crev .cv-tree ul ul li::before { content:""; position:absolute; left:-14px; top:0; bottom:0; border-left:2px solid var(--rule); }
-.crev .cv-tree ul ul li:last-child::before { bottom:auto; height:18px; }
-.crev .cv-tree ul ul li::after { content:""; position:absolute; left:-14px; top:18px; width:12px; border-top:2px solid var(--rule); }
+.crev .cv-classes { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:0 0 12px; font-size:.84rem; color:var(--muted); }
+.crev .cv-classes .cv-node { font-size:.78rem; padding:2px 8px; }
+.crev .cv-classes .cv-plain { font-weight:700; color:var(--ink); }
+.crev .cv-tree { font-size:.84rem; }
+.crev .cv-tree ul { list-style:none; margin:0; padding:0; position:relative; }
+.crev .cv-tree li { position:relative; }
+.crev .cv-node { line-height:1.2; }
+@media (min-width:800px) {   /* left to right: each level a column, joined by a spine */
+  .crev .cv-tree { overflow-x:auto; }
+  .crev .cv-tree ul { display:flex; flex-direction:column; justify-content:center; gap:6px; padding-left:28px; }
+  .crev .cv-tree > ul { padding-left:0; }
+  .crev .cv-tree li { display:flex; align-items:center; padding-left:14px; }
+  .crev .cv-tree > ul > li { padding-left:0; }
+  .crev .cv-tree .cv-node { white-space:nowrap; padding:4px 9px; font-size:.8rem; }
+  .crev .cv-tree ul { padding-left:24px; }
+  .crev .cv-tree > ul { padding-left:0; }
+  .crev .cv-tree ul ul::before { content:""; position:absolute; left:0; top:50%; width:14px; border-top:2px solid var(--rule); }
+  .crev .cv-tree ul ul > li::before { content:""; position:absolute; left:0; top:-3px; bottom:-3px; border-left:2px solid var(--rule); }
+  .crev .cv-tree ul ul > li:first-child::before { top:50%; }
+  .crev .cv-tree ul ul > li:last-child::before { bottom:50%; }
+  .crev .cv-tree ul ul > li:only-child::before { display:none; }
+  .crev .cv-tree ul ul > li::after { content:""; position:absolute; left:0; top:50%; width:14px; border-top:2px solid var(--rule); }
+}
+@media (max-width:799px) {   /* stacked: indented, joined on the left */
+  .crev .cv-tree ul ul { padding-left:22px; }
+  .crev .cv-tree li { padding:4px 0; }
+  .crev .cv-tree ul ul li::before { content:""; position:absolute; left:-14px; top:0; bottom:0; border-left:2px solid var(--rule); }
+  .crev .cv-tree ul ul li:last-child::before { bottom:auto; height:18px; }
+  .crev .cv-tree ul ul li::after { content:""; position:absolute; left:-14px; top:18px; width:12px; border-top:2px solid var(--rule); }
+}
 .crev .cv-node { display:inline-block; padding:4px 10px; border-radius:6px; background:var(--soft); border:1px solid var(--rule); font-weight:600; }
 .crev .cv-node.hot { background:#1d4f94; border-color:#1d4f94; color:#fff; }
 .crev .cv-node.warm { background:#e3edfb; border-color:#9ec0ee; }
@@ -118,7 +157,13 @@ CSS = r"""<style>
   .crev .cv-bar { grid-template-columns:minmax(0, 8.5em) 1fr 4.6em; font-size:.82rem; }
   .crev .cv-steps { grid-template-columns:1fr; }
   .crev .cv-rung { margin-left:0; }
-  .crev .cv-axis span { font-size:.66rem; }
+  .crev .cv-axis span { font-size:.68rem; }
+  .crev .cv-tl-lab { font-size:.74rem; }
+  .crev .cv-tl-lab b { display:block; margin:0; }
+  .crev .cv-tl-lab .cv-x { display:none; }
+  .crev .cv-tl-lab.cv-harv { left:auto !important; right:0; text-align:right; }
+  .crev .cv-tl-lab.cv-r { text-align:right; }
+  .crev .cv-tl-row { height:2.7em; }
   .crev .cv-row, .crev .cv-bar { min-height:36px; }
 }
 @media (prefers-reduced-motion: reduce) { .crev * { transition:none !important; } }
@@ -192,19 +237,24 @@ RUNTIME = r"""<script>
   }
   function bars(root, D) {
     var box = root.querySelector('.cv-rows'), read = root.querySelector('.cv-read'), tabs = root.querySelector('.cv-tabs');
-    var max = Math.max.apply(null, D.items.map(function (x) { return x.v; })), tot = D.total || D.items.reduce(function (s, x) { return s + x.v; }, 0);
+    var tot = D.total || D.items.reduce(function (s, x) { return s + x.v; }, 0), rest = D.rest;
     D.items.forEach(function (x, i) {
       var row = document.createElement('div'); row.className = 'cv-bar'; row.dataset.i = i; row.dataset.g = x.g || ''; row.tabIndex = 0; row.setAttribute('role', 'button');
       var val = D.unit === 'T' ? '$' + x.v.toFixed(1) + 'T' : '$' + x.v.toLocaleString('en-US') + 'B';
       row.setAttribute('aria-label', x.l + ': ' + val);
-      row.innerHTML = '<span class="cv-l">' + x.l + '</span><span class="cv-track"><span class="cv-fill" style="display:block;width:' + (100 * x.v / max).toFixed(1) + '%;background:' + x.c + '"></span></span><span class="cv-v">' + val + '</span>';
+      row.innerHTML = '<span class="cv-l">' + x.l + '</span><span class="cv-track"><span class="cv-fill" style="display:block;background:' + x.c + '"></span></span><span class="cv-v">' + val + '</span>';
       box.appendChild(row);
     });
     function show(i) {
       mark(root, i);
-      if (i === null) { read.innerHTML = D.rest; read.style.borderLeftColor = ''; return; }
+      if (i === null) { read.innerHTML = rest; read.style.borderLeftColor = ''; return; }
       var x = D.items[i]; read.innerHTML = '<b>' + x.l + '</b>: ' + (D.unit === 'T' ? fmtT(x.v) : fmtB(x.v)) + (D.share ? ', ' + pct(x.v, tot) + ' of ' + D.share : '') + '. ' + (x.n || ''); read.style.borderLeftColor = x.c;
     }
+    function scale() {   // each bar against the longest one showing, so a filtered view uses the full width
+      var rows = Array.prototype.slice.call(box.querySelectorAll('.cv-bar:not(.hide)')), max = Math.max.apply(null, rows.map(function (r) { return D.items[+r.dataset.i].v; }));
+      rows.forEach(function (r) { r.querySelector('.cv-fill').style.width = (100 * D.items[+r.dataset.i].v / max).toFixed(1) + '%'; });
+    }
+    scale();
     var reset = wire(root, Array.prototype.slice.call(box.children), show); show(null);
     if (D.filters) {
       D.filters.forEach(function (f, k) {
@@ -212,7 +262,7 @@ RUNTIME = r"""<script>
         b.addEventListener('click', function () {
           tabs.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
           box.querySelectorAll('.cv-bar').forEach(function (r) { r.classList.toggle('hide', !!f.g && r.dataset.g !== f.g); });
-          reset(); show(null); if (f.rest) read.innerHTML = f.rest;
+          rest = f.rest || D.rest; scale(); reset(); show(null);
         });
         tabs.appendChild(b);
       });
@@ -305,20 +355,19 @@ def debt_holders():
                '<div class="cv-tabs" role="group" aria-label="Filter"></div>\n<div class="cv-rows"></div>\n' + key + '\n<div class="cv-read" aria-live="polite"></div>')
 
 def tree():
+    """The other asset classes as one line; commercial real estate's routes as a tree that reads left to right."""
+    N = lambda s, c="": f'<span class="cv-node {c}">{s}</span>'
     return ('<div class="crev" id="cre-tree">\n<p class="cv-title">Where CRE Equity Fits in the Capital Markets</p>\n'
-            '<p class="cv-lede">Commercial real estate is an alternative asset class, owned through private or public markets.</p>\n<div class="cv-tree"><ul>'
-            '<li><span class="cv-node">Cash</span> <span class="cv-node">Bonds</span> <span class="cv-node">Stocks</span></li>'
-            '<li><span class="cv-node">Alternatives</span><ul>'
-            '<li><span class="cv-node hot">Commercial real estate</span><ul>'
-            '<li><span class="cv-node warm">Private market <small>(85% to 90% of CRE equity)</small></span><ul>'
-            '<li><span class="cv-node">Direct investment</span></li>'
-            '<li><span class="cv-node">Through intermediaries</span><ul>'
-            '<li><span class="cv-node">JVs, LLCs, etc.</span></li>'
-            '<li><span class="cv-node">PERE funds</span><ul><li><span class="cv-node">Open-end funds</span></li><li><span class="cv-node">Closed-end funds</span></li></ul></li>'
+            '<p class="cv-lede">Commercial real estate is an alternative asset class, owned through private or public markets.</p>\n'
+            '<div class="cv-classes">Asset classes: ' + N("Cash") + N("Bonds") + N("Stocks") + '<span class="cv-plain">Alternatives:</span>' + N("Commercial real estate", "hot") + N("Hedge funds") + N("Infrastructure") + '</div>\n'
+            '<div class="cv-tree"><ul><li>' + N("Commercial<br>real estate", "hot wrap") + '<ul>'
+            '<li>' + N("Private market<br><small>85% to 90% of CRE equity</small>", "warm wrap") + '<ul>'
+            '<li>' + N("Direct investment") + '</li>'
+            '<li>' + N("Through<br>intermediaries", "wrap") + '<ul>'
+            '<li>' + N("JVs, LLCs, etc.") + '</li>'
+            '<li>' + N("PERE funds") + '<ul><li>' + N("Open-end funds") + '</li><li>' + N("Closed-end funds") + '</li></ul></li>'
             '</ul></li></ul></li>'
-            '<li><span class="cv-node warm">Public market</span><ul><li><span class="cv-node">Listed REITs</span></li></ul></li>'
-            '</ul></li>'
-            '<li><span class="cv-node">Hedge funds</span></li><li><span class="cv-node">Infrastructure</span></li>'
+            '<li>' + N("Public market", "warm") + '<ul><li>' + N("Listed REITs") + '</li></ul></li>'
             '</ul></li></ul></div>\n</div>')
 
 def risk_return():
@@ -333,12 +382,24 @@ def risk_return():
             f'<div class="cv-ladder"><div class="cv-axis"><span>More risk,<br>higher expected return</span></div><div class="cv-rungs">{rows}</div></div>\n</div>')
 
 def lifecycle():
-    phases = [("Fundraising", "about 1 year", "Investors commit capital between the first and final close.", "#5b6474", 1),
-              ("Investment period", "often 2 to 3 years", "The manager issues capital calls and buys assets.", "#2f6fbf", 2.5),
-              ("Harvesting period", "to the end of the fund's life", "Assets are operated, improved and sold; capital goes back to investors.", BLUE_D, 5)]
-    cells = "".join(f'<div class="cv-step" style="border-top:4px solid {c}"><b>{n}</b><span style="color:#5b6474;font-size:.82rem">{d}</span><br>{t}</div>' for n, d, t, c, _ in phases)
-    return ('<div class="crev" id="cre-life">\n<p class="cv-title">Life Cycle of a Closed-End PERE Fund</p>\n<p class="cv-lede">A finite life of 7 to 10 years, which the manager may extend by a year or two.</p>\n'
-            f'<div class="cv-steps">{cells}</div>\n</div>')
+    """The box above it already says what each phase is; the figure shows what the text cannot, the phases to
+    scale against the fund's life. Years 0 to 12: fundraising 0-1, investment 1-3.5 (often 2 to 3 years), harvesting
+    to the end of a 7- to 10-year life, then a possible 1- to 2-year extension."""
+    Y = 12; at = lambda y: f"{100 * y / Y:.2f}%"
+    segs = (f'<div class="cv-tl-seg" style="left:0;width:{at(1)};background:#5b6474"></div>'
+            f'<div class="cv-tl-seg" style="left:{at(1)};width:{at(2.5)};background:#2f6fbf"></div>'
+            f'<div class="cv-tl-seg" style="left:{at(3.5)};width:{at(6.5)};background:linear-gradient(to right, {BLUE_D} 55%, #9fb6d6)"></div>'
+            f'<div class="cv-tl-seg cv-tl-ext" style="left:{at(10)};width:{at(2)}"></div>'
+            f'<div class="cv-tl-end" style="left:{at(7)};width:{at(3)}"></div>')
+    above = (f'<span class="cv-tl-lab" style="left:0"><b>Fundraising</b> 1 yr</span>'
+             f'<span class="cv-tl-lab cv-harv" style="left:{at(3.5)}"><b>Harvesting</b> <span class="cv-x">operate, improve, </span>sell</span>')
+    below = (f'<span class="cv-tl-lab" style="left:{at(1)}"><b>Investment</b> 2 to 3 yrs<span class="cv-x">, capital calls</span></span>'
+             f'<span class="cv-tl-lab cv-r" style="right:0">+1 to 2 yr<span class="cv-x"> extension</span></span>')
+    ticks = "".join(f'<span class="cv-tl-tick" style="left:{at(y)}">{y}</span>' for y in range(0, Y + 1, 2))
+    return ('<div class="crev" id="cre-life">\n<p class="cv-title">Life Cycle of a Closed-End PERE Fund, to Scale</p>\n'
+            '<p class="cv-lede">The fund must wind down within 7 to 10 years (shaded); the manager may extend it by a year or two.</p>\n'
+            f'<div class="cv-tl"><div class="cv-tl-row cv-tl-above">{above}</div><div class="cv-tl-bar">{segs}</div>'
+            f'<div class="cv-tl-row cv-tl-below">{below}</div><div class="cv-tl-ticks">{ticks}</div><div class="cv-tl-axis">Years from launch (approximate)</div></div>\n</div>')
 
 def waterfall():
     steps = [("1", "Return of capital", "100% of distributable cash goes to the limited partners until their contributed equity is returned.", [("LPs 100%", 1, BLUE_D)]),
