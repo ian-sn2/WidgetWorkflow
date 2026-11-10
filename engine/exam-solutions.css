@@ -191,6 +191,14 @@ body.sol-fs-open { overflow:hidden; }
   section.sol .sdg .mx-head, section.sol .sdg .mx-rowp, .sol-fs-panel .sdg .mx-head, .sol-fs-panel .sdg .mx-rowp { white-space:normal; padding-left:4px; padding-right:6px; }
   section.sol .sdg .mx-cell, .sol-fs-panel .sdg .mx-cell { padding:6px 4px; }
 }
+/* At 320px wrapping alone left the games 25-30px over: "WALMART" is a 95px
+   column at full size. The grid's type steps down a size there. */
+@media (max-width:380px){
+  section.sol .sdg .mx-player { font-size:.78rem; padding:2px 4px; letter-spacing:0; }
+  section.sol .sdg .mx-head, section.sol .sdg .mx-rowp { font-size:.8rem; }
+  section.sol .sdg .mx-cell .ln { font-size:.78rem; padding:1px 2px; }
+  section.sol .sdg .mx-cell { padding:4px 2px; }
+}
 /* A displayed equation wider than the column scrolls inside its own box
    instead of the page: Exam 1's 840px opportunity-cost line scrolled a phone
    sideways and zoomed the whole page out (2026-11-09, mobile_check). */

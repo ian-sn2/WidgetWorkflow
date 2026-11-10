@@ -98,4 +98,4 @@ as Exam 1 (`docs/exam-solutions-brief.md`).
 * **Fewer crowded labels (2026-11-10, 11 warnings to 3, none of them labels).** Reviewed before and after at https://claude.ai/artifact/67PHRHXYdYEsFk1oxf9Rna. Seven widgets changed:
   - **Natural-monopoly regulation** (three widgets): the dot at the loss's top corner no longer carries its own "ATC", which sat a few pixels from the ATC curve's name.
   - **The PPF points** (three) and **who pays a tax** (one) take the Exam 1 shapes' fixes.
-* **On a phone (2026-11-10).** The payoff tables wrap their strategy names instead of running 14 to 43px past the screen. The buttons are 44px, the graph fills the column, and three wide inline equations in Spring 2020 Q24 scroll in their own box.
+* **On a phone (2026-11-10).** The payoff tables wrap their strategy names instead of running 14 to 43px past the screen, and at 320px their type steps down a size so the grid fits. The buttons are 44px, the graph fills the column, and three wide inline equations in Spring 2020 Q24 scroll in their own box.
