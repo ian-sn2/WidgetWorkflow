@@ -2467,6 +2467,10 @@ body.sol-fs-open { overflow:hidden; }
   section.sol .sdg .sol-tools, .sol-fs-panel .sdg .sol-tools { position:static; flex-wrap:wrap; gap:6px; margin:0 0 8px; }
   .sol-fs-panel .sdg .sol-tools { justify-content:flex-start; padding:0 90px 8px 0; }
 }
+/* A displayed equation wider than the column scrolls inside its own box
+   instead of the page: Exam 1's 840px opportunity-cost line scrolled a phone
+   sideways and zoomed the whole page out (2026-11-09, mobile_check). */
+section.sol mjx-container[display="true"] { display:block; max-width:100%; overflow-x:auto; overflow-y:hidden; }
 section.sol .sol-table { overflow-x:auto; margin:8px 0; }
 section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
