@@ -187,6 +187,17 @@ def floor_labor(title, lede, steps):
             "braces": [{"p": pf, "q1": qd, "q2": qs, "label": "Unemployment", "at": 2}],
             "steps": steps}
 
+def p1_by_dot(pn, i=0, **at):
+    """Name a panel's equilibrium P₁ beside its dot instead of on the price
+    axis, where a price a few units away would crowd it. `pl` goes as well
+    as `showP`: the engine prints a point's `pl` on the axis whatever `showP`
+    says, which is how the first version of this drew P₁ twice. Its
+    horizontal guide goes too, since it would end at a blank spot on the
+    axis (CLAUDE.md: a guide needs a number at its foot)."""
+    pt = pn["points"][i]; pt.pop("pl", None)
+    pt.update({"showP": False, "label": "P₁", "guides": "q"}, **at)
+    return pn
+
 def tax(title, lede, steps, scenarios=True, t=30):
     """A tax on sellers shifts S up by t. With scenarios, an inelastic (steep)
     and an elastic (flat) demand curve, same tax, so the split is seen."""
@@ -209,25 +220,28 @@ def tax(title, lede, steps, scenarios=True, t=30):
     steep = [[30, 100], [70, 8]]       # slope -2.3 through (50, 50)
     flat = [[8, 60.5], [100, 37.5]]    # slope -1/4 through (50, 50)
     for D in (steep, flat): assert abs(cross(D, S_pts())[0] - 50) < 1.5
-    el = panel(flat, "D")
-    # On the flat curve the buyers' price barely moves, so P₁ and Pᵇ would
-    # share the axis: P₁ is named beside its dot instead.
-    el["points"][0].update({"showP": False, "label": "P₁", "dx": 12, "dy": 18})
-    base["scenarios"] = {"in": dict({"label": "Inelastic demand (steep)"}, **panel(steep, "D")),
+    # Whichever side bears less of the tax has its price close to P₁ -- the
+    # sellers' on the steep curve, the buyers' on the flat one -- so the two
+    # would crowd the price axis. P₁ is named beside its dot instead.
+    st = p1_by_dot(panel(steep, "D"), dx=10, dy=4)
+    el = p1_by_dot(panel(flat, "D"), dx=12, dy=18)
+    base["scenarios"] = {"in": dict({"label": "Inelastic demand (steep)"}, **st),
                          "el": dict({"label": "Elastic demand (flat)"}, **el)}
     return base
 
 def subsidy(title, lede, steps, s=20):
     S1 = S_pts(); S2 = [[8 + s, 8], [100, 100 - s]]         # p = q - s
     e2 = cross(D_pts(), S2); q2, pc = e2; pp = pc + s
-    return {"title": title, "lede": lede, "axes": {"xmax": 110, "ymax": 110},
+    # P₁ sits between Pᶜ and Pᵖ, a few units from each, so it is named
+    # beside its dot rather than on the crowded axis.
+    return p1_by_dot({"title": title, "lede": lede, "axes": {"xmax": 110, "ymax": 110},
             "curves": [{"id": "D", "label": "D", "pts": D_pts(), **D_label()}, {"id": "S1", "label": "S", "pts": S1},
                        {"id": "S2", "label": "S − subsidy", "pts": S2, "color": "red", "from": "S1", "at": 1, "arrowP": 30, "dimAt": 2}],
             "points": [{"q": 50, "p": 50, "pl": "P₁", "ql": "Q₁"},
                        {"q": q2, "p": pc, "pl": "Pᶜ", "ql": "Q₂", "color": "red", "at": 2},
                        {"q": q2, "p": pp, "pl": "Pᵖ", "guides": "p", "showQ": False, "at": 2}],
             "vbraces": [{"p1": pc, "p2": pp, "q": q2, "label": "Subsidy", "at": 2}],
-            "steps": steps}
+            "steps": steps}, dx=10, dy=4)
 
 def quota(title, lede, steps, qq=30, binding=True):
     if not binding:
@@ -324,7 +338,10 @@ def steep_vs_flat(title, lede, steps):
                            {"id": "S2", "label": "S₂", "pts": S_pts(-24), "color": "red", "from": "S1", "at": 1, "arrowP": 88}],
                 "points": [{"q": e1[0], "p": e1[1], "pl": "P₁", "ql": "Q₁"}, {"q": e2[0], "p": e2[1], "pl": "P₂", "ql": "Q₂", "color": "red", "at": 2}]}
     return {"title": title, "lede": lede, "axes": {"xmax": 110, "ymax": 110}, "steps": steps,
-            "scenarios": {"in": sc("Inelastic demand (steep)", steep), "el": sc("Elastic demand (flat)", flat)}}
+            # On the flat curve the price barely rises, so P₁ and P₂ would
+            # share the axis: P₁ is named beside its dot.
+            "scenarios": {"in": sc("Inelastic demand (steep)", steep),
+                          "el": p1_by_dot(sc("Elastic demand (flat)", flat), dx=10, dy=16)}}
 
 def tr_test(title, lede, steps):
     return {"title": title, "lede": lede, "link": False, "panels": [
@@ -464,7 +481,7 @@ def ppf_points(title, lede, caption):
             "curves": [{"id": "PPF", "label": "PPF", "pts": [[0, 100], [30, 94], [60, 78], [85, 48], [100, 0]], "curved": True, "ldx": 6, "ldy": -6}],
             "points": [{"q": 35, "p": 40, "label": "Attainable,\ninefficient", "dx": 10, "dy": 4, "guides": False, "showP": False, "showQ": False},
                        {"q": 60, "p": 78, "label": "On the frontier", "dx": 10, "dy": 4, "guides": False, "showP": False, "showQ": False},
-                       {"q": 85, "p": 85, "label": "Unattainable", "dx": 10, "dy": 4, "guides": False, "showP": False, "showQ": False}],
+                       {"q": 92, "p": 90, "label": "Unattainable", "dx": 10, "dy": 4, "guides": False, "showP": False, "showQ": False}],
             "caption": caption}
 
 def ppf_bowed(xname, yname, title, lede, steps):

@@ -44,5 +44,17 @@ geometry and take a few minutes over 78 widgets.
 
 ```
 python3 -I solutions/build/build_solutions.py <upload> solutions/ECO2023-263-Exam1-DetailedSolutions-Full.html
+python3 scripts/place_labels.py solutions/ECO2023-263-Exam1-DetailedSolutions-Full.html --apply
 python3 scripts/embed_engine.py solutions/ECO2023-263-Exam1-DetailedSolutions-Full.html
 ```
+
+`place_labels.py` only moves an area label that collides with something,
+so it leaves the rest of the page as the builder wrote it (2026-11-10). The
+builder reproduces the committed page byte for byte without it.
+
+**Exam 3 does not rebuild to the committed page.** Run end to end, its two
+placers now choose differently on a few widgets than they did on
+2026-11-05, because the checker they score against stopped testing labels
+against guides at v2.69. So a change to an Exam 3 shape is applied to the
+committed page widget by widget rather than by rebuilding, and its diff
+should touch only the widgets that shape draws.

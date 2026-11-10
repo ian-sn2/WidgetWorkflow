@@ -94,3 +94,8 @@ as Exam 1 (`docs/exam-solutions-brief.md`).
 * **Labels nothing covers (engine v2.57, 2026-11-05).** Every dashed guide is cut out around each label inside the plot and carries on past it, every in-plot label has a halo in the plot colour, and curve and area names are drawn above the curves and points. This came from the review marks on the tax, rent-ceiling and trade figures.
 
 * **Bookmarks in the menu (shell v0.39, 2026-11-05).** A bookmarked question puts a ribbon count on its semester card, on Full Exam and on its topic card, and the menu gains a Bookmarks row listing each one by semester, question number and topic. A click there opens the question in its semester's Full Exam.
+
+* **Fewer crowded labels (2026-11-10, 11 warnings to 3, none of them labels).** Reviewed before and after at https://claude.ai/artifact/67PHRHXYdYEsFk1oxf9Rna. Seven widgets changed:
+  - **Natural-monopoly regulation** (three widgets): the dot at the loss's top corner no longer carries its own "ATC", which sat a few pixels from the ATC curve's name.
+  - **The PPF points** (three) and **who pays a tax** (one) take the Exam 1 shapes' fixes.
+* **On a phone (2026-11-10).** The payoff tables wrap their strategy names instead of running 14 to 43px past the screen. The buttons are 44px, the graph fills the column, and three wide inline equations in Spring 2020 Q24 scroll in their own box.

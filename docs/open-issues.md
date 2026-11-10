@@ -164,13 +164,6 @@ in brackets.
       warnings, which every solutions page reports and none can act on.
       (`mobile_check.py` opens every question itself since 2026-11-09;
       `render_widgets.py` does not yet.)
-- [ ] **The phone check's solutions findings** (2026-11-09, the first run that
-      reached them): the widget tool row's step, zoom and fullscreen buttons
-      are 28px, under the 44px tap minimum, on every solutions widget; and the
-      Exam 3 payoff matrices are 14–43px wider than a 390px column. Both are
-      in `scripts/ci_phone_baseline.json`. The fix is a phone-width rule in
-      `engine/exam-solutions.css`. One display equation on the Exam 3 page
-      also still pushes it sideways.
 - [ ] **Equations push three example chapters sideways on a phone** once
       MathJax has typeset them (Government Intervention, Tradeoffs, ECO2023
       Elasticity), and at 320px the Tradeoffs page zooms out far enough that

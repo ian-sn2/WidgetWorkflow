@@ -204,3 +204,10 @@ results are in the commit message of the push that carried them.
 * **Four rent ceilings drawn further apart.** The rent axis now runs $12.50 a unit either side of $1,500 rather than $30 a unit from zero, so the $1,400 and $1,200 ceilings sit well below the market rent and their deadweight-loss wedges are visible. Its only label is $1,500, so no stated number moves. Its DWL sits just outside the narrow $1,400 wedge.
 
 * **Bookmarks in the menu (shell v0.39, 2026-11-05).** A bookmarked question puts a ribbon count on its semester card, on Full Exam and on its topic card, and the menu gains a Bookmarks row listing each one by semester, question number and topic. A click there opens the question in its semester's Full Exam.
+
+* **Fewer crowded labels (2026-11-10, 48 warnings to 12).** Reviewed before and after at https://claude.ai/artifact/67PHRHXYdYEsFk1oxf9Rna. Twenty-eight widgets changed:
+  - **P₁ beside its dot** on the tax, subsidy and steep-against-flat widgets. Whichever price a few units from P₁ the figure is about (the sellers' price on steep demand, the buyers' on flat, both under a subsidy) crowded it on the price axis. P₁'s horizontal dashed line goes with it. The flat-demand tax widgets had been drawing P₁ twice, on the axis and beside the dot.
+  - **Shaded-area labels placed with `place_labels.py`** where one sat on a curve or against the world-price line: PS and CS in the trade and tariff figures, DWL in the tax, quota and rent-ceiling figures, CS in total surplus. Each moved to the clear spot nearest its shape's centre, inside the shape.
+  - **The PPF's Unattainable point** sits further beyond the frontier, so its label no longer crowds On the frontier.
+  - The 12 warnings left are figures with the question's own numbers ($19 and $21, 90 and 100, 36 and 40 on one axis) and three curve-label crowdings, none from a shared shape.
+* **On a phone (2026-11-10).** The step, fullscreen and other buttons are 44px. The graph fills the column rather than half of it, and the size buttons give way there. A wide equation scrolls in its own box rather than pushing the page sideways.
