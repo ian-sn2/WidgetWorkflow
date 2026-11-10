@@ -51,16 +51,7 @@
    "page scrolls sideways by #px (widest: <table class=''>)"
   ],
   "examples/ECO2023-263-ThePPF.html": [],
-  "solutions/ECO2023-261-Exam3-DetailedSolutions-Full.html": [
-   "fit w19 table #px",
-   "fit w22 table #px",
-   "fit w40 table #px",
-   "fit w49 table #px",
-   "fit w60 table #px",
-   "fit w67 table #px",
-   "fit w78 table #px",
-   "fit w8 table #px"
-  ],
+  "solutions/ECO2023-261-Exam3-DetailedSolutions-Full.html": [],
   "solutions/ECO2023-263-Exam1-DetailedSolutions-Full.html": []
  }
 }
