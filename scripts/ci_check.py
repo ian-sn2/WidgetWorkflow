@@ -90,6 +90,8 @@ def phone_problems(size):
                 text = widget + " " + text
             text = re.sub(r"[+-]?\d+(\.\d+)?px", "#px", text)
             text = re.sub(r"\d+ms", "#ms", text)
+            # a control's size: "Fullscreen 96x28" here is 95x28 on a runner
+            text = re.sub(r"\b\d+x\d+\b", "#x#", text)
             out[page].append("%s %s" % (kind, " ".join(text.split())))
     return out, r.stdout
 
