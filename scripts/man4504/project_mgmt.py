@@ -454,7 +454,7 @@ def beta_figure():
     path = "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in curve)
     def area(x0, x1):
         pts = [x0 + (x1 - x0) * i / 40 for i in range(41)]
-        return (f"M{X(x0):.1f},{Bm} " + " ".join(f"L{X(x):.1f},{Y(pdf(x)):.1f}" for x in pts) + f" L{X(x1):.1f},{Bm} Z")
+        return (f"M{X(x0):.1f},{Bm + 3.6} L{X(x0):.1f},{Y(pdf(x0)):.1f} " + " ".join(f"L{X(x):.1f},{Y(pdf(x)):.1f}" for x in pts) + f" L{X(x1):.1f},{Bm + 3.6} Z")
     def centroid(x0, x1):   # a point inside a tail for the leader to land on
         xm = x0 + (x1 - x0) * (0.75 if x0 < m else 0.15)
         return X(xm), Bm - (Bm - Y(pdf(xm))) * 0.35
@@ -488,8 +488,6 @@ def beta_figure():
          f'<path d="{path}" class="curve"/>'
          f'<line x1="{L - 8}" y1="{Bm + 2.5}" x2="{W - Rm + 8}" y2="{Bm + 2.5}" class="axis"/>'
          f'<path d="{area(lo, a)}" class="tail"/><path d="{area(b, hi)}" class="tail"/>'
-         f'<line x1="{X(lo):.1f}" y1="{Bm + 2.5}" x2="{X(a):.1f}" y2="{Bm + 2.5}" class="band"/>'
-         f'<line x1="{X(b):.1f}" y1="{Bm + 2.5}" x2="{X(hi):.1f}" y2="{Bm + 2.5}" class="band"/>'
          f'<line x1="{X(m):.1f}" y1="{T}" x2="{X(m):.1f}" y2="{Bm + 2.5}" class="mline"/>'
          f'<line x1="{X(a):.1f}" y1="{Y(pdf(a)) - 2:.1f}" x2="{X(a):.1f}" y2="{Bm + 6}" class="tick"/>'
          f'<line x1="{X(b):.1f}" y1="{Y(pdf(b)) - 2:.1f}" x2="{X(b):.1f}" y2="{Bm + 6}" class="tick"/>'
@@ -498,9 +496,7 @@ def beta_figure():
          f'<text x="{min(X(b), W - 62):.1f}" y="{Bm + 22}" class="xl">Pessimistic (<tspan font-style="italic">b</tspan>)</text>'
          + note(lx, ly, left, "start") + note(rx, ry, right, "end") +
          f'<line x1="{(lb[0] + lb[2]) / 2:.1f}" y1="{lb[3] + 3:.1f}" x2="{lt[0]:.1f}" y2="{lt[1]:.1f}" class="lead"/>'
-         f'<circle cx="{lt[0]:.1f}" cy="{lt[1]:.1f}" r="2.5" class="leaddot"/>'
          f'<line x1="{(rb[0] + rb[2]) / 2:.1f}" y1="{rb[3] + 3:.1f}" x2="{rt[0]:.1f}" y2="{rt[1]:.1f}" class="lead"/>'
-         f'<circle cx="{rt[0]:.1f}" cy="{rt[1]:.1f}" r="2.5" class="leaddot"/>'
          f'</svg>')
     return ('<div class="pmw pm-beta"><p class="pm-title">The Beta Distribution of an Activity Time</p>' + s + '</div>')
 

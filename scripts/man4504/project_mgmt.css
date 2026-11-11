@@ -141,7 +141,7 @@
 .pm-beta { max-width:680px; }
 .pm-beta-svg { display:block; width:100%; height:auto; }
 .pm-beta-svg .curve { fill:none; stroke:var(--ink); stroke-width:3; }
-.pm-beta-svg .tail { fill:#ef8550; stroke:#b8400f; stroke-width:1.2; }
+.pm-beta-svg .tail { fill:#ef8550; stroke:none; }
 .pm-beta-svg .leaddot { fill:#b8400f; }
 .pm-beta-svg .band { stroke:#ef8550; stroke-width:5; stroke-linecap:round; }
 .pm-beta-svg .axis { stroke:var(--ink); stroke-width:1.3; }
