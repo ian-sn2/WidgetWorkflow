@@ -1096,6 +1096,19 @@ Ian changed this rule on 2026-09-17, and the change applies **here only**:
   Widgets/Exam N/<chapter>/`). The finished files are not committed; Ian
   reviews them first.
 
+### MAN4504 step-by-step widgets (2026-11-11)
+
+* **Aggregate planning: Option A, the stepper, is the chosen design** (Ian's
+  boss, 2026-11-11). Build and deliver Option A only from now on; Option B
+  (the tabbed explorer) stays in `scripts/man4504/transport.py` but is not
+  delivered unless asked. A future step-by-step widget for a worked
+  calculation defaults to the same stepper pattern.
+* Builds: `transport.py` and `transport_editions.py` (aggregate planning),
+  `project_mgmt.py` (`--patch` updates an already-converted file) and
+  `project_mgmt_editions.py` (project management). A Concise keeps the Full's
+  h1/h2 headings exactly, plus Glossary and Key Takeaways; the edition
+  scripts assert it.
+
 ### Reviewing Ian's work
 
 When Ian asks for a check of files he has written or edited (a chapter, a
