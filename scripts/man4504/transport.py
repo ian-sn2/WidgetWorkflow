@@ -1,11 +1,11 @@
-"""MAN4504 Exam 3, Aggregate Planning: the transportation-method example as an interactive tableau, 2026-11-11.
+"""MAN4504 Exam 3, Aggregate Planning: the transportation-method example as an interactive table, 2026-11-11.
 
-Ian's readme: the nine tableau images make the section very long; replace them with a step-by-step widget,
+Ian's readme: the nine table images make the section very long; replace them with a step-by-step widget,
 one or two options, and make sure every number is right. Two options, each written as a whole chapter:
 
-  A  stepper  - one tableau that fills in as the reader presses Next: layout, costs column by column,
+  A  stepper  - one table that fills in as the reader presses Next: layout, costs column by column,
                 then the cheapest-first allocation one source at a time, the dummy column, and the total
-  B  explorer - the finished tableau with tabs: how each cost is built, how each column is filled
+  B  explorer - the finished table with tabs: how each cost is built, how each column is filled
                 (a ranked list of sources), and a "read the plan" mode for the row/column exam questions
 
 Every number is computed here from the example's givens and asserted against what the notes print, so the
@@ -31,6 +31,12 @@ def cost(r, c):
     return None if c[3] < r[5] else r[4] + CARRY * (c[3] - r[5])
 
 def name(r): return "Beginning inventory" if r[0] == "inv" else f"{r[1]} {r[2].lower()}"
+
+def held(r, c):
+    """the source's name, saying so when it is an earlier month's production carried forward"""
+    m = c[3] - r[5]
+    if r[0] == "inv" and m == 0: return name(r)
+    return name(r) + (f" (held {m} month{'s' if m > 1 else ''})" if m else "")
 
 def solve():
     left = {r[0]: r[3] for r in ROWS}; alloc = {}; log = []
@@ -76,7 +82,7 @@ def states():
     def push(title, text, hi=(), hirows=(), hicols=()):
         S.append({"title": title, "text": text, "costs": sorted(costs), "alloc": {f"{k[0]}|{k[1]}": v for k, v in alloc.items()},
                   "left": dict(left), "dleft": dict(dleft), "done": sorted(done), "hi": [f"{a}|{b}" for a, b in hi], "hirows": list(hirows), "hicols": list(hicols)})
-    push("Set up the tableau",
+    push("Set up the table",
          f"Demand periods run across the top and sources of supply down the side. Total demand is 800 + 1,000 + 750 = <b>2,550</b>. "
          f"Capacity is (700 + 50 + 150) + (700 + 50 + 150) + (700 + 50 + 130) = <b>2,680</b>, plus <b>100</b> units of beginning inventory. "
          f"A dummy column for unused capacity takes the <b>{DUMMY_UNITS}</b> extra units so that supply equals demand. With no back-ordering, "
@@ -90,12 +96,15 @@ def states():
          "The dummy column costs <b>$0</b>: unused capacity is never produced.", hicols=["may", "dum"])
     for c in COLS:
         steps = [x for x in LOG if x[0] is c]
+        cands = sorted((r for r in ROWS if cost(r, c) is not None and left[r[0]]), key=lambda r: cost(r, c))
+        menu = ("Sources that can still supply " + c[1] + ", cheapest first, including earlier months' production held in inventory: "
+                + ", ".join(f"{held(r, c)} ${cost(r, c)}" for r in cands) + ". ")
         for k, (cc, r, q, unit, need) in enumerate(steps):
             alloc[(r[0], c[0])] = q; left[r[0]] -= q; dleft[c[0]] -= q
-            first = "Fill each demand column from left to right, always from the cheapest source with capacity left. " if c[0] == "mar" and k == 0 else ""
+            first = ("Fill each demand column from left to right, always from the cheapest source with capacity left. " if c[0] == "mar" else "") + menu if k == 0 else ""
             more = (f"<b>{need:,}</b> units of {c[1]} demand still to fill." if need else f"{c[1]} demand is met.")
             part = f" Only {q:,} of its {r[3]:,} units are needed, so {left[r[0]]:,} stay available." if left[r[0]] and q < r[3] else ""
-            push(f"{c[1]}: {name(r)}", f"{first}Cheapest source left: <b>{name(r)}</b> at <b>${unit}</b>. Take <b>{q:,}</b> units.{part} {more}",
+            push(f"{c[1]}: {held(r, c)}", f"{first}Next cheapest source with units left: <b>{held(r, c)}</b> at <b>${unit}</b>. Take <b>{q:,}</b> units.{part} {more}",
                  hi=[(r[0], c[0])], hirows=[r[0]], hicols=[c[0]])
         done.add(c[0])
     for rk, q in DUMMY_FILL.items():
@@ -127,7 +136,7 @@ def explorer_data():
     for c in COLS:
         rows = []
         for cc, r, q, unit, need in [x for x in LOG if x[0] is c]:
-            rows.append([name(r), unit, q, need])
+            rows.append([held(r, c), unit, q, need])
         fills[c[0]] = rows
     return {"why": why, "fills": fills, "dummy": [[name(next(r for r in ROWS if r[0] == k)), q] for k, q in DUMMY_FILL.items()]}
 
@@ -270,7 +279,7 @@ RUNTIME = r"""<script>
           M.dummyRows.map(function (x) { return '<li><span>' + x[0] + '</span><span class="tp-cost">$0</span><span class="tp-take">' + x[1] + '</span></li>'; }).join('') + '</ol>';
         return;
       }
-      cap.innerHTML = '<b class="tp-h">Filling ' + label + ' demand (' + M.cols.filter(function (c) { return c.id === colId; })[0].dem.toLocaleString('en-US') + ' units), cheapest source first</b><ol class="tp-list">' +
+      cap.innerHTML = '<b class="tp-h">Filling ' + label + ' demand (' + M.cols.filter(function (c) { return c.id === colId; })[0].dem.toLocaleString('en-US') + ' units), cheapest source first</b>Earlier months\' leftover production counts as a source too, at its cost plus $2 a month held.<ol class="tp-list">' +
         M.fills[colId].map(function (x) { return '<li><span>' + x[0] + '</span><span class="tp-cost">$' + x[1] + '</span><span class="tp-take">' + x[2].toLocaleString('en-US') + '</span></li>'; }).join('') + '</ol>';
     }
     function setMode(m) {
@@ -329,7 +338,7 @@ def widget(mode):
         M["steps"] = states()
         body = ('<div class="tp-bar"><button type="button" class="tp-back">◀ Back</button><span class="tp-count"></span><button type="button" class="tp-next">Next ▶</button></div>\n'
                 '<div class="tp-cap" aria-live="polite"></div>\n<div class="tp-scroll"></div>\n<div class="tp-dots" aria-hidden="true"></div>')
-        title, lede = "The Transportation Method, Step by Step", "Press Next to build the tableau and the plan one step at a time."
+        title, lede = "The Transportation Method, Step by Step", "Press Next to build the table and the plan one step at a time."
     else:
         M.update(explorer_data())
         terms = cost_terms()
@@ -344,7 +353,7 @@ def widget(mode):
             f'{FALLBACK}\n<script type="application/json">{js}</script>\n</div>')
 
 # ---------------------------------------------------------------- the chapter
-INTRO = ("<p>We set the problem up as a table, or <em>tableau</em>: demand periods across the top, sources of supply down the side, "
+INTRO = ("<p>We set the problem up as a table: demand periods across the top, sources of supply down the side, "
          "and the cost of each pairing in the corner of its cell. Then we fill each month's demand from its cheapest available sources. "
          "{how}</p>")
 
@@ -355,14 +364,14 @@ def chapter(src, mode):
     old = t[a:b]
     for must in ("chapter12-02-", "chapter12-10-", "Luckily, we have already added in a dummy column"):
         assert must in old, must
-    how = ("The widget below builds the tableau and the plan one step at a time." if mode == "stepper"
+    how = ("The widget below builds the table and the plan one step at a time." if mode == "stepper"
            else "Work through the widget's tabs in order: how the costs are built, how each month is filled, and the total.")
-    new = ("<h2>Setting Up and Solving the Tableau</h2>\n\n" + INTRO.format(how=how) + "\n\n" + CSS + "\n" + widget(mode) + "\n\n")
+    new = ("<h2>Setting Up and Solving the Table</h2>\n\n" + INTRO.format(how=how) + "\n\n" + CSS + "\n" + widget(mode) + "\n\n")
     t = t[:a] + new + t[b:]
     t = t.replace("</body>", RUNTIME + "\n</body>", 1)
     # the chapter's own wide tables scroll inside their box on a phone; the widget's table already does
     t = t.replace("</head>", '<style>@media (max-width:600px){table:not(.tp){display:block;overflow-x:auto !important;-webkit-overflow-scrolling:touch} mjx-container{display:inline-block !important;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:middle}}</style>\n</head>', 1)
-    assert t.count("chapter12-0") == 1 and "chapter12-10-" in t   # the flowchart stays; only the noscript fallback remains of the tableau images
+    assert t.count("chapter12-0") == 1 and "chapter12-10-" in t   # the flowchart stays; only the noscript fallback remains of the table images
     return t
 
 if __name__ == "__main__":
