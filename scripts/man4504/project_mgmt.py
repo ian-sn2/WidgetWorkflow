@@ -511,6 +511,27 @@ def chapter(src):
                   "-webkit-overflow-scrolling:touch} mjx-container{display:inline-block !important;max-width:100%;"
                   "overflow-x:auto;overflow-y:hidden;vertical-align:middle}}</style>\n</head>", 1)
 
+    # content corrections (Ian, 2026-11-11)
+    t = swap(t, "the precedence relationships between the following seven tasks:",
+             "the precedence relationships between the following eight tasks:")
+    t = swap(t, "The area under the curve to the right of the mean is the probability that the activity will get done later than "
+                "the most likely time. The area under the curve to the left of the mean is the probability",
+             "The area under the curve to the right of the most likely time is the probability that the activity will get done "
+             "later than the most likely time. The area under the curve to the left of the most likely time is the probability")
+    t = swap(t, "<strong>=norm.dist(z, true)</strong>", "<strong>=NORM.S.DIST(z, TRUE)</strong>")
+    t = swap(t, "<strong>=norm.dist(0.57, true)</strong>", "<strong>=NORM.S.DIST(0.57, TRUE)</strong>")
+    t = swap(t, "Therefore, we have two choices: (1) we can crash Activity G, which is common to both critical paths, or (2)",
+             "Therefore, we have two choices: (1) we can crash an activity that is common to both critical paths (G or H), or (2)")
+    t = swap(t, "<td>Activity G</td>\n<td>$1,500</td>\n</tr>\n",
+             "<td>Activity G</td>\n<td>$1,500</td>\n</tr>\n<tr>\n<td>Activity H</td>\n<td>$3,000</td>\n</tr>\n")
+    assert PER_WEEK["H"] == 3000 and PER_WEEK["G"] == 1500
+    # after crashing G as well: still two critical paths, both 13 weeks
+    g2 = dict(DUR_X, G=4); e2, f2, l2, _ = cpm(g2)
+    lens = {"→".join(p): sum(g2[x] for x in p) for p in PATHS}
+    assert max(f2.values()) == 13 and sorted(k for k, v in lens.items() if v == 13) == ["A→C→E→G→H", "B→D→G→H"], lens
+    t = swap(t, "The result in this case would be three critical paths.",
+             "The result in this case would still be two critical paths, A → C → E → G → H and B → D → G → H, each taking 13 weeks.")
+
     # Gantt chart
     t = swap(t, "which may look something like the one on the next page.", "which may look something like the one below.")
     t = swap(t, img_tag(t, "01-gantt"), gantt_static().replace("<noscript></noscript>", ""))
