@@ -8,7 +8,7 @@ A claude.ai chat has no repo, so each zip carries the files its skill uses at th
 paths, plus CLAUDE.md, which the skills cite for the full rules. Re-run after changing a skill or
 any file it bundles.
 """
-import pathlib, sys, zipfile
+import json, pathlib, re, sys, zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 ENGINE = ["engine/sd-graph.js", "engine/sd-graph.css"]
@@ -19,7 +19,7 @@ MAN = ["scripts/man4504/transport.py", "scripts/man4504/project_mgmt.py", "scrip
        "scripts/man4504/project_mgmt.js"]
 
 BUNDLES = {
-    "widget-basics": ENGINE + REF + ["scripts/embed_engine.py", "examples/ECO2013-Widgets-All.html"] + CHECK,
+    "widget-basics": ENGINE + REF + ["scripts/embed_engine.py"] + CHECK,
     "curves-and-labels": ENGINE + REF + CHECK + ["scripts/curve_shapes.py", "scripts/test_curve_shapes.py",
                                                  "scripts/place_labels.py", "scripts/place_curve_labels.py"],
     "other-charts": ENGINE + HP + REF + MAN + ["scripts/embed_engine.py", "scripts/apply_widgets.py",
@@ -39,6 +39,23 @@ BUNDLES = {
     "review-notes": CHECK + ["scripts/mobile_check.py"],
 }
 
+# claude.ai's skill upload rejects an .html file (widget-basics failed on the example page, 2026-11-11),
+# so the example page travels as its 20 widget configs, which are what the skill uses it for.
+EXAMPLE = "examples/ECO2013-Widgets-All.html"
+GENERATED = {"widget-basics": {"examples/ECO2013-Widgets-All.configs.json": "example_configs"}}
+
+
+def example_configs():
+    t = (ROOT / EXAMPLE).read_text(encoding="utf-8")
+    out = []
+    for b in re.findall(r'<div class="sdg"><script type="application/json">(.*?)</script>', t, flags=re.S):
+        try: c = json.loads(b)
+        except ValueError: continue   # the "{ ...config... }" placeholder in the page's own comment
+        out.append(c)
+    assert len(out) == 20, len(out)
+    return json.dumps(out, ensure_ascii=False, indent=1)
+
+
 NOTE = ("\n> **Files:** every path below (`scripts/…`, `docs/…`, `engine/…`, `CLAUDE.md`) is inside this skill's "
         "folder, at the same place it sits in the WidgetWorkflow repo.\n")
 
@@ -53,10 +70,17 @@ def main(out):
         assert sep and head.startswith("---\n"), name
         z = out / f"{name}.zip"
         with zipfile.ZipFile(z, "w", zipfile.ZIP_DEFLATED) as zf:
+            gen = GENERATED.get(name, {})
+            for path in gen:   # point the skill at the generated stand-in for the page
+                body = body.replace(EXAMPLE, path)
+            assert EXAMPLE not in body or not gen, name
             zf.writestr(f"{name}/SKILL.md", head + sep + NOTE + body)
+            for path, fn in gen.items():
+                zf.writestr(f"{name}/{path}", globals()[fn]())
             for f in sorted(set(files + ["CLAUDE.md"])):
                 src = ROOT / f
                 assert src.exists(), f
+                assert src.suffix != ".html", f   # the upload rejects HTML files
                 zf.write(src, f"{name}/{f}")
         print(f"{z.name}: {len(set(files)) + 2} files, {z.stat().st_size // 1024} KB")
 
