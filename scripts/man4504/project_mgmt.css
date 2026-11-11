@@ -47,7 +47,10 @@
 .pmw .n.cur-b .n-c { stroke:var(--bwd); stroke-width:3.4; } .pmw .n.cur-b .n-halo { stroke:var(--bwd); }
 .pmw .n.crit .n-c { stroke:var(--crit); stroke-width:3.2; }
 .pmw .n.path .n-c { stroke:var(--path); stroke-width:3.2; } .pmw .n.path .n-bg { fill:var(--path-bg); }
-.pmw .n.dim { opacity:.32; }
+/* off the selected path: lighter lines and cells, but solid text, so the numbers stay sharp (Ian, 2026-11-12) */
+.pmw .n.dim .n-c, .pmw .n.dim .n-div { stroke:#c5ccd8; } .pmw .n.dim .n-bg { fill:#fff; }
+.pmw .n.dim .cf { fill:#f1f6fc; } .pmw .n.dim .cb { fill:#f0f8f4; }
+.pmw .n.dim .n-l, .pmw .n.dim .n-d, .pmw .n.dim .n-v.vf, .pmw .n.dim .n-v.vb { fill:#8f99aa; }
 .pmw .n.new .n-c { stroke:var(--fwd); stroke-width:3; } .pmw .n.new .n-bg { fill:var(--fwd-bg); }
 .pmw .n.plain .n-bg { fill:#c9f2e0; } .pmw .n.plain.new .n-bg { fill:var(--fwd-bg); }
 .pmw .n.plain .n-l { font-size:15px; } .pmw .n.plain .n-l.n-ls { font-size:10px; }
@@ -59,7 +62,7 @@
 .pmw .e.crit .e-l { stroke:var(--crit); stroke-width:3.6; } .pmw .e.crit .e-h { fill:var(--crit); }
 .pmw .e.path .e-l { stroke:var(--path); stroke-width:3.4; } .pmw .e.path .e-h { fill:var(--path); }
 .pmw .e.new .e-l { stroke:var(--fwd); stroke-width:2.6; } .pmw .e.new .e-h { fill:var(--fwd); }
-.pmw .e.dim { opacity:.22; }
+.pmw .e.dim .e-l { stroke:#d3d9e2; } .pmw .e.dim .e-h { fill:#d3d9e2; }
 .pmw .e .e-t { font-size:14px; font-weight:800; fill:#3b4656; text-anchor:middle; dominant-baseline:central; }
 .pmw .e .e-t.dm { font-size:11px; font-weight:600; font-style:italic; }
 .pmw .sl rect { fill:var(--slack-bg); stroke:var(--slack-rule); stroke-width:1; }
@@ -108,7 +111,7 @@
 .pmw .crv-tail { fill:#ef8550; }
 .pmw .lead.tail { stroke:#b8400f; }
 .pmw .mk.tailtxt { fill:#b8400f; font-size:18px; }
-.pmw .dim { stroke:#16365f; stroke-width:1.6; } .pmw .dimh { fill:#16365f; }
+.pmw .dimline { stroke:#16365f; stroke-width:1.6; } .pmw .dimhead { fill:#16365f; }   /* not .dim: that is the faded-node class */
 .pmw .mk.dimtxt { fill:#16365f; font-size:13.5px; } .pmw .mk.dimtxt.big2 { font-size:16px; }
 .pmw .mk.halo, .pmw .big.halo { paint-order:stroke; stroke:#cfe1f7; stroke-width:6px; stroke-linejoin:round; }
 .pmw .big { font-size:22px; font-weight:800; fill:#16365f; text-anchor:middle; }

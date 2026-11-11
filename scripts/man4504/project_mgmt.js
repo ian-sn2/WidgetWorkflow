@@ -97,7 +97,7 @@
     if (style === 'full' && (!vertical || room)) Hh += vertical ? 16 : 10;
     holder.innerHTML = '';
     var svg = E('svg', { viewBox: '0 0 ' + W + ' ' + Hh, 'class': 'pm-fig', role: 'img', 'aria-label': 'Project network' }, holder);
-    svg.style.width = '100%'; svg.style.margin = '0 auto';
+    svg.style.width = '100%'; svg.style.maxWidth = Math.round(W * 1.3) + 'px'; svg.style.margin = '0 auto';
     var clip = 'pmclip' + (++uid), defs = E('defs', {}, svg), cp = E('clipPath', { id: clip }, defs); E('circle', { r: g.R }, cp);
     var ge = E('g', {}, svg), gn = E('g', {}, svg);
     if (aoa) {
@@ -238,7 +238,7 @@
     function Y(p) { return B - p / PDF0 * (B - Tp); }
     holder.innerHTML = '';
     var svg = E('svg', { viewBox: '0 0 ' + Wd + ' ' + Hd, 'class': 'pm-fig', role: 'img', 'aria-label': o.aria || 'Normal curve' }, holder);
-    svg.style.width = '100%'; svg.style.margin = '0 auto';
+    svg.style.width = '100%'; svg.style.maxWidth = '780px'; svg.style.margin = '0 auto';
     function area(a, b) {
       var d = 'M' + f1(X(a)) + ',' + B, n = 60;
       for (var i = 0; i <= n; i++) { var z = a + (b - a) * i / n; d += ' L' + f1(X(z)) + ',' + f1(Y(pdf(z))); }
@@ -267,9 +267,9 @@
     }
     if (o.dim) {   /* a dimension arrow between two z values, named above */
       var x0 = X(o.dim[0]) + 2, x1 = X(o.dim[1]) - 2, yy = B - 6;
-      E('line', { x1: f1(x0 + 6), y1: yy, x2: f1(x1 - 6), y2: yy, 'class': 'dim' }, svg);
-      E('polygon', { points: f1(x0) + ',' + yy + ' ' + f1(x0 + 8) + ',' + (yy - 4) + ' ' + f1(x0 + 8) + ',' + (yy + 4), 'class': 'dimh' }, svg);
-      E('polygon', { points: f1(x1) + ',' + yy + ' ' + f1(x1 - 8) + ',' + (yy - 4) + ' ' + f1(x1 - 8) + ',' + (yy + 4), 'class': 'dimh' }, svg);
+      E('line', { x1: f1(x0 + 6), y1: yy, x2: f1(x1 - 6), y2: yy, 'class': 'dimline' }, svg);
+      E('polygon', { points: f1(x0) + ',' + yy + ' ' + f1(x0 + 8) + ',' + (yy - 4) + ' ' + f1(x0 + 8) + ',' + (yy + 4), 'class': 'dimhead' }, svg);
+      E('polygon', { points: f1(x1) + ',' + yy + ' ' + f1(x1 - 8) + ',' + (yy - 4) + ' ' + f1(x1 - 8) + ',' + (yy + 4), 'class': 'dimhead' }, svg);
       /* the name sits in the tall part of the shaded area, two lines, clear of the curve */
       T(svg, f1(X(0.82)), yy - 30, o.dim[2][0], 'mk dimtxt big2');
       T(svg, f1(X(0.82)), yy - 13, o.dim[2][1], 'mk dimtxt');
@@ -346,7 +346,7 @@
       function X(x) { return L + x / M.xmax * (Wd - L - Rr); } function Y(y) { return B - y * (B - Tp); }
       fig.innerHTML = '';
       var svg = E('svg', { viewBox: '0 0 ' + Wd + ' ' + Hd, 'class': 'pm-fig', role: 'img', 'aria-label': 'Activity ' + a.id + ': a = ' + a.a + ', m = ' + a.m + ', b = ' + a.b + ', expected time ' + a.t + ' weeks' }, fig);
-      svg.style.width = '100%'; svg.style.margin = '0 auto';
+      svg.style.width = '100%'; svg.style.maxWidth = '780px'; svg.style.margin = '0 auto';
       var d = 'M' + f1(X(a.a)) + ',' + B;
       a.pts.forEach(function (p) { d += ' L' + f1(X(p[0])) + ',' + f1(Y(p[1])); });
       E('path', { d: d + ' L' + f1(X(a.b)) + ',' + B + ' Z', 'class': 'crv-fill' }, svg);
