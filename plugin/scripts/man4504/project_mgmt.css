@@ -141,7 +141,7 @@
 .pm-legend-svg .lead { stroke-width:1.2; } .pm-legend-svg .lead.f { stroke:var(--fwd); } .pm-legend-svg .lead.b { stroke:var(--bwd); } .pm-legend-svg .lead.k { stroke:var(--ink); }
 .pmw p.pm-key { display:block; text-align:center; }
 .pmw .pm-key .kf { color:var(--fwd); font-weight:800; } .pmw .pm-key .kb { color:var(--bwd); font-weight:800; }
-.pm-beta-svg { display:block; width:100%; height:auto; }
+.pm-beta-svg { display:block; width:100%; max-width:830px; margin:0 auto; height:auto; }   /* 1.3x its drawn size */
 .pm-beta-svg .curve { fill:none; stroke:var(--ink); stroke-width:3; }
 .pm-beta-svg .tail { fill:#ef8550; stroke:none; }
 .pm-beta-svg .leaddot { fill:#b8400f; }

@@ -7,7 +7,7 @@ checked against the values the notes print (the ES/EF/LS/LF table, the path
 lengths, the crashed network, the PERT table, the z-values), so a figure
 cannot drift from the prose beside it.
 """
-import json, math, os, sys
+import json, math, os, re, sys
 from decimal import Decimal, ROUND_HALF_UP
 
 IMG = "https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter3-"
@@ -479,7 +479,7 @@ def beta_figure():
     def note(x, y, lines, anchor):
         out = f'<text x="{x:.1f}" y="{y}" class="note" text-anchor="{anchor}">'
         for i, l in enumerate(lines):
-            l = l.replace(" a", ' <tspan font-style="italic">a</tspan>').replace(" b", ' <tspan font-style="italic">b</tspan>')
+            l = re.sub(r" ([ab])$", r' <tspan font-style="italic">\1</tspan>', l)   # only the variable itself, never the a in "after"
             out += f'<tspan x="{x:.1f}" dy="{0 if i == 0 else LH}">{l}</tspan>'
         return out + "</text>"
     s = (f'<svg viewBox="0 0 {W} {H}" class="pm-beta-svg" role="img" aria-label="A right-skewed beta distribution of an '
