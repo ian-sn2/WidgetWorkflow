@@ -41,7 +41,7 @@ LAYOUT = {
 
 def model():
     views = [{"label": "Whole chart", "path": [], "crit": False, "whole": True,
-              "cap": "All three paths from prototype (A) to launch (F)."}]
+              "cap": ""}]
     order = sorted(PATHS, key=lambda x: "".join(x[0]))
     for p, t in order:
         crit = p == CRIT[0]
@@ -69,7 +69,7 @@ CSS = r"""<style>
 .pertw .pt-caps { display:grid; margin:0 0 6px; }
 .pertw .pt-cap { grid-area:1 / 1; visibility:hidden; padding:7px 12px; border-left:4px solid var(--sel); background:var(--soft);
   border-radius:0 6px 6px 0; font-size:.92rem; text-align:left; }
-.pertw .pt-cap.crit { border-left-color:var(--crit); } .pertw .pt-cap.whole { border-left-color:var(--rule); }
+.pertw .pt-cap.crit { border-left-color:var(--crit); } .pertw .pt-cap.whole { border-left-color:transparent; background:transparent; }
 .pertw button.whole[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); }
 .pertw .pt-cap.on { visibility:visible; }
 .pertw svg { display:block; width:100%; height:auto; margin:0 auto; }
@@ -181,7 +181,22 @@ def edition(src, kind):
     return t
 
 
+def patch(path):
+    """bring a file this script already converted up to the current chart: its stylesheet, data and runtime"""
+    import re
+    t = open(path, encoding="utf-8").read()
+    t, n1 = re.subn(r"<style>\n\.pertw \{.*?</style>", lambda m: CSS, t, count=1, flags=re.S)
+    js = json.dumps(model(), ensure_ascii=False).replace("</", "<\\/")
+    t, n2 = re.subn(r'(<div class="pertw">.*?<script type="application/json">).*?(</script>)', lambda m: m.group(1) + js + m.group(2), t, count=1, flags=re.S)
+    t, n3 = re.subn(r"<script>\n\(function \(\) \{\n  var NS = 'http://www.w3.org/2000/svg';\n  function E\(t,.*?</script>", lambda m: RUNTIME, t, count=1, flags=re.S)
+    assert (n1, n2, n3) == (1, 1, 1), (n1, n2, n3)
+    open(path, "w", encoding="utf-8").write(t); print("patched", path)
+
+
 if __name__ == "__main__":
+    if sys.argv[1] == "--patch":
+        for f in sys.argv[2:]: patch(f)
+        sys.exit()
     full, bal, con, out = sys.argv[1:5]; os.makedirs(out, exist_ok=True)
     for src, kind in ((full, "Full"), (bal, "Balanced"), (con, "Concise")):
         p = os.path.join(out, f"MAR3023-Fall26-Exam3-Chapter22-{kind}.html")
