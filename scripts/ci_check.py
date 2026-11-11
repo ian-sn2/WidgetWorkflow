@@ -18,7 +18,10 @@
 Ian, 2026-11-09: run the checks automatically so a broken page or an engine
 clash between sessions is caught at the pull request, not after it merges.
 
-3. With --phone WxH, mobile_check.py instead loads every page at that size and
+3. plugin/ (the skills as a claude.ai plugin) must match .claude/skills/ and the files it bundles:
+   `python scripts/package_skills.py --plugin` rebuilds it.
+
+4. With --phone WxH, mobile_check.py instead loads every page at that size and
    presses every scenario, step and Back button. Its problems (a page that
    scrolls sideways, a figure wider than its column, a button under 44px, a
    button that does nothing, an engine error) are compared the same way,
@@ -135,6 +138,14 @@ def main():
             bad += 1; tests_bad += 1
             gh("error", "%s: %s" % (t, last.strip()))
             print("\n".join(l for l in r.stdout.splitlines() if l.startswith("FAIL")))
+
+    # the claude.ai plugin (plugin/) must match the skills it is built from: Ian syncs it from GitHub
+    r = subprocess.run([sys.executable, str(ROOT / "scripts" / "package_skills.py"), "--check-plugin"],
+                       capture_output=True, text=True, cwd=ROOT)
+    print("%-22s %s" % ("plugin", r.stdout.strip()))
+    if r.returncode != 0:
+        bad += 1
+        gh("error", r.stdout.strip())
 
     base = json.loads(BASELINE.read_text()) if BASELINE.exists() else {}
     new_base = {}

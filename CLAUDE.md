@@ -86,9 +86,14 @@ scripts/
 
 The skills restate rules this file holds in full. When a rule here changes, update
 the skill that carries it in the same commit.
-For Ian's claude.ai Skills tab, `python scripts/package_skills.py skills-upload` zips
-each skill with the files it uses (same relative paths, plus this file); re-run and resend
-after changing a skill.
+**The skills reach claude.ai as a plugin, not as uploads** (Ian, 2026-11-12). The repo is a
+plugin marketplace (`.claude-plugin/marketplace.json`) whose one plugin, `plugin/`, holds all
+seven skills and one copy of the files they use; Ian added it once in claude.ai (Customize >
+Plugins > Add marketplace, `ian-sn2/WidgetWorkflow`, Sync automatically) and it updates when the
+default branch does. **After changing a skill, or any file in `plugin/`, or this file: run
+`python scripts/package_skills.py --plugin` and commit the result**; it bumps the plugin's
+version only when the content changed, and CI fails a pull request whose `plugin/` is stale.
+`python scripts/package_skills.py OUTDIR` still writes one zip per skill for a manual upload.
 
 ## The workflow in one paragraph
 

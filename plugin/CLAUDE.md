@@ -1,0 +1,1225 @@
+# CLAUDE.md — ECO2013 / ECO2023 interactive graph widgets
+
+Smokin' Notes (Ian, ian@smokinnotes.com) publishes HTML course notes. This repo
+turns the static supply-and-demand graph images in those notes into interactive
+widgets, so a new semester's examples (different good, different numbers,
+different shift) are a config edit rather than new artwork. The project began in
+a Claude.ai project ("ECO2013 widgets", 2026-09-11 → 09-16) and moved here.
+
+The repo lives at **`ian-sn2/WidgetWorkflow`** (it moved from
+`JobbyChen/WidgetWorkflow` in October 2026); the default branch is
+`claude/eco-interactive-graph-widgets-yrl3jz`. Work goes up as a pull request
+against that branch. The browser scripts need `pip install playwright` once
+per container; Chromium is already under `/opt/pw-browsers`, so never run
+`playwright install`.
+
+**Read this file, then `docs/decisions-and-history.md`, then
+`docs/open-issues.md`.**
+
+## What is in this repo
+
+**A second kind of page lives in `solutions/`** since 2026-10-26: detailed
+solutions to past exam questions, with a widget wherever the reasoning is a
+graph, the question restated in our own words with its right choice marked
+and the solution in the open, opening on a menu of card
+buttons for semester, exam and topic, then one question at a time in a box
+with Previous / Next under a Back-to-menu bar. Read
+`docs/exam-solutions-brief.md` before touching one. The toggles are
+`engine/exam-solutions.js` + `.css`, embedded by `embed_engine.py` in place of
+`<!--SOL-SHELL-->`; the graphs are ordinary widgets and every rule below
+applies to them.
+
+```
+CLAUDE.md                     ← you are here
+README.md                     ← short human-facing overview
+engine/
+  sd-graph.js                 ← the widget engine (v2). ONE copy. Everything renders from this.
+  sd-graph.css                ← its stylesheet (all arrows red)
+docs/
+  project-brief.md            ← the brief + what got built against it
+  conversion-prompt-v7.md     ← THE operating procedure (the system prompt), verbatim
+  engine-reference.md         ← JSON schema, presets, geometry, and what the engine does NOT do
+  decisions-and-history.md    ← timeline and decisions with reasons
+  open-issues.md              ← bugs, gaps, next steps (checkboxes)
+  changelogs/                 ← one changelog per conversion
+  archive/                    ← prompt-variant conventions
+solutions/
+  ECO2023-263-Exam1-DetailedSolutions-Full.html ← five semesters of Exam 1, 120 widgets
+  ECO2023-261-Exam3-DetailedSolutions-Full.html ← four semesters of Exam 3, 78 widgets
+  build/                      ← the builders and the widget SHAPE LIBRARY. A new exam reuses these.
+engine/exam-solutions.js, .css  ← the solutions shell (the semester / exam / topic picker)
+docs/exam-solutions-brief.md    ← what a solutions page is and how it is checked
+examples/
+  ECO2013-263-SupplyAndDemand.html ← FINISHED OUTPUT (Fall '26, transcript-only, 9 widgets)
+  ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html ← FINISHED OUTPUT (Exam 1 ch. 1, 7 widgets)
+  ECO2013-Widgets-All.html    ← the 9/11/26 prototype: 20 widgets, the JSON shape reference
+reference-images/             ← the source PNGs (empty — see open issues)
+scripts/
+  embed_engine.py             ← inline engine/ into a notes file's <head> (prompt step 7)
+  check_file.py               ← mechanical step-8 checks (JSON, </script>, head, engine identity…)
+  doc_headings.py             ← a Word file's headings and their level. Run it BEFORE writing any.
+  doc_formulas.py             ← a Word file's MathType equations as text; --check audits a notes file
+  add_toc.py                  ← write the TOC in by hand. Only for a file WITHOUT the live script.
+  widget_text.py              ← every renamable string in a file's widgets; --apply writes them back
+  test_widget_text.py         ← tests for it. Run after changing it.
+  transcript_diff.py          ← does a new term's transcript change this file? Run it BEFORE swapping.
+  test_check_file.py          ← tests for check_file.py. Run after changing it.
+  ci_check.py                 ← what every pull request runs (.github/workflows/checks.yml)
+  ci_baseline.json            ← the examples' known failures, so CI blocks only new ones
+  ci_phone_baseline.json      ← the same for the phone check (mobile_check.py), per screen size
+  render_widgets.py           ← Playwright: screenshot every widget × scenario × step for collision review
+  mobile_check.py             ← does it fit and still work on a phone? Drives every button at 390/320px
+  place_labels.py             ← put every shaded area's label where it is clear, and centred
+  place_curve_labels.py       ← the same for curve labels: the clear ldx/ldy nearest the default
+  curve_shapes.py             ← cost families, tangencies, supply fans, crossings. Import, don't retype.
+  test_curve_shapes.py        ← tests for it. Run after changing it.
+.claude/commands/             ← /convert, /check, /render
+.claude/skills/               ← load on demand, one per kind of job:
+  widget-basics/              ← creating a widget: JSON, steps, scenarios, captions, embedding
+  curves-and-labels/          ← drawing curves (curve_shapes) and placing every label
+  other-charts/               ← diagrams, networks, matrices, calculators, hand-built page charts
+  study-guide-editions/       ← Full / Balanced / Concise
+  chapter-conversion/         ← converting a chapter; semester swaps
+  widget-qa/                  ← checks, renders, phone tests before delivery
+  review-notes/               ← reviewing Ian's files (report only)
+```
+
+The skills restate rules this file holds in full. When a rule here changes, update
+the skill that carries it in the same commit.
+**The skills reach claude.ai as a plugin, not as uploads** (Ian, 2026-11-12). The repo is a
+plugin marketplace (`.claude-plugin/marketplace.json`) whose one plugin, `plugin/`, holds all
+seven skills and one copy of the files they use; Ian added it once in claude.ai (Customize >
+Plugins > Add marketplace, `ian-sn2/WidgetWorkflow`, Sync automatically) and it updates when the
+default branch does. **After changing a skill, or any file in `plugin/`, or this file: run
+`python scripts/package_skills.py --plugin` and commit the result**; it bumps the plugin's
+version only when the content changed, and CI fails a pull request whose `plugin/` is stale.
+`python scripts/package_skills.py OUTDIR` still writes one zip per skill for a manual upload.
+
+## The workflow in one paragraph
+
+Input is one of: (a) notes PDF ± PNGs, (b) notes HTML ± PNGs, (c) a lecture
+transcript (± notes), or (d) an existing widget file plus a message saying what
+changed this semester. Follow `docs/conversion-prompt-v7.md` exactly — it is a
+step-numbered procedure (0, 0T, 0C, 1–8) that was iterated over six versions,
+and every rule in it exists because something went wrong without it. Output is
+one HTML file carrying the house head, a `<!--SDG-ENGINE-->` placeholder, and a
+`<div class="sdg">` JSON widget in place of every graph image (or, in mode d, a
+set of REPLACE patches), plus a changelog
+whose first line is the file name `COURSE-TERMCODE-Topic.html` (Fall 2026 →
+`263`). **Ask only when a wrong guess would be costly** — a number, which graphs
+to convert, which of two readings of a table or figure. Everything else you
+decide and flag in the changelog: heading levels, table markup, label placement,
+how a scenario is grouped. See *Asking questions* below, and note that prompt v6
+itself still forbids questions outright.
+
+## Hard rules (these override anything you'd otherwise do)
+
+1. **Never edit `engine/sd-graph.js` or `.css` casually.** Every published notes
+   file embeds a verbatim copy — header comment included — and step 8 checks
+   byte-identity. If you change the engine: bump the version comment, update
+   `docs/engine-reference.md`, and re-embed into every example with
+   `scripts/embed_engine.py`. The model never types the engine: it emits
+   `<!--SDG-ENGINE-->` and the script fills it in.
+
+   **One session changes the engine at a time** (Ian, 2026-11-09). Two
+   sessions moved it in parallel to v2.57 and v2.68 in November, and merging
+   them meant porting one onto the other by hand. Before changing
+   `engine/`, check open pull requests and other sessions for engine work;
+   if one is in flight, wait for it to merge, then start from the default
+   branch. CI fails a page whose embedded engine differs from `engine/`, so
+   a clash shows at the pull request, but this rule is what avoids it.
+2. **Widgets are JSON, never bespoke code.** If a graph can't be expressed with
+   the engine's schema, that is an engine feature request
+   (`docs/open-issues.md`), not a reason to hand-write SVG/JS in a notes file.
+   (Exception: "figure mode" for process diagrams is specified in the prompt but
+   not implemented — see open issues before using it.)
+3. **Numbers come from the source only.** Every coordinate, tick and caption
+   number must be stated in the notes prose, the user's message, or the
+   transcript. Symbolic drawing (P₁/Q₁) when numbers are missing; never invent
+   one. Authority order: user message > notes prose > notes labels > transcript >
+   image > alt text.
+4. **Student-facing text never mentions its source.** No "the transcript", "the
+   lecture", "the recording", "on the board", "the slides", "his slide", "the
+   file" — in captions, labels, or prose. This is
+   also Ian's standing preference for all study-guide work: paraphrase in
+   original wording, never copy textbook/printed phrasing, and flag anything
+   that closely mirrors a source.
+
+   **A professor, named or not, and what happened in class are fine** (Ian,
+   2026-11-09: "get rid of the professor and in class warnings, the text in
+   the notes should be fine"). The notes Ian sends mention both on purpose, so
+   keep them as written. `check_file.py` no longer tests for a named person,
+   "the professor", "the instructor", "in class" or "the class"; it still
+   fails "the transcript", "the lecture", "the recording", "on the board",
+   "the slides" and "his slide".
+5. **No label touches a curve, an axis line, or a curve's own name.**
+   The axis lines were the last thing on a panel that nothing tested against,
+   and a curve that runs down to the axis parks its label right on it — which
+   is where `D` sat in the Piesanos figure. They are tested now; the axis
+   *titles* are exempt, since the engine anchors each one to its own axis by
+   design and every panel ever drawn would report it.
+
+   The other half of the same rule:
+   `check_file.py` used to skip a curve's label against its own curve, on the
+   grounds that it sits at its own end. True of the default offset, false the
+   moment `ldx`/`ldy` move it: pull a label back along its own line and the
+   line runs straight through the text. "D = MB = MSB" shipped struck through
+   by its own demand curve with the file reporting PASS. Nothing is exempt now,
+   and removing the exemption flagged nothing in any other example — so it was
+   covering defects, not preventing false alarms. Anchor a long label at the
+   curve's other end with `lstart` when the near end has no room.
+6. **Match the printed artwork.** Black original curve, red shifted curve, every
+   arrow red, curved D/S with numbered markers on conceptual graphs, straight
+   lines with hollow dots on numeric ones, dashed grid on schedules, P and Q as
+   axis labels, nothing else. (Label placement is rule 5; the rest of the
+   drawing conventions are settled below.)
+7. **House HTML format is fixed** (prompt step 0), with one exception: **the
+   `<title>` is not yours to set.** Prompt v6 step 0 asks for the chapter name
+   alone, and `check_file.py` used to fail a title carrying a course code, term
+   or year. Ian's titles come from his boss — "ECO2013 Fall '26 - International
+   Trade Study Guide" is correct as written — so the checker now only requires
+   that a title exist, and a title you are given is left exactly as it is.
+   (Changed 2026-09-23.) The rest of the head: the Red Hat Display font link,
+   `sn25-v6.css` from
+   `https://smokinnotes.s3.us-east-1.amazonaws.com/content/`, the house script,
+   then `<!--SDG-ENGINE-->`;
+
+   **The house script lives under one of two paths, and they version
+   separately.** `content/sn25-v6.js` is what this file used to demand, and it
+   returns **403** from S3 — a page carrying only that runs no house script at
+   all. `studyguide/sn25-v2.js` is live, is what the chapter files Ian sends
+   carry, and is the one he confirmed correct on 2026-09-21. It builds the
+   table of contents in the browser (the same `<details class="toc-box">` that
+   `add_toc.py` writes) and gives every heading an id. So a chapter carrying it
+   needs no TOC markup in the file — and must not also carry one written in,
+   because the script builds its own unconditionally and the page then renders
+   two. Four example files did, because `add_toc.py` wrote them while
+   `content/sn25-v6.js` was the head's only script; swapping to the live script
+   is what turned those into duplicates. `check_file.py` fails on the pair now.
+   And `check_file.py` compares version
+   numbers **inside** a path, never across the two — matching a bare
+   `sn25-v[0-5]` failed the current script twice over, once for being absent
+   and once for looking old.
+
+   **The two scripts differ in three visible ways**, which is worth knowing
+   before migrating a page: `content/sn25-v5.js` heads the box with 📖 OPEN
+   BOOK and inserts it at the very top of `<body>` — above the `date` pill,
+   which floats right and lands on the first paragraph. `studyguide/sn25-v2.js`
+   uses 📘 BLUE BOOK and inserts before the first `<h1>`, so the date keeps its
+   corner. Neither sets `open`; both say so in a comment, so a TOC that looks
+   "open" is the emoji, not the `<details>`. Both list `h1`, `h2` *and* `h3`. `<p class="date">` per class date, `<h1>`/`<h2>`, with
+   `<h3>` only on Concise pages, where headings are changed by hand and often
+   end in a colon (Ian, 2026-10-12; check_file.py warns on one elsewhere), `.exam-tip` with an `<h4>`, plain tables; `<strong>` for
+   vocabulary terms only, `<b>` for emphasis and labels, never `<u>` -- except
+   that **a centred equation the source sets in `<strong>` keeps it** (Ian,
+   2026-10-07, and he asked for it as a rule: where the source has a
+   centred, bold equation, the output has the same -- blue and bold is how
+   the house format sets a displayed formula. `check_file.py` skips a
+   centred paragraph when it looks for `<strong>` swallowing a sentence).
+
+   **And the source's `<strong>` stays `<strong>`, every one of them.** Ian,
+   2026-10-07, after a day of restoring what the conversion had demoted to
+   `<b>`: the centred equations, then the two bold rules and the three
+   closing banners in the exchange-rate chapter ("keep these as strong").
+   Blue bold is how the house format marks anything the author wanted to
+   stand out, and a list label, a stressed sentence or a banner the source
+   set that way is the author's call, not the conversion's. The "`<strong>`
+   for terms only" rule above governs text *you* write; what the source
+   already has is left as it is. `check_file.py`'s "swallows more than the
+   term" is a WARN to read, never a reason to edit the source's markup.
+
+   **From the next chapter on, a displayed definition is bold whether or not
+   the source sets it so** (Ian, 2026-10-07, looking at the multiplier
+   definitions in the fiscal chapter: "most of these equations should be
+   strong text even if the source is not"). A displayed formula that
+   *defines* a term -- the government spending multiplier, the tax
+   multiplier, the money multiplier, the reserve requirement -- is written as
+   a centred `<p style="text-align: center;"><strong>\( … \)</strong></p>`,
+   the same shape as the budget-balance line. A worked line of arithmetic
+   under it (`\frac{+\$2T}{…} = 1.33`) is not a definition and stays as the
+   source has it. The Exam 3 fiscal chapter is **not** to be redone for this;
+   it applies from the next conversion onward.); keep every
+   `<!-- IMAGE POSITION: … -->` comment where the image was.
+
+   **Glossary and Key Takeaways are `<h2>`s, on purpose.** They are not
+   promoted sections and not a heading the source lacks: the house format
+   ends every chapter with them at that level (Ian, 2026-10-12). Do not
+   report them in a review. The same day's other two confirmations, already
+   above: an `<h3>` ending in a colon is normal on a Concise page, where the
+   headings are edited by hand, and `.exam-tip` boxes take an `<h4>` while
+   class dates go in `<p class="date">`.
+8. **A step must change the drawing.** Ian's rule, and he has had to give it
+   twice: a caption that advances while the picture holds still reads as a
+   broken button. The usual cause is off-by-one rather than carelessness —
+   `at` is a step index and index 0 is the opening state, so "curves, then CS,
+   then PS" needs `at:1` and `at:2`; `at:2` and `at:3` leave step 2 showing
+   step 1's picture. `check_file.py` now fails on it, and a figure that is
+   genuinely one static diagram takes a `caption` instead of `steps`.
+9. **Captions are prose, and short:** 1–3 complete sentences ending with the P
+   and Q change in words. No "Before –/After –", no fragments, no colon
+   punchlines, no "Price up, quantity up".
+
+   **200 characters is the ceiling** — about four lines at phone width, and
+   40% above the median caption already here, so one written to the point is
+   nowhere near it. `check_file.py` fails over it. The concise editions are
+   produced by a pipeline that rewrites the prose and leaves widget captions
+   exactly as they are, so a caption that runs long here runs long in every
+   edition (Ian, 2026-09-28) — the baseline caption is the only place to fix
+   it. **A caption showing its working gets 260** instead: three or more
+   numbers, or a widget carrying a `calcs` block, and the length is carrying
+   the arithmetic rather than padding it. Cutting the values going in, the
+   step between them or the answer loses the reason the caption is there.
+
+   **Files written before the rule are left as they are** (Ian, 2026-09-28),
+   so `check_file.py` reports caption failures on the nine examples. That is
+   known and recorded in `docs/open-issues.md` with the count per file; do not
+   read it as those files being broken, and do not rewrite them without
+   asking. Everything from ECO2023 chapter 14 onward obeys the cap.
+10. **Group cases of one lesson into one widget with scenario buttons** (four
+   apple shifts; surplus + shortage; increase + decrease of one schedule;
+   substitutes + complements in production).
+
+## Drawing conventions (settled — do not re-decide these per chapter)
+
+Every one of these was a round of review. Follow them and the review is about
+economics instead of label placement.
+
+* **Fetch the source images and match them.** The `<img src>` URLs in the
+  chapter resolve (200 from S3), so `curl` them and look. Match the *figure*,
+  not the paragraph beside it: a figure showing consumer surplus, producer
+  surplus and five ticks keeps all of it even where the text discusses one
+  piece. Drawing only the piece under discussion throws the figure away.
+* **A figure that is not becoming a widget stays the image it is.** Not a
+  table, not a list, not prose. The natural-monopoly chapter's last figure is
+  a ranking on two arrows rather than a graph, so it was rewritten as an HTML
+  table — which reads well and was still wrong: the conversion replaces graphs
+  with widgets and leaves everything else exactly as it was. (Ian,
+  2026-09-28.) The `<img>` tag, its classes and its alt text carry over
+  untouched, the same as any other part of the chapter.
+* **Label every price and quantity the source names** — `P*`, the control
+  price, `Qᴅ`/`Qꜱ`, and the intercepts. A dashed guide with no number at its
+  foot is worse than no guide: drop the guide instead.
+* **Shading**: consumer surplus teal, producer surplus orange, gains from
+  trade teal, deadweight loss red, tax or tariff revenue navy. Two pieces of
+  one surplus (a trapezoid split into a triangle and a rectangle) take
+  `edge: true`, or they read as one wash.
+* **Braces sit against their price line.** Above it for a surplus or exports,
+  `below:"in"` for a shortage or imports, `below:"axis"` where the space under
+  the line is taken (the tariff figures). Under the Q axis *only* where the
+  source puts them there. A long label wraps with `\n` rather than moving the
+  brace — that is what the artwork does.
+
+  **`"axis"` sets the bracket down but leaves the label reaching back up**,
+  which is only a fix where what crowds it is right against the price line.
+  A tariff band holds the revenue rectangle and both deadweight triangles,
+  and their names sit where that label lands — so the trade chapter's imports
+  brace is `below: true`, fully under the Q axis, the same as the quota
+  figure's. It gives up the brace's own drop guides, which the marked
+  quantities already draw.
+* **A brace's label sits at the brace's midpoint, beside it.** Not under the
+  brace, not under the line it hangs off — Ian's call, 2026-09-29, and he gave
+  it twice in one round ("the tax or fee should be at the point of the brace",
+  then the same of the external benefit). A label pushed off its own brace
+  stops reading as that brace's name and starts reading as a caption for
+  whatever it has landed next to. Inside the plot it is set at 11px (v2.31)
+  and wraps on `\n`, which is what makes a three-word name fit between two
+  curves; where even that does not fit, the curve gives way — see the label
+  rule below — never the label.
+* **One guide per quantity, and the right leg.** An equilibrium gets the full
+  elbow; a quantity read off a control price gets `guides:"q"`; a price whose
+  quantity is not the point gets `guides:"p"`. Two points at one quantity draw
+  the same dashed line twice, which is most of what makes a panel look busy.
+* **A guide needs a number at its foot.** A dashed line running to a blank spot
+  on the axis — because its price is suppressed, or cannot be written beside
+  its neighbour — is clutter. Drop the guide and keep the dot; the reading is
+  still marked, and the number appears in the panel whose answer depends on it. The
+  exception is a line that is not marking a reading at all: the labor supply
+  curve turns at a wage the chapter never names, and the source still draws a
+  dotted line across it because that is where the two effects balance. Say so
+  with `divider: true` on the point — declared, so the rule still fires
+  everywhere else.
+* **Draw the equilibrium's guide once per widget.** If a later step or panel
+  does not move it, it does not need drawing again (Ian, 2026-09-23). It is the
+  horizontal that goes — it only restates a price already established — while a
+  vertical still marking a quantity that panel refers to stays.
+* **One superscript letter after P, never four.** `Pᶜ`, `Pᶠ`, `Pᵂ` read at
+  10.5px; `Pᶜᵉⁱˡ` is noise. The line says what it is in full through its `tag`.
+  A `_{...}` subscript is the same rule: `P_{W}`, not `P_{WORLD}` — a word set
+  in capitals on a price axis is the widest thing in the panel and reads as
+  shouting. Ian, again, 2026-09-30. Where dropping to a letter leaves the line
+  unexplained, give the line a `tag`, which is where its name belongs.
+* **A dot wherever a price meets a curve, the control price included.** The
+  artwork marks all of them, and Ian's call (2026-09-23) is to match it: every
+  reading in a panel, not just the ones away from the ceiling. The same
+  readings appear in every panel of a market, so a series does not change its
+  markings figure to figure.
+* **A shape's corners are marked on the shape's own step.** The engine rings
+  what a step revealed, so the corners of a deadweight-loss wedge that came in
+  earlier sit there unringed while the one that step added is highlighted —
+  which reads as the other two belonging to something else. `hiAt` on each
+  corner re-marks them all on the step that shades it (Ian, 2026-09-29). The
+  same correction also moved the corner that is on no curve the reader has
+  been asked about yet: it is the wedge's, so it appears with the wedge.
+* **A value appears in the step it belongs to.** Ticks live in `axes` and
+  cannot step, so a reading that belongs to a later step comes from its
+  *point* instead — those take `at`/`until` like anything else. The textbook
+  ceiling shows $100 and 500 while that is the subject, then hands the axis to
+  $75, 375 and 562.5, which is also why 500 and 562.5 never have to share it.
+  Carry the equilibrium's dot on a second, label-less point present from the
+  start, or the engine rings it as newly revealed. (Ian, 2026-09-24.)
+  **So a numeric figure with steps usually has no `xticks` at all.** Splitting
+  the trade chapter's four quantities between its two quota figures stopped
+  them colliding ("3040") and still put each figure's numbers on the axis
+  from its opening state, before anything had marked them — the rule again,
+  one level up. Every quantity comes from the point that reads it; the axis
+  carries a tick only where no point does. (Ian, again, 2026-09-30.)
+* **A caption must say something the paragraphs around it do not.** Vertical
+  space is the scarce thing on these pages. `check_file.py` measures each
+  caption against the prose on either side of its widget and reports one
+  mostly contained in it; cut it to what it adds, or drop it. A title and a
+  lede describe a figure on their own, so a widget left without a caption
+  still passes the schema — and a caption that answers the question the
+  chapter is about to ask should go whether or not it repeats anything. The
+  rule measures captions only: a lede is one line, and naming what the figure
+  shows is its job. (Ian, 2026-09-24.)
+* **Show the working only where the artwork does.** `calcs` carries the
+  formulas when they live inside the image — replacing the image would
+  otherwise lose them. Where the chapter prints the same formula as text under
+  the figure, a `calcs` block says it twice.
+* **Clip the axis to the region the figure uses.** Drawn out to the full
+  intercepts, ticks collide (24 and 30 rendered as "2430") and most of the
+  plot is empty.
+* **A label stays on the thing it names; the curve underneath gives way.**
+  Where a measure is named at the quantity it is measured at and a curve runs
+  through the only place the name fits, fade that curve for those steps
+  (`dimAt`) rather than pushing the label off its own brace — Ian's call,
+  2026-09-29, and he had to give it four times. A label nudged clear of its
+  brace stops reading as that brace's name, and a curve shortened to make room
+  starts from nowhere on the steps before its end is marked. Fade only the
+  curve the label actually crosses: `check_file.py` names it, and fading the
+  others greys out half the figure for no reason.
+* **Place area labels with `scripts/place_labels.py`, never by eye.** It takes
+  the clear point nearest the centroid, and falls back to just outside the
+  shape for a wedge too small to hold a label — which is what the source does
+  with its own slivers. **Read which of the two it did.** A deadweight-loss
+  triangle with room to spare had its label parked outside it because the
+  first clear candidate happened to be there, and outside is where a label
+  stops naming its own shape. The fallback is for a sliver; anywhere else,
+  centred is the answer and a label that is not centred is a drawing to fix.
+* **Nothing covers a name (v2.69).** The engine cuts every dashed guide
+  around each in-plot label and gives the label a halo, so place labels for
+  the curves and points they must clear, not for the guides; the checker no
+  longer reports a guide against a label (Ian, 2026-11-05).
+* **An area's name is drawn over the curves, so let it be -- and leave the
+  box off.** From v2.46 the name goes on top of the lines, which is how the
+  printed figures name a deadweight wedge: solid fill, the word straight on
+  it, the wedge's own edges running under the letters. So a wedge narrower
+  than the word it is called keeps its name at its own centre, in plain text,
+  rather than being pushed outside on a leader or shrunk to fit a box --
+  Ian's call, 2026-09-30, after five rounds of the name being moved or
+  resized. A box round it is a second shape whose edges lie across the
+  wedge's own, and no size small enough to fit one in is big enough to read:
+  measured at every size from 10px down to 7. `boxed: true` is for a label
+  over a *gap* in the drawing -- the importers' rectangle, a Lorenz year --
+  not over a wedge. `check_file.py` reports an area label over a curve as a
+  WARN rather than a FAIL for the same reason: the line passes behind the
+  letters, and whether it reads is a look, not a measurement. Outside on a
+  hairline is still right where the source itself names a shape from outside
+  (a legend swatch, a tariff's revenue band).
+* **Where no gap is wide enough, box the label.** Three Lorenz curves converge
+  on one corner, and at its widest the gap between two of them is about 27px
+  against a 28px year — so there is nowhere between them a horizontal label
+  can go, and hunting for one is wasted. `boxed: true` on a point gives the
+  label a white background, which is what lets the source put each year on its
+  own curve with a short leader, and what lets a name for a curve sit on the
+  curve. Ian's call, 2026-09-29, from the reference artwork. Use it where the
+  drawing genuinely has no gap, not to paper over a label that could move.
+* **Place curve labels with `scripts/place_curve_labels.py`, never by eye.**
+  A curve label sits at its own end, which is where the other curves converge:
+  MR ends on the Q axis with MC a few units above it and an equilibrium's guide
+  beside it, leaving about nine pixels of room. Guessed offsets trade one
+  collision for another — MR came off MC and straight onto the axis on the
+  first try — and each guess costs a render. The script scores candidates
+  against `check_file`'s own geometry and takes the clear one nearest the
+  engine's default. Where it reports *nowhere clear*, that is a drawing to
+  change (run the curve further, or anchor the label at the other end with
+  `lstart`), not an offset to keep hunting for. **One offset for a series:**
+  where the same market is drawn in several figures, search for an offset clear
+  in all of them at once, or the label moves about from figure to figure.
+* **A curve stops where it leaves the plot, not at the far frame.** A cost
+  curve run out to `xmax` when it exits through the *top* has its last point —
+  and therefore its label — off the panel, so the curve is drawn with no name
+  and nothing reports it. Sample to the edge it actually reaches.
+* **Every class date in the source survives.** A `<p class="date">` carries no
+  content, so condensing or restructuring a chapter drops it with nothing left
+  looking wrong — concise editions of modules dated over three meetings were
+  shipping with none. `check_file.py <file> --source <what it was built from>`
+  fails on a lost one; run it with `--source` whenever there is one. The pill
+  goes immediately before the heading or paragraph that day started with, and
+  where the output merges two of the source's sections, it anchors to that
+  paragraph rather than the merged heading. (Ian, 2026-09-24.)
+* **Copy the source figure's own words, including its capitalisation and its
+  subscripts.** A panel the source heads "The Entire Market" is not "The
+  entire market", and a curve it labels `S_Market` is not `S`. Write the
+  subscript as `_{...}` — `S_{Market}`, `d_{Firm} = MR` — which the engine
+  sets smaller and lighter (v2.24); small capitals render at full weight and
+  read as capitals. Where a curve reaches the axis in the source, draw it
+  reaching the axis. (Ian, 2026-09-28.)
+* **Generate a shape, never type it.** `scripts/curve_shapes.py` carries the
+  shapes these chapters keep needing, and each function is there because
+  drawing that shape by eye went wrong: `cost_family` solves MC from the two
+  average minima it must cut, so the dots sit on all three curves at once;
+  `tangent_to_line` and `tangent_to_hyperbola` touch rather than cross;
+  `on_hyperbola` puts a basket on a sample point of its own curve, because a
+  curve is a spline through samples and a point taken from the formula
+  between two of them sits just off the line that is drawn; `supply_fan`
+  gives the `p = A(e^(kq) − 1)` shape the market-supply figure needs, flat
+  along the bottom and vertical at the end; `lorenz` gives `y = x**k`, which
+  runs corner to corner and cannot cross the line of equality or another
+  Lorenz curve, so an ordering a figure exists to show is a property of the
+  numbers rather than something to check by eye; `hug` bows each chord of a curve plotted through a table's readings
+  below itself, so the whole thing is convex -- a spline through the readings
+  alone bows above the chord as often as below, which leaves the bottom early
+  and arrives at the top corner gently, the opposite of what a Lorenz curve
+  does. Several shallow samples per chord, not one deep one: one deep sample
+  bows each segment hard and leaves a kink at every reading, which is more
+  visible than the problem it fixes; `around` samples either side of a
+  basket in proportion to it, sorted, so a low basket cannot double the curve
+  back on itself. **`cross` is the important one**: name every crossing and
+  build the equilibrium dots from it. Typed as coordinates they are left
+  behind the moment a curve moves, and a dot a few units off its crossing
+  looks deliberate. `python scripts/test_curve_shapes.py` must be 0 failing.
+* **A curve runs to the edge of the plot, not to wherever it stopped.** The
+  source draws every curve out to the frame, so a cost curve ending two
+  thirds of the way across reads as truncated beside it — and cutting one
+  short to make room for a label is the wrong fix, since running it further
+  usually moves it clear of the label anyway. The exceptions are ends that
+  mean something: a frontier stops at its intercept, a demand curve at the
+  axis, a tangent is a stub by design. No checker for this — the meaningful
+  ends and the truncated ones look identical to one, and a rule that flagged
+  both would fire on every frontier in the PPF chapter. (Ian, 2026-09-28.)
+* **A curve runs well past the point it is drawn for.** A curve sampled just
+  either side of its tangency reads as beginning where it touches. Sample in
+  proportion to the point — roughly 0.45× to 6× its x — so the upper branch is
+  tall and the tail long whatever x the point sits at. (Ian, 2026-09-28.)
+* **A point sits on one of its curve's own sample points.** A curve is a
+  spline through samples, not the formula behind it, so a point placed from
+  the formula at an x between two samples sits just off the drawn curve — and
+  off any tangent through it. Put every marked basket in the sample list.
+* **A tangency is arithmetic, never drawn by eye.** `y = k/x + b` with
+  `k = m·t²` and `b = c − 2mt` touches the line through `(0,c)` and `(xint,0)`
+  at `x = t`. Eyeballed, it crosses — which is the one thing a tangency figure
+  exists to rule out. A tangent line is a short stub through its point, as the
+  artwork draws it, not a full-width line.
+* **Set the slopes so the lesson is visible.** The marginal-rate-of-
+  substitution figure needs a steep basket and a nearly flat one (−3.0 against
+  −0.2); on a gently bowed curve shared with other figures, both look the
+  same. A figure whose subject is a slope gets its own curve.
+* **Draw what the source draws, and no more.** Extra curves added to
+  illustrate a point the artwork makes with one curve are clutter, and they
+  crowd the labels that matter. **Dots count as drawing.** A shifted curve
+  gets a dot where the source puts one, not one at every crossing a guide
+  happens to make with it: the property-rights figure marks one reading on its
+  new supply curve and the widget marked two, which reads as two answers to a
+  question that has one. The ceiling convention above is the same rule seen
+  from the other side — the artwork marks all of them there, so the widget
+  does too.
+* **A figure that is one market before and after a change is one panel with
+  steps, not two panels.** The source prints "No Trade" beside "With Trade"
+  because paper cannot animate; a widget can, and the surplus areas are then
+  seen to move rather than compared across a gap. Two panels stay two panels
+  where they are two *different* markets -- the net exporter beside the net
+  importer. (Trade chapter, 2026-09-30; flag it in the changelog either way.)
+* **Where the source figure and the source prose disagree, the prose wins**
+  (rule 3's authority order) — and say so in the changelog. The apartment
+  figure prints a demand intercept of 1,200 that contradicts its own
+  equilibrium; the prose's numbers force 1,080.
+
+  **That is for a figure that contradicts itself, not for one that is simply
+  a different example.** The trade chapter draws the quota market three times
+  on three sets of numbers, and the third was redrawn on the prose's — which
+  Ian overruled on 2026-09-30: each widget follows its own figure, so that
+  one gets its own market, its own curves and its own ticks. A reader looking
+  from the page to the widget beside it is comparing one figure against one
+  widget, not the chapter against itself. Say in the changelog that the
+  figures disagree; do not resolve it by redrawing one of them.
+
+* **A value arrives with its step — so a stepped numeric figure has no ticks.**
+  Ian caught "$19" standing on the axis from step 1 of a five-step build whose
+  AE line, the thing $19 names, arrives at step 5. The rule above already said
+  it; this is the mechanical form, and `check_file.py` fails on it now: any
+  tick whose value is a point's own reading at a later step. The production
+  function in the growth chapter had the same slip on six values. Write every
+  reading as its point and leave `xticks`/`yticks` out (2026-10-06).
+* **A gap too small to arrow is written, not arrowed.** A $2T shift on a $50T
+  axis is 8px, and a $3T shift on a half-width panel 13px: the engine's head
+  scales down to 55% and the arrow is still almost all head ("a blot rather
+  than a direction", v2.26's own words), and an upright brace in the margin
+  across 8px is a curl beside a rotated name six times its length. Ian asked
+  for both to go (2026-10-06). Below about 18px of gap, drop the stub arrow
+  and the margin brace; keep the first intercept on the axis and write the
+  change once in plain text beside the new line's start ("+$2T"). The
+  animation of the shifted line is the movement. Where the gap is 20px or
+  more, the arrow stays — **standing off both lines**, its ends inset 3–4px,
+  because drawn from line to line its head and tail sit on the lines it is
+  meant to separate (Ian, same day). `check_file.py` warns on a movement arrow
+  under 18px.
+* **Two side-by-side panels halve every gap.** Rule 10 (group cases of one
+  lesson under scenario buttons) has a second reason: a two-panel widget gives
+  each plot half a screen, and two readings 20 units apart on a 165-unit axis
+  rendered as "120140". When the two panels would be the same market twice —
+  a rise beside a fall, two readings of one economy — make it one full-width
+  panel with a button per case. Keep two panels for two *different* markets
+  (the labor market beside the production function), and then let each panel
+  mark only what it is about: the output panel takes `guides:"p"` and
+  `showQ:false`, because the quantity is read off the other panel's axis.
+* **A slope triangle is drawn whole.** The consumption-function figure marks
+  ΔY and ΔC with two dotted legs — across from the first point to under the
+  second, then up to the second — and the brace hangs under the run. Drawn
+  with the brace's own drop guides alone, the vertical leg stopped at the
+  brace and the reader saw it "not continue" to the point (Ian, 2026-10-06).
+  Draw both legs as `thin`+`dashed` curve segments, and wrap the brace's name
+  on `\n` until it fits *inside* the brace's drop guides, or the guides run
+  through the text.
+* **No movement arrow between two crossings a few units apart.** The AD-AS
+  shocks mark A and B on the fixed curve one crossing apart: LAS runs through
+  A and the shifted curve through B, so a short arrow beside the segment lies
+  across one line or the other whichever side it takes, and its head lands
+  on the dot it points at. Ian: make them clear or remove them (2026-10-07).
+  Removed: the dots, the shift arrow and the caption carry the movement. The
+  movement arrow belongs to a *single* curve read at two prices (the peso
+  market, a demand schedule), where nothing else crosses the segment.
+  **And a shift arrow across LAS has a price where it is not.** A SAS moving
+  across LAS straddles it at any price between the two crossings and is on one
+  side of it above or below that band; `clear_p()` in the AD-AS build scans
+  for that price rather than guessing an `arrowP`.
+* **A shift arrow's `arrowP` lies inside both of its curves.** Above the
+  shorter one's end the arrow points at nothing and its head lands on that
+  curve's name; `check_file.py` warns (2026-10-07).
+* **A point's name sits level with its dot, to the right.** At a crossing,
+  above-right is along whichever curve rises there (SAS, S), and below-right
+  along the one that falls. `dx 12, dy 4` was clear at every A, B and C in the
+  AD-AS chapter; `dy −6` put nine of them on a curve.
+* **A flat line's name cannot be nudged along the line.** `lstart` plus `ldx`
+  on a horizontal curve puts the name on the curve itself. Three flat lines two
+  units apart (I = $6T, G = $4T, NX = $2T) fit only by shortening the quantity
+  axis — it carries no numbers, so its scale is free — until a unit is tall
+  enough for a 13px name, and staggering the names up and down at one end.
+* **Aggregate supply is `SRAS` and `LRAS`, never `SAS` and `LAS`.** Ian's
+  call, 2026-10-07, after the AD-AS and fiscal chapters shipped with the
+  source figures' `SAS`/`LAS`: the abbreviations say short-run and long-run,
+  in every curve name, caption, heading and the chapter's own prose. The
+  longer names crowd a neighbour at a curve's lower-left end more often, so
+  run `place_curve_labels.py` after renaming and carry one offset per series.
+* **A widget's title and its panel headings are in Title Case** ("A Cut in
+  the Personal Income Tax", "The Real Economy"), the way the source heads its
+  own panels (Ian, 2026-10-07). Ledes, captions and steps stay sentence case.
+  A word with a capital inside it (AD₁, LRAS, U.S.) is left as written.
+* **The original curve of a shift pair is drawn at full weight: no `thin`.**
+  Ian, 2026-10-07 ("why is AD₁ not as thick as the other lines"). `thin` was
+  the older examples' convention for the curve a shift moves away from, and
+  it made that curve the lightest line on the panel before anything had
+  moved. The engine already fades the original (2px, 80%) from the step the
+  shifted curve arrives, which is the printed grey-original convention; that
+  is the only weight change a shift pair gets. `thin` is for a line that is
+  genuinely secondary in the drawing, such as the 45-degree line.
+* **A shaded area's name goes where the source puts it, and never on a
+  solid line.** Ian, 2026-10-14, from the Exam 3 review's profit and loss
+  rectangles. A rectangle against the price axis is named at its left end,
+  beside the axis, where no cost curve runs; a thin one takes the name on one
+  line. Where the name cannot fit inside the shape at all, it goes beside the
+  shape **over the dashed guides** rather than over a curve (the
+  monopolistic-competition DWL wedge), and where a solid line crosses the
+  only inside spot (MR through a monopoly's profit rectangle) the name sits
+  above the shape with a `leader` hairline into it, as the source draws it.
+  A numeric figure the source hatches without a name, stating the amount in
+  the text, carries no in-plot name either. `place_labels.py` still finds the
+  centroid; these are the cases where the centroid is wrong.
+* **A brace goes where the source draws its arrow.** The buyers' tax arrow
+  sits between D and D_TAX at the lower right, past Q*; drawn at the upper
+  left it collided with the P_T guide and read as a different figure (Ian,
+  2026-10-14). Check each brace against the artwork, not against the
+  sellers' case it was copied from.
+* **A vertical shift gets a `moves` arrow.** The engine's shift arrow is
+  horizontal, so a frontier whose corn intercept moves up and whose TV
+  intercept stays put had no arrow at all ("why is there no up arrow",
+  Ian, 2026-10-12). Draw it as a `moves` arrow between the two lines at
+  the widest point of the gap, standing 7 units clear of each.
+* **A figure whose numbers change each semester is a widget, table and
+  all.** The comparative-advantage production figures (two frontiers with a
+  total-production table beside them) were kept as images for want of a
+  two-panel table; Ian's call (2026-10-12) is that people, goods and numbers
+  are exactly what changes, so they are two panels with the totals as a
+  `calcs` block under the plots.
+* **A circular flow is a `flow` widget with `cycle: true`, an open-market
+  diagram a chain `flow` with a two-way link, and a figure's own table a
+  `table.plain` beside the plot** (2026-10-19, redoing the seven UCF ECO
+  images left as pictures before the 2026-10-16 "anything drawable" rule).
+  A picture of a calculation (the midpoint formula) becomes the calculation
+  in HTML through `apply_widgets.py`'s `{"html": block}` entry. What still
+  stays an image: a tree diagram (the population hierarchy).
+* **A chain that the page reads top to bottom is a vertical `flow`**
+  (`vertical: true`, 2026-10-21): the channel figures say "upstream" and
+  "downstream" in the prose beside them, so a horizontal chain contradicts
+  the page. Braces grouping a run of boxes are `spans` (`brace: true` in a
+  horizontal chain; always braces in a vertical one). A pictorial diagram
+  that is not a chain or a ring (a shipping network, a conflict tree, a
+  spectrum arrow) is a static HTML figure placed through `{"html": block}`,
+  not a hand-written drawing inside a widget.
+* **An image that stays an image says why.** `<!-- KEEP: why -->` immediately
+  before the `<img>`, declared the way a point declares `divider` or `boxed`,
+  and `check_file.py` stops reporting it as a graph. The macro chapters are
+  full of published charts, photographs and bar charts the "looks like a
+  graph" rule is wrong about.
+
+`check_file.py` enforces the guide, control-price and `calcs` rules, so they
+fail the file rather than waiting for someone to notice.
+
+**A rule is only worth having if it is cheap to obey.** When you add or change
+one — here, in the prompt, or in a script — weigh what it costs on every future
+run, not just whether it is correct:
+
+* **Make it mechanical or make it brief.** A rule a script checks needs one
+  line here; a rule a person has to remember needs to earn its paragraph. The
+  label-placement arithmetic came out of the prompt when `check_file` and
+  `place_labels` started doing it properly.
+* **Declare, don't infer.** `control: true` on a price line replaced guessing
+  from whether the line happened to be named, which was a drawing decision
+  standing in for an economic one. A stated fact needs no heuristic and never
+  drifts.
+* **Write a shared coordinate down once.** The upright brace's x lived in the
+  checker twice, once for the brace and once for its label, so moving it in
+  v2.33 fixed half the collision and left the other half warning. It is one
+  function now. The same goes for the plot's width, which two places derived
+  from a right margin that stopped being 36 at v2.28.
+* **Score against the checker's own geometry, never a copy of it.** That is why
+  `place_labels` takes 0.3s where a re-run-the-checks loop took three minutes,
+  and why the two can never disagree about the same drawing.
+  **The checker holds a copy of the engine's layout, and it goes stale.**
+  `geom()` reproduces the engine's margins so it can turn data coordinates
+  into pixels, so every margin change in the engine is two edits, not one --
+  v2.27 shipped without the second and measured chapter 14's wide-label panel
+  17px out. Change one, change the other, in the same commit.
+* **Measure the drawing, do not estimate it.** The label box was 0.58em a
+  character for everything, which is right for the 700-weight ticks and 17%
+  narrow for the 800-weight curve labels. A label that overflowed its panel by
+  15px was reported as fitting. Chromium's `getBBox` over a rendered file
+  settles these in a minute; the constants now come from it. **And measure
+  the right thing:** the second version split on weight, .58 against .70, and
+  was right about the curve labels only by luck -- they are uppercase; the
+  third went by *case* (upper .690, lower .539, digits .558), which fixed
+  `P_{WORLD}` and was still 20% narrow for `S + Quota`, because a Q, a W or a
+  + is half again an average capital. **A class average is not a
+  measurement.** The table is per character now (`scripts/em_widths.py`,
+  v2.45), the engine's copy is generated from it, and `test_check_file.py`
+  fails on a drift. **And measure the font the reader gets.** That table was
+  recorded before Red Hat Display had loaded -- the font comes from Google
+  through the agent proxy, which the browser scripts did not use until v2.47
+  -- so for eight versions it held the *fallback's* widths, 6% to 100% wide
+  depending on the character, with `1` as broad as `0` because the fallback
+  sets its digits tabular and Red Hat Display does not. Every margin was
+  generous and every overlap test pessimistic, which is the safe direction
+  and is exactly why nothing looked wrong. `scripts/measure_em.py` re-measures
+  it and refuses to record anything until `document.fonts.check` says the font
+  is there (v2.53). A measurement of the wrong thing is worse than an estimate,
+  because it carries the authority of having been measured: re-measuring
+  dropped four warnings from the government-intervention file, three from
+  ECO2013 supply-and-demand and a failure from the 9/11 prototype, and added
+  nothing anywhere.
+* **Every place a panel writes on an axis has to be counted in its margin.**
+  v2.27 sized the left margin to the ticks and the points; a price line writes
+  there too, and `P_{WORLD}` came out as `WORLD` (v2.43). When a margin is
+  sized to "the labels", enumerate what draws them rather than the ones in
+  front of you.
+* **Read the WARNs, not just the FAILs.** A curve label sitting on the Q axis
+  was reported for a whole round as a warning while every re-check was
+  grepped for `^FAIL`. Rule 5's severity was wrong — that is fixed — but the
+  habit was worse than the bug.
+* **A printed self-check is not a check.** The builder for the externalities
+  chapter computed whether the subsidised supply curve met demand at the
+  efficient quantity and printed the mismatch. It printed it for three rounds
+  and the figure shipped with its equilibrium dot off the curve, because
+  nothing in the build stopped and a passing build reads as a passing build.
+  `assert` instead: the same arithmetic, in the same place, that cannot be
+  scrolled past. Every relationship a figure depends on is worth one line.
+* **Prove an edit landed.** Patching a config by string replacement fails
+  silently when the text has moved on, and the build still succeeds, so the
+  next render looks like the fix simply did not work. Assert the match count,
+  and check the property afterwards: chapter 12 shipped equilibrium dots
+  beside their crossings for three rounds because three patches in a row
+  quietly matched nothing.
+* **Render what the reader loads, stylesheet and all.** `render_widgets` and
+  `mobile_check` launched Chromium with no proxy, so in this container the
+  house stylesheet and script -- which every notes file pulls from S3 -- never
+  arrived, and every screenshot taken here showed the engine's CSS alone. The
+  house sheet styles `table:not(.financial)`: full width, 16px padding, a
+  tinted first column, zebra striping. It had been painting over a schedule
+  row's highlight in every column but the first, and over the navy behind a
+  `given` label's white lettering so the label was simply invisible -- for
+  weeks, with every check passing and every screenshot looking right. Both
+  scripts pass the proxy through now. If a widget looks right here and wrong
+  to Ian, this is the first thing to suspect.
+* **A check that never drives the thing is not checking it.**
+  `check_file` and `render_widgets` both passed a file whose every `calcs`
+  widget threw on load and lost its step buttons with it, because neither
+  presses a button; `mobile_check` found it a chapter later, since driving
+  every control is what it does. Run it on anything interactive, not only on
+  the question of whether a phone fits.
+* **Know what each step costs.** The whole static toolchain is under a second:
+  `check_file` 0.2s, the test suite 0.8s, `place_labels` 0.3s, `embed_engine`
+  0.05s — run those freely, and after every change. The browser steps are the
+  expensive ones (`render_widgets` ~30s, `mobile_check` ~13s per width), so run
+  them once the static checks are clean, not between edits.
+
+## Where things stand (2026-09-23)
+
+The repository was created empty — `eco-widgets.zip` never reached it. The engine,
+both example files and prompt v6 were later supplied directly and are installed
+here verbatim. An earlier attempt to reconstruct them from this file's prose
+description was wrong in nearly every particular and has been deleted;
+`docs/decisions-and-history.md` records what it got wrong, and why a summary is
+not enough to reproduce an implementation.
+
+* **Verified against the real files:** the engine embedded in the 263 file is
+  byte-identical to `engine/` (header comment included); both of
+  `embed_engine.py`'s paths reproduce the delivered file byte-for-byte; all 20
+  prototype widgets render with no engine errors; `check_file.py` runs the
+  geometric label test over 74 labels in the 263 file with no overlaps.
+* **Engine is v2.69** (v2.69 cuts every dashed guide round each in-plot label, gives those labels a halo and draws names last, so nothing covers a name -- see the engine reference, Ian 2026-11-05; v2.68 pulls a network node's four times in against the node, 5px out and 1px above or below, after Ian's review of the MAR3203 passes, 2026-10-26; v2.67 adds `axes.years` so a year tick prints without a thousands separator; v2.66 adds the `network` widget: a project network with ES/EF/LS/LF and the critical path revealed by step, AON or AOA, from the MAR3203 project-management chapter, 2026-10-23; v2.65 drops a wrapped quantity title below the tick row on a crossed-axis panel; v2.64 adds `gold` to the palette, `opacity` on an area and a colour on a `moves` arrow, so a UCF figure can be drawn in the school's gold, white and black -- the rejection-region bells, 2026-10-21; v2.63 adds `axes.xmin` and `axes.ymin`, so a plot need not start at the origin -- the GRE scatter starts at 2.8 GPA and 240 points, the profit parabola runs below zero -- from the QMB3200 set, 2026-10-21; v2.60 to v2.62 add a `pipe` node and a vertical `flow` chain, its links headed downward, with brace spans, plain-arrow links and auto-fitted node names, from the MAR3023 channels chapter; a `flow` chain-of-boxes widget, a shield against the host page's own CSS, and `axes.cross` for axes that meet inside the plot, all from the FIN3403 set, v2.57/v2.58; then `flow.cycle` for the circular flow of income, two-way and arrowless links with `plain` nodes for the open-market diagrams, and `table.plain` for a figure's own non-schedule table beside its plot, from the UCF ECO redo of 2026-10-19; the rest below is unchanged). Since v2.6: `areas` shade a polygon (v2.11) with
+  `edge` to outline it (v2.18) and labels centred on their anchor (v2.13);
+  `dot:false` drops a marker but keeps the axis label (v2.12); points take
+  `guides:"p"`/`"q"` for one leg of the elbow (v2.14); braces take
+  `below:"in"` and `below:"axis"` (v2.14/v2.17) and wrap on `\n` (v2.17), as
+  curve labels do (v2.19); `hlines` take `tag`/`tagdy`/`tagq` to name the line
+  itself (v2.14/v2.16) and suppress a point's own price label only while both
+  are on screen (v2.20); and `calcs` prints the working beside the plot in a
+  widget 920px or wider -- where the plot then grows past `--fig` into the
+  width the working is not using -- and under it in a narrower one
+  (v2.15/v2.21/v2.22), scrolling sideways as a block where a formula is wider
+  than the widget (v2.23); `_{...}` sets a word subscript in a label, a `tag`
+  or a point's axis label (v2.24/v2.25); and an arrow's head scales with its
+  length (v2.26), because a fixed 7×3.6 head made a short movement arrow --
+  two firms sliding a few units along one cost curve -- read as a blot rather
+  than a direction; and the left margin is sized to the widest price-axis
+  label (v2.27), and the right margin to the curve labels (v2.28), because
+  fixed margins cut `P* = ATC` down to `= ATC` and `D = MB = MSB` down to
+  `D = M` -- the text was placed correctly and the panel simply had no room
+  for it. `check_file.py` fails a label that runs outside the panel now, which
+  is the check that would have caught both. An upright brace's label wraps on
+  `\n` and takes `ldx`/`ldy` (v2.29/v2.30), because the externalities
+  chapter's three-line `Marginal External Cost` could not be written on one
+  line and could not be centred rigidly on its brace; it is set at 11px inside
+  the plot; and `dimAt` fades a curve from a step so a label can be read over
+  it (v2.31); and `hiAt` re-marks a point from a step on, whenever it
+  arrived, so a shape a later step draws rings all of its corners rather than
+  the one that step added (v2.32). Axis titles wrap on `\n` and a `left`
+  upright brace sits outside the widest price-axis label (v2.33), both from
+  the labor chapter: `Amount of Employment (L)` is two thirds of a panel on
+  one line, and `CWD` was drawn straight through the two wages it spans. A
+  wrapped price-axis title is anchored clear to the *left* of the axis, a
+  point's `label` wraps on `\n`, and `divider: true` on a point says its guide
+  separates two regions rather than marking a reading (v2.34). `pct: true`
+  labels both axes as percentages and a wrapped axis title gets out of the
+  tick rows' way -- the price title below the topmost tick, the quantity
+  title below the whole row, with the panel grown to 268 to hold it (v2.35),
+  both from the Lorenz-curve chapter, which plots a cumulative percent
+  against a cumulative percent and names both axes in full. A point's label
+  takes `boxed: true` (v2.36): a white box with its own border, so the label
+  can be read over the curves it sits on, at 9.5px so the box covers as
+  little of the curve as it can; and `leader: true` draws a curve as a 1px
+  hairline, the weight of a line that points at the drawing rather than being
+  part of it, and keeps that weight on the step it arrives (v2.37/v2.38). And a
+  widget can be a **payoff matrix** rather than a plot (v2.39): a grid built
+  as HTML, like the schedule table, whose steps mark a row, a column or one
+  cell -- because the game-theory chapter argues through its matrix one
+  comparison at a time, which is what a picture of the finished grid cannot
+  show. A mark's `given` fills in the strategy label of the row or column
+  being held fixed (v2.40): the argument is "*if* B complies, A does better
+  cheating", and with the "if" half missing from the drawing the two lit
+  payoffs read as the wrong cells -- which is how they were read. An area's
+  label wraps on `\n` and takes `boxed` (v2.41); a price line can drop its
+  axis price with `showP: false` (v2.42); and the left margin counts those
+  price-line labels, which it never did -- `P_{WORLD}` rendered as `WORLD`
+  (v2.43). A character's width comes from a per-character table measured in
+  Chromium (v2.45), which `scripts/em_widths.py` holds and generates the
+  engine's copy of: an average per *case* is 20% narrow for a capital-heavy
+  label, so the margin sized for `S + Quota` cut it to `S + Quo`. And a
+  widget's `calcs` block reaches the row it belongs in through the widget
+  rather than a local of another function (v2.45) -- it threw `main is not
+  defined` and took the step controls down with it, so every `calcs` widget
+  was dead while `check_file` and `render_widgets` both passed. An area's
+  *name* is drawn over the curves rather than under them (v2.46), so a boxed
+  one masks what runs beneath it -- which is what `check_file` had always
+  assumed and the engine had never done -- and a boxed area label's box is
+  measured with the same table as everything else instead of 5.3px a
+  character, which hung "Importers" out of both sides of its own box. And a
+  widget's tables opt out of the house stylesheet's own table rules (v2.47),
+  which had been painting white over a schedule row's highlight in every
+  column but the first and over the navy behind a `given` label, so the label
+  vanished; every box in a payoff matrix is one size now, so the same mark
+  reads the same whether it heads a row or a column, and the weights the
+  house sheet was thinning -- `td:first-child` is 500 there, which caught
+  FIRM B and whichever row label started its row, so half the grid was a
+  different weight from the other half -- are re-asserted. And a widget can
+  be a **years table** (v2.48): the same game played year after year, a row
+  at a time, with a red arrow carrying one year's move into the next year's
+  answer, which is the whole of tit-for-tat and what the printed table has to
+  state all at once. Its arrows run from where one cell's writing ends to
+  where the next one's begins, measured off the text: set at a fraction of
+  the cell instead they land on the closing bracket at one end and on the
+  move at the other, and somewhere different again the moment an amount is a
+  character longer. Its header is one navy band across the top, corner cell
+  included, and `rowhead` names that corner (v2.49): the pale rule the other
+  cells carry drew a line down the middle of the band and set the corner a
+  pixel out of line with the two names. And a widget can be an **amortization
+  explorer** (v2.50): the first one here that is a model rather than a
+  drawing, because the share of a payment that is interest depends on the
+  amount, the rate and the term at once and no table of points can hold all
+  three. `pct:"y"` labels the price axis alone, and a quantity title starting
+  with `\n` drops below the tick row, which is where a figure with a tick at
+  the axis's own end has to put it. A `left` upright brace sits 12px clear of
+  whatever the price axis writes rather than a fixed 32 (v2.51): on a panel
+  that writes nothing there it stood out in empty space, away from the gap it
+  measures, which is the one thing a brace has to be next to. The character
+  table was re-measured at v2.53, with the web font actually loaded; the
+  explorer is
+  read by moving a mouse over the figure with nothing held down (v2.54), by
+  dragging a finger, or by the arrow keys, and its year
+  reading is a whole year however it is asked for (v2.55), on a figure whose
+  own ticks are 0, 15 and 30; underneath, the schedule is indexed by month,
+  and setting that in months while writing it back in years clamped the thumb
+  at its own maximum so it never moved (v2.52). A shift arrow's ends are inset
+  for the curve's slope, so the head clears the line it points at by 3.5px
+  rather than 2.7px on every symbolic preset, and the presets choose a clear
+  arrow height instead of a fixed 88 or 32 (v2.56). Every label inside the
+  plot cuts the dashed guides around itself, carries a halo in the plot's
+  colour, and is drawn above the curves and points (v2.69): Ian asked for
+  names that nothing covers and guides that stop at the text and carry on
+  past it, and `check_file` stopped testing labels against guides with it.
+
+* **PPF works.** The first chapter of Exam 1 material converted to seven widgets
+  with no engine gaps hit: frontiers, a combinations table, points on/inside/
+  outside, opportunity cost with both braces, a bowed-out frontier, three growth
+  cases as scenarios, and two-country gains from trade. Only three panels in one
+  figure had to be restructured, into scenario buttons. **Redone 2026-10-05**
+  at Ian's ask, against the source document's own shape groups: it is the one
+  example at 0 FAIL, and
+  `docs/changelogs/tradeoffs-comparative-advantage-changelog.md` says what the
+  figures draw that the first pass did not.
+* **PPF is feasible without new architecture.** Probed against the real engine:
+  the frontier, its combinations table, points on/inside/outside, movement along
+  it, and outward/inward/pivot shifts all work unchanged — a frontier shift is
+  the same `from` mechanic as a supply shift. Four small gaps and the prompt work
+  are in `docs/open-issues.md`; the docs themselves have not arrived yet.
+* **The examples report caption-length failures**, from before the cap existed
+  (rule 9). Everything else about them is 0 FAIL, apart from the 9/11
+  prototype. Counts per file are in `docs/open-issues.md`.
+* **`ECO2013-263-SupplyAndDemand.html` is 0 FAIL and 0 WARN** — the only
+  example that reports nothing at all, since the **2026-10-05 redo** at Ian's
+  ask. The three crowding WARNs are gone (the equilibrium moves further in
+  widgets 7 and 8, `S₂`'s label drops 4px in both of widget 9's panels), widget
+  6's numbers come from its points rather than from ticks every scenario
+  shares, widget 5's new equilibrium is the crossing of the drawn splines
+  rather than a typed coordinate, and widget 6's two converging arrows clear
+  the guides for the first time. `transcript_diff.py` is 45/45 and 38/38 before
+  and after, so no number changed.
+  `docs/changelogs/supply-and-demand-eco2013-changelog.md` has the rest. Its
+  three references to the class are reworded and its four term labels now keep
+  only the term inside `<strong>`. Widget 5's lede and widget 6's equilibrium
+  caption were trimmed on 2026-09-24: both restated the sentence introducing
+  them, and the caption now says why nothing moves rather than re-reading the
+  graph.
+* **Left as delivered:** the 9/11 prototype's captions predate v6's caption
+  rules, and its apples widget puts six brace labels on curves (`below:true`
+  would fix it). Both are recorded in `docs/open-issues.md` rather than silently
+  rewritten.
+* **Still open:** figure mode is in the prompt and throws in the engine;
+  `preset:"shift"` draws its gap brace above the axis where the hand-written
+  template puts it below.
+* **Unknowns to ask Ian:** where finished files get published (S3 path? LMS?);
+  whether the professor's PDF for the Fall '26 chapter exists yet; and whether
+  the rest of the zip (the 30 reference PNGs, the sample notes file, the earlier
+  changelogs) still exists.
+
+Full list with checkboxes: `docs/open-issues.md`.
+
+## How to work here
+
+* Before touching a widget, open `docs/engine-reference.md` for the schema and
+  `examples/ECO2013-Widgets-All.html` for the canonical shapes (schedule+curve,
+  movement-along vs shift, schedule shift with per-row arrows, surplus/shortage
+  with hlines+braces+moves, two-market panels, symbolic presets). Copy those
+  shapes; don't reinvent.
+* **Headings come from the source's formatting, not from what reads like a major
+  topic.** Run `python scripts/doc_headings.py <the Word file>` and use exactly
+  that list: bold alone is `<h1>`, bold + underline at size 23 is `<h2>`, and in
+  a binary `.doc` centred Helvetica-Bold 12 is `<h1>` and underlined Times-Bold
+  is `<h2>`. Never promote a section because it looks important, and never add a
+  heading the source does not have. Box and exam-tip titles are not headings.
+* **A formula is a third thing a Word reader cannot see.** These chapters carry
+  their equations as MathType OLE objects, so `word/document.xml` has no
+  `<m:oMath>` at all — just an `<w:object>` and a WMF picture — and pandoc,
+  `antiword` and `catdoc` all skip them silently. Run `python
+  scripts/doc_formulas.py <the Word file>` for the text inside those pictures,
+  and `--check <notes file>` to be told which of their words the file's LaTeX
+  does not carry. Reiterate each formula whole: keep the left-hand side, keep
+  the source's subscript, and never substitute an equal expression. `OC_X =`
+  went missing because the fraction was transcribed by eye and the thing it
+  equals was not; point elasticity was rewritten from `1/Slope` to `ΔQ_D/ΔP`,
+  which is the same number and loses the reason the equation is there.
+* **A `.doc` needs two readers.** `antiword` gives the body flow and, via its
+  PostScript output, the formatting; it silently drops every floating text box —
+  which in these files is where the exam tips, the worked examples and the
+  figure labels live. Always also run `catdoc` and reconcile the two, or the
+  conversion will quietly lose whole sections.
+* Coordinates come from the source, never from guesswork, and curves pass exactly
+  through every numbered point. A point's axis labels are automatic: it prints
+  its own price and quantity unless they are already ticks, and `pl`/`ql` replace
+  them with `P₁`/`Q₁` on symbolic graphs.
+* **Every pull request runs `python scripts/ci_check.py`** (GitHub Actions,
+  `.github/workflows/checks.yml`; Ian, 2026-11-09). It fails on a failing test
+  suite, an embedded engine that is not byte-identical to `engine/`, or any
+  `check_file.py` FAIL not already in `scripts/ci_baseline.json`. A new page
+  has no baseline, so it must be at 0 FAIL. Run it locally before pushing;
+  after fixing failures, or accepting one Ian has agreed to, run it with
+  `--update-baseline` and commit the new baseline with the change.
+  A second job, `phone`, runs `ci_check.py --phone 390x844` and
+  `--phone 320x568`: `mobile_check.py` on every page, every scenario, step
+  and Back button pressed, against `scripts/ci_phone_baseline.json`. It is the
+  only check that drives the widgets. It takes about five minutes a size, so
+  run it locally once the static checks are clean, not between edits.
+  **Locally, set `MATHJAX_DIR` first** (`npm pack mathjax@3`, unpack, point
+  it at `package/es5`): this container cannot reach the CDN the pages load
+  MathJax from, a runner can, and a page measured without its equations is
+  not the page CI measures. The first CI run failed on exactly that -- an
+  840px equation that only exists once MathJax has typeset it.
+* After any change to `scripts/check_file.py`: `python scripts/test_check_file.py`
+  (must be 0 failing). Its checks have been narrowed repeatedly, and a rule
+  narrowed once too often stops firing silently while every file still reports
+  0 FAIL.
+* After any change to a notes file: `python scripts/check_file.py <file>` (must
+  be 0 FAIL) and, for anything visual, `python scripts/render_widgets.py <file>`
+  and look at every PNG for collisions at every step. That script also measures
+  every arrow against every curve and every dashed guide from the **rendered**
+  geometry and must report no problems. Do not settle a "does that touch?"
+  question by eye: a 1px gap and a touch look identical in a screenshot, and on
+  a `curved` pair the drawn spline is nowhere near the polyline through its
+  points, so the arithmetic misleads too.
+* **A phone is where these get read, and a desktop is where they get
+  reviewed.** `python scripts/mobile_check.py <file> --width 390` loads the file
+  at phone size and reports four things: the page scrolling sideways, a figure
+  or table wider than its column, a control under the 44px tap minimum, and the
+  buttons and the graph not fitting on screen together. It drives every
+  scenario and steps each widget to its last step, so "still interactive" is
+  measured rather than assumed — a button that is disabled or already pressed is
+  doing its job when nothing happens, so neither is counted against it. Run
+  `--width 320 --height 568` too; that is the size everything is tightest at.
+  **Until 2026-11-09 it printed a figure too wide or a button too small only
+  when the widget also failed the fit-on-screen test**, an indentation slip,
+  so "all examples pass" meant less than it said. Fixed; the examples still
+  pass at 390, and the solutions pages' 28px tool buttons and wide payoff
+  matrices showed up at once (`docs/open-issues.md`). On a solutions page it
+  opens every question first, since a widget behind the menu cannot be tapped.
+* **An arrow does not lie over the dashed guides.** Ian's rule. A converging
+  pair belongs *inside* the box the guides fence off, not across it, which
+  usually means starting it a few units in from the point and keeping it short.
+  Where a panel genuinely has nowhere else to put it, crossing a guide is
+  allowed — but establish that from the measurement, not from a glance.
+* **Before a semester swap, find out whether there is one.** `python
+  scripts/transcript_diff.py <file> <transcript>...` reports, per widget,
+  which of its ticks, schedule rows and brace prices the transcripts state and
+  which of the nouns its titles and labels name they use. Symbolic widgets are
+  reported as having no values at all, because their 110-scale coordinates are
+  the engine's convention and rule 3 says that is exactly what you draw when the
+  source states no numbers. Everything stated means the transcripts do not
+  change the file, and the swap is finished before it starts — the delivered
+  `ECO2013-263-SupplyAndDemand.html` against the 9/2 and 9/9 transcripts is
+  45/45 values and 38/38 names, because those are the transcripts it was built
+  from. Matching is loose on purpose, so it over-reports support: an UNSUPPORTED
+  line is worth trusting, a stated one only means "not obviously changed". And
+  read it as a question — an unsupported number is a number to go look up in the
+  source, never one to edit to taste.
+* **A semester swap is `scripts/widget_text.py`, not a rewrite.** It lists every
+  title, lede, caption, step, axis title, button label and column header under
+  an address like `w4.scenarios.sub.steps[2]`, and `--apply` writes an edited
+  map back. Coordinates, ticks and step wiring are never listed and never
+  touched, so a swap cannot move a curve by accident; a no-op round-trip is
+  byte-identical. If the new semester also changes the *numbers*, that is a
+  reconversion rather than a swap, because the drawing has to change with them.
+* To test a config quickly, drop it into a copy of
+  `examples/ECO2013-Widgets-All.html` and open it in a browser; it carries its
+  own copy of the engine in its head.
+* Prompt changes: edit `docs/conversion-prompt-v7.md` (bump the version in the file
+  name and add a "what changed" line at the top). If a standalone tool prompt is
+  needed, append the two engine files as Appendix A/B — see
+  `docs/archive/README.md`.
+* Commit messages: plain imperative. Don't commit `shots/` (screenshots) — it's
+  in `.gitignore`.
+* Ian is the only user. He reviews output by reading it and clicking through
+  widgets, and wants the file plus a changelog he can scan.
+
+### Asking questions
+
+Ian changed this rule on 2026-09-17, and the change applies **here only**:
+
+* **In this repo, ask when a wrong guess would be costly.** That means a number
+  (rule 3), which graphs to convert, or which of two readings of a table or
+  figure is intended. Batch them if there are several; do not ask one at a time.
+* **Decide everything else and flag it.** Heading levels, table markup, `<b>` vs
+  `<strong>`, label placement, scenario grouping, prose edits. A changelog line
+  is the right place for those, not a question.
+* **`docs/conversion-prompt-v7.md` still says "You never reply with a question",
+  and that is deliberate — do not harmonise the two.** v6 runs in Claude Cowork,
+  where a question stalls a run that nobody is watching, so it must always
+  finish the output. This file governs work done here, with Ian present. If v6
+  is ever given a question-asking step, it needs a bump to v7 and a note about
+  unattended runs.
+
+### Converting another publisher's files (the UCF / StudyKnight set, 2026-10-12)
+
+* **Only the widgets change.** The head keeps its own stylesheet
+  (`sk26-v1.css`) and `<title>`; the one head change is swapping
+  `content/sn25-v5.js` for the live `studyguide/sn25-v2.js`, which builds the
+  table of contents (Ian: "one thing you can fix is the toc"). No prose,
+  markup or heading edits, however wrong they look: those go on the
+  checklist. `scripts/apply_widgets.py` replaces each mapped `<img>` with its
+  widget, anchors widgets into a Concise edition, and refuses to write a file
+  that differs from its source in anything else; `check_file.py --no-head`
+  checks the widgets without the Smokin' Notes head rules.
+* **A Concise edition carries a widget only where the text is hard to grasp
+  without it.** The test, in Ian's words (2026-10-26, confirmed after two
+  tightenings the same day): *if it is complex, keep it in the Concise; if
+  it is already explained sufficiently in the tables or text, the widget is
+  not needed.* His fuller statement: "the widget should only be there if it is needed to comprehend the
+  text, like the financial calculator; a simple diagram of something being
+  described is most likely not needed unless it is very complex"). So a CPM
+  pass with its four times stays and a bell curve, a cost band or a
+  break-even chart does not, whatever tip sits beside it; a figure with data
+  becomes a table, one without is dropped. The MAR3203 set ended with one
+  Concise widget in twelve chapters. The older wording: Cases of one lesson that the text introduces together (surplus and
+  shortage, the two taxes, the four surplus areas) become one widget with
+  scenario buttons; a widget the Concise text never introduces is dropped,
+  and not replaced by a table of its numbers either (Ian, 2026-10-12: the
+  Concise exists to save vertical space, and Full and Balanced carry the
+  figure). Two widgets back to back with no text between them is never
+  acceptable; `concise_runs.py` in the build area lists any such run.
+* **Deliveries.** The full set goes as one zip: `c - ECO2013 UCF Widgets/`
+  and `d - ECO2023 UCF - Widgets/` with `Exam N/` and chapter subfolders (no
+  "- DONE" suffix), new files only, plus `CHECKLIST.md` and one changelog per
+  chapter. A redone chapter goes as the three files on their own, or one flat
+  folder, never a path tree. The finished UCF files are not committed here;
+  Ian reviews them first.
+
+### Calculator widgets (the FIN3403 UCF set, 2026-10-16)
+
+* **A calculator screenshot becomes an HP 10bII+ widget, not a graph.** The
+  engine is `engine/hp10bii.css` + `engine/hp10bii.js` (the sample Ian sent,
+  extended); `apply_widgets.py` embeds both after the house script whenever a
+  map entry carries `"hp"`, and keeps the original `<img>` inside the widget
+  as a `<noscript>` fallback, so the file's proof still holds. Kinds: `tvm`
+  (N, I/YR, PV, PMT, FV, `EFF%`), `cf` (CFj, Nj as `50000x5`, NPV, IRR,
+  `PI` with `io`), `amort` (INPUT, AMORT, = = =), `stat` (Σ+, x̄, Sx), `keys`
+  (a static picture with keys glowing). `alt` gives one widget a row of
+  buttons for cases of one lesson; `then` chains a second calculation that
+  starts from the answer on the display; `occurrence` replaces one use of a
+  picture the file carries twice.
+* **Follow the notes' convention, not the sample's.** The sample typed
+  `5/12` into I/YR with P/YR at 1; these notes set P/YR (`12 [orange] P/YR`),
+  count N in periods and leave I/YR annual, and the engine now does the same,
+  because the prose beside each widget says so ("we didn't change the interest
+  rate because I/YR refers to an annual rate"). Amortization rounds the
+  payment and each period's interest to four places, which is the only way
+  the notes' PRIN/INT/BAL (and the 0.0250 residual) come out to the cent.
+* **Every number comes from the screenshot's own register boxes or the
+  prose**, and every widget's result is checked in Chromium against the
+  number the notes print: `python scripts/check_calc_widgets.py FILE` drives
+  each widget to its last step and compares `data-expect` (kept in the test
+  build, stripped from the delivery with `--strip-expect`). 162 runs, 0
+  mismatches on the first delivery.
+* **Concise: a widget only where the Concise's own text states the numbers**,
+  placed after that line or table, cases merged under `alt`, never two in a
+  row (the UCF rule above, applied to calculators). A keystroke list with no
+  values beside it (the Σ+ keys, the deferred-annuity methods) gets nothing,
+  and neither does a bare example bullet: the Cost of Capital Concise's
+  "Bond with flotation example: … → kd = 8.6045%" line had a widget under it
+  and Ian pulled it ("there's no context for this widget", 2026-10-16). The
+  text has to introduce the calculation, not just list its inputs.
+* **Every chart or graph the sd-graph engine can draw is an sd-graph figure
+  too** (Ian, 2026-10-16: "anything that can be converted from chart/graph to
+  SDG"), static with a caption where the picture is static -- to Ian a widget
+  means interaction, but a drawn figure is wanted either way. Steps only
+  where the picture genuinely builds. Conceptual finance graphs are
+  symbolic: word axis titles wrapped on `\n`, no numbers unless the source
+  prints them, `grey` for a faded series, histograms and bar charts as
+  rectangular `areas`. What stays a picture: timelines (the calculator
+  widget draws its own), the annotated button legend, income-statement tables, the stock
+  quote table. Flow charts (the leverage chains) are the `flow` widget.
+* **A chapter's own `<style>` can restyle the plot.** The risk chapter's
+  `.brace { transform: scaleX(.65) }` squeezed every upright brace into the
+  margin while `check_file` and the DOM both said they were fine; the
+  engine's stylesheet now pins layout properties on its SVG classes
+  (v2.57). When a widget looks wrong only on one page, grep that page's
+  `<style>` for the engine's class names first.
+* The build lives in `scripts/fin3403/` (`fin_maps.py` writes every chapter's
+  map and merges the graph overlays from `graphs/*.json`, which
+  `build_risk.py` and `build_other.py` write; `fin_assemble.py` applies them
+  to a folder holding the unpacked P1/P2 zips and writes `FIN3403
+  Widgets/Exam N/<chapter>/`). The finished files are not committed; Ian
+  reviews them first.
+
+### MAN4504 step-by-step widgets (2026-11-11)
+
+* **Aggregate planning: Option A, the stepper, is the chosen design** (Ian's
+  boss, 2026-11-11). Build and deliver Option A only from now on; Option B
+  (the tabbed explorer) stays in `scripts/man4504/transport.py` but is not
+  delivered unless asked. A future step-by-step widget for a worked
+  calculation defaults to the same stepper pattern.
+* Builds: `transport.py` and `transport_editions.py` (aggregate planning),
+  `project_mgmt.py` (`--patch` updates an already-converted file) and
+  `project_mgmt_editions.py` (project management). A Concise keeps the Full's
+  h1/h2 headings exactly, plus Glossary and Key Takeaways; the edition
+  scripts assert it.
+* **Hand-built widgets span about 75–80% of the page** (`width: 78%`, full
+  width under 600px), and their figures scale with the box instead of a fixed
+  pixel size (Ian, 2026-11-12). A leader line points *at* the thing it names,
+  ending a few pixels short of it, not at the shape's edge.
+
+### Reviewing Ian's work
+
+When Ian asks for a check of files he has written or edited (a chapter, a
+Concise edition, a zip of a module), the deliverable is the findings. **Report
+and change nothing** unless he asks for the fix (Ian, 2026-10-12). Report in
+this order, most costly first:
+
+1. Broken widgets and wrong heading structure.
+2. Layout and page errors (a table pushing the page sideways, a lost date).
+3. Wrong or contradictory content.
+4. Missing information.
+5. Housekeeping.
+
+Three editions of a chapter exist. **Full** is the source as converted.
+**Balanced** is close to Full. **Concise** is produced by a pipeline that
+rewrites the prose: it usually carries no images, may use tables or widgets
+where Full has a figure, and is the one edition where `<h3>` is expected.
+Review each against what its edition is meant to be, not against Full.
+Folders marked `x-ignore` are out of scope: skip them without comment.
+
+## Vocabulary
+
+* **widget** — one `<div class="sdg">` block. **config** — its JSON. **preset** —
+  a config that starts `"preset":"shift"|"double"` and expands in the engine.
+* **symbolic graph** — P₁/Q₁ axes via `pl`/`ql`, no numbers, 110×110 coordinates
+  with equilibrium at [50,50]. **numeric** — real prices/quantities from the
+  source.
+* **scenario** — a button whose overrides are merged shallowly over the base
+  config. **step** — one caption string + visibility state, driven by `at` and
+  `until` (`until` is exclusive).
+* **schedule** — a price/quantity table; **schedule shift** — before/after
+  columns with per-row arrows.
+* **house format / sn25-v6** — Smokin' Notes' site stylesheet and script that
+  every notes page loads.
+* **TERMCODE** — YY + {1 spring, 2 summer, 3 fall}; Fall 2026 = 263.
+* **patch mode** — mode (d)'s default output: `=== REPLACE / === WITH / === END`
+  blocks instead of the whole file.
+* **change-by-message / mode (d) / step 0C** — updating an existing widget file
+  from a sentence like "this semester it's hotdogs, demand shifts right by 20".
