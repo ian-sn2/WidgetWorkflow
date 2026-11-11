@@ -401,9 +401,12 @@ def bands():
 # ---------------------------------------------------------------- static SVG figures
 def node_legend():
     """the node-labelling convention, as code, in the widgets' colours"""
-    R = 70; cx, cy = 230, 136; xl = R * 0.40
+    R = 84; cx, cy = 230, 142; xl = R * 0.36
     def yc(x): return math.sqrt(R * R - x * x)
-    s = [f'<svg viewBox="0 0 460 262" class="pm-legend-svg" role="img" aria-label="An activity node: earliest start top left, '
+    vx, vy = 0.64 * R, 0.38 * R          # centre of each corner cell: the label sits inside its own shading
+    def edge(sx, sy):                    # where a leader meets the circle, on the line out through the cell's centre
+        d = math.hypot(vx, vy); return cx + sx * vx / d * R, cy + sy * vy / d * R
+    s = [f'<svg viewBox="0 0 460 286" class="pm-legend-svg" role="img" aria-label="An activity node: earliest start top left, '
          f'earliest finish top right, latest start bottom left, latest finish bottom right, the activity label at the top '
          f'centre and its duration at the bottom centre.">',
          f'<defs><clipPath id="pm-lg-clip"><circle cx="{cx}" cy="{cy}" r="{R}"/></clipPath></defs>',
@@ -412,21 +415,22 @@ def node_legend():
          f'<rect x="{cx - R}" y="{cy}" width="{R - xl}" height="{R}" class="cb"/>'
          f'<rect x="{cx + xl}" y="{cy}" width="{R - xl}" height="{R}" class="cb"/></g>',
          f'<circle cx="{cx}" cy="{cy}" r="{R}" class="ring"/>',
-         f'<line x1="{cx - xl}" y1="{cy - yc(xl)}" x2="{cx - xl}" y2="{cy + yc(xl)}" class="div"/>',
-         f'<line x1="{cx + xl}" y1="{cy - yc(xl)}" x2="{cx + xl}" y2="{cy + yc(xl)}" class="div"/>',
-         f'<line x1="{cx - R}" y1="{cy}" x2="{cx - xl}" y2="{cy}" class="div"/><line x1="{cx + xl}" y1="{cy}" x2="{cx + R}" y2="{cy}" class="div"/>',
-         f'<text x="{cx - 0.70 * R}" y="{cy - 16}" class="vf">ES</text><text x="{cx + 0.70 * R}" y="{cy - 16}" class="vf">EF</text>',
-         f'<text x="{cx - 0.70 * R}" y="{cy + 34}" class="vb">LS</text><text x="{cx + 0.70 * R}" y="{cy + 34}" class="vb">LF</text>',
-         f'<text x="{cx}" y="{cy - 14}" class="lab">A</text><text x="{cx}" y="{cy + 48}" class="dur">2</text>']
-    calls = [  # text, x, y, anchor, leader from, leader to, colour
-        ("Earliest Start", 16, 34, "start", (96, 46), (cx - 52, cy - 44), "f"),
-        ("Earliest Finish", 444, 34, "end", (364, 46), (cx + 52, cy - 44), "f"),
-        ("Latest Start", 16, 236, "start", (90, 224), (cx - 52, cy + 44), "b"),
-        ("Latest Finish", 444, 236, "end", (370, 224), (cx + 52, cy + 44), "b"),
-        ("Activity label", cx, 22, "middle", (cx, 32), (cx, cy - 36), "k"),
-        ("Duration", cx, 252, "middle", (cx, 240), (cx, cy + 60), "k")]
+         f'<line x1="{cx - xl:.1f}" y1="{cy - yc(xl):.1f}" x2="{cx - xl:.1f}" y2="{cy + yc(xl):.1f}" class="div"/>',
+         f'<line x1="{cx + xl:.1f}" y1="{cy - yc(xl):.1f}" x2="{cx + xl:.1f}" y2="{cy + yc(xl):.1f}" class="div"/>',
+         f'<line x1="{cx - R}" y1="{cy}" x2="{cx - xl:.1f}" y2="{cy}" class="div"/><line x1="{cx + xl:.1f}" y1="{cy}" x2="{cx + R}" y2="{cy}" class="div"/>',
+         f'<text x="{cx - vx:.1f}" y="{cy - vy:.1f}" class="vf">ES</text><text x="{cx + vx:.1f}" y="{cy - vy:.1f}" class="vf">EF</text>',
+         f'<text x="{cx - vx:.1f}" y="{cy + vy:.1f}" class="vb">LS</text><text x="{cx + vx:.1f}" y="{cy + vy:.1f}" class="vb">LF</text>',
+         f'<text x="{cx}" y="{cy - vy:.1f}" class="lab">A</text><text x="{cx}" y="{cy + 0.5 * R:.1f}" class="dur">2</text>']
+    calls = [  # text, x, y, anchor, leader from, leader to (a point on the node's edge), colour
+        ("Earliest Start", 14, 40, "start", (112, 50), edge(-1, -1), "f"),
+        ("Earliest Finish", 446, 40, "end", (348, 50), edge(1, -1), "f"),
+        ("Latest Start", 14, 252, "start", (100, 240), edge(-1, 1), "b"),
+        ("Latest Finish", 446, 252, "end", (360, 240), edge(1, 1), "b"),
+        ("Activity label", cx, 22, "middle", (cx, 33), (cx, cy - R), "k"),
+        ("Duration", cx, 276, "middle", (cx, 264), (cx, cy + R), "k")]
     for t, x, y, anc, (x1, y1), (x2, y2), c in calls:
         s.append(f'<line x1="{x1}" y1="{y1}" x2="{x2:.1f}" y2="{y2:.1f}" class="lead {c}"/>')
+        s.append(f'<circle cx="{x2:.1f}" cy="{y2:.1f}" r="3" class="dot {c}"/>')
         s.append(f'<text x="{x}" y="{y}" class="call {c}" text-anchor="{anc}">{t}</text>')
     s.append("</svg>")
     return ('<div class="pmw pm-legend"><p class="pm-title">How Each Node Is Labeled</p>' + "".join(s) +

@@ -4,7 +4,7 @@ Ian's readme: the nine table images make the section very long; replace them wit
 one or two options, and make sure every number is right. Two options, each written as a whole chapter:
 
   A  stepper  - one table that fills in as the reader presses Next: layout, costs column by column,
-                then the cheapest-first allocation one source at a time, the dummy column, and the total
+                then the cheapest-first allocation one source at a time, and the dummy column
   B  explorer - the finished table with tabs: how each cost is built, how each column is filled
                 (a ranked list of sources), and a "read the plan" mode for the row/column exam questions
 
@@ -113,10 +113,7 @@ def states():
     push("Unused capacity",
          "Every month's demand is met. The capacity nobody used goes to the dummy column: <b>100</b> units of March subcontracting and <b>130</b> of May subcontracting, "
          f"{DUMMY_UNITS} in all. Supply and demand now balance.", hi=[(k, "dum") for k in DUMMY_FILL], hicols=["dum"])
-    terms = cost_terms()
-    push("Total cost",
-         "Multiply each filled cell by its cost and add: " + " + ".join(f"{q:,}({u})" for q, u in terms) + f" = <b>{money(TOTAL_COST)}</b>.",
-         hi=[f for f in ALLOC if f[1] != "dum"])
+    # the total cost and how to read the plan are the prose right after the widget, so the widget stops here
     return S
 
 # ---------------------------------------------------------------- option B: the explorer's text
@@ -344,10 +341,10 @@ def widget(mode):
         terms = cost_terms()
         M["totalText"] = " + ".join(f"{q:,}({u})" for q, u in terms) + f" = <b>{money(TOTAL_COST)}</b>."
         M["dummyRows"] = M.pop("dummy")
-        tabs = [("costs", "1. Costs"), ("mar", "2. March"), ("apr", "3. April"), ("may", "4. May"), ("dum", "5. Unused"), ("total", "6. Total"), ("read", "Read the plan")]
+        tabs = [("costs", "1. Costs"), ("mar", "2. March"), ("apr", "3. April"), ("may", "4. May"), ("dum", "5. Unused")]
         body = ('<div class="tp-bar" role="group" aria-label="Step">' + "".join(f'<button type="button" data-mode="{m}">{l}</button>' for m, l in tabs) + '</div>\n'
                 '<div class="tp-cap" aria-live="polite"></div>\n<div class="tp-scroll"></div>')
-        title, lede = "The Transportation Method: Tire Example", "Work through the tabs in order, then use Read the plan to practice the exam questions."
+        title, lede = "The Transportation Method: Tire Example", "Work through the tabs in order."
     js = json.dumps(M, ensure_ascii=False).replace("</", "<\\/")
     return (f'<div class="tpw" data-mode="{mode}" tabindex="-1">\n<p class="tp-title">{title}</p>\n<p class="tp-lede">{lede}</p>\n{body}\n'
             f'{FALLBACK}\n<script type="application/json">{js}</script>\n</div>')
@@ -365,7 +362,7 @@ def chapter(src, mode):
     for must in ("chapter12-02-", "chapter12-10-", "Luckily, we have already added in a dummy column"):
         assert must in old, must
     how = ("The widget below builds the table and the plan one step at a time." if mode == "stepper"
-           else "Work through the widget's tabs in order: how the costs are built, how each month is filled, and the total.")
+           else "Work through the widget's tabs in order: how the costs are built and how each month is filled.")
     new = ("<h2>Setting Up and Solving the Table</h2>\n\n" + INTRO.format(how=how) + "\n\n" + CSS + "\n" + widget(mode) + "\n\n")
     t = t[:a] + new + t[b:]
     t = t.replace("</body>", RUNTIME + "\n</body>", 1)

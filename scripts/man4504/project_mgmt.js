@@ -52,14 +52,14 @@
     return gg;
   }
 
-  var GEO = { full: { R: 33, SX: 128, SY: 112, M: 44, VX: 92, VY: 104 }, plain: { R: 21, SX: 104, SY: 64, M: 30 }, aoa: { R: 14, SX: 112, SY: 62, M: 30 } };
+  var GEO = { full: { R: 36, SX: 130, SY: 114, M: 46, VX: 96, VY: 106 }, plain: { R: 21, SX: 104, SY: 64, M: 30 }, aoa: { R: 14, SX: 112, SY: 62, M: 30 } };
 
   function fullNode(g, clip, R, id, d, vals, ns, crashed) {
     var gr = E('g', { 'class': 'n ' + (ns.cls || '') }, g);
     var v = ns.v || [], has = function (k) { return v.indexOf(k) >= 0; };
     if (/cur-/.test(ns.cls || '')) E('circle', { r: R + 5, 'class': 'n-halo' }, gr);
     E('circle', { r: R, 'class': 'n-bg' }, gr);
-    var xl = R * 0.4, yl = Math.sqrt(R * R - xl * xl), w = R - xl;
+    var xl = R * 0.34, yl = Math.sqrt(R * R - xl * xl), w = R - xl;
     var cg = E('g', { 'clip-path': 'url(#' + clip + ')' }, gr);
     if (has('es')) { E('rect', { x: -R, y: -R, width: w, height: R, 'class': 'cf' }, cg); E('rect', { x: xl, y: -R, width: w, height: R, 'class': 'cf' }, cg); }
     if (has('ls')) { E('rect', { x: -R, y: 0, width: w, height: R, 'class': 'cb' }, cg); E('rect', { x: xl, y: 0, width: w, height: R, 'class': 'cb' }, cg); }
@@ -73,7 +73,7 @@
     E('circle', { r: R, 'class': 'n-c' }, gr);
     T(gr, 0, f1(-R * 0.36), id, 'n-l' + (id === 'Start' ? ' n-ls' : ''));
     T(gr, 0, f1(R * 0.6), String(d), 'n-d' + (crashed ? ' n-x' : ''));
-    var cx = R * 0.665, cy = R * 0.4, at = { es: [-cx, -cy, 'vf', 0], ef: [cx, -cy, 'vf', 1], ls: [-cx, cy, 'vb', 2], lf: [cx, cy, 'vb', 3] };
+    var cx = R * 0.61, cy = R * 0.37, at = { es: [-cx, -cy, 'vf', 0], ef: [cx, -cy, 'vf', 1], ls: [-cx, cy, 'vb', 2], lf: [cx, cy, 'vb', 3] };
     v.forEach(function (k) { var p = at[k]; T(gr, f1(p[0]), f1(p[1]), String(vals[p[3]]), 'n-v ' + p[2]); });
     return gr;
   }
@@ -88,7 +88,7 @@
   function network(holder, net, st, style, aoa, reserve) {
     var g = GEO[style], vertical = style === 'full' && holder.clientWidth < 560;
     var nodes = aoa ? aoa.nodes : null, P = {}, W = 0, Hh = 0, id, PS = {}, maxc = 0;
-    var src = aoa ? nodes : net.nodes, room = st.slack || reserve, side = vertical && room ? 92 : g.M;
+    var src = aoa ? nodes : net.nodes, room = st.slack || reserve, side = vertical && room ? 100 : g.M;
     for (id in src) {
       var pos = aoa ? src[id] : src[id].pos, x, y;
       if (vertical) { x = side + pos[1] * g.VY; y = g.M + pos[0] * g.VX; } else { x = g.M + pos[0] * g.SX; y = g.M + pos[1] * g.SY; }
@@ -105,13 +105,24 @@
       for (id in P) { var q = plainNode(gn, g.R, id, {}, 'aoa'); q.setAttribute('transform', 'translate(' + P[id][0] + ',' + P[id][1] + ')'); }
       return;
     }
-    var en = st.e || {};
+    var en = st.e || {}, segs = [];
     net.edges.forEach(function (e) {
       var k = e[0] + '>' + e[1], c = en[k] || '';
       if (c === 'hide') return;
       var a = P[e[0]], b = P[e[1]];
-      arrow(ge, a[0], a[1], b[0], b[1], g.R, g.R, c);
+      arrow(ge, a[0], a[1], b[0], b[1], g.R, g.R, c); segs.push([a[0], a[1], b[0], b[1]]);
     });
+    function clear(x, y, w, h) {   /* does a w x h box centred at x,y stay inside the panel and off every arrow? */
+      if (x - w / 2 < 1 || x + w / 2 > W - 1 || y + h / 2 > Hh - 1) return false;
+      for (var nid in P) { var dx = Math.max(Math.abs(P[nid][0] - x) - w / 2, 0), dy = Math.max(Math.abs(P[nid][1] - y) - h / 2, 0); if (Math.sqrt(dx * dx + dy * dy) < g.R + 2) return false; }
+      return segs.every(function (q) {
+        for (var k = 0; k <= 60; k++) {
+          var px = q[0] + (q[2] - q[0]) * k / 60, py = q[1] + (q[3] - q[1]) * k / 60;
+          if (Math.abs(px - x) < w / 2 + 2 && Math.abs(py - y) < h / 2 + 2) return false;
+        }
+        return true;
+      });
+    }
     for (id in P) {
       var ns = st.n ? st.n[id] : {}, gr;
       if (ns && ns.cls === 'hide') continue;
@@ -128,6 +139,8 @@
           else { sx = -g.R - bw / 2 - 4; sy = 0; }
         }
         else { sx = 0; sy = g.R + 13; }
+        var tries = [[sx, sy], [sx - 16, sy], [sx + 16, sy], [sx - 30, sy], [sx + 30, sy], [sx, sy + 8], [sx - 24, sy + 6]];
+        for (var q = 0; q < tries.length; q++) if (clear(P[id][0] + tries[q][0], P[id][1] + tries[q][1], bw, bh)) { sx = tries[q][0]; sy = tries[q][1]; break; }
         var sg = E('g', { 'class': 'sl' + (s === 0 ? ' z' : ''), transform: 'translate(' + f1(P[id][0] + sx) + ',' + f1(P[id][1] + sy) + ')' }, gn);
         E('rect', { x: -bw / 2, y: -bh / 2, width: bw, height: bh, rx: 8 }, sg);
         T(sg, 0, 0, 'Slack ' + s, '');

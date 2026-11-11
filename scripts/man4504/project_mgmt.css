@@ -37,10 +37,10 @@
 .pmw .n .n-div { stroke:var(--ink); stroke-width:1.1; }
 .pmw .n .cf { fill:var(--fwd-bg); } .pmw .n .cb { fill:var(--bwd-bg); } .pmw .n .cu { fill:var(--use); }
 .pmw .n .n-l { font-size:17px; font-weight:800; fill:var(--ink); text-anchor:middle; dominant-baseline:central; }
-.pmw .n .n-l.n-ls { font-size:10.5px; }
+.pmw .n .n-l.n-ls { font-size:8.5px; }
 .pmw .n .n-d { font-size:12px; font-weight:700; fill:var(--muted); text-anchor:middle; dominant-baseline:central; }
 .pmw .n .n-d.n-x { fill:var(--crit); }
-.pmw .n .n-v { font-size:13px; font-weight:800; text-anchor:middle; dominant-baseline:central; font-variant-numeric:tabular-nums; }
+.pmw .n .n-v { font-size:12.5px; font-weight:800; text-anchor:middle; dominant-baseline:central; font-variant-numeric:tabular-nums; }
 .pmw .n .n-v.vf { fill:var(--fwd); } .pmw .n .n-v.vb { fill:var(--bwd); }
 .pmw .n .n-halo { fill:none; stroke-width:7; opacity:.28; }
 .pmw .n.cur-f .n-c { stroke:var(--fwd); stroke-width:3.4; } .pmw .n.cur-f .n-halo { stroke:var(--fwd); }
@@ -122,8 +122,9 @@
 .pm-legend-svg .cf { fill:var(--fwd-bg); } .pm-legend-svg .cb { fill:var(--bwd-bg); }
 .pm-legend-svg .ring { fill:none; stroke:var(--ink); stroke-width:2; } .pm-legend-svg .div { stroke:var(--ink); stroke-width:1.5; }
 .pm-legend-svg .vf, .pm-legend-svg .vb, .pm-legend-svg .lab, .pm-legend-svg .dur { text-anchor:middle; font-weight:800; dominant-baseline:central; }
-.pm-legend-svg .vf { fill:var(--fwd); font-size:21px; } .pm-legend-svg .vb { fill:var(--bwd); font-size:21px; }
-.pm-legend-svg .lab { font-size:34px; fill:var(--ink); } .pm-legend-svg .dur { font-size:19px; fill:var(--muted); }
+.pm-legend-svg .vf { fill:var(--fwd); font-size:20px; } .pm-legend-svg .vb { fill:var(--bwd); font-size:20px; }
+.pm-legend-svg .dot.f { fill:var(--fwd); } .pm-legend-svg .dot.b { fill:var(--bwd); } .pm-legend-svg .dot.k { fill:var(--ink); }
+.pm-legend-svg .lab { font-size:30px; fill:var(--ink); } .pm-legend-svg .dur { font-size:19px; fill:var(--muted); }
 .pm-legend-svg .call { font-size:15px; font-weight:800; dominant-baseline:central; }
 .pm-legend-svg .call.f { fill:var(--fwd); } .pm-legend-svg .call.b { fill:var(--bwd); } .pm-legend-svg .call.k { fill:var(--ink); }
 .pm-legend-svg .lead { stroke-width:1.2; } .pm-legend-svg .lead.f { stroke:var(--fwd); } .pm-legend-svg .lead.b { stroke:var(--bwd); } .pm-legend-svg .lead.k { stroke:var(--ink); }
