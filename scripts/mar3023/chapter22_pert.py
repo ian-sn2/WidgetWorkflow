@@ -40,14 +40,15 @@ LAYOUT = {
 
 
 def model():
-    views = []
+    views = [{"label": "Whole chart", "path": [], "crit": False, "whole": True,
+              "cap": "All three paths from prototype (A) to launch (F)."}]
     order = sorted(PATHS, key=lambda x: "".join(x[0]))
     for p, t in order:
         crit = p == CRIT[0]
         steps = " + ".join(str(DUR[(p[i], p[i + 1])]) for i in range(len(p) - 1))
         views.append({"label": " → ".join(p), "path": p, "crit": crit,
                       "cap": f"<b>{' → '.join(p)}:</b> {steps} = <b>{t} months</b>" + (" (the critical path)" if crit else "")})
-    start = next(i for i, v in enumerate(views) if v["crit"])
+    start = 0   # opens on the whole chart; the critical path shows only when its button is pressed
     return {"nodes": NODES, "edges": [[a, b, d, a + b in {"AC", "CE", "EF"}] for a, b, d in EDGES], "layout": LAYOUT,
             "views": views, "start": start}
 
@@ -68,7 +69,8 @@ CSS = r"""<style>
 .pertw .pt-caps { display:grid; margin:0 0 6px; }
 .pertw .pt-cap { grid-area:1 / 1; visibility:hidden; padding:7px 12px; border-left:4px solid var(--sel); background:var(--soft);
   border-radius:0 6px 6px 0; font-size:.92rem; text-align:left; }
-.pertw .pt-cap.crit { border-left-color:var(--crit); }
+.pertw .pt-cap.crit { border-left-color:var(--crit); } .pertw .pt-cap.whole { border-left-color:var(--rule); }
+.pertw button.whole[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); }
 .pertw .pt-cap.on { visibility:visible; }
 .pertw svg { display:block; width:100%; height:auto; margin:0 auto; }
 .pertw svg text { font-family:"Red Hat Display", system-ui, sans-serif; }
@@ -110,7 +112,8 @@ RUNTIME = r"""<script>
     }
     M.edges.forEach(function (e) {
       var a = P[e[0]], b = P[e[1]], k = e[0] + e[1], dx = b[0] - a[0], dy = b[1] - a[1], d = Math.sqrt(dx * dx + dy * dy), ux = dx / d, uy = dy / d;
-      var cls = 'ed' + (e[3] ? ' cp' : '') + (on[k] ? ' on' : ' off'), g = E('g', { 'class': cls }, svg), thick = on[k] || e[3];
+      var whole = !v.path.length, cp = e[3] && v.crit;
+      var cls = 'ed' + (cp ? ' cp' : '') + (whole ? '' : on[k] ? ' on' : ' off'), g = E('g', { 'class': cls }, svg), thick = !whole && on[k];
       var hl = thick ? 13 : 9, hw = thick ? 7 : 4.5, sx = a[0] + ux * (R + 2), sy = a[1] + uy * (R + 2), tx = b[0] - ux * (R + 3), ty2 = b[1] - uy * (R + 3), bx = tx - ux * hl, by = ty2 - uy * hl;
       E('line', { x1: r1(sx), y1: r1(sy), x2: r1(bx + ux), y2: r1(by + uy) }, g);
       E('polygon', { points: [r1(tx) + ',' + r1(ty2), r1(bx - uy * hw) + ',' + r1(by + ux * hw), r1(bx + uy * hw) + ',' + r1(by - ux * hw)].join(' ') }, g);
@@ -118,7 +121,7 @@ RUNTIME = r"""<script>
       var t = E('text', { x: r1(mx), y: r1(my), 'class': 'du' }, g); t.textContent = e[2];
     });
     Object.keys(P).forEach(function (id) {
-      var p = P[id], g = E('g', { 'class': 'nd' + (onN[id] ? ' on' : ' off') + (v.crit ? ' crit' : ''), transform: 'translate(' + p[0] + ',' + p[1] + ')' }, svg);
+      var p = P[id], g = E('g', { 'class': 'nd' + (!v.path.length ? '' : onN[id] ? ' on' : ' off') + (v.crit ? ' crit' : ''), transform: 'translate(' + p[0] + ',' + p[1] + ')' }, svg);
       E('circle', { r: R }, g); var t = E('text', { x: 0, y: 0, 'class': 'id' }, g); t.textContent = id;
       var lines = M.nodes[id].split('\n'), lh = 15, side = p[2], x = 0, y, anc = 'middle';
       if (side === 'below') y = R + 15;
@@ -137,9 +140,9 @@ RUNTIME = r"""<script>
     var key = document.createElement('div'); key.className = 'pt-key'; key.innerHTML = '<span><i style="color:var(--crit)"></i>Critical path</span><span><i style="color:var(--sel)"></i>Selected path</span>'; body.appendChild(key);
     var cur = M.start, btns = [], cs = [];
     M.views.forEach(function (v, i) {
-      var b = document.createElement('button'); b.type = 'button'; b.textContent = v.label; if (v.crit) b.className = 'crit';
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = v.label; if (v.crit) b.className = 'crit'; if (v.whole) b.className = 'whole';
       b.onclick = function () { set(i); }; bar.appendChild(b); btns.push(b);
-      var c = document.createElement('div'); c.className = 'pt-cap' + (v.crit ? ' crit' : ''); c.innerHTML = v.cap; caps.appendChild(c); cs.push(c);
+      var c = document.createElement('div'); c.className = 'pt-cap' + (v.crit ? ' crit' : '') + (v.whole ? ' whole' : ''); c.innerHTML = v.cap; caps.appendChild(c); cs.push(c);
     });
     function set(i) { cur = i; btns.forEach(function (b, j) { b.setAttribute('aria-pressed', i === j ? 'true' : 'false'); }); cs.forEach(function (c, j) { c.classList.toggle('on', i === j); }); draw(fig, M, M.views[i]); }
     set(cur);

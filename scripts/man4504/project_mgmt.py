@@ -443,35 +443,64 @@ def beta_figure():
     sig, mu = 0.42, 0.0
     a, b = math.exp(mu - 2.326 * sig), math.exp(mu + 2.326 * sig)
     m = math.exp(mu - sig * sig)
-    lo, hi = a * 0.45, b + 0.10 * (b - a)
-    W, H, L, Rm, T, Bm = 640, 230, 20, 20, 18, 176
+    lo, hi = a * 0.2, b + 0.10 * (b - a)
+    W, H, L, Rm, T, Bm = 640, 250, 20, 20, 16, 196
     pdf = lambda x: math.exp(-(math.log(x) - mu) ** 2 / (2 * sig * sig)) / (x * sig * math.sqrt(2 * math.pi))
     top = pdf(m)
     X = lambda x: L + (x - lo) / (hi - lo) * (W - L - Rm)
     Y = lambda y: Bm - y / top * (Bm - T)
-    xs = [lo + (hi - lo) * i / 200 for i in range(201)]
-    path = "M" + " L".join(f"{X(x):.1f},{Y(pdf(x)):.1f}" for x in xs)
+    xs = [lo + (hi - lo) * i / 400 for i in range(401)]
+    curve = [(X(x), Y(pdf(x))) for x in xs]
+    path = "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in curve)
     def area(x0, x1):
         pts = [x0 + (x1 - x0) * i / 40 for i in range(41)]
         return (f"M{X(x0):.1f},{Bm} " + " ".join(f"L{X(x):.1f},{Y(pdf(x)):.1f}" for x in pts) + f" L{X(x1):.1f},{Bm} Z")
+    def centroid(x0, x1):   # a point inside a tail for the leader to land on
+        xm = x0 + (x1 - x0) * (0.75 if x0 < m else 0.15)
+        return X(xm), Bm - (Bm - Y(pdf(xm))) * 0.35
+    FS, LH = 12.5, 15
+    def box(x, y, lines, anchor):   # the label's box: x is the anchor, y the first baseline
+        w = max(len(l) for l in lines) * FS * 0.56
+        x0 = x if anchor == "start" else x - w
+        return x0, y - FS * 0.8, x0 + w, y + LH * (len(lines) - 1) + FS * 0.25
+    def clear_of_curve(bx, gap=6):
+        x0, y0, x1, y1 = bx
+        return x0 >= 2 and x1 <= W - 2 and y0 >= 2 and all(not (x0 - gap <= cx <= x1 + gap and cy <= y1 + gap) for cx, cy in curve)
+    def place(lines, anchor, xs_try):
+        for y in range(T + 12, Bm - 40, 4):
+            for x in xs_try:
+                if clear_of_curve(box(x, y, lines, anchor)): return x, y
+        raise AssertionError(lines)
+    left = ["1% chance of", "finishing", "before a"]; right = ["1% chance of", "finishing after b"]
+    lx, ly = place(left, "start", [10, 14, 18])          # above the curve, at the left
+    rx, ry = place(right, "end", [W - 10, W - 14, W - 18])
+    lb, rb = box(lx, ly, left, "start"), box(rx, ry, right, "end")
+    lt, rt = centroid(lo, a), centroid(b, hi)
+    def note(x, y, lines, anchor):
+        out = f'<text x="{x:.1f}" y="{y}" class="note" text-anchor="{anchor}">'
+        for i, l in enumerate(lines):
+            l = l.replace(" a", ' <tspan font-style="italic">a</tspan>').replace(" b", ' <tspan font-style="italic">b</tspan>')
+            out += f'<tspan x="{x:.1f}" dy="{0 if i == 0 else LH}">{l}</tspan>'
+        return out + "</text>"
     s = (f'<svg viewBox="0 0 {W} {H}" class="pm-beta-svg" role="img" aria-label="A right-skewed beta distribution of an '
          f'activity time: the optimistic time a near the left tail, the most likely time m at the peak, and the pessimistic '
          f'time b far out in the long right tail, with a 1% chance of finishing before a and a 1% chance of finishing after b.">'
-         f'<path d="{area(lo, a)}" class="tail"/><path d="{area(b, hi)}" class="tail"/>'
          f'<path d="{path}" class="curve"/>'
          f'<line x1="{L - 8}" y1="{Bm}" x2="{W - Rm + 8}" y2="{Bm}" class="axis"/>'
+         f'<path d="{area(lo, a)}" class="tail"/><path d="{area(b, hi)}" class="tail"/>'
+         f'<line x1="{X(lo):.1f}" y1="{Bm + 2.5}" x2="{X(a):.1f}" y2="{Bm + 2.5}" class="band"/>'
+         f'<line x1="{X(b):.1f}" y1="{Bm + 2.5}" x2="{X(hi):.1f}" y2="{Bm + 2.5}" class="band"/>'
          f'<line x1="{X(m):.1f}" y1="{T}" x2="{X(m):.1f}" y2="{Bm}" class="mline"/>'
          f'<line x1="{X(a):.1f}" y1="{Y(pdf(a)) - 2:.1f}" x2="{X(a):.1f}" y2="{Bm + 6}" class="tick"/>'
          f'<line x1="{X(b):.1f}" y1="{Y(pdf(b)) - 2:.1f}" x2="{X(b):.1f}" y2="{Bm + 6}" class="tick"/>'
-         f'<text x="{X(a):.1f}" y="{Bm + 22}" class="xl">Optimistic (<tspan font-style="italic">a</tspan>)</text>'
-         f'<text x="{X(m):.1f}" y="{Bm + 22}" class="xl">Most likely (<tspan font-style="italic">m</tspan>)</text>'
-         f'<text x="{X(b):.1f}" y="{Bm + 22}" class="xl">Pessimistic (<tspan font-style="italic">b</tspan>)</text>'
-         f'<text x="{X(a) - 4:.1f}" y="{Bm - 52}" class="note" text-anchor="start"><tspan x="{X(a) - 30:.1f}">1% chance of</tspan>'
-         f'<tspan x="{X(a) - 30:.1f}" dy="15">finishing before <tspan font-style="italic">a</tspan></tspan></text>'
-         f'<line x1="{X(a) - 6:.1f}" y1="{Bm - 22}" x2="{X(a) - 10:.1f}" y2="{Bm - 6}" class="lead"/>'
-         f'<text x="{X(b) + 4:.1f}" y="{Bm - 62}" class="note" text-anchor="end"><tspan x="{X(b) + 26:.1f}">1% chance of</tspan>'
-         f'<tspan x="{X(b) + 26:.1f}" dy="15">finishing after <tspan font-style="italic">b</tspan></tspan></text>'
-         f'<line x1="{X(b) + 10:.1f}" y1="{Bm - 32}" x2="{X(b) + 12:.1f}" y2="{Bm - 6}" class="lead"/>'
+         f'<text x="{max(X(a), 62):.1f}" y="{Bm + 22}" class="xl">Optimistic (<tspan font-style="italic">a</tspan>)</text>'
+         f'<text x="{max(X(m), X(a) + 120):.1f}" y="{Bm + 22}" class="xl">Most likely (<tspan font-style="italic">m</tspan>)</text>'
+         f'<text x="{min(X(b), W - 62):.1f}" y="{Bm + 22}" class="xl">Pessimistic (<tspan font-style="italic">b</tspan>)</text>'
+         + note(lx, ly, left, "start") + note(rx, ry, right, "end") +
+         f'<line x1="{(lb[0] + lb[2]) / 2:.1f}" y1="{lb[3] + 3:.1f}" x2="{lt[0]:.1f}" y2="{lt[1]:.1f}" class="lead"/>'
+         f'<circle cx="{lt[0]:.1f}" cy="{lt[1]:.1f}" r="2.5" class="leaddot"/>'
+         f'<line x1="{(rb[0] + rb[2]) / 2:.1f}" y1="{rb[3] + 3:.1f}" x2="{rt[0]:.1f}" y2="{rt[1]:.1f}" class="lead"/>'
+         f'<circle cx="{rt[0]:.1f}" cy="{rt[1]:.1f}" r="2.5" class="leaddot"/>'
          f'</svg>')
     return ('<div class="pmw pm-beta"><p class="pm-title">The Beta Distribution of an Activity Time</p>' + s + '</div>')
 

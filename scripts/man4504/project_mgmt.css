@@ -133,10 +133,12 @@
 .pm-beta { max-width:680px; }
 .pm-beta-svg { display:block; width:100%; height:auto; }
 .pm-beta-svg .curve { fill:none; stroke:var(--ink); stroke-width:3; }
-.pm-beta-svg .tail { fill:#f7c7ae; }
+.pm-beta-svg .tail { fill:#ef8550; stroke:#b8400f; stroke-width:1.2; }
+.pm-beta-svg .leaddot { fill:#b8400f; }
+.pm-beta-svg .band { stroke:#ef8550; stroke-width:5; stroke-linecap:round; }
 .pm-beta-svg .axis { stroke:var(--ink); stroke-width:1.3; }
 .pm-beta-svg .mline { stroke:var(--ink); stroke-width:1.2; stroke-dasharray:5 4; }
-.pm-beta-svg .tick { stroke:#b8400f; stroke-width:1.4; stroke-dasharray:2 2; }
+.pm-beta-svg .tick { stroke:#b8400f; stroke-width:1.6; }
 .pm-beta-svg .xl { font-size:14px; font-weight:800; fill:var(--ink); text-anchor:middle; }
 .pm-beta-svg .note { font-size:12.5px; font-weight:700; fill:#b8400f; }
 .pm-beta-svg .lead { stroke:#b8400f; stroke-width:1.1; }
