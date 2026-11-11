@@ -41,10 +41,12 @@ BUNDLES = {
     "chapter-conversion": ENGINE + HP + REF + CHECK + ["docs/conversion-prompt-v7.md", "scripts/embed_engine.py",
                                                        "scripts/apply_widgets.py", "scripts/doc_headings.py",
                                                        "scripts/doc_formulas.py", "scripts/transcript_diff.py",
-                                                       "scripts/widget_text.py", "scripts/test_widget_text.py"],
-    "widget-qa": ENGINE + CHECK + ["scripts/test_check_file.py", "scripts/place_labels.py", "scripts/embed_engine.py", "scripts/render_widgets.py",
+                                                       "scripts/widget_text.py", "scripts/test_widget_text.py",
+                                                       "scripts/build_chapters.py"],
+    "widget-qa": ENGINE + CHECK + ["scripts/check_arithmetic.py", "scripts/test_check_arithmetic.py",
+                                   "scripts/build_chapters.py", "scripts/test_check_file.py", "scripts/place_labels.py", "scripts/embed_engine.py", "scripts/render_widgets.py",
                                    "scripts/mobile_check.py", "scripts/check_calc_widgets.py", "scripts/measure_em.py"],
-    "review-notes": CHECK + ["scripts/mobile_check.py"],
+    "review-notes": CHECK + ["scripts/mobile_check.py", "scripts/check_arithmetic.py"],
 }
 
 # claude.ai's skill upload rejects an .html file (widget-basics failed on the example page, 2026-11-11),

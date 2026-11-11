@@ -12,7 +12,7 @@ description: Review files Ian has written or edited (a chapter, a Concise or Bal
 ## Report in this order, most costly first
 1. **Broken widgets and wrong heading structure.** Load the page and press every control (`widget-qa`). A Concise must keep the Full's h1/h2 headings.
 2. **Layout and page errors.** Sideways scrolling at 390/320px, a lost class date, a missing or duplicated TOC (the `sn25-v5.js` vs `studyguide/sn25-v2.js` head script), house-CSS clashes.
-3. **Wrong or contradictory content.** Recompute every number the page states.
+3. **Wrong or contradictory content.** Recompute every number the page states: `python scripts/check_arithmetic.py FILE` finds the written-out calculations; counts in words still need reading.
 4. **Missing information.** Compare with the Full or the source.
 5. **Housekeeping.** `<u>` tags, stray markup, a source-revealing phrase ("the slides", "in class").
 

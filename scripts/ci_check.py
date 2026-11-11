@@ -18,7 +18,10 @@
 Ian, 2026-11-09: run the checks automatically so a broken page or an engine
 clash between sessions is caught at the pull request, not after it merges.
 
-3. plugin/ (the skills as a claude.ai plugin) must match .claude/skills/ and the files it bundles:
+3. Every chapter in chapters/ rebuilds from its sources (scripts/build_chapters.py), and every
+   calculation written out in a chapter edition or a page adds up (scripts/check_arithmetic.py).
+
+   plugin/ (the skills as a claude.ai plugin) must match .claude/skills/ and the files it bundles:
    `python scripts/package_skills.py --plugin` rebuilds it.
 
 4. With --phone WxH, mobile_check.py instead loads every page at that size and
@@ -42,7 +45,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 BASELINE = ROOT / "scripts" / "ci_baseline.json"
 PHONE_BASELINE = ROOT / "scripts" / "ci_phone_baseline.json"
-TESTS = ["test_check_file.py", "test_curve_shapes.py", "test_widget_text.py"]
+TESTS = ["test_check_file.py", "test_curve_shapes.py", "test_widget_text.py", "test_check_arithmetic.py"]
 ENGINE_MARK = re.compile(r"sd-graph\.js v\d+\.\d+")
 
 
@@ -138,6 +141,22 @@ def main():
             bad += 1; tests_bad += 1
             gh("error", "%s: %s" % (t, last.strip()))
             print("\n".join(l for l in r.stdout.splitlines() if l.startswith("FAIL")))
+
+    # every chapter kept in chapters/ rebuilds from its sources (the builds assert their own numbers),
+    # and every calculation written out in a chapter edition or a page adds up (Ian, 2026-11-12)
+    r = subprocess.run([sys.executable, str(ROOT / "scripts" / "build_chapters.py"), "--check"],
+                       capture_output=True, text=True, cwd=ROOT)
+    print("%-22s %s" % ("chapters", (r.stdout.strip().splitlines() or ["(no output)"])[-1]))
+    if r.returncode != 0:
+        bad += 1
+        gh("error", "chapters/ build or arithmetic: " + r.stdout.strip()[-1500:])
+    r = subprocess.run([sys.executable, str(ROOT / "scripts" / "check_arithmetic.py")] + [str(p) for p in pages()],
+                       capture_output=True, text=True, cwd=ROOT)
+    print("%-22s %s" % ("arithmetic", "every page adds up" if r.returncode == 0 else "wrong results"))
+    if r.returncode != 0:
+        bad += 1
+        print("\n".join(l for l in r.stdout.splitlines() if l.startswith("  ")))
+        gh("error", "a calculation on a page does not add up: python scripts/check_arithmetic.py")
 
     # the claude.ai plugin (plugin/) must match the skills it is built from: Ian syncs it from GitHub
     r = subprocess.run([sys.executable, str(ROOT / "scripts" / "package_skills.py"), "--check-plugin"],

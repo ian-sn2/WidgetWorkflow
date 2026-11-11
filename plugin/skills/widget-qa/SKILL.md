@@ -14,7 +14,11 @@ python scripts/check_file.py FILE.html                      # must be 0 FAIL; re
 python scripts/check_file.py FILE.html --source SOURCE.html # whenever it was built from another file (catches lost class dates)
 python scripts/check_file.py FILE.html --no-head            # another publisher's file
 ```
-After changing a checker or helper: `python scripts/test_check_file.py`, `python scripts/test_curve_shapes.py`, `python scripts/test_widget_text.py` (all 0 failing). `check_file.py` holds a copy of the engine's geometry: an engine margin change needs both edits in one commit.
+```
+python scripts/check_arithmetic.py FILE.html                # every written calculation adds up
+python scripts/build_chapters.py --check                    # every chapter in chapters/ rebuilds, and adds up
+```
+After changing a checker or helper: `python scripts/test_check_file.py`, `python scripts/test_curve_shapes.py`, `python scripts/test_widget_text.py`, `python scripts/test_check_arithmetic.py` (all 0 failing). `check_file.py` holds a copy of the engine's geometry: an engine margin change needs both edits in one commit.
 
 ## Browser checks (seconds each; run once the static checks pass)
 ```

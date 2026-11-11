@@ -1,0 +1,463 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 22: Implementation and Control</title>
+    <link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v6.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<script>
+    MathJax = {
+        tex: {
+            displayMath: [['\\[','\\]']],
+            inlineMath: [['\\(','\\)']]
+        }
+    };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>
+<script>document.addEventListener('DOMContentLoaded', function () { var b = document.getElementById('intro-note'), t = document.querySelector('details.toc-box'); if (b && t) b.parentNode.insertBefore(t, b); });</script><style>
+.pertw { --ink:#1c2a44; --muted:#5b6474; --rule:#cfd6e2; --soft:#f1f4f9; --crit:#0e6f73; --node:#d9f5f5; --node-rule:#8fcfd1; --sel:#2a78d6;
+  max-width:760px; margin:20px auto; padding:14px 16px 12px; background:#fff; border:1px solid #dfe3ea; border-radius:10px;
+  box-sizing:border-box; font-family:"Red Hat Display", system-ui, sans-serif; color:var(--ink); clear:both; }
+.pertw * { box-sizing:border-box; }
+.pertw .pt-title { font-weight:800; font-size:1.02rem; margin:0 0 8px; text-align:center; }
+.pertw .pt-bar { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin:0 0 8px; }
+.pertw button { font:inherit; font-size:.85rem; font-weight:700; min-height:40px; padding:6px 14px; border:1px solid var(--rule);
+  border-radius:999px; background:#fff; color:var(--ink); cursor:pointer; }
+.pertw button.crit { border-color:var(--crit); color:var(--crit); }
+.pertw button[aria-pressed="true"] { background:var(--sel); border-color:var(--sel); color:#fff; }
+.pertw button.crit[aria-pressed="true"] { background:var(--crit); border-color:var(--crit); }
+.pertw button:focus-visible { outline:3px solid #2a78d6; outline-offset:2px; }
+.pertw .pt-caps { display:grid; margin:0 0 6px; }
+.pertw .pt-cap { grid-area:1 / 1; visibility:hidden; padding:7px 12px; border-left:4px solid var(--sel); background:var(--soft);
+  border-radius:0 6px 6px 0; font-size:.92rem; text-align:left; }
+.pertw .pt-cap.crit { border-left-color:var(--crit); }
+.pertw .pt-cap.on { visibility:visible; }
+.pertw svg { display:block; width:100%; height:auto; margin:0 auto; }
+.pertw svg text { font-family:"Red Hat Display", system-ui, sans-serif; }
+.pertw .nd circle { fill:var(--node); stroke:var(--node-rule); stroke-width:1.5; }
+.pertw .nd.on circle { stroke:var(--sel); stroke-width:3; } .pertw .nd.on.crit circle { stroke:var(--crit); }
+.pertw .nd .id { font-size:19px; font-weight:800; fill:var(--ink); text-anchor:middle; dominant-baseline:central; }
+.pertw .nd .nm { font-size:13px; font-weight:800; fill:var(--ink); }
+.pertw .ed line { stroke:#5fa9ad; stroke-width:1.6; } .pertw .ed polygon { fill:#5fa9ad; }
+.pertw .ed .du { font-size:16px; font-weight:700; fill:#3f9ca1; text-anchor:middle; dominant-baseline:central; }
+.pertw .ed.cp line { stroke:var(--crit); stroke-width:5; } .pertw .ed.cp polygon { fill:var(--crit); } .pertw .ed.cp .du { fill:var(--crit); }
+.pertw .ed.on line { stroke:var(--sel); stroke-width:5; } .pertw .ed.on polygon { fill:var(--sel); } .pertw .ed.on .du { fill:var(--sel); font-weight:800; }
+.pertw .ed.on.cp line { stroke:var(--crit); } .pertw .ed.on.cp polygon { fill:var(--crit); } .pertw .ed.on.cp .du { fill:var(--crit); }
+.pertw .ed.off { opacity:.35; } .pertw .nd.off { opacity:.45; }
+.pertw .time line { stroke:#6b7f78; stroke-width:1.5; } .pertw .time polygon { fill:#6b7f78; } .pertw .time text { font-size:12px; font-weight:700; fill:#6b7f78; }
+.pertw .pt-key { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin:6px 0 0; font-size:.78rem; color:var(--muted); }
+.pertw .pt-key i { display:inline-block; width:22px; border-top:5px solid; vertical-align:middle; margin-right:6px; border-radius:3px; }
+@media (max-width:600px) { .pertw { padding:12px 8px; } .pertw button { padding:6px 10px; font-size:.8rem; } }
+@media (max-width:600px) { table { display:block; overflow-x:auto !important; -webkit-overflow-scrolling:touch; }
+  mjx-container { display:inline-block !important; max-width:100%; overflow-x:auto; overflow-y:hidden; vertical-align:middle; }
+  li, p { overflow-wrap:break-word; } }
+</style>
+</head>
+<body>
+<!-- IMAGE AUDIT: Verified all 'see below' references correctly placed -->
+<!-- FORMAT AUDIT: All italic, bold, and underline text visually verified -->
+<p id="intro-note"><i>Recall that the process of strategy formulation includes planning, implementation, and control. In the last section, we discussed the planning phase. In this segment, we will wrap up marketing strategy formulation by discussing the <em>implementation</em> and <em>control</em> phases.
+</i></p>
+<h1>The Implementation Phase</h1>
+
+<p>The <strong>implementation phase</strong> of the strategic marketing process includes establishing the marketing organization, developing timetables, obtaining and allocating budgets, and executing the marketing program.</p>
+
+<h2>Establishing the Marketing Organization</h2>
+
+<p>To build an effective marketing organization, companies need clear roles and responsibilities. Procter &amp; Gamble is a commonly cited example because it has produced an unusually high number of CMOs and CEOs—ranking first as a starting point for future CMOs and fourth for future CEOs among the 2,000 largest companies. Key marketing functions include:</p>
+
+<ul>
+<li>Monitoring the brand (brand managers)</li>
+<li>Marketing research (understanding the customer)</li>
+<li>Communications (advertising and promotion)</li>
+<li>Design (new product development and packaging)</li>
+</ul>
+
+<p>In most large firms, the <strong>brand manager</strong> is responsible for the overall marketing effort for a particular brand, including ensuring the right people are in the right roles through strong human resource development.</p>
+
+<p>As competition for talent has intensified, companies now treat recruiting much like consumer marketing. Effective "employer branding" means presenting the organization as a place top applicants genuinely want to work—about 83% of job seekers check a company's reviews before applying. Employees aligned with a company's mission also tend to be more engaged, which is why talent deployment increasingly involves a marketing perspective.</p>
+
+<p>Some organizations use structured leadership models. Google commits to continual learning for every employee, while Microsoft's "Model–Coach–Care" framework encourages leaders to demonstrate expected behavior, help employees navigate challenges, and show authentic care for their growth.</p>
+
+<p>The textbook discusses 2 current issues regarding organization for marketing:</p>
+
+<ul>
+<li><em>The role of the CMO</em> – Many companies now use the title "chief marketing officer" instead of "vice president of marketing." The CMO increasingly serves as the voice of the consumer inside the company, keeping up with changing consumers, digital and mobile media, and new data and AI sources. CMOs often oversee budgets above 10% of company revenue, most report to the CEO or COO, and they typically stay in the role about four years.</li>
+</ul>
+
+<ul>
+<li><em>Line versus staff and divisional groupings</em> – A typical business unit has people in both line and staff positions.
+<ul>
+<li><strong>Line positions</strong> have authority and responsibility to issue orders to the people who report to them.</li>
+<li><strong>Staff positions</strong> have authority and responsibility to advise people in line positions but cannot issue direct orders to them.</li>
+</ul>
+
+<p>To carry out strategic plans, organizations rely on several types of divisional groupings:</p>
+
+<ul>
+<li><strong>Product line groupings</strong>, in which a unit oversees specific product offerings</li>
+<li><strong>Functional groupings</strong>, which align employees by department or business activity</li>
+<li><strong>Geographical groupings</strong>, which divide sales territories by location</li>
+<li><strong>Market-based groupings</strong>, which organize around customer segments; when paired with product line groupings, they form a matrix organization</li>
+</ul>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/19-divisionalgroupings.png" alt="PERT chart diagram showing nodes A through F representing project milestones with connecting lines showing task durations in months and critical path highlighted" class="image-wide-70 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>Some firms have created the position of <em>category manager</em> to manage an entire product line.</p>
+</li>
+</ul>
+
+<h2>Developing Timetables</h2>
+
+<p>Timing can make or break a marketing plan. Dr. Cooke shared an example where Post pitched Honey Bunches of Oats with Greek Yogurt to Walmart and Target while it was still a concept. The retailers offered six months of free shelf space in exchange for exclusivity—cutting Post's development timeline in half. The company still didn't know how to mass-produce dried Greek yogurt, so it relied on critical path analysis to compress its schedule.</p>
+
+<p>Tools to assist in scheduling include action lists, Gantt charts, and PERT charts. The best tool for scheduling a complicated process is <strong>critical path analysis</strong> using <strong>Program Evaluation and Review Technique (PERT) charts</strong>. A sample PERT chart for new product development is shown below:</p>
+
+<div class="pertw">
+<p class="pt-title">PERT Chart: New Product Launch</p>
+<div class="pt-body"></div>
+<noscript><img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/mar3023-253-exam3-chapter22-01-pert-chart-diagram.png" alt="PERT chart: prototype (A) to launch (F), critical path A to C to E to F" class="image-wide-70 content-image"></noscript>
+<script type="application/json">{"nodes": {"A": "Prototype", "B": "Market\nResearch", "C": "Build\nProduction\nFacility", "D": "Develop Ad\nCampaign", "E": "Redesign\nProduct", "F": "Launch"}, "edges": [["A", "B", 5, false], ["A", "C", 7, true], ["B", "D", 5, false], ["B", "E", 2, false], ["C", "E", 4, true], ["D", "F", 2, false], ["E", "F", 4, true]], "layout": {"h": {"w": 660, "h": 326, "R": 25, "n": {"A": [62, 165, "below"], "B": [240, 82, "above"], "C": [240, 228, "below"], "D": [440, 82, "above"], "E": [440, 228, "below"], "F": [600, 165, "below"]}, "e": {"AB": -1, "AC": 1, "BD": -1, "BE": -1, "CE": -1, "DF": -1, "EF": -1}}, "v": {"w": 392, "h": 590, "R": 25, "n": {"A": [196, 46, "right"], "B": [116, 196, "left"], "C": [276, 196, "right"], "D": [116, 380, "left"], "E": [276, 380, "right"], "F": [196, 530, "right"]}, "e": {"AB": 1, "AC": -1, "BD": 1, "BE": -1, "CE": -1, "DF": 1, "EF": -1}}}, "views": [{"label": "A → B → D → F", "path": ["A", "B", "D", "F"], "crit": false, "cap": "<b>A → B → D → F:<\/b> 5 + 5 + 2 = <b>12 months<\/b>"}, {"label": "A → B → E → F", "path": ["A", "B", "E", "F"], "crit": false, "cap": "<b>A → B → E → F:<\/b> 5 + 2 + 4 = <b>11 months<\/b>"}, {"label": "A → C → E → F", "path": ["A", "C", "E", "F"], "crit": true, "cap": "<b>A → C → E → F:<\/b> 7 + 4 + 4 = <b>15 months<\/b> (the critical path)"}], "start": 2}</script>
+</div>
+
+<ul>
+<li>The <em>nodes</em> represent the milestones that need to be accomplished.</li>
+<li>The <em>numbers</em> represent the number of months it takes to get to the next step.</li>
+<li>The <em>lines</em> represent the tasks that must be done to get from one step to the other.</li>
+</ul>
+
+<p>Certain tasks must be completed before others can begin; other tasks can be done "in parallel." Three paths from prototype to launch are possible:</p>
+
+<ul>
+<li>\(A \to B \to D \to F = 12\) months</li>
+<li>\(A \to B \to E \to F = 11\) months</li>
+<li>\(A \to C \to E \to F = 15\) months*</li>
+</ul>
+
+<p>The <strong>critical path</strong> is the longest possible path that will allow us to get from prototype to launch. This determines the minimum time it will take to launch the product.</p>
+
+<div class="exam-tip">
+<h4>EXAM TIP: Interpreting PERT Charts</h4>
+
+<p>You will likely have an exam question that requires you to interpret a PERT chart.</p>
+</div>
+
+<p>Here, the critical path is \(A \to C \to E \to F\) at 15 months—longer than any other path. Because steps can happen in parallel, you simultaneously move along \(A \to B \to D \to F\) (12 months) and \(A \to C \to E \to F\) (15 months). The 15-month path determines when you can launch.</p>
+
+<p>The critical path is the bottleneck. To move to market faster, focus on the activities along it: A, C, E, and F. Speeding up a step not on the critical path only adds slack and does not bring the launch any closer.</p>
+
+<details class="video-section">
+    <summary class="video-section-header">
+        Quantitative Review Video - PERT Charts
+        <span class="expand-icon">▼</span>
+    </summary>
+    <div class="video-content">
+        <div class="video-embed-wrapper">
+<div style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;"><iframe id="42dada65e1071b2d149089e1cb3992e2-vod-276e6b99-8a27-412b-ba08-b30cc3b34b78" src="https://iframe.dacast.com/vod/42dada65e1071b2d149089e1cb3992e2/276e6b99-8a27-412b-ba08-b30cc3b34b78" width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay;encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen style="position:absolute;top:0;left:0;"></iframe></div>
+        </div>
+        <div class="download-section">
+            <a href="https://smokinnotes.s3.us-east-1.amazonaws.com/public/mar3023-exam3-review-pertcharts.pdf" target="_blank" class="download-btn">Download Video Sheet (PW is "stockturn")</a>
+        </div>
+    </div>
+</details>
+
+<p>Scheduling activities can also be done with a <em>Gantt chart</em>—a graph of a program schedule. For each task, a Gantt chart should specify (1) the task, (2) the person responsible, (3) the finish date, and (4) what is to be delivered. As with PERT charts, it is important to distinguish sequential from simultaneous tasks.</p>
+
+<h2>Resource Allocation (Budgets)</h2>
+
+<p><strong>Share point analysis</strong> refers to thinking in terms of the overall market and dividing it into market share points. A <strong>share point</strong> is equivalent to 1% of the overall market's sales, used as a common basis of comparison to allocate marketing resources.</p>
+
+<p>The steps for share point analysis are as follows:</p>
+
+<ol>
+<li><b>Estimate industry sales</b> – Gathered from syndicated research firms or trade publications.</li>
+<li><b>Estimate the firm's market share</b> – The firm's sales divided by total industry sales.</li>
+<li><b>Compute gross margin per share point</b> – <strong>Gross margin</strong>—the <strong>contribution</strong> to cover fixed costs and profit—equals sales revenue minus cost of goods sold:
+
+<p>\[\text{Gross margin} = \text{Sales revenue} - \text{Cost of goods sold}\]</p>
+</li>
+</ol>
+
+<p>The key decision is how much to spend in additional marketing expenses to gain one share point. If the added marketing expense exceeds the added gross margin, the investment is not worth making.</p>
+
+<div class="example-box">
+<h4>Share Point Analysis for Resource Allocation</h4>
+
+<p>Suppose that <strong>total industry sales are $100 billion</strong>, and our <strong>firm's sales are $15 billion</strong> with <strong>$5 billion in gross margin</strong>. Our market share is as follows:</p>
+
+<p>\[\text{Market share} = \frac{\$15 \text{ billion}}{\$100 \text{ billion}} = 15\%\]</p>
+
+<p>Therefore, our <strong>firm has 15 share points</strong>. Now, the gross margin per share point can be computed as follows:</p>
+
+<p>\[\text{Gross margin per share point} = \frac{\text{Gross margin}}{\text{Share points}} = \frac{\$5 \text{ billion}}{15 \text{ share points}} = \$333.3 \text{ million}\]</p>
+
+<p>Now suppose our firm wants to <strong>reach 18% market share</strong>. If we expand market share by <strong>3 share points</strong>, we gain <strong>$1 billion in gross margin</strong> ($333.3 million × 3). Using the <strong>1.5 rule</strong>, increasing market share by 3% requires a <strong>4.5-point increase in share of voice</strong> (1.5 × 3).</p>
+
+<p>If <strong>industry marketing expenditures total $10 billion</strong>, each share of voice point costs $100 million. Increasing share of voice by 4.5% requires <strong>$450 million in additional marketing spend</strong>.</p>
+
+<p>The return: a <strong>net gain of $550 million</strong> ($1 billion additional gross margin − $450 million additional expenses).</p>
+</div>
+
+<details class="video-section">
+    <summary class="video-section-header">
+        Quantitative Review Video - Share Point Analysis
+        <span class="expand-icon">▼</span>
+    </summary>
+    <div class="video-content">
+        <div class="video-embed-wrapper">
+<div style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;"><iframe id="42dada65e1071b2d149089e1cb3992e2-vod-b5d4400e-6687-4253-a084-a6d28dc25dbb" src="https://iframe.dacast.com/vod/42dada65e1071b2d149089e1cb3992e2/b5d4400e-6687-4253-a084-a6d28dc25dbb" width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay;encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen style="position:absolute;top:0;left:0;"></iframe></div>
+        </div>
+        <div class="download-section">
+            <a href="https://smokinnotes.s3.us-east-1.amazonaws.com/public/mar3023-exam3-review-sharepoint.pdf" target="_blank" class="download-btn">Download Video Sheet (PW is "stockturn")</a>
+        </div>
+    </div>
+</details>
+
+<style>
+.video-section {
+    width: 100%;
+    margin: 10px auto;
+    border: 0px solid #810000;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.video-section-header {
+    background-color: #810000;
+    color: white;
+    padding: 5px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: background-color 0.3s ease;
+    user-select: none;
+}
+
+.video-section-header:hover {
+    background-color: #9b0b0b;
+}
+
+.video-section-header::-webkit-details-marker {
+    display: none;
+}
+
+.expand-icon {
+    position: absolute;
+    right: 20px;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.video-section[open] .expand-icon {
+    transform: rotate(180deg);
+}
+
+.video-content {
+    padding: 20px;
+    text-align: center;
+    background-color: #fff3f3;
+}
+
+.video-embed-wrapper {
+    width: 60%;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.video-embed-wrapper iframe {
+    border-radius: 8px;
+}
+
+.download-section {
+    margin-top: 20px;
+}
+
+.download-btn {
+    display: inline-block;
+    background-color: #810000;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.download-btn:hover {
+    background-color: #9b0b0b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    color: white;
+    text-decoration: none;
+}
+</style>
+
+
+<h2>Executing the Marketing Program</h2>
+
+<p>Even the best marketing plan fails without strong execution. A <strong>marketing strategy</strong> outlines how a company will achieve a specific goal, including the target market and the marketing program used to reach it. <strong>Marketing tactics</strong> are the day-to-day operational decisions that bring the strategy to life.</p>
+
+<p class="date">Tuesday, 11/10/26</p>
+
+<p><em>During class, Dr. Cooke brought in Annabelle Dobson, director of UF's Master of Science in Marketing program and a graduate of it, who discussed the program's curriculum, its traditional and combined-degree options, and how to apply.</em></p>
+
+<h2>Planning vs. Implementation</h2>
+
+<p>When performance slips, companies must determine whether the problem comes from the plan or its execution. The matrix below summarizes the possibilities.</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/19-planimplement.png" alt="Two by two matrix showing planning quality on horizontal axis and implementation quality on vertical axis with four quadrants labeled success problems problems and failure" class="image-wide-60 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>Burger King UK's "Women belong in the kitchen" tweet illustrates poor implementation. The campaign was meant to promote a scholarship for female chefs, but the decontextualized message went viral for the wrong reasons—a solid idea undone by weak execution. Similarly, Coca-Cola's 2026 global brand refresh drew criticism because the new typeface resembled Marlboro's—an unhelpful association for a product whose health effects are already questioned.</p>
+
+<p>It's generally better to have a good plan with imperfect execution than a flawed plan executed well—improving implementation is far easier than rebuilding strategy. Planning carries more weight because it defines the product, sets goals and success measures, and establishes contingency plans. A firm that planned well can pivot quickly when results slip; one that did not must start over.</p>
+
+<h2>Improving Implementation</h2>
+
+<p>When a company has a solid plan but weak execution, several tactics can strengthen implementation:</p>
+
+<ul>
+<li><em>Communicate</em> – The marketing plan must be clearly explained to employees and customers. Two-way communication helps employees understand their roles while giving managers useful feedback. Teams should feel safe raising concerns so problems can be solved collectively.</li>
+
+<li><em>Leadership (champions)</em> – A <strong>program</strong> (or <strong>product</strong> or <strong>project</strong>) <strong>champion</strong> is a person who is able and willing to cut red tape and move the program forward. Champions navigate strategy and day-to-day details and persist when they meet resistance. Steve Jobs is a well-known example. Dr. Cooke noted that champions are not a guarantee of success—they push both strong and weak ideas, exist at all organizational levels, and often act on behalf of their department. What defines them is determination, not perfect outcomes.</li>
+
+<li><em>Reward performance</em> – Reward employees who execute well and treat failures as lessons rather than punishing them.</li>
+
+<li><em>Schedule tasks</em> – Use tools like PERT charts to map out tasks and deadlines clearly.</li>
+
+<li><em>Just do it</em> – Avoid <strong>"paralysis by analysis,"</strong> where overthinking prevents action. At some point, additional planning adds little value and slows progress.</li>
+
+<li><em>Seek internal and external feedback</em> – Useful feedback comes from customers, channel partners, employees, and other stakeholders.</li>
+</ul>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/19-strengtheningimplementation.png" alt="Two by two matrix showing planning quality on horizontal axis and implementation quality on vertical axis with four quadrants labeled success problems problems and failure" class="image-wide-80 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>Overall, communication is the thread that ties these tactics together.</p>
+
+<p>On leadership, Dr. Cooke recommended Stephen R. Covey's <em>The 7 Habits of Highly Effective People</em>: be proactive; begin with the end in mind; put first things first; think win/win; seek first to understand, then to be understood; synergize; and sharpen the saw.</p>
+
+<h1>The Control Phase</h1>
+
+<p>The <strong>control (evaluation) phase</strong> is when managers measure results, spot deviations from the plan, and make adjustments. Management by exception helps them focus on deviations, understand why they occurred, and decide what actions to take. Evaluations include financial outcomes and marketing metrics like customer satisfaction, salesforce motivation, and time-to-market.</p>
+
+<p>If results fall short, managers make corrective changes. If results exceed expectations, they should capitalize on the momentum and "double down" on what's working.</p>
+
+<h2>Measuring Results and Identifying Deviations</h2>
+
+<p>Two methods help a firm measure results and identify plan deviations:</p>
+
+<ul>
+<li><strong>Sales analysis</strong> involves comparing actual results to sales goals and identifying areas of strength and weakness. For example, a firm selling nationally can compare sales by region and shift resources where they will pay off most.</li>
+
+<li><strong>Profitability analysis</strong> works the same way but focuses on profit. It helps firms assess the profitability of products, customer groups, territories, distribution channels, and order sizes—guiding decisions on whether to expand, maintain, reduce, or eliminate offerings.</li>
+</ul>
+
+<h2>The Marketing Audit</h2>
+
+<p>A <strong>marketing audit</strong> is a comprehensive, unbiased, periodic review of the strategic marketing process of a firm or strategic business unit. It helps determine a company's marketing return on investment (ROI).</p>
+
+<p><strong>Marketing return on investment (ROI)</strong> is a tool for controlling marketing programs that uses current measurement technology to assess what marketing spending accomplishes and improve it. Two tools support marketing ROI evaluation:</p>
+
+<ul>
+<li><strong>Marketing metrics</strong> are quantified goals, identified ahead of time, that serve as benchmarks against which performance can be judged. Examples include sales goals, retention rates, and sales per square foot.</li>
+
+<li><strong>Marketing dashboards</strong> present real-time displays of key metrics, enabling managers to spot trends or problems quickly.</li>
+</ul>
+
+<p>Audits may be conducted internally, but many firms hire outside consultants to ensure objectivity: they work from the firm's annual plan and are paid regardless of what they find, so they have no reason to shade the results.</p>
+
+<h2>Taking Corrective Action (Contingency Plans)</h2>
+
+<p>When actual performance deviates from goals, <strong>corrective action</strong> may need to be taken. Firms commonly have established <strong>contingency plans</strong> to address situations when marketing programs do not work as expected. When contingency plans in the annual plan were written well, most deviations already have a prepared response, so no major course change is needed.</p>
+
+<h1>Marketing Yourself: You, Inc.</h1>
+
+<p>Dr. Cooke closed the segment by applying the strategic marketing process to a job search, treating each student as a brand: "You, Inc." He noted this material is meant to help with career decisions more than the exam.</p>
+
+<p>Start with objectives—money, experience, advancement, fulfillment, and work-life balance—then craft a personal mission statement. Apply the same steps as any marketing plan: segmentation, targeting, and positioning; situation analysis; strategy; tactics; budget; timing; and a contingency plan. The marketing mix applies as well:</p>
+
+<ul>
+<li><em>Product (you)</em> – Assess strengths and weaknesses, fill gaps with certifications or new skills, and seek an honest "audit" from a trusted mentor. Employers value motivation, oral and written communication, initiative, maturity, enthusiasm, ambition, assertiveness, self-assurance, and problem solving. Packaging matters too: clothing, grooming, and demeanor suited to the role you want.</li>
+
+<li><em>Promotion</em> – Your résumé and cover letters are advertising (tailored to each job). LinkedIn is public relations: use a professional photo, an "About" section as your mission statement, and recommendations. The interview is personal selling: prepare thoroughly, ask questions to uncover the employer's needs, handle objections, and follow up with a thank-you note.</li>
+
+<li><em>Place</em> – Flexibility about where you work widens your options.</li>
+
+<li><em>Price</em> – Know the going salary for the job and industry, and adjust your ask based on what you bring.</li>
+</ul>
+
+<p>Everyone has a personal brand, whether or not they manage it. Personal branding is summarized as three C's: competencies, character, and communication.</p>
+
+<p>The two largest sources of entry-level marketing jobs are sales and retailing; others include marketing research, digital marketing, brand management, and AI-related roles. Graduate options include a master's in marketing research (analytically focused), an MBA (generalist, requires work experience and demonstrated leadership), and a specialized master's in marketing (concentrates on marketing, requires little work experience).</p>
+
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  function E(t, a, p) { var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function r1(n) { return Math.round(n * 10) / 10; }
+  function draw(fig, M, v) {
+    var L = M.layout[fig.clientWidth < 540 ? 'v' : 'h'], R = L.R, P = L.n, on = {}, onN = {};
+    for (var i = 0; i < v.path.length; i++) { onN[v.path[i]] = 1; if (i) on[v.path[i - 1] + v.path[i]] = 1; }
+    fig.innerHTML = '';
+    var svg = E('svg', { viewBox: '0 0 ' + L.w + ' ' + L.h, role: 'img', 'aria-label': 'PERT chart, path ' + v.label + ' highlighted' }, fig);
+    svg.style.maxWidth = L.w + 'px';
+    if (L === M.layout.h) {   /* the source's time arrow along the bottom */
+      var tg = E('g', { 'class': 'time' }, svg), ty = L.h - 12;
+      E('line', { x1: 30, y1: ty, x2: L.w - 30, y2: ty }, tg);
+      E('polygon', { points: (L.w - 22) + ',' + ty + ' ' + (L.w - 34) + ',' + (ty - 5) + ' ' + (L.w - 34) + ',' + (ty + 5) }, tg);
+      var tt = E('text', { x: L.w - 40, y: ty - 7, 'text-anchor': 'end' }, tg); tt.textContent = 'Time';
+    }
+    M.edges.forEach(function (e) {
+      var a = P[e[0]], b = P[e[1]], k = e[0] + e[1], dx = b[0] - a[0], dy = b[1] - a[1], d = Math.sqrt(dx * dx + dy * dy), ux = dx / d, uy = dy / d;
+      var cls = 'ed' + (e[3] ? ' cp' : '') + (on[k] ? ' on' : ' off'), g = E('g', { 'class': cls }, svg), thick = on[k] || e[3];
+      var hl = thick ? 13 : 9, hw = thick ? 7 : 4.5, sx = a[0] + ux * (R + 2), sy = a[1] + uy * (R + 2), tx = b[0] - ux * (R + 3), ty2 = b[1] - uy * (R + 3), bx = tx - ux * hl, by = ty2 - uy * hl;
+      E('line', { x1: r1(sx), y1: r1(sy), x2: r1(bx + ux), y2: r1(by + uy) }, g);
+      E('polygon', { points: [r1(tx) + ',' + r1(ty2), r1(bx - uy * hw) + ',' + r1(by + ux * hw), r1(bx + uy * hw) + ',' + r1(by - ux * hw)].join(' ') }, g);
+      var s = L.e[k], mx = (sx + tx) / 2 - uy * 14 * s, my = (sy + ty2) / 2 + ux * 14 * s;
+      var t = E('text', { x: r1(mx), y: r1(my), 'class': 'du' }, g); t.textContent = e[2];
+    });
+    Object.keys(P).forEach(function (id) {
+      var p = P[id], g = E('g', { 'class': 'nd' + (onN[id] ? ' on' : ' off') + (v.crit ? ' crit' : ''), transform: 'translate(' + p[0] + ',' + p[1] + ')' }, svg);
+      E('circle', { r: R }, g); var t = E('text', { x: 0, y: 0, 'class': 'id' }, g); t.textContent = id;
+      var lines = M.nodes[id].split('\n'), lh = 15, side = p[2], x = 0, y, anc = 'middle';
+      if (side === 'below') y = R + 15;
+      else if (side === 'above') y = -R - 9 - (lines.length - 1) * lh;
+      else { x = side === 'left' ? -R - 8 : R + 8; anc = side === 'left' ? 'end' : 'start'; y = -(lines.length - 1) * lh / 2 + 4; }
+      var nm = E('text', { x: x, y: y, 'class': 'nm', 'text-anchor': anc }, g);
+      lines.forEach(function (ln, i) { var s = E('tspan', { x: x, dy: i ? lh : 0 }, nm); s.textContent = ln; });
+    });
+  }
+  function boot(w) {
+    if (w.dataset.ready) return; w.dataset.ready = '1';
+    var M = JSON.parse(w.querySelector('script[type="application/json"]').textContent), body = w.querySelector('.pt-body');
+    var bar = document.createElement('div'); bar.className = 'pt-bar'; bar.setAttribute('role', 'group'); body.appendChild(bar);
+    var caps = document.createElement('div'); caps.className = 'pt-caps'; caps.setAttribute('aria-live', 'polite'); body.appendChild(caps);
+    var fig = document.createElement('div'); body.appendChild(fig);
+    var key = document.createElement('div'); key.className = 'pt-key'; key.innerHTML = '<span><i style="color:var(--crit)"></i>Critical path</span><span><i style="color:var(--sel)"></i>Selected path</span>'; body.appendChild(key);
+    var cur = M.start, btns = [], cs = [];
+    M.views.forEach(function (v, i) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = v.label; if (v.crit) b.className = 'crit';
+      b.onclick = function () { set(i); }; bar.appendChild(b); btns.push(b);
+      var c = document.createElement('div'); c.className = 'pt-cap' + (v.crit ? ' crit' : ''); c.innerHTML = v.cap; caps.appendChild(c); cs.push(c);
+    });
+    function set(i) { cur = i; btns.forEach(function (b, j) { b.setAttribute('aria-pressed', i === j ? 'true' : 'false'); }); cs.forEach(function (c, j) { c.classList.toggle('on', i === j); }); draw(fig, M, M.views[i]); }
+    set(cur);
+    var lastW = fig.clientWidth;
+    if (window.ResizeObserver) new ResizeObserver(function () { if (Math.abs(fig.clientWidth - lastW) > 4) { lastW = fig.clientWidth; draw(fig, M, M.views[cur]); } }).observe(fig);
+  }
+  function all() { Array.prototype.forEach.call(document.querySelectorAll('.pertw'), function (w) { try { boot(w); } catch (e) { if (window.console) console.error(e); } }); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', all); else all();
+})();
+</script>
+</body>
+</html>

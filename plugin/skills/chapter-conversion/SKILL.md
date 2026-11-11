@@ -9,6 +9,9 @@ description: Convert a chapter (notes HTML, PDF, Word file or lecture transcript
 
 The procedure is `docs/conversion-prompt-v7.md` (steps 0, 0T, 0C, 1–8); `/convert` starts it. In this repo you may **ask when a wrong guess is costly** (a number, which graphs to convert, which reading of a figure), batched. Decide everything else and flag it in the changelog.
 
+## First: file the sources
+Put the files Ian sent, unchanged, in `chapters/<COURSE>/<chapter>/source/`, and write `chapter.json` (build steps with `{source}`/`{out}`, and the outputs). `python scripts/build_chapters.py <filter>` builds into `build/chapters/`. Only sources are committed.
+
 ## Inputs
 - **Word file**: `python scripts/doc_headings.py FILE` for the heading levels; use exactly that list. `python scripts/doc_formulas.py FILE` for MathType equations (`--check NOTES.html` audits the output). A `.doc` needs both `antiword` and `catdoc`, since antiword drops floating text boxes (exam tips, worked examples).
 - **Transcript**: paraphrase, and never name the source ("the lecture", "in class", "the slides").

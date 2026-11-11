@@ -1,0 +1,11 @@
+{
+ "about": "Rest of project management: CPM network, PERT, crashing and Gantt figures as colour widgets, with Balanced and Concise editions.",
+ "source_note": "The converted Full as Ian last sent it (2026-11-11); the build patches its widgets up to the current code, so his edits to the prose are kept.",
+ "steps": [
+  ["scripts/man4504/project_mgmt.py", "--patch", "{source}/MAN4504-263-Exam3-Chapter3-RestofProjectManagement-Full.html", "{out}/MAN4504-263-Exam3-Chapter3-RestofProjectManagement-Full.html"],
+  ["scripts/man4504/project_mgmt_editions.py", "{out}/MAN4504-263-Exam3-Chapter3-RestofProjectManagement-Full.html", "{out}"]
+ ],
+ "outputs": ["MAN4504-263-Exam3-Chapter3-RestofProjectManagement-Full.html",
+             "MAN4504-263-Exam3-Chapter3-RestofProjectManagement-Balanced.html",
+             "MAN4504-263-Exam3-Chapter3-RestofProjectManagement-Concise.html"]
+}
