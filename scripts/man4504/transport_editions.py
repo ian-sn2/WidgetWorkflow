@@ -83,7 +83,7 @@ def concise_body(mode):
 <li><strong>Aggregate planning</strong> (in industry, <b>sales and production (S&amp;P) planning</b>): planning intermediate-term production in aggregate units (how many cars, not how many blue sedans), because totals forecast better than individual items.</li>
 <li><b>Goal</b>: meet forecast demand at minimum cost over the planning period by adjusting production rates, labor, inventory, overtime, and subcontracting.</li>
 <li><b>Requirements</b>: a logical aggregate unit; an aggregate demand forecast; a way to determine costs; a model combining forecasts and costs.</li>
-<li>The plan feeds the master production schedule and MRP, which break it down by product.</li>
+<li>The plan works like a budget authorization and feeds the master production schedule and MRP, which break it down by product.</li>
 </ul>
 
 {table(["Horizon", "Who plans", "Examples"], [
@@ -93,7 +93,11 @@ def concise_body(mode):
 
 <h1>Aggregate Planning Strategies</h1>
 
-<h3>Capacity Options (Supply Side)</h3>
+<ul>
+<li><b>Capacity options</b> change supply; <b>demand options</b> change demand. Each comes in opposite pairs (hire or lay off; build inventory or back-order).</li>
+</ul>
+
+<h2>Capacity Options</h2>
 
 {table(["Option", "Drawbacks"], [
     ["<b>Change inventory levels</b>: build stock in slow periods", "Holding costs; shortages if demand runs high; not possible for services"],
@@ -102,7 +106,7 @@ def concise_body(mode):
     ["<b>Subcontract</b>", "Cost; quality and delivery risk; exposes customers to a competitor"],
     ["<b>Part-time workers</b>", "Best for low-skilled labor; poor fit for skilled work"]])}
 
-<h3>Demand Options</h3>
+<h2>Demand Options</h2>
 
 {table(["Option", "Drawbacks"], [
     ["<b>Influence demand</b>: promotions and off-peak discounts", "Uncertain response; may not balance demand and capacity"],
@@ -112,10 +116,10 @@ def concise_body(mode):
 <h1>Methods of Aggregate Planning</h1>
 
 <ul>
+<li>No single option is likely to be optimal, partly because company policies limit each one, so planners combine several.</li>
 <li><strong>Chase strategy</strong>: match output to each period's demand (common, often the only option, in services).</li>
 <li><strong>Level strategy</strong>: uniform daily production, with inventory or idle time as the buffer.</li>
 <li><strong>Mixed strategy</strong>: a combination, usually best; finding it takes trial and error.</li>
-<li><strong>Graphical methods</strong>: trial-and-error comparisons of demand with capacity; easy, but not optimal.</li>
 </ul>
 
 <div class="exam-tip">
@@ -123,24 +127,53 @@ def concise_body(mode):
 <p>The routine problems hide small rules (inventory carried in, charging for a workforce change at the start). The exam has no wrinkle that is not also in the practice questions.</p>
 </div>
 
-<h3>Example: Roofing Shingles</h3>
+<h2>Graphical Approaches (Trial and Error)</h2>
+
+<ul>
+<li><strong>Graphical methods</strong> compare demand with capacity a few variables at a time; easy, but not guaranteed optimal.</li>
+<li>Steps: demand per period; capacity (regular, overtime, subcontracting); labor, hiring, layoff, and holding costs; company policies; then compare alternative plans' total costs.</li>
+</ul>
+
+<h2>Example: Applying Aggregate Planning Strategies</h2>
 
 {table(["Month", "Demand", "Production days", "Demand per day"],
        [[m, f"{d:,}", n, r] for m, d, n, r in zip(["Jan", "Feb", "Mar", "Apr", "May", "Jun"], DEM, DAYS, [41, 39, 38, 57, 68, 55])] + [["<b>Total</b>", "<b>6,200</b>", "<b>124</b>", ""]])}
 
 <p>Costs: carrying $5 per unit per month; subcontracting $20 per unit; labor $80 per day per worker (1.6 labor-hours per unit); raising the daily rate $300 per unit; lowering it $600 per unit.</p>
 
-{table(["Method", "Working", "Total cost"], [
-    ["1. Pure level (average, 6,200 ÷ 124 = 50 per day)", "Ending inventory 1,850 × $5 = $9,250; 10 workers × $80 × 124 days = $99,200", "$108,450"],
-    ["2. Level at the minimum (38 per day) + subcontracting", "7.6 workers × $80 × 124 = $75,392; 6,200 − 4,712 = 1,488 subcontracted × $20 = $29,760", "<b>$105,152</b> (lowest)"],
-    ["3. Pure chase (hiring and layoffs)", "Production $99,200 + hiring $9,000 + layoffs $9,600", "$117,800"]])}
+<h2>Method 1: Pure Level Strategy</h2>
+
+<ul>
+<li>6,200 ÷ 124 = 50 units per day with 10 workers. Ending inventory 1,850 × $5 = $9,250; labor 10 × $80 × 124 = $99,200. <b>Total $108,450.</b></li>
+</ul>
+
+<h2>Method 2: Level Strategy (Production at the Minimum Requirement and Use of Subcontracting)</h2>
+
+<ul>
+<li>38 units per day (March's rate) with 7.6 workers: 7.6 × $80 × 124 = $75,392. 6,200 − 4,712 = 1,488 units subcontracted × $20 = $29,760. <b>Total $105,152</b>, the lowest of the three.</li>
+</ul>
+
+<h2>Method 3: Pure Chase Strategy (Using Hiring and Layoffs)</h2>
+
+<ul>
+<li>Production $99,200 + hiring $9,000 + layoffs $9,600. <b>Total $117,800.</b></li>
+<li>Other plans (overtime, for one) were not tried, and nonmonetary costs such as layoffs' effect on morale also count.</li>
+</ul>
 
 <h2>Transportation Method of Linear Programming</h2>
 
-<p>An optimizing method: supply (by period and source) in the rows, demand periods in the columns, and the unit cost in each cell. A tire maker has regular time at $40, overtime at $50, and subcontracting at $70 per tire; 100 tires in beginning inventory; $2 per tire per month carrying cost; and no back-ordering.</p>
+<ul>
+<li>An optimizing method: supply (by period and source) in the rows, demand periods in the columns, and the unit cost in each cell.</li>
+</ul>
+
+<h2>Example: Transportation Method</h2>
+
+<p>A tire maker has regular time at $40, overtime at $50, and subcontracting at $70 per tire; 100 tires in beginning inventory; $2 per tire per month carrying cost; and no back-ordering.</p>
 
 {table(["", "March", "April", "May"], [["<b>Demand</b>", "800", "1,000", "750"], ["Regular capacity", "700", "700", "700"],
                                        ["Overtime", "50", "50", "50"], ["Subcontracting", "150", "150", "130"]])}
+
+<h2>Setting Up and Solving the Table</h2>
 
 <ul>
 <li>Capacity 2,680 + 100 inventory exceeds demand of 2,550, so a <b>dummy column</b> takes the 230 unused units at $0.</li>
@@ -161,17 +194,22 @@ def concise_body(mode):
 <p>A question about the <em>period of production</em> (made, ordered, delivered) reads a <b>row</b>; one about the <em>period of demand</em> (sold, used to meet demand) reads a <b>column</b>. April demand met by subcontracting: 50 + 150 = 200 (April column). March overtime paid for: 50 (March overtime row).</p>
 </div>
 
-<h2>Other Methods</h2>
+<h2>Management Coefficients Model</h2>
 
 <ul>
 <li><strong>Management coefficients model</strong>: a regression on managers' past decisions; objective and consistent, but assumes past trends continue and past decisions were good.</li>
-<li>Services: controlling labor cost is critical, and an on-call labor resource covers unexpected demand.</li>
 </ul>
+
+<h2>Summary of Aggregate Planning Methods</h2>
 
 {table(["Method", "Strength", "Weakness"], [
     ["Graphical", "Easy; handles policies and constraints", "Usually not optimal"],
     ["Transportation (linear programming)", "Finds the optimum", "Linear relationships only"],
     ["Management coefficients", "Objective, easy to use", "Only as good as the past data"]])}
+
+<ul>
+<li>Services: controlling labor cost is critical, and an on-call labor resource covers unexpected demand.</li>
+</ul>
 
 <h2>Glossary</h2>
 
@@ -202,7 +240,10 @@ def concise(src, mode):
     full = T.chapter(src, mode)
     head = full[:full.index("<body>") + len("<body>")]
     head = head.replace("</head>", T.CSS + "\n</head>", 1) if T.CSS not in head else head
-    return head + "\n" + concise_body(mode) + "\n" + T.RUNTIME + "\n</body>\n</html>\n"
+    out = head + "\n" + concise_body(mode) + "\n" + T.RUNTIME + "\n</body>\n</html>\n"
+    h = lambda x: re.findall(r"<h[12]>([^<]*)</h[12]>", x[x.index("<body>"):])
+    assert h(out) == h(full) + ["Glossary", "Key Takeaways"], [x for x in h(out) if x not in h(full)]   # same h1/h2 as the Full
+    return out
 
 
 if __name__ == "__main__":

@@ -113,7 +113,7 @@ def concise_body(full):
     assert [a for a in acts if slack[a] == 0] == CRIT
     paths = sorted(PATH_LEN.items(), key=lambda kv: -kv[1])
     fwd, bwd = widget(full, "The Forward Pass"), widget(full, "The Backward Pass")
-    mu = sum(T_PRINT[a] for a in CRIT); assert mu == 15
+    assert sum(T_PRINT[a] for a in CRIT) == 15
 
     return f"""
 <h1>Introduction to Projects</h1>
@@ -130,9 +130,18 @@ def concise_body(full):
 
 <ul>
 <li><b>Project management triangle</b>: time, cost, and performance scope trade off against each other.</li>
-<li><b>Project organization</b> (a temporary, cross-functional team) works best for a specific goal and deadline; unfamiliar, complex, interrelated work; many functions involved; and important but temporary projects.</li>
+</ul>
+
+<h2>Project Organization</h2>
+
+<ul>
+<li>A temporary, cross-functional team. Works best for a specific goal and deadline; unfamiliar, complex, interrelated work; many functions involved; and important but temporary projects.</li>
+</ul>
+
+<h2>Project Managers</h2>
+
+<ul>
 <li><strong>Project manager</strong>: coordinates and monitors the project; responsible for quality, schedule, budget, and the people on it.</li>
-<li>Ethics questions (PMI code): gifts from contractors, false expense or status reports, pressure to cut quality to stay on schedule.</li>
 </ul>
 
 <div class="exam-tip">
@@ -140,14 +149,36 @@ def concise_body(full):
 <p><b>Client satisfaction</b> is the most important measure of a project's success, ahead of schedule and budget.</p>
 </div>
 
-<h1>Project Scheduling Techniques</h1>
+<h2>Project Management Software</h2>
+
+<ul>
+<li>Microsoft Project, Primavera, Agile tools (smaller projects), or internal software tied to accounting.</li>
+<li>Ethics questions (PMI code): gifts from contractors, false expense or status reports, pressure to cut quality to stay on schedule.</li>
+</ul>
+
+<h1>Project Scheduling Techniques (Overview)</h1>
+
+<ul>
+<li>Gantt charts, CPM, and PERT show where each activity fits, set precedence (what must come first), force realistic time and cost estimates, and expose bottlenecks.</li>
+</ul>
+
+<h1>Gantt Charts</h1>
 
 <ul>
 <li><strong>Gantt chart</strong>: one bar per activity, from its start to its finish; overlapping bars are activities running at the same time.</li>
+</ul>
+
+<h1>PERT and CPM</h1>
+
+<ul>
 <li><strong>CPM</strong> (Critical Path Method): activity times are known with fair certainty.</li>
 <li><strong>PERT</strong> (Program Evaluation and Review Technique): activity times vary, so it can give the probability of finishing by a date.</li>
-<li>Both show where each activity fits, set precedence (what must come first), force realistic time and cost estimates, and expose bottlenecks.</li>
 <li>Six steps: define the activities; set precedence; draw the network; estimate times; compute the critical path; use the network to schedule and control.</li>
+</ul>
+
+<h2>Activity Network Conventions</h2>
+
+<ul>
 <li><strong>Activity-on-node (AON)</strong>: nodes are activities. <strong>Activity-on-arrow (AOA)</strong>: arrows are activities, and may need dashed <em>dummy</em> activities.</li>
 </ul>
 
@@ -160,9 +191,27 @@ def concise_body(full):
 
 <p>The EPA gives Milwaukee Paper 16 weeks to install pollution control equipment.</p>
 
-{table(["Activity", "Description", "Immediate predecessors", "Duration (weeks)"], [[a, desc[a], pred[a], dur[a]] for a in acts])}
+<h2>Step 1: Define the project and break it down into specific activities.</h2>
 
-<h3>The Four Times</h3>
+<ul>
+<li>Eight activities, A through H (named in the table under Step 4).</li>
+</ul>
+
+<h2>Step 2: Determine the precedence relationships among the different activities.</h2>
+
+<ul>
+<li>A and B start the project; C follows A; D follows A and B; E and F follow C; G follows D and E; H follows F and G.</li>
+</ul>
+
+<h2>Step 3: Draw the network that connects all of the activities.</h2>
+
+<ul>
+<li>Begin with a Start node, then draw an arrow from each activity to every activity it immediately precedes.</li>
+</ul>
+
+<h2>Step 4: Assign estimates of time and/or cost to each activity.</h2>
+
+{table(["Activity", "Description", "Immediate predecessors", "Duration (weeks)"], [[a, desc[a], pred[a], dur[a]] for a in acts])}
 
 {table(["Time", "Meaning", "Rule"], [
     ["<b>ES</b> (early start)", "Earliest an activity can begin", "= EF of its predecessor; with several, the <b>largest</b> EF"],
@@ -170,15 +219,21 @@ def concise_body(full):
     ["<b>LF</b> (late finish)", "Latest it can end without delaying the project", "= LS of its follower; with several, the <b>smallest</b> LS; the last activity's LF = its EF"],
     ["<b>LS</b> (late start)", "Latest it can begin", "= LF − duration"]])}
 
-<p>Each node shows ES top-left, EF top-right, LS bottom-left, and LF bottom-right. The <b>forward pass</b> works left to right for ES and EF:</p>
+<p>Each node shows ES top-left, EF top-right, LS bottom-left, and LF bottom-right.</p>
+
+<h2>Forward Pass</h2>
+
+<p>Left to right, for ES and EF:</p>
 
 {fwd}
 
-<p>The <b>backward pass</b> works right to left for LF and LS, always computing LF first:</p>
+<h2>Backward Pass</h2>
+
+<p>Right to left, for LF and LS, always computing LF first. With several final activities, start each from the largest EF (an End node of duration 0 helps):</p>
 
 {bwd}
 
-<h3>Slack and the Critical Path</h3>
+<h2>Step 5: Compute the critical path.</h2>
 
 <ul>
 <li><strong>Slack</strong> = LS − ES = LF − EF: how long an activity can slip without delaying the project.</li>
@@ -190,8 +245,11 @@ def concise_body(full):
 
 {table(["Path", "Weeks"], [[k.replace("→", " → "), f"<b>{v}</b> (critical)" if v == 15 else v] for k, v in paths])}
 
+<h2>Step 6: Use the network to schedule, plan, monitor, and control the project.</h2>
+
 <ul>
 <li>B and D share 1 week of slack on B → D → G → H: <em>either</em> can slip a week, not both.</li>
+<li>Early-start and late-start Gantt charts show the earliest and latest each activity can run.</li>
 </ul>
 
 <div class="exam-tip">
@@ -203,27 +261,45 @@ def concise_body(full):
 
 <ul>
 <li>Each activity's time follows a right-skewed <b>beta distribution</b> with three estimates: <strong>optimistic (a)</strong>, <strong>most likely (m)</strong>, <strong>pessimistic (b)</strong>.</li>
-<li>The project's completion time follows a <b>normal distribution</b>; activity times are assumed independent.</li>
+<li>Project completion time follows a <b>normal distribution</b>; activity times are assumed independent.</li>
 </ul>
 
-<p style="text-align: center;"><strong>\\( t = \\frac{{a + 4m + b}}{{6}} \\qquad v = \\left(\\frac{{b - a}}{{6}}\\right)^2 \\)</strong></p>
-<p style="text-align: center;"><strong>\\( \\mu = \\Sigma\\, t_{{\\text{{critical}}}} \\qquad \\sigma_p^2 = \\Sigma\\, v_{{\\text{{critical}}}} \\qquad z = \\frac{{\\text{{Due date}} - \\mu}}{{\\sigma_p}} \\)</strong></p>
+<p style="text-align: center;"><strong>\\( t = \\frac{{a + 4m + b}}{{6}} \\qquad v = \\left(\\frac{{b - a}}{{6}}\\right)^2 \\qquad \\mu = \\Sigma\\, t_{{\\text{{critical}}}} \\qquad \\sigma_p^2 = \\Sigma\\, v_{{\\text{{critical}}}} \\)</strong></p>
 
 <div class="exam-tip">
 <h4>EXAM TIP: Critical Path Calculations</h4>
 <p>Add expected times and variances along the <b>critical path only</b>. You cannot add standard deviations: square each to a variance, add, then take the square root.</p>
 </div>
 
-<h3>PERT Example</h3>
+<h2>Review of Normal Distribution</h2>
+
+<ul>
+<li>Symmetric: 50% on each side of the mean; about 68%, 95%, and 99.7% fall within ±1, ±2, and ±3 standard deviations.</li>
+</ul>
+
+<p style="text-align: center;"><strong>\\( z = \\frac{{x - \\mu}}{{\\sigma}} = \\frac{{\\text{{Due date}} - \\text{{Expected date}}}}{{\\sigma_p}} \\)</strong></p>
+
+<h2>PERT Example: Milwaukee Paper Company</h2>
 
 {table(["Activity", "a", "m", "b", "t", "v"], [[a, *PERT[a], T_PRINT[a], V_PRINT[a]] for a in acts])}
 
 <ul>
 <li>Critical path A → C → E → G → H: μ = 2 + 2 + 4 + 5 + 2 = <b>15 weeks</b>; σ² = 0.11 + 0.11 + 1.00 + 1.78 + 0.11 = <b>3.11</b>; σ = √3.11 = <b>1.76 weeks</b>.</li>
-<li>By the 16-week deadline: z = (16 − 15) ÷ 1.76 = 0.57 → P = <b>0.71566</b>, a 71.57% chance (Excel: =NORM.S.DIST(0.57, TRUE)).</li>
+<li>By the 16-week deadline: z = (16 − 15) ÷ 1.76 = 0.57 → P = <b>0.71566</b> (Excel: =NORM.S.DIST(0.57, TRUE)).</li>
 <li>For a 99% chance: z = 2.33 (P = 0.9901), so x = zσ + μ = (2.33)(1.76) + 15 = <b>19.10 weeks</b>.</li>
-<li>Normal rules of thumb: about 68%, 95%, and 99.7% fall within ±1, ±2, and ±3 standard deviations.</li>
-<li>Non-critical paths matter too: an activity whose variability is large next to its slack can still delay the project.</li>
+</ul>
+
+<h2>Variability of Completion Time for Non-Critical Paths</h2>
+
+<ul>
+<li>A non-critical activity can still delay the project if its variability is large next to its slack.</li>
+</ul>
+
+<h2>Conclusion</h2>
+
+<ul>
+<li>Expected completion 15 weeks; a 71.57% chance of meeting the 16-week deadline.</li>
+<li>A, C, E, G, and H are critical; B, D, and F have slack.</li>
 </ul>
 
 <h1>Project Crashing</h1>
@@ -239,14 +315,22 @@ def concise_body(full):
 <li>Find each activity's crash cost per period.</li>
 <li>Find the critical path(s) with current times.</li>
 <li>One critical path: crash its cheapest crashable activity. Several: crash an activity common to all of them, or one on each.</li>
-<li>Update the times; stop at the due date, otherwise return to step 2. Crash <b>one period at a time</b>, since the critical path can change.</li>
+<li>Update the times; stop at the due date, otherwise return to step 2.</li>
 </ol>
+
+<h2>Project Crashing Example: Milwaukee Paper Company</h2>
 
 {table(["Activity", "Normal weeks", "Crash weeks", "Crash cost per week", "Critical?"],
        [[a, CRASH[a][0], CRASH[a][1], f"${PER_WEEK[a]:,}", "Yes" if a in CRIT else "No"] for a in acts])}
 
 <ul>
 <li>15 → 14 weeks: crash <b>A</b> ($750, the cheapest critical activity). Now two critical paths: A → C → E → G → H and B → D → G → H.</li>
+</ul>
+
+<h2>Crashing the Project by Multiple Time Periods</h2>
+
+<ul>
+<li>Crash <b>one period at a time</b> and redo both passes, since the critical path can change.</li>
 <li>14 → 13 weeks: A is used up. Options: G ($1,500) or H ($3,000), common to both paths; or one on each path: C + D or E + D ($2,000), C + B or E + B ($3,000). Crash <b>G</b>; both paths stay critical at 13 weeks.</li>
 </ul>
 
@@ -291,7 +375,10 @@ def concise_body(full):
 def concise(full):
     head = full[:full.index("<body>") + len("<body>")]
     tail = full[full.index("<script>\n(function () {\n  var NS = 'http://www.w3.org/2000/svg', uid = 0;"):]
-    return head + "\n" + concise_body(full) + "\n" + tail
+    out = head + "\n" + concise_body(full) + "\n" + tail
+    h = lambda x: re.findall(r"<h[12]>([^<]*)</h[12]>", x[x.index("<body>"):])
+    assert h(out) == h(full) + ["Glossary", "Key Takeaways"], [x for x in h(out) if x not in h(full)]   # same h1/h2 as the Full
+    return out
 
 
 if __name__ == "__main__":
