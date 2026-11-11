@@ -54,7 +54,18 @@ scripts/
   curve_shapes.py             ← cost families, tangencies, supply fans, crossings. Import, don't retype.
   test_curve_shapes.py        ← tests for it. Run after changing it.
 .claude/commands/             ← /convert, /check, /render
+.claude/skills/               ← load on demand, one per kind of job:
+  widget-basics/              ← creating a widget: JSON, steps, scenarios, captions, embedding
+  curves-and-labels/          ← drawing curves (curve_shapes) and placing every label
+  other-charts/               ← diagrams, networks, matrices, calculators, hand-built page charts
+  study-guide-editions/       ← Full / Balanced / Concise
+  chapter-conversion/         ← converting a chapter; semester swaps
+  widget-qa/                  ← checks, renders, phone tests before delivery
+  review-notes/               ← reviewing Ian's files (report only)
 ```
+
+The skills restate rules this file holds in full. When a rule here changes, update
+the skill that carries it in the same commit.
 
 ## The workflow in one paragraph
 
