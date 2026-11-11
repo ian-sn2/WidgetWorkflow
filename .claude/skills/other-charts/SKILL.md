@@ -41,6 +41,7 @@ Rules for these:
 - Every number is computed and **asserted** against the notes.
 - A step changes the drawing.
 - **No layout shift**: stack the captions in one grid cell.
+- **Width**: a widget spans about 75–80% of the page on desktop (`width: 78%`) and the full width on phones, and its figure scales with it rather than keeping a fixed pixel size (Ian, 2026-11-12).
 - Labels sit **inside** their shape, or outside with a leader ending on it, **measured in Chromium**.
 - Re-lay out top to bottom on phones.
 - No instruction text in captions, and no repeating the prose that follows.

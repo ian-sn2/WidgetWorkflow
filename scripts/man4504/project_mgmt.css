@@ -2,7 +2,7 @@
 .pmw { --ink:#1c2a44; --muted:#5b6474; --rule:#cfd6e2; --soft:#f1f4f9;
   --fwd:#1f62b8; --fwd-bg:#dcebfb; --bwd:#0d7a4f; --bwd-bg:#d8f2e6; --crit:#c8302a; --crit-bg:#fde8e6;
   --slack:#7a5600; --slack-bg:#fff1c7; --slack-rule:#e3b23c; --use:#ffd95a; --path:#6a4bc4; --path-bg:#efeafc;
-  max-width:760px; margin:20px auto; padding:14px 16px 12px; background:#fff; border:1px solid #dfe3ea; border-radius:10px;
+  width:78%; max-width:none; margin:20px auto; padding:14px 16px 12px; background:#fff; border:1px solid #dfe3ea; border-radius:10px;
   box-sizing:border-box; font-family:"Red Hat Display", system-ui, sans-serif; color:var(--ink); clear:both; }
 .pmw * { box-sizing:border-box; }
 .pmw .pm-title { font-weight:800; font-size:1.02rem; margin:0 0 8px; text-align:center; }
@@ -125,7 +125,7 @@
 .pmw .pm-acts button.crit[aria-pressed="true"] { background:var(--crit); color:#fff; }
 
 /* static figures */
-.pm-legend { max-width:420px; }
+.pm-legend { max-width:480px; }
 .pm-legend-svg { display:block; width:100%; height:auto; }
 .pm-legend-svg .cf { fill:var(--fwd-bg); } .pm-legend-svg .cb { fill:var(--bwd-bg); }
 .pm-legend-svg .ring { fill:none; stroke:var(--ink); stroke-width:2; } .pm-legend-svg .div { stroke:var(--ink); stroke-width:1.5; }
@@ -138,7 +138,6 @@
 .pm-legend-svg .lead { stroke-width:1.2; } .pm-legend-svg .lead.f { stroke:var(--fwd); } .pm-legend-svg .lead.b { stroke:var(--bwd); } .pm-legend-svg .lead.k { stroke:var(--ink); }
 .pmw p.pm-key { display:block; text-align:center; }
 .pmw .pm-key .kf { color:var(--fwd); font-weight:800; } .pmw .pm-key .kb { color:var(--bwd); font-weight:800; }
-.pm-beta { max-width:680px; }
 .pm-beta-svg { display:block; width:100%; height:auto; }
 .pm-beta-svg .curve { fill:none; stroke:var(--ink); stroke-width:3; }
 .pm-beta-svg .tail { fill:#ef8550; stroke:none; }
@@ -151,7 +150,7 @@
 .pm-beta-svg .note { font-size:12.5px; font-weight:700; fill:#b8400f; }
 .pm-beta-svg .lead { stroke:#b8400f; stroke-width:1.1; }
 
-@media (max-width:600px) { .pmw { padding:12px 8px; } .pmw .pm-cap { font-size:.86rem; } .pmw .pm-conv { grid-template-columns:1fr; gap:4px; }
+@media (max-width:600px) { .pmw { width:100%; padding:12px 8px; } .pmw .pm-cap { font-size:.86rem; } .pmw .pm-conv { grid-template-columns:1fr; gap:4px; }
   .pmw .pg-row { grid-template-columns:62px 1fr; } .pmw .pg-grid { min-width:0; } .pmw .pg-lab { font-size:.74rem; padding-right:4px; }
   .pmw .pg-head .pg-track span { font-size:.56rem; letter-spacing:-.02em; } .pmw .pg-rows .pg-lab small { display:none; }
   .pmw .pg-axis .pg-track span:nth-child(even) { display:none; } .pmw .pg-b { font-size:.64rem; } .pmw .pg-s { font-size:.56rem; overflow:hidden; } }

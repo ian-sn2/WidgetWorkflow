@@ -426,8 +426,8 @@ def node_legend():
         ("Earliest Finish", 446, 40, "end", (348, 50), edge(1, -1), "f"),
         ("Latest Start", 14, 252, "start", (100, 240), edge(-1, 1), "b"),
         ("Latest Finish", 446, 252, "end", (360, 240), edge(1, 1), "b"),
-        ("Activity label", cx, 22, "middle", (cx, 33), (cx, cy - R), "k"),
-        ("Duration", cx, 276, "middle", (cx, 264), (cx, cy + R), "k")]
+        ("Activity label", cx, 22, "middle", (cx, 33), (cx, cy - vy - 0.36 * 30 - 9), "k"),   # ends just above the A
+        ("Duration", cx, 276, "middle", (cx, 264), (cx, cy + 0.5 * R + 0.36 * 19 + 8), "k")]   # ends just below the 2
     for t, x, y, anc, (x1, y1), (x2, y2), c in calls:
         s.append(f'<line x1="{x1}" y1="{y1}" x2="{x2:.1f}" y2="{y2:.1f}" class="lead {c}"/>')
         s.append(f'<circle cx="{x2:.1f}" cy="{y2:.1f}" r="3" class="dot {c}"/>')

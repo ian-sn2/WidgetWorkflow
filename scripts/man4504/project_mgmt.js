@@ -97,7 +97,7 @@
     if (style === 'full' && (!vertical || room)) Hh += vertical ? 16 : 10;
     holder.innerHTML = '';
     var svg = E('svg', { viewBox: '0 0 ' + W + ' ' + Hh, 'class': 'pm-fig', role: 'img', 'aria-label': 'Project network' }, holder);
-    svg.style.maxWidth = W + 'px'; svg.style.margin = '0 auto';
+    svg.style.width = '100%'; svg.style.margin = '0 auto';
     var clip = 'pmclip' + (++uid), defs = E('defs', {}, svg), cp = E('clipPath', { id: clip }, defs); E('circle', { r: g.R }, cp);
     var ge = E('g', {}, svg), gn = E('g', {}, svg);
     if (aoa) {
@@ -151,7 +151,7 @@
   function small(holder, spec, kind) {
     var R = kind === 'aon' ? 20 : 13;
     var svg = E('svg', { viewBox: '0 0 300 160', 'class': 'pm-fig', role: 'img', 'aria-label': kind === 'aon' ? 'Activity-on-node drawing' : 'Activity-on-arrow drawing' }, holder);
-    svg.style.maxWidth = '360px'; svg.style.margin = '0 auto';
+    svg.style.width = '100%'; svg.style.maxWidth = '420px'; svg.style.margin = '0 auto';
     var ge = E('g', {}, svg), gn = E('g', {}, svg), P = spec.nodes;
     spec.edges.forEach(function (e) { var a = P[e[0]], b = P[e[1]]; arrow(ge, a[0], a[1], b[0], b[1], R, R, '', kind === 'aoa' ? e[2] : null, e[3], e[4]); });
     for (var id in P) { var q = plainNode(gn, R, id, {}, kind === 'aon' ? 'plain' : 'aoa'); q.setAttribute('transform', 'translate(' + P[id][0] + ',' + P[id][1] + ')'); }
@@ -238,7 +238,7 @@
     function Y(p) { return B - p / PDF0 * (B - Tp); }
     holder.innerHTML = '';
     var svg = E('svg', { viewBox: '0 0 ' + Wd + ' ' + Hd, 'class': 'pm-fig', role: 'img', 'aria-label': o.aria || 'Normal curve' }, holder);
-    svg.style.maxWidth = '560px'; svg.style.margin = '0 auto';
+    svg.style.width = '100%'; svg.style.margin = '0 auto';
     function area(a, b) {
       var d = 'M' + f1(X(a)) + ',' + B, n = 60;
       for (var i = 0; i <= n; i++) { var z = a + (b - a) * i / n; d += ' L' + f1(X(z)) + ',' + f1(Y(pdf(z))); }
@@ -346,7 +346,7 @@
       function X(x) { return L + x / M.xmax * (Wd - L - Rr); } function Y(y) { return B - y * (B - Tp); }
       fig.innerHTML = '';
       var svg = E('svg', { viewBox: '0 0 ' + Wd + ' ' + Hd, 'class': 'pm-fig', role: 'img', 'aria-label': 'Activity ' + a.id + ': a = ' + a.a + ', m = ' + a.m + ', b = ' + a.b + ', expected time ' + a.t + ' weeks' }, fig);
-      svg.style.maxWidth = '580px'; svg.style.margin = '0 auto';
+      svg.style.width = '100%'; svg.style.margin = '0 auto';
       var d = 'M' + f1(X(a.a)) + ',' + B;
       a.pts.forEach(function (p) { d += ' L' + f1(X(p[0])) + ',' + f1(Y(p[1])); });
       E('path', { d: d + ' L' + f1(X(a.b)) + ',' + B + ' Z', 'class': 'crv-fill' }, svg);

@@ -1122,6 +1122,10 @@ Ian changed this rule on 2026-09-17, and the change applies **here only**:
   `project_mgmt_editions.py` (project management). A Concise keeps the Full's
   h1/h2 headings exactly, plus Glossary and Key Takeaways; the edition
   scripts assert it.
+* **Hand-built widgets span about 75–80% of the page** (`width: 78%`, full
+  width under 600px), and their figures scale with the box instead of a fixed
+  pixel size (Ian, 2026-11-12). A leader line points *at* the thing it names,
+  ending a few pixels short of it, not at the shape's edge.
 
 ### Reviewing Ian's work
 
