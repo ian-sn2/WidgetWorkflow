@@ -2466,11 +2466,39 @@ body.sol-fs-open { overflow:hidden; }
   section.sol .sdg h4, .sol-fs-panel .sdg h4 { padding-right:0; margin-top:0; }
   section.sol .sdg .sol-tools, .sol-fs-panel .sdg .sol-tools { position:static; flex-wrap:wrap; gap:6px; margin:0 0 8px; }
   .sol-fs-panel .sdg .sol-tools { justify-content:flex-start; padding:0 90px 8px 0; }
+  /* A finger needs 44px. The strip is 28px on a desktop, where a pointer is
+     precise and the strip sits over the title; here it has its own row, so
+     there is room (2026-11-09, found by mobile_check). */
+  section.sol .sdg .sol-tools button, .sol-fs-panel .sdg .sol-tools button { min-width:44px; min-height:44px; }
+  section.sol .sdg .sol-tools .sdg-ctrl button, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button { width:44px; }
+  /* The default size is half the column, which on a phone left a graph
+     about 170px wide. A phone gets the full column, so the size steps have
+     nothing left to change there and go; Fullscreen stays. */
+  section.sol .sdg { --fig:100cqw !important; }
+  section.sol .sdg .sol-tools .sol-minus, section.sol .sdg .sol-tools .sol-plus { display:none; }
+  /* A payoff matrix's strategy names and the row player's name are set on
+     one line, which ran the Exam 3 games 14-43px past a 390px column. They
+     wrap here instead, and the cells give up some padding. */
+  section.sol .sdg .mx-head, section.sol .sdg .mx-rowp, .sol-fs-panel .sdg .mx-head, .sol-fs-panel .sdg .mx-rowp { white-space:normal; padding-left:4px; padding-right:6px; }
+  section.sol .sdg .mx-cell, .sol-fs-panel .sdg .mx-cell { padding:6px 4px; }
+}
+/* At 320px wrapping alone left the games 25-30px over: "WALMART" is a 95px
+   column at full size. The grid's type steps down a size there. */
+@media (max-width:380px){
+  section.sol .sdg .mx-player { font-size:.78rem; padding:2px 4px; letter-spacing:0; }
+  section.sol .sdg .mx-head, section.sol .sdg .mx-rowp { font-size:.8rem; }
+  section.sol .sdg .mx-cell .ln { font-size:.78rem; padding:1px 2px; }
+  section.sol .sdg .mx-cell { padding:4px 2px; }
 }
 /* A displayed equation wider than the column scrolls inside its own box
    instead of the page: Exam 1's 840px opportunity-cost line scrolled a phone
    sideways and zoomed the whole page out (2026-11-09, mobile_check). */
 section.sol mjx-container[display="true"] { display:block; max-width:100%; overflow-x:auto; overflow-y:hidden; }
+/* An equation set inline can be as wide: three in Exam 3's Spring 2020 Q24
+   ran 45px past a 390px column. On a phone it scrolls in its own box too. */
+@media (max-width:640px){
+  section.sol mjx-container:not([display="true"]) { display:inline-block; max-width:100%; overflow-x:auto; overflow-y:hidden; vertical-align:middle; }
+}
 section.sol .sol-table { overflow-x:auto; margin:8px 0; }
 section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
@@ -3355,9 +3383,6 @@ section.sol .sol-table table { margin:0; }
     {
      "q": 80.0,
      "p": 28.75,
-     "label": "ATC",
-     "dx": 10,
-     "dy": -6,
      "guides": false,
      "showP": false,
      "showQ": false,
@@ -5622,9 +5647,6 @@ section.sol .sol-table table { margin:0; }
     {
      "q": 80.0,
      "p": 28.75,
-     "label": "ATC",
-     "dx": 10,
-     "dy": -6,
      "guides": false,
      "showP": false,
      "showQ": false,
@@ -5951,7 +5973,7 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li>resources are being used inefficiently</li><li>society cannot produce that combination with its present resources and technology</li><li class="sol-right">the nation is production efficient</li><li>both goods have increasing costs</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(c)</strong> The <i>production possibilities frontier</i> reflects the maximum attainable combinations of two goods that a country can produce with existing resources and technology. A production point on the production possibilities frontier indicates that the nation has achieved production efficiency.</p>
-<div class="sdg"><script type="application/json">{"title":"Points On, Inside and Beyond the Frontier","lede":"The frontier is the outer limit of what the resources can produce.","axes":{"x":"Good X","y":"Good Y","xmax":110,"ymax":110},"curves":[{"id":"PPF","label":"PPF","pts":[[0,100],[30,94],[60,78],[85,48],[100,0]],"curved":true,"ldx":6,"ldy":-6}],"points":[{"q":35,"p":40,"label":"Attainable,\ninefficient","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":60,"p":78,"label":"On the frontier","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":85,"p":85,"label":"Unattainable","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false}],"caption":"A point inside the frontier is attainable but wastes resources; a point on it is production efficient; a point beyond it cannot be reached."}</script></div>
+<div class="sdg"><script type="application/json">{"title": "Points On, Inside and Beyond the Frontier", "lede": "The frontier is the outer limit of what the resources can produce.", "axes": {"x": "Good X", "y": "Good Y", "xmax": 110, "ymax": 110}, "curves": [{"id": "PPF", "label": "PPF", "pts": [[0, 100], [30, 94], [60, 78], [85, 48], [100, 0]], "curved": true, "ldx": 6, "ldy": -6}], "points": [{"q": 35, "p": 40, "label": "Attainable,\ninefficient", "dx": 10, "dy": 4, "guides": false, "showP": false, "showQ": false}, {"q": 60, "p": 78, "label": "On the frontier", "dx": 10, "dy": 4, "guides": false, "showP": false, "showQ": false}, {"q": 92, "p": 90, "label": "Unattainable", "dx": 10, "dy": 4, "guides": false, "showP": false, "showQ": false}], "caption": "A point inside the frontier is attainable but wastes resources; a point on it is production efficient; a point beyond it cannot be reached."}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-211-e3-q28" data-term="211" data-exam="3" data-topic="Oligopoly">
@@ -6927,9 +6949,6 @@ section.sol .sol-table table { margin:0; }
     {
      "q": 80.0,
      "p": 28.75,
-     "label": "ATC",
-     "dx": 10,
-     "dy": -6,
      "guides": false,
      "showP": false,
      "showQ": false,
@@ -7198,7 +7217,7 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li class="sol-right">Points outside the frontier cannot be attained</li><li>Points inside the frontier cannot be attained</li><li>Points on the frontier are less efficient than points inside it</li><li>None of these, because all three are false</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(a)</strong> The <i>production possibilities frontier</i> reflects the maximum attainable combinations of two goods that a country can produce with existing resources and technology. A production point outside of the production possibilities frontier represents a combination of products that society cannot produce given its current level of resources and technology. That is, production points outside of the frontier are not attainable.</p>
-<div class="sdg"><script type="application/json">{"title":"Points On, Inside and Beyond the Frontier","lede":"The frontier is the outer limit of what the resources can produce.","axes":{"x":"Good X","y":"Good Y","xmax":110,"ymax":110},"curves":[{"id":"PPF","label":"PPF","pts":[[0,100],[30,94],[60,78],[85,48],[100,0]],"curved":true,"ldx":6,"ldy":-6}],"points":[{"q":35,"p":40,"label":"Attainable,\ninefficient","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":60,"p":78,"label":"On the frontier","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":85,"p":85,"label":"Unattainable","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false}],"caption":"A point inside the frontier is attainable but wastes resources; a point on it is production efficient; a point beyond it cannot be reached."}</script></div>
+<div class="sdg"><script type="application/json">{"title": "Points On, Inside and Beyond the Frontier", "lede": "The frontier is the outer limit of what the resources can produce.", "axes": {"x": "Good X", "y": "Good Y", "xmax": 110, "ymax": 110}, "curves": [{"id": "PPF", "label": "PPF", "pts": [[0, 100], [30, 94], [60, 78], [85, 48], [100, 0]], "curved": true, "ldx": 6, "ldy": -6}], "points": [{"q": 35, "p": 40, "label": "Attainable,\ninefficient", "dx": 10, "dy": 4, "guides": false, "showP": false, "showQ": false}, {"q": 60, "p": 78, "label": "On the frontier", "dx": 10, "dy": 4, "guides": false, "showP": false, "showQ": false}, {"q": 92, "p": 90, "label": "Unattainable", "dx": 10, "dy": 4, "guides": false, "showP": false, "showQ": false}], "caption": "A point inside the frontier is attainable but wastes resources; a point on it is production efficient; a point beyond it cannot be reached."}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-203-e3-q26" data-term="203" data-exam="3" data-topic="Public Goods and Common Resources">
@@ -8228,8 +8247,12 @@ section.sol .sol-table table { margin:0; }
     {
      "q": 51.2,
      "p": 51.2,
-     "pl": "P₁",
-     "ql": "Q₁"
+     "ql": "Q₁",
+     "showP": false,
+     "label": "P₁",
+     "guides": "q",
+     "dx": 10,
+     "dy": 4
     },
     {
      "q": 42.1,
@@ -8343,12 +8366,12 @@ section.sol .sol-table table { margin:0; }
     {
      "q": 50.0,
      "p": 50.0,
-     "pl": "P₁",
      "ql": "Q₁",
      "showP": false,
      "label": "P₁",
      "dx": 12,
-     "dy": 18
+     "dy": 18,
+     "guides": "q"
     },
     {
      "q": 26.0,
@@ -8687,7 +8710,7 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li>a point where resources are not being used efficiently</li><li class="sol-right">a combination society cannot produce with its present resources and technology</li><li>a sign that resources are being used very efficiently</li><li>a sign that both goods have increasing costs</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(b)</strong> The <i>production possibilities frontier</i> reflects the maximum attainable combinations of two goods that a country can produce with existing resources and technology. A production point outside of the production possibilities frontier represents a combination of products that society cannot produce given its current level of resources and technology.</p>
-<div class="sdg"><script type="application/json">{"title":"Points On, Inside and Beyond the Frontier","lede":"The frontier is the outer limit of what the resources can produce.","axes":{"x":"Good X","y":"Good Y","xmax":110,"ymax":110},"curves":[{"id":"PPF","label":"PPF","pts":[[0,100],[30,94],[60,78],[85,48],[100,0]],"curved":true,"ldx":6,"ldy":-6}],"points":[{"q":35,"p":40,"label":"Attainable,\ninefficient","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":60,"p":78,"label":"On the frontier","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":85,"p":85,"label":"Unattainable","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false}],"caption":"A point inside the frontier is attainable but wastes resources; a point on it is production efficient; a point beyond it cannot be reached."}</script></div>
+<div class="sdg"><script type="application/json">{"title": "Points On, Inside and Beyond the Frontier", "lede": "The frontier is the outer limit of what the resources can produce.", "axes": {"x": "Good X", "y": "Good Y", "xmax": 110, "ymax": 110}, "curves": [{"id": "PPF", "label": "PPF", "pts": [[0, 100], [30, 94], [60, 78], [85, 48], [100, 0]], "curved": true, "ldx": 6, "ldy": -6}], "points": [{"q": 35, "p": 40, "label": "Attainable,\ninefficient", "dx": 10, "dy": 4, "guides": false, "showP": false, "showQ": false}, {"q": 60, "p": 78, "label": "On the frontier", "dx": 10, "dy": 4, "guides": false, "showP": false, "showQ": false}, {"q": 92, "p": 90, "label": "Unattainable", "dx": 10, "dy": 4, "guides": false, "showP": false, "showQ": false}], "caption": "A point inside the frontier is attainable but wastes resources; a point on it is production efficient; a point beyond it cannot be reached."}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-201-e3-q26" data-term="201" data-exam="3" data-topic="Labor Markets">

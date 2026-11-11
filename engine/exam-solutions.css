@@ -175,11 +175,39 @@ body.sol-fs-open { overflow:hidden; }
   section.sol .sdg h4, .sol-fs-panel .sdg h4 { padding-right:0; margin-top:0; }
   section.sol .sdg .sol-tools, .sol-fs-panel .sdg .sol-tools { position:static; flex-wrap:wrap; gap:6px; margin:0 0 8px; }
   .sol-fs-panel .sdg .sol-tools { justify-content:flex-start; padding:0 90px 8px 0; }
+  /* A finger needs 44px. The strip is 28px on a desktop, where a pointer is
+     precise and the strip sits over the title; here it has its own row, so
+     there is room (2026-11-09, found by mobile_check). */
+  section.sol .sdg .sol-tools button, .sol-fs-panel .sdg .sol-tools button { min-width:44px; min-height:44px; }
+  section.sol .sdg .sol-tools .sdg-ctrl button, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button { width:44px; }
+  /* The default size is half the column, which on a phone left a graph
+     about 170px wide. A phone gets the full column, so the size steps have
+     nothing left to change there and go; Fullscreen stays. */
+  section.sol .sdg { --fig:100cqw !important; }
+  section.sol .sdg .sol-tools .sol-minus, section.sol .sdg .sol-tools .sol-plus { display:none; }
+  /* A payoff matrix's strategy names and the row player's name are set on
+     one line, which ran the Exam 3 games 14-43px past a 390px column. They
+     wrap here instead, and the cells give up some padding. */
+  section.sol .sdg .mx-head, section.sol .sdg .mx-rowp, .sol-fs-panel .sdg .mx-head, .sol-fs-panel .sdg .mx-rowp { white-space:normal; padding-left:4px; padding-right:6px; }
+  section.sol .sdg .mx-cell, .sol-fs-panel .sdg .mx-cell { padding:6px 4px; }
+}
+/* At 320px wrapping alone left the games 25-30px over: "WALMART" is a 95px
+   column at full size. The grid's type steps down a size there. */
+@media (max-width:380px){
+  section.sol .sdg .mx-player { font-size:.78rem; padding:2px 4px; letter-spacing:0; }
+  section.sol .sdg .mx-head, section.sol .sdg .mx-rowp { font-size:.8rem; }
+  section.sol .sdg .mx-cell .ln { font-size:.78rem; padding:1px 2px; }
+  section.sol .sdg .mx-cell { padding:4px 2px; }
 }
 /* A displayed equation wider than the column scrolls inside its own box
    instead of the page: Exam 1's 840px opportunity-cost line scrolled a phone
    sideways and zoomed the whole page out (2026-11-09, mobile_check). */
 section.sol mjx-container[display="true"] { display:block; max-width:100%; overflow-x:auto; overflow-y:hidden; }
+/* An equation set inline can be as wide: three in Exam 3's Spring 2020 Q24
+   ran 45px past a 390px column. On a phone it scrolls in its own box too. */
+@media (max-width:640px){
+  section.sol mjx-container:not([display="true"]) { display:inline-block; max-width:100%; overflow-x:auto; overflow-y:hidden; vertical-align:middle; }
+}
 section.sol .sol-table { overflow-x:auto; margin:8px 0; }
 section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }

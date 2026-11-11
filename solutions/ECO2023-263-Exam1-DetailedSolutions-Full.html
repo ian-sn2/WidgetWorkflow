@@ -2466,11 +2466,39 @@ body.sol-fs-open { overflow:hidden; }
   section.sol .sdg h4, .sol-fs-panel .sdg h4 { padding-right:0; margin-top:0; }
   section.sol .sdg .sol-tools, .sol-fs-panel .sdg .sol-tools { position:static; flex-wrap:wrap; gap:6px; margin:0 0 8px; }
   .sol-fs-panel .sdg .sol-tools { justify-content:flex-start; padding:0 90px 8px 0; }
+  /* A finger needs 44px. The strip is 28px on a desktop, where a pointer is
+     precise and the strip sits over the title; here it has its own row, so
+     there is room (2026-11-09, found by mobile_check). */
+  section.sol .sdg .sol-tools button, .sol-fs-panel .sdg .sol-tools button { min-width:44px; min-height:44px; }
+  section.sol .sdg .sol-tools .sdg-ctrl button, .sol-fs-panel .sdg .sol-tools .sdg-ctrl button { width:44px; }
+  /* The default size is half the column, which on a phone left a graph
+     about 170px wide. A phone gets the full column, so the size steps have
+     nothing left to change there and go; Fullscreen stays. */
+  section.sol .sdg { --fig:100cqw !important; }
+  section.sol .sdg .sol-tools .sol-minus, section.sol .sdg .sol-tools .sol-plus { display:none; }
+  /* A payoff matrix's strategy names and the row player's name are set on
+     one line, which ran the Exam 3 games 14-43px past a 390px column. They
+     wrap here instead, and the cells give up some padding. */
+  section.sol .sdg .mx-head, section.sol .sdg .mx-rowp, .sol-fs-panel .sdg .mx-head, .sol-fs-panel .sdg .mx-rowp { white-space:normal; padding-left:4px; padding-right:6px; }
+  section.sol .sdg .mx-cell, .sol-fs-panel .sdg .mx-cell { padding:6px 4px; }
+}
+/* At 320px wrapping alone left the games 25-30px over: "WALMART" is a 95px
+   column at full size. The grid's type steps down a size there. */
+@media (max-width:380px){
+  section.sol .sdg .mx-player { font-size:.78rem; padding:2px 4px; letter-spacing:0; }
+  section.sol .sdg .mx-head, section.sol .sdg .mx-rowp { font-size:.8rem; }
+  section.sol .sdg .mx-cell .ln { font-size:.78rem; padding:1px 2px; }
+  section.sol .sdg .mx-cell { padding:4px 2px; }
 }
 /* A displayed equation wider than the column scrolls inside its own box
    instead of the page: Exam 1's 840px opportunity-cost line scrolled a phone
    sideways and zoomed the whole page out (2026-11-09, mobile_check). */
 section.sol mjx-container[display="true"] { display:block; max-width:100%; overflow-x:auto; overflow-y:hidden; }
+/* An equation set inline can be as wide: three in Exam 3's Spring 2020 Q24
+   ran 45px past a 390px column. On a phone it scrolls in its own box too. */
+@media (max-width:640px){
+  section.sol mjx-container:not([display="true"]) { display:inline-block; max-width:100%; overflow-x:auto; overflow-y:hidden; vertical-align:middle; }
+}
 section.sol .sol-table { overflow-x:auto; margin:8px 0; }
 section.sol .sol-table table { margin:0; }
 [hidden] { display:none !important; }
@@ -3269,7 +3297,130 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li>Both increase</li><li>Equilibrium quantity increases; efficient quantity decreases</li><li>Equilibrium quantity decreases; efficient quantity increases</li><li>Both decrease</li><li class="sol-right">None of these</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(e)</strong> A tax imposed on pizza companies works like an increase in their cost of selling pizza, so the supply curve of pizza shifts leftward (upward by the amount of the tax). The price buyers pay rises and the equilibrium quantity decreases. The efficient quantity, however, is the quantity at which MSB = MSC. A tax does not change how much consumers value pizza or the resources needed to make it, so neither the MSB curve nor the MSC curve moves, and the efficient quantity does not change. The blanks should therefore read "decreases; does not change," which is not offered in (a) through (d), so the answer is (e). The gap between the smaller, taxed equilibrium quantity and the unchanged efficient quantity is precisely why a tax creates a deadweight loss.</p>
-<div class="sdg"><script type="application/json">{"title":"A Tax on Pizza Sellers","lede":"The tax moves the market quantity; the efficient quantity, where MSB meets MSC, stays at Q₁.","axes":{"xmax":110,"ymax":110},"steps":["The market starts at P₁ and Q₁ with no tax.","A tax on sellers raises what they must collect at every quantity: the supply curve shifts up by the tax, to S + tax.","Buyers now pay Pᵇ, sellers keep Pˢ, and the gap between them is the tax. The quantity falls to Q₂.","The trades between Q₂ and Q₁ no longer happen, and the surplus they carried is the deadweight loss."],"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"pl":"P₁","ql":"Q₁"},{"q":35.0,"p":65.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":35.0,"p":35.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":35.0,"p2":65.0,"q":35.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[35.0,65.0],[50.0,50.0],[35.0,35.0]],"label":"DWL","color":"red","lp":[39.5,56.0],"at":3}]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Tax on Pizza Sellers",
+ "lede": "The tax moves the market quantity; the efficient quantity, where MSB meets MSC, stays at Q₁.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "steps": [
+  "The market starts at P₁ and Q₁ with no tax.",
+  "A tax on sellers raises what they must collect at every quantity: the supply curve shifts up by the tax, to S + tax.",
+  "Buyers now pay Pᵇ, sellers keep Pˢ, and the gap between them is the tax. The quantity falls to Q₂.",
+  "The trades between Q₂ and Q₁ no longer happen, and the surplus they carried is the deadweight loss."
+ ],
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S1",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  },
+  {
+   "id": "S2",
+   "label": "S + tax",
+   "pts": [
+    [
+     8,
+     38
+    ],
+    [
+     64,
+     94
+    ]
+   ],
+   "color": "red",
+   "from": "S1",
+   "at": 1,
+   "arrowP": 84,
+   "dimAt": 2
+  }
+ ],
+ "points": [
+  {
+   "q": 50.0,
+   "p": 50.0,
+   "pl": "P₁",
+   "ql": "Q₁"
+  },
+  {
+   "q": 35.0,
+   "p": 65.0,
+   "pl": "Pᵇ",
+   "ql": "Q₂",
+   "color": "red",
+   "at": 2
+  },
+  {
+   "q": 35.0,
+   "p": 35.0,
+   "pl": "Pˢ",
+   "guides": "p",
+   "showQ": false,
+   "at": 2
+  }
+ ],
+ "vbraces": [
+  {
+   "p1": 35.0,
+   "p2": 65.0,
+   "q": 35.0,
+   "label": "Tax",
+   "side": "left",
+   "at": 2
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     35.0,
+     65.0
+    ],
+    [
+     50.0,
+     50.0
+    ],
+    [
+     35.0,
+     35.0
+    ]
+   ],
+   "label": "DWL",
+   "color": "red",
+   "lp": [
+    40.19,
+    50.0
+   ],
+   "at": 3
+  }
+ ]
+}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-233-e1-q3" data-term="233" data-exam="1" data-topic="Supply and Demand">
@@ -3287,7 +3438,121 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li>Price rises and quantity increases</li><li class="sol-right">Price rises and quantity decreases</li><li>Price falls and quantity increases</li><li>Price falls and quantity decreases</li><li>None of these</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(b)</strong> A production quota is a legal cap on how much of a good may be produced. When the cap is set below the equilibrium quantity, it is binding: producers are not allowed to produce the equilibrium quantity, so the quantity decreases to the quota amount. With fewer tons of rice available, the price is found by going up to the demand curve at the quota quantity. Because the demand curve slopes downward, that price is higher than the equilibrium price. So the price of a ton of rice rises and the quantity decreases. (A quota set above the equilibrium quantity would have no effect on the market.)</p>
-<div class="sdg"><script type="application/json">{"title":"A Production Quota Below the Equilibrium Quantity","lede":"The quota caps output, and the price is read off demand.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]},{"id":"Q","label":"Quota","pts":[[30,8],[30,100]],"color":"red","at":1,"ldx":4,"ldy":-4}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":30,"p":70,"pl":"P₂","ql":"Qᵠ","guides":"p","showQ":false,"color":"red","at":2},{"q":30,"p":30,"guides":false,"showP":false,"showQ":false,"at":3}],"areas":[{"pts":[[30,70],[50,50],[30,30]],"label":"DWL","color":"red","lp":[37,56],"at":3}],"steps":["The market clears at P₁ and Q₁.","A production quota below Q₁ caps output at Qᵠ, so the quantity falls to the quota.","With less on offer, the price is read up to the demand curve: buyers pay P₂, above P₁.","The trades between Qᵠ and Q₁ no longer happen, and their surplus is the deadweight loss."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Production Quota Below the Equilibrium Quantity",
+ "lede": "The quota caps output, and the price is read off demand.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  },
+  {
+   "id": "Q",
+   "label": "Quota",
+   "pts": [
+    [
+     30,
+     8
+    ],
+    [
+     30,
+     100
+    ]
+   ],
+   "color": "red",
+   "at": 1,
+   "ldx": 4,
+   "ldy": -4
+  }
+ ],
+ "points": [
+  {
+   "q": 50,
+   "p": 50,
+   "pl": "P₁",
+   "ql": "Q₁"
+  },
+  {
+   "q": 30,
+   "p": 70,
+   "pl": "P₂",
+   "ql": "Qᵠ",
+   "guides": "p",
+   "showQ": false,
+   "color": "red",
+   "at": 2
+  },
+  {
+   "q": 30,
+   "p": 30,
+   "guides": false,
+   "showP": false,
+   "showQ": false,
+   "at": 3
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     30,
+     70
+    ],
+    [
+     50,
+     50
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "DWL",
+   "color": "red",
+   "lp": [
+    36.92,
+    50.0
+   ],
+   "at": 3
+  }
+ ],
+ "steps": [
+  "The market clears at P₁ and Q₁.",
+  "A production quota below Q₁ caps output at Qᵠ, so the quantity falls to the quota.",
+  "With less on offer, the price is read up to the demand curve: buyers pay P₂, above P₁.",
+  "The trades between Qᵠ and Q₁ no longer happen, and their surplus is the deadweight loss."
+ ]
+}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-233-e1-q5" data-term="233" data-exam="1" data-topic="Efficiency and Equity">
@@ -3344,7 +3609,170 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li class="sol-right">rises</li><li>does not change</li><li>falls</li><li>could rise, fall or stay the same</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(a)</strong> Total surplus is the sum of consumer surplus and producer surplus. On a supply and demand graph, it is the area between the demand curve and the supply curve, from zero out to the equilibrium quantity. An increase in demand shifts the demand curve rightward, which raises both the equilibrium price and the equilibrium quantity. The area between the new, higher demand curve and the unchanged supply curve, measured out to the new, larger quantity, is bigger than before. Intuitively, the units that were already being produced are now valued more highly by buyers, and additional units whose marginal benefit exceeds their marginal cost are now produced as well. Total surplus rises.</p>
-<div class="sdg"><script type="application/json">{"title":"Total Surplus When Demand Increases","lede":"Total surplus is the area between demand and supply out to the quantity traded.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"S","label":"S","pts":[[8,8],[100,100]]},{"id":"D1","label":"D₁","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"D2","label":"D₂","pts":[[24,100],[119,5]],"color":"red","from":"D1","at":1,"arrowP":40,"ldx":6,"ldy":-8}],"areas":[{"pts":[[0,50],[0,100],[50,50]],"label":"CS","color":"teal","until":3},{"pts":[[0,62.0],[0,124],[62.0,62.0]],"label":"CS","color":"teal","at":3},{"pts":[[0,50],[0,0],[50,50]],"label":"PS","color":"orange","until":3},{"pts":[[0,62.0],[0,0],[62.0,62.0]],"label":"PS","color":"orange","at":3}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":62.0,"p":62.0,"pl":"P₂","ql":"Q₂","color":"red","at":2}],"steps":["At P₁ and Q₁ consumers keep CS and producers PS. Together they are total surplus.","Demand increases, from D₁ to D₂.","The market settles at P₂ and Q₂: more is traded at a higher price.","Between the higher demand curve and the same supply curve, out to the larger Q₂, the area is bigger: total surplus rises."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "Total Surplus When Demand Increases",
+ "lede": "Total surplus is the area between demand and supply out to the quantity traded.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  },
+  {
+   "id": "D1",
+   "label": "D₁",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "D2",
+   "label": "D₂",
+   "pts": [
+    [
+     24,
+     100
+    ],
+    [
+     119,
+     5
+    ]
+   ],
+   "color": "red",
+   "from": "D1",
+   "at": 1,
+   "arrowP": 40,
+   "ldx": 6,
+   "ldy": -8
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     50
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 3
+  },
+  {
+   "pts": [
+    [
+     0,
+     62.0
+    ],
+    [
+     0,
+     124
+    ],
+    [
+     62.0,
+     62.0
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 3,
+   "lp": [
+    21.46,
+    85.85
+   ]
+  },
+  {
+   "pts": [
+    [
+     0,
+     50
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 3
+  },
+  {
+   "pts": [
+    [
+     0,
+     62.0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     62.0,
+     62.0
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 3
+  }
+ ],
+ "points": [
+  {
+   "q": 50,
+   "p": 50,
+   "pl": "P₁",
+   "ql": "Q₁"
+  },
+  {
+   "q": 62.0,
+   "p": 62.0,
+   "pl": "P₂",
+   "ql": "Q₂",
+   "color": "red",
+   "at": 2
+  }
+ ],
+ "steps": [
+  "At P₁ and Q₁ consumers keep CS and producers PS. Together they are total surplus.",
+  "Demand increases, from D₁ to D₂.",
+  "The market settles at P₂ and Q₂: more is traded at a higher price.",
+  "Between the higher demand curve and the same supply curve, out to the larger Q₂, the area is bigger: total surplus rises."
+ ]
+}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-233-e1-q10" data-term="233" data-exam="1" data-topic="Efficiency and Equity">
@@ -3378,7 +3806,7 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li>tax product A</li><li class="sol-right">tax product B</li><li>split the tax between A and B</li><li>None of these</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(b)</strong> This question is about tax incidence, which is the division of a tax between buyers and sellers. The side of the market that is less responsive to price changes, that is, the side with the smaller elasticity, ends up paying the larger share of the tax. Because the elasticity of supply is the same for the two products, the only difference is the elasticity of demand. When demand is very inelastic, as it is for product B, buyers continue to purchase nearly the same quantity even when the price rises, so sellers can pass most of the tax on to them through a higher price. When demand is very elastic, as it is for product A, buyers would cut back sharply if the price rose, so the price buyers pay rises only slightly and sellers absorb most of the tax. To make consumers pay the larger fraction, the government will tax product B.</p>
-<div class="sdg"><script type="application/json">{"title":"Who Pays a Tax: Steep Demand Against Flat Demand","lede":"Switch between the two demand curves to see how the same tax is shared.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"pl":"P₁","ql":"Q₁"},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"pl":"P₁","ql":"Q₁","showP":false,"label":"P₁","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
+<div class="sdg"><script type="application/json">{"title":"Who Pays a Tax: Steep Demand Against Flat Demand","lede":"Switch between the two demand curves to see how the same tax is shared.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":10,"dy":4},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-233-e1-q14" data-term="233" data-exam="1" data-topic="Efficiency and Equity">
@@ -3463,7 +3891,165 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li>fewer people will search for an apartment</li><li>more apartments will be rented</li><li>the supply of housing will also increase</li><li class="sol-right">the deadweight loss from the cap will grow</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(d)</strong> With a rent ceiling below the equilibrium rent, the quantity of apartments actually rented equals the quantity supplied at the ceiling rent, and there is a shortage. When demand increases, the demand curve shifts rightward, but the rent is not allowed to rise. Landlords therefore have no reason to offer more apartments, and the quantity rented does not change, so (b) is incorrect. The shortage becomes larger, which means more people spend time searching for apartments, not fewer, so (a) is incorrect. A change in demand does not shift the supply curve, so (c) is incorrect. The deadweight loss does increase: the new demand curve crosses the supply curve at a larger quantity, so the efficient quantity has grown while the quantity rented is stuck where it was. The gap between the two is wider, and the apartments that are not being supplied are now valued even more highly by renters, so the deadweight loss triangle is larger.</p>
-<div class="sdg"><script type="application/json">{"title":"A Rent Ceiling When Demand Rises","lede":"The ceiling holds the rent, so landlords offer no more than before.","axes":{"xmax":110,"ymax":110,"y":"Rent"},"curves":[{"id":"S","label":"S","pts":[[8,8],[100,100]]},{"id":"D1","label":"D₁","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"D2","label":"D₂","pts":[[24,100],[119,5]],"color":"red","from":"D1","at":2,"arrowP":80,"ldx":6,"ldy":-8}],"hlines":[{"p":30,"tag":"Ceiling","tagq":50,"showP":false}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᶜ"},{"q":30,"p":70,"guides":false,"showP":false,"showQ":false,"at":1},{"q":62.0,"p":62.0,"pl":"P₂","ql":"Q₂","color":"red","at":3},{"q":30,"p":94,"guides":false,"showP":false,"showQ":false,"at":3}],"areas":[{"pts":[[30,30],[30,70],[50,50]],"label":"DWL","color":"red","at":1,"until":3},{"pts":[[30,30],[30,94],[62.0,62.0]],"label":"DWL","color":"red","at":3}],"steps":["With a ceiling below the market rent, only Qₛ apartments are rented and there is a shortage.","The trades between Qₛ and Q₁ do not happen, so their surplus is the deadweight loss.","Incomes rise and demand shifts right, from D₁ to D₂, but the rent may not rise, so landlords still offer Qₛ.","The market would now clear at Q₂, further from Qₛ than Q₁ was, so more trades are lost and the deadweight loss grows."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Rent Ceiling When Demand Rises",
+ "lede": "The ceiling holds the rent, so landlords offer no more than before.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110,
+  "y": "Rent"
+ },
+ "curves": [
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  },
+  {
+   "id": "D1",
+   "label": "D₁",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "D2",
+   "label": "D₂",
+   "pts": [
+    [
+     24,
+     100
+    ],
+    [
+     119,
+     5
+    ]
+   ],
+   "color": "red",
+   "from": "D1",
+   "at": 2,
+   "arrowP": 80,
+   "ldx": 6,
+   "ldy": -8
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "Ceiling",
+   "tagq": 50,
+   "showP": false
+  }
+ ],
+ "points": [
+  {
+   "q": 50,
+   "p": 50,
+   "pl": "P₁",
+   "ql": "Q₁"
+  },
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᶜ"
+  },
+  {
+   "q": 30,
+   "p": 70,
+   "guides": false,
+   "showP": false,
+   "showQ": false,
+   "at": 1
+  },
+  {
+   "q": 62.0,
+   "p": 62.0,
+   "pl": "P₂",
+   "ql": "Q₂",
+   "color": "red",
+   "at": 3
+  },
+  {
+   "q": 30,
+   "p": 94,
+   "guides": false,
+   "showP": false,
+   "showQ": false,
+   "at": 3
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     30,
+     70
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "label": "DWL",
+   "color": "red",
+   "at": 1,
+   "until": 3
+  },
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     30,
+     94
+    ],
+    [
+     62.0,
+     62.0
+    ]
+   ],
+   "label": "DWL",
+   "color": "red",
+   "at": 3,
+   "lp": [
+    42.31,
+    66.92
+   ]
+  }
+ ],
+ "steps": [
+  "With a ceiling below the market rent, only Qₛ apartments are rented and there is a shortage.",
+  "The trades between Qₛ and Q₁ do not happen, so their surplus is the deadweight loss.",
+  "Incomes rise and demand shifts right, from D₁ to D₂, but the rent may not rise, so landlords still offer Qₛ.",
+  "The market would now clear at Q₂, further from Qₛ than Q₁ was, so more trades are lost and the deadweight loss grows."
+ ]
+}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-233-e1-q23" data-term="233" data-exam="1" data-topic="Government Intervention">
@@ -3508,7 +4094,175 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li>All three increase</li><li>Consumer surplus increases; producer and total surplus decrease</li><li>Consumer surplus decreases; producer and total surplus increase</li><li class="sol-right">Consumer surplus increases; producer surplus decreases; total surplus increases</li><li>None of these</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(d)</strong> A nation imports a good when the world price is below the price that would prevail in the domestic market without trade. Once trade is allowed, the domestic price falls to the world price. Domestic consumers buy a larger quantity at a lower price, so consumer surplus increases. Domestic producers sell a smaller quantity at a lower price, so producer surplus decreases. Part of the consumers' gain is simply surplus transferred from producers, but the rest is brand-new surplus on the additional units consumed and on units now obtained at a lower cost from abroad. Since the consumers' gain is larger than the producers' loss, total surplus increases.</p>
-<div class="sdg"><script type="application/json">{"title":"A Market That Imports","lede":"The world price is below the no-trade price.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","at":1,"showP":false}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ","at":1},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false,"at":1}],"areas":[{"pts":[[0,50],[0,100],[50,50]],"label":"CS","color":"teal","until":2},{"pts":[[0,50],[0,0],[50,50]],"label":"PS","color":"orange","until":2},{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","at":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","at":2}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports","below":true,"at":2}],"steps":["With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.","The world price is below P₁. At that price domestic producers offer Qₛ and domestic buyers want Qᴅ.","With trade the price falls to the world price and imports fill the gap. CS grows by more than PS shrinks, so total surplus rises."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Market That Imports",
+ "lede": "The world price is below the no-trade price.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "World price",
+   "at": 1,
+   "showP": false
+  }
+ ],
+ "points": [
+  {
+   "q": 50,
+   "p": 50,
+   "pl": "P₁",
+   "ql": "Q₁"
+  },
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᵂ",
+   "at": 1
+  },
+  {
+   "q": 70,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qᴅ",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     50
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     50
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 2,
+   "lp": [
+    17.31,
+    36.54
+   ]
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 2
+  }
+ ],
+ "braces": [
+  {
+   "p": 30,
+   "q1": 30,
+   "q2": 70,
+   "label": "Imports",
+   "below": true,
+   "at": 2
+  }
+ ],
+ "steps": [
+  "With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.",
+  "The world price is below P₁. At that price domestic producers offer Qₛ and domestic buyers want Qᴅ.",
+  "With trade the price falls to the world price and imports fill the gap. CS grows by more than PS shrinks, so total surplus rises."
+ ]
+}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-233-e1-q28" data-term="233" data-exam="1" data-topic="Supply and Demand">
@@ -3549,7 +4303,262 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li>Only the first holds</li><li>Only the second holds</li><li class="sol-right">Both statements hold</li><li>Neither holds</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(c)</strong> A tariff is a tax on an imported good, and an import quota is a limit on the quantity of a good that may be imported. Although they work differently, both raise the domestic price of the good above the world price. At the higher price, domestic buyers purchase less and domestic firms produce more, so imports, which make up the difference, decrease. Statement i is correct for both policies. The higher domestic price also lets domestic producers sell more units at a higher price, which increases their producer surplus and makes them better off. Statement ii is correct for both policies as well. (Where the two policies differ is in who collects the gap between the domestic price and the world price: the government under a tariff, and the importers under a quota.)</p>
-<div class="sdg"><script type="application/json">{"title":"A Tariff on an Imported Good","lede":"A tariff and a quota both raise the domestic price and cut imports.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","showP":false},{"p":42,"tag":"World price + tariff","showP":false,"at":1}],"points":[{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ"},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false},{"q":42,"p":42,"guides":"q","ql":"Qₛ′","pl":"Pᵀ","at":1},{"q":58,"p":42,"guides":"q","ql":"Qᴅ′","showP":false,"at":1}],"areas":[{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","until":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","until":2},{"pts":[[0,42],[0,100],[58,42]],"label":"CS","color":"teal","at":2},{"pts":[[0,42],[0,0],[42,42]],"label":"PS","color":"orange","at":2},{"pts":[[42,30],[42,42],[58,42],[58,30]],"label":"Tariff revenue","color":"navy","lp":[50,20],"at":3},{"pts":[[30,30],[42,42],[42,30]],"label":"","color":"red","at":3},{"pts":[[58,30],[58,42],[70,30]],"label":"","color":"red","at":3}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports before","below":true,"until":1},{"p":42,"q1":42,"q2":58,"label":"Imports after","below":true,"at":1}],"steps":["At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.","A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.","Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.","Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Tariff on an Imported Good",
+ "lede": "A tariff and a quota both raise the domestic price and cut imports.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "World price",
+   "showP": false
+  },
+  {
+   "p": 42,
+   "tag": "World price + tariff",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "points": [
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᵂ"
+  },
+  {
+   "q": 70,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qᴅ",
+   "showP": false
+  },
+  {
+   "q": 42,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qₛ′",
+   "pl": "Pᵀ",
+   "at": 1
+  },
+  {
+   "q": 58,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qᴅ′",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     58,
+     42
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     42,
+     42
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 2,
+   "lp": [
+    14.54,
+    24.23
+   ]
+  },
+  {
+   "pts": [
+    [
+     42,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     58,
+     30
+    ]
+   ],
+   "label": "Tariff revenue",
+   "color": "navy",
+   "lp": [
+    50,
+    20
+   ],
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     42,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     58,
+     30
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  }
+ ],
+ "braces": [
+  {
+   "p": 30,
+   "q1": 30,
+   "q2": 70,
+   "label": "Imports before",
+   "below": true,
+   "until": 1
+  },
+  {
+   "p": 42,
+   "q1": 42,
+   "q2": 58,
+   "label": "Imports after",
+   "below": true,
+   "at": 1
+  }
+ ],
+ "steps": [
+  "At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.",
+  "A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.",
+  "Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.",
+  "Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."
+ ]
+}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-233-e1-q32" data-term="233" data-exam="1" data-topic="Supply and Demand">
@@ -3572,7 +4581,262 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li>Only the first holds</li><li>Only the second holds</li><li>Both statements hold</li><li class="sol-right">Neither holds</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(d)</strong> Statement i is incorrect. A tariff does raise the domestic price and increase domestic production, but it decreases total surplus. Consumers lose more than domestic producers and the government gain combined, and the difference is a deadweight loss. It arises because the extra domestic output costs more to produce than the world price at which it could have been imported, and because consumers give up units they value at more than the world price.</p>
-<div class="sdg"><script type="application/json">{"title":"What a Tariff Does to Total Surplus","lede":"Consumers lose more than producers and the government gain together.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","showP":false},{"p":42,"tag":"World price + tariff","showP":false,"at":1}],"points":[{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ"},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false},{"q":42,"p":42,"guides":"q","ql":"Qₛ′","pl":"Pᵀ","at":1},{"q":58,"p":42,"guides":"q","ql":"Qᴅ′","showP":false,"at":1}],"areas":[{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","until":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","until":2},{"pts":[[0,42],[0,100],[58,42]],"label":"CS","color":"teal","at":2},{"pts":[[0,42],[0,0],[42,42]],"label":"PS","color":"orange","at":2},{"pts":[[42,30],[42,42],[58,42],[58,30]],"label":"Tariff revenue","color":"navy","lp":[50,20],"at":3},{"pts":[[30,30],[42,42],[42,30]],"label":"","color":"red","at":3},{"pts":[[58,30],[58,42],[70,30]],"label":"","color":"red","at":3}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports before","below":true,"until":1},{"p":42,"q1":42,"q2":58,"label":"Imports after","below":true,"at":1}],"steps":["At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.","A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.","Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.","Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "What a Tariff Does to Total Surplus",
+ "lede": "Consumers lose more than producers and the government gain together.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "World price",
+   "showP": false
+  },
+  {
+   "p": 42,
+   "tag": "World price + tariff",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "points": [
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᵂ"
+  },
+  {
+   "q": 70,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qᴅ",
+   "showP": false
+  },
+  {
+   "q": 42,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qₛ′",
+   "pl": "Pᵀ",
+   "at": 1
+  },
+  {
+   "q": 58,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qᴅ′",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     58,
+     42
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     42,
+     42
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 2,
+   "lp": [
+    14.54,
+    24.23
+   ]
+  },
+  {
+   "pts": [
+    [
+     42,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     58,
+     30
+    ]
+   ],
+   "label": "Tariff revenue",
+   "color": "navy",
+   "lp": [
+    50,
+    20
+   ],
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     42,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     58,
+     30
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  }
+ ],
+ "braces": [
+  {
+   "p": 30,
+   "q1": 30,
+   "q2": 70,
+   "label": "Imports before",
+   "below": true,
+   "until": 1
+  },
+  {
+   "p": 42,
+   "q1": 42,
+   "q2": 58,
+   "label": "Imports after",
+   "below": true,
+   "at": 1
+  }
+ ],
+ "steps": [
+  "At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.",
+  "A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.",
+  "Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.",
+  "Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."
+ ]
+}</script></div>
     <p>Statement ii is also incorrect. Without a tariff, the government collects nothing on imports. With a tariff, it collects revenue equal to the tariff multiplied by the quantity imported. Imports do shrink, but the government's revenue goes from zero to a positive amount, so it gains revenue. Since neither statement is correct, the answer is (d).</p>
 </div>
 </section>
@@ -3626,7 +4890,174 @@ section.sol .sol-table table { margin:0; }
 <ol class="sol-choices" type="A"><li>Production falls; consumers are better off</li><li>Production falls; consumers are worse off</li><li>Production rises; consumers are better off</li><li class="sol-right">Production rises; consumers are worse off</li><li>Production rises; consumers are unaffected</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(d)</strong> A nation exports a good when the world price is above the price that would prevail in its domestic market without trade. With trade, the price of corn in the United States rises to the world price. U.S. corn farmers respond by moving up along their supply curve, so U.S. production of corn increases, and they sell it at a higher price, which increases producer surplus. U.S. corn consumers, on the other hand, must now pay the higher world price and they buy less corn, so their consumer surplus decreases and they are worse off. (The producers' gain is larger than the consumers' loss, so U.S. total surplus still rises.)</p>
-<div class="sdg"><script type="application/json">{"title":"A Market That Exports","lede":"The world price is above the no-trade price.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":70,"tag":"World price","at":1,"showP":false}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":70,"p":70,"guides":"q","ql":"Qₛ","pl":"Pᵂ","at":1},{"q":30,"p":70,"guides":"q","ql":"Qᴅ","showP":false,"at":1}],"areas":[{"pts":[[0,50],[0,100],[50,50]],"label":"CS","color":"teal","until":2},{"pts":[[0,50],[0,0],[50,50]],"label":"PS","color":"orange","until":2},{"pts":[[0,70],[0,100],[30,70]],"label":"CS","color":"teal","at":2},{"pts":[[0,70],[0,0],[70,70]],"label":"PS","color":"orange","at":2}],"braces":[{"p":70,"q1":30,"q2":70,"label":"Exports","at":2}],"steps":["With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.","The world price is above P₁. At that price domestic producers offer Qₛ and domestic buyers want only Qᴅ.","With trade the price rises to the world price and the difference is exported. PS grows by more than CS shrinks, so total surplus rises."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Market That Exports",
+ "lede": "The world price is above the no-trade price.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  }
+ ],
+ "hlines": [
+  {
+   "p": 70,
+   "tag": "World price",
+   "at": 1,
+   "showP": false
+  }
+ ],
+ "points": [
+  {
+   "q": 50,
+   "p": 50,
+   "pl": "P₁",
+   "ql": "Q₁"
+  },
+  {
+   "q": 70,
+   "p": 70,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᵂ",
+   "at": 1
+  },
+  {
+   "q": 30,
+   "p": 70,
+   "guides": "q",
+   "ql": "Qᴅ",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     50
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 2,
+   "lp": [
+    17.31,
+    63.46
+   ]
+  },
+  {
+   "pts": [
+    [
+     0,
+     50
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     70
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     30,
+     70
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     70
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     70,
+     70
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 2
+  }
+ ],
+ "braces": [
+  {
+   "p": 70,
+   "q1": 30,
+   "q2": 70,
+   "label": "Exports",
+   "at": 2
+  }
+ ],
+ "steps": [
+  "With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.",
+  "The world price is above P₁. At that price domestic producers offer Qₛ and domestic buyers want only Qᴅ.",
+  "With trade the price rises to the world price and the difference is exported. PS grows by more than CS shrinks, so total surplus rises."
+ ]
+}</script></div>
 </div>
 </section>
 </div>
@@ -3834,7 +5265,175 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>Harm U.S. sugar consumers; benefit foreign producers</li><li>Harm U.S. sugar consumers; benefit U.S. producers</li><li class="sol-right">Harm U.S. sugar producers; benefit U.S. consumers</li><li>Harm U.S. sugar producers; benefit the U.S. government</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(c)</strong> A nation is an importer of a good when the world price is less than the domestic equilibrium price. When this is the case, allowing imports harms domestic producers, who can sell less of the good and have to accept the lower world price. It benefits domestic consumers, who can consume more of the good and get to pay the lower world price. Therefore, U.S. sugar imports harm U.S. sugar producers and benefit U.S. sugar customers.</p>
-<div class="sdg"><script type="application/json">{"title":"A Market That Imports","lede":"The world price is below the no-trade price.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","at":1,"showP":false}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ","at":1},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false,"at":1}],"areas":[{"pts":[[0,50],[0,100],[50,50]],"label":"CS","color":"teal","until":2},{"pts":[[0,50],[0,0],[50,50]],"label":"PS","color":"orange","until":2},{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","at":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","at":2}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports","below":true,"at":2}],"steps":["With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.","The world price is below P₁. At that price domestic producers offer Qₛ and domestic buyers want Qᴅ.","With trade the price falls to the world price and imports fill the gap. CS grows by more than PS shrinks, so total surplus rises."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Market That Imports",
+ "lede": "The world price is below the no-trade price.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "World price",
+   "at": 1,
+   "showP": false
+  }
+ ],
+ "points": [
+  {
+   "q": 50,
+   "p": 50,
+   "pl": "P₁",
+   "ql": "Q₁"
+  },
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᵂ",
+   "at": 1
+  },
+  {
+   "q": 70,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qᴅ",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     50
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     50
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 2,
+   "lp": [
+    17.31,
+    36.54
+   ]
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 2
+  }
+ ],
+ "braces": [
+  {
+   "p": 30,
+   "q1": 30,
+   "q2": 70,
+   "label": "Imports",
+   "below": true,
+   "at": 2
+  }
+ ],
+ "steps": [
+  "With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.",
+  "The world price is below P₁. At that price domestic producers offer Qₛ and domestic buyers want Qᴅ.",
+  "With trade the price falls to the world price and imports fill the gap. CS grows by more than PS shrinks, so total surplus rises."
+ ]
+}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-232-e1-q21" data-term="232" data-exam="1" data-topic="Efficiency and Equity">
@@ -3869,7 +5468,262 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li class="sol-right">Domestic consumers of the good</li><li>Domestic producers of the good</li><li>Foreign governments</li><li>The domestic government</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(a)</strong> A tariff is a tax on imports. Tariffs benefit domestic producers of the good, who can sell more of the good at a higher price. They also benefit the domestic government, which earns tariff revenue on every unit. However, they harm domestic consumers, who can consume less of the good, and must pay a higher price.</p>
-<div class="sdg"><script type="application/json">{"title":"Who a Tariff Harms","lede":"Producers and the government gain; consumers lose more than both together.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","showP":false},{"p":42,"tag":"World price + tariff","showP":false,"at":1}],"points":[{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ"},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false},{"q":42,"p":42,"guides":"q","ql":"Qₛ′","pl":"Pᵀ","at":1},{"q":58,"p":42,"guides":"q","ql":"Qᴅ′","showP":false,"at":1}],"areas":[{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","until":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","until":2},{"pts":[[0,42],[0,100],[58,42]],"label":"CS","color":"teal","at":2},{"pts":[[0,42],[0,0],[42,42]],"label":"PS","color":"orange","at":2},{"pts":[[42,30],[42,42],[58,42],[58,30]],"label":"Tariff revenue","color":"navy","lp":[50,20],"at":3},{"pts":[[30,30],[42,42],[42,30]],"label":"","color":"red","at":3},{"pts":[[58,30],[58,42],[70,30]],"label":"","color":"red","at":3}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports before","below":true,"until":1},{"p":42,"q1":42,"q2":58,"label":"Imports after","below":true,"at":1}],"steps":["At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.","A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.","Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.","Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "Who a Tariff Harms",
+ "lede": "Producers and the government gain; consumers lose more than both together.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "World price",
+   "showP": false
+  },
+  {
+   "p": 42,
+   "tag": "World price + tariff",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "points": [
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᵂ"
+  },
+  {
+   "q": 70,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qᴅ",
+   "showP": false
+  },
+  {
+   "q": 42,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qₛ′",
+   "pl": "Pᵀ",
+   "at": 1
+  },
+  {
+   "q": 58,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qᴅ′",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     58,
+     42
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     42,
+     42
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 2,
+   "lp": [
+    14.54,
+    24.23
+   ]
+  },
+  {
+   "pts": [
+    [
+     42,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     58,
+     30
+    ]
+   ],
+   "label": "Tariff revenue",
+   "color": "navy",
+   "lp": [
+    50,
+    20
+   ],
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     42,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     58,
+     30
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  }
+ ],
+ "braces": [
+  {
+   "p": 30,
+   "q1": 30,
+   "q2": 70,
+   "label": "Imports before",
+   "below": true,
+   "until": 1
+  },
+  {
+   "p": 42,
+   "q1": 42,
+   "q2": 58,
+   "label": "Imports after",
+   "below": true,
+   "at": 1
+  }
+ ],
+ "steps": [
+  "At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.",
+  "A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.",
+  "Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.",
+  "Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."
+ ]
+}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-232-e1-q25" data-term="232" data-exam="1" data-topic="Supply and Demand">
@@ -3923,7 +5777,7 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>the tax is levied on buyers</li><li>the tax is levied on sellers</li><li class="sol-right">demand is inelastic</li><li>demand is elastic</li><li>Both the first and third answers</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(c)</strong> Tax incidence depends on the relative elasticities of demand and supply. You can think of elasticity as flexibility. If demanders are more flexible than suppliers, the suppliers will be left to pay the majority of the tax. On the other hand, if suppliers are more flexible than demanders, the demanders will be left to pay the majority of the tax. Therefore, demanders pay a larger fraction of a tax when demand is inelastic.</p>
-<div class="sdg"><script type="application/json">{"title":"Who Pays a Tax: Steep Demand Against Flat Demand","lede":"Switch between the two demand curves to see how the same tax is shared.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"pl":"P₁","ql":"Q₁"},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"pl":"P₁","ql":"Q₁","showP":false,"label":"P₁","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
+<div class="sdg"><script type="application/json">{"title":"Who Pays a Tax: Steep Demand Against Flat Demand","lede":"Switch between the two demand curves to see how the same tax is shared.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":10,"dy":4},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
 </div>
 </section>
 </div>
@@ -4072,7 +5926,7 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>larger; larger</li><li class="sol-right">larger; smaller</li><li>smaller; larger</li><li>smaller; smaller</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(b)</strong> <em>Tax incidence</em> depends on the relative elasticities of demand and supply. You can think of elasticity as <em>flexibility</em>. If demanders are more flexible than suppliers, the suppliers will be left to pay the majority of the tax. On the other hand, if suppliers are more flexible than demanders, the demanders will be left to pay the majority of the tax. Therefore, producers pay a larger fraction of a sales tax when the price elasticity of demand is larger and when the price elasticity of supply is smaller.</p>
-<div class="sdg"><script type="application/json">{"title":"Who Pays a Tax: Steep Demand Against Flat Demand","lede":"Switch between the two demand curves to see how the same tax is shared.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"pl":"P₁","ql":"Q₁"},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"pl":"P₁","ql":"Q₁","showP":false,"label":"P₁","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
+<div class="sdg"><script type="application/json">{"title":"Who Pays a Tax: Steep Demand Against Flat Demand","lede":"Switch between the two demand curves to see how the same tax is shared.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":10,"dy":4},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-231-e1-q14" data-term="231" data-exam="1" data-topic="Supply and Demand">
@@ -4114,7 +5968,7 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>Raises both</li><li>Raises the consumers' price; lowers the producers'</li><li class="sol-right">Lowers the consumers' price; raises the producers'</li><li>Lowers the consumers' price; leaves the producers' unchanged</li><li>Lowers both</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(c)</strong> A <em>subsidy</em> is a payment made by the government to suppliers. It has the effect of increasing the supply of the good that the suppliers are providing to the market. If the government subsidizes the production of sugar, the supply curve for sugar will shift to the right, which reduces the equilibrium price of sugar (that consumers have to pay). The subsidy also increases the price (including the subsidy) that producers receive.</p>
-<div class="sdg"><script type="application/json">{"title":"A Subsidy to Sugar Producers","lede":"A payment per unit to sellers shifts supply down by the subsidy.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S − subsidy","pts":[[28,8],[100,80]],"color":"red","from":"S1","at":1,"arrowP":30,"dimAt":2}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":60.0,"p":40.0,"pl":"Pᶜ","ql":"Q₂","color":"red","at":2},{"q":60.0,"p":60.0,"pl":"Pᵖ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":40.0,"p2":60.0,"q":60.0,"label":"Subsidy","at":2}],"steps":["The sugar market starts at P₁ and Q₁ with no subsidy.","A subsidy lowers what sellers need from buyers at every quantity: the supply curve shifts down by the subsidy.","Buyers now pay Pᶜ, below P₁, and sellers receive Pᵖ, which includes the subsidy, above P₁. The quantity rises to Q₂."]}</script></div>
+<div class="sdg"><script type="application/json">{"title":"A Subsidy to Sugar Producers","lede":"A payment per unit to sellers shifts supply down by the subsidy.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S − subsidy","pts":[[28,8],[100,80]],"color":"red","from":"S1","at":1,"arrowP":30,"dimAt":2}],"points":[{"q":50,"p":50,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":10,"dy":4},{"q":60.0,"p":40.0,"pl":"Pᶜ","ql":"Q₂","color":"red","at":2},{"q":60.0,"p":60.0,"pl":"Pᵖ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":40.0,"p2":60.0,"q":60.0,"label":"Subsidy","at":2}],"steps":["The sugar market starts at P₁ and Q₁ with no subsidy.","A subsidy lowers what sellers need from buyers at every quantity: the supply curve shifts down by the subsidy.","Buyers now pay Pᶜ, below P₁, and sellers receive Pᵖ, which includes the subsidy, above P₁. The quantity rises to Q₂."]}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-231-e1-q18" data-term="231" data-exam="1" data-topic="Government Intervention">
@@ -4123,7 +5977,7 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>increases; larger</li><li>increases; smaller</li><li class="sol-right">decreases; larger</li><li>decreases; smaller</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(c)</strong> A tax causes the supply curve to shift upward, which reduces the equilibrium quantity. The reduction in the equilibrium quantity is greater if the demand curve is flatter—that is, if the price elasticity of demand is higher.</p>
-<div class="sdg"><script type="application/json">{"title":"A Tax Cuts Quantity More When Demand Is Elastic","lede":"Switch between the two demand curves and watch Q₂.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"pl":"P₁","ql":"Q₁"},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"pl":"P₁","ql":"Q₁","showP":false,"label":"P₁","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
+<div class="sdg"><script type="application/json">{"title":"A Tax Cuts Quantity More When Demand Is Elastic","lede":"Switch between the two demand curves and watch Q₂.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":10,"dy":4},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-231-e1-q19" data-term="231" data-exam="1" data-topic="Supply and Demand">
@@ -4195,7 +6049,165 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li class="sol-right">increases the deadweight loss</li><li>leaves the deadweight loss unchanged</li><li>decreases the deadweight loss</li><li>is beside the point, because there is no deadweight loss</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(a)</strong> A rent ceiling set below the equilibrium rent creates a deadweight loss because it reduces the quantity of housing transacted. If income increases and the demand curve shifts to the right, the deadweight loss resulting from the rent ceiling increases because the difference between the quantity transacted at equilibrium and the quantity transacted under the rent ceiling has gotten larger.</p>
-<div class="sdg"><script type="application/json">{"title":"A Rent Ceiling When Income Rises","lede":"The ceiling holds the rent, so landlords offer no more than before.","axes":{"xmax":110,"ymax":110,"y":"Rent"},"curves":[{"id":"S","label":"S","pts":[[8,8],[100,100]]},{"id":"D1","label":"D₁","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"D2","label":"D₂","pts":[[24,100],[119,5]],"color":"red","from":"D1","at":2,"arrowP":80,"ldx":6,"ldy":-8}],"hlines":[{"p":30,"tag":"Ceiling","tagq":50,"showP":false}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᶜ"},{"q":30,"p":70,"guides":false,"showP":false,"showQ":false,"at":1},{"q":62.0,"p":62.0,"pl":"P₂","ql":"Q₂","color":"red","at":3},{"q":30,"p":94,"guides":false,"showP":false,"showQ":false,"at":3}],"areas":[{"pts":[[30,30],[30,70],[50,50]],"label":"DWL","color":"red","at":1,"until":3},{"pts":[[30,30],[30,94],[62.0,62.0]],"label":"DWL","color":"red","at":3}],"steps":["With a ceiling below the market rent, only Qₛ apartments are rented and there is a shortage.","The trades between Qₛ and Q₁ do not happen, so their surplus is the deadweight loss.","Incomes rise and demand shifts right, from D₁ to D₂, but the rent may not rise, so landlords still offer Qₛ.","The market would now clear at Q₂, further from Qₛ than Q₁ was, so more trades are lost and the deadweight loss grows."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Rent Ceiling When Income Rises",
+ "lede": "The ceiling holds the rent, so landlords offer no more than before.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110,
+  "y": "Rent"
+ },
+ "curves": [
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  },
+  {
+   "id": "D1",
+   "label": "D₁",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "D2",
+   "label": "D₂",
+   "pts": [
+    [
+     24,
+     100
+    ],
+    [
+     119,
+     5
+    ]
+   ],
+   "color": "red",
+   "from": "D1",
+   "at": 2,
+   "arrowP": 80,
+   "ldx": 6,
+   "ldy": -8
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "Ceiling",
+   "tagq": 50,
+   "showP": false
+  }
+ ],
+ "points": [
+  {
+   "q": 50,
+   "p": 50,
+   "pl": "P₁",
+   "ql": "Q₁"
+  },
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᶜ"
+  },
+  {
+   "q": 30,
+   "p": 70,
+   "guides": false,
+   "showP": false,
+   "showQ": false,
+   "at": 1
+  },
+  {
+   "q": 62.0,
+   "p": 62.0,
+   "pl": "P₂",
+   "ql": "Q₂",
+   "color": "red",
+   "at": 3
+  },
+  {
+   "q": 30,
+   "p": 94,
+   "guides": false,
+   "showP": false,
+   "showQ": false,
+   "at": 3
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     30,
+     70
+    ],
+    [
+     50,
+     50
+    ]
+   ],
+   "label": "DWL",
+   "color": "red",
+   "at": 1,
+   "until": 3
+  },
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     30,
+     94
+    ],
+    [
+     62.0,
+     62.0
+    ]
+   ],
+   "label": "DWL",
+   "color": "red",
+   "at": 3,
+   "lp": [
+    42.31,
+    66.92
+   ]
+  }
+ ],
+ "steps": [
+  "With a ceiling below the market rent, only Qₛ apartments are rented and there is a shortage.",
+  "The trades between Qₛ and Q₁ do not happen, so their surplus is the deadweight loss.",
+  "Incomes rise and demand shifts right, from D₁ to D₂, but the rent may not rise, so landlords still offer Qₛ.",
+  "The market would now clear at Q₂, further from Qₛ than Q₁ was, so more trades are lost and the deadweight loss grows."
+ ]
+}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-231-e1-q26" data-term="231" data-exam="1" data-topic="Efficiency and Equity">
@@ -4230,7 +6242,7 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li class="sol-right">only on the production possibilities frontier</li><li>only inside the frontier</li><li>only outside the frontier</li><li>on or inside the frontier</li><li>on or outside the frontier</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(a)</strong> Points along the production possibilities frontier (PPF) are considered production-efficient. Operating at one of these points, a country cannot produce more of one good without giving up production of the other.</p>
-<div class="sdg"><script type="application/json">{"title":"Points On, Inside and Beyond the Frontier","lede":"The frontier is the outer limit of what the resources can produce.","axes":{"x":"Good X","y":"Good Y","xmax":110,"ymax":110},"curves":[{"id":"PPF","label":"PPF","pts":[[0,100],[30,94],[60,78],[85,48],[100,0]],"curved":true,"ldx":6,"ldy":-6}],"points":[{"q":35,"p":40,"label":"Attainable,\ninefficient","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":60,"p":78,"label":"On the frontier","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":85,"p":85,"label":"Unattainable","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false}],"caption":"A point inside the frontier is attainable but wastes resources; a point on it is production efficient; a point beyond it cannot be reached."}</script></div>
+<div class="sdg"><script type="application/json">{"title":"Points On, Inside and Beyond the Frontier","lede":"The frontier is the outer limit of what the resources can produce.","axes":{"x":"Good X","y":"Good Y","xmax":110,"ymax":110},"curves":[{"id":"PPF","label":"PPF","pts":[[0,100],[30,94],[60,78],[85,48],[100,0]],"curved":true,"ldx":6,"ldy":-6}],"points":[{"q":35,"p":40,"label":"Attainable,\ninefficient","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":60,"p":78,"label":"On the frontier","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":92,"p":90,"label":"Unattainable","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false}],"caption":"A point inside the frontier is attainable but wastes resources; a point on it is production efficient; a point beyond it cannot be reached."}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-231-e1-q30" data-term="231" data-exam="1" data-topic="Government Intervention">
@@ -4247,7 +6259,262 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>Raised consumer surplus; raised producer surplus; no deadweight loss</li><li>Raised consumer surplus; lowered producer surplus; no deadweight loss</li><li>Lowered both surpluses; created a deadweight loss</li><li>Raised consumer surplus; lowered producer surplus; created a deadweight loss</li><li class="sol-right">Lowered consumer surplus; raised producer surplus; created a deadweight loss</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(e)</strong> The imposition of a tariff reduces domestic consumer surplus because domestic consumers can consume fewer units, and they have to pay a higher price under the tariff. A tariff increases domestic producer surplus because domestic producers get to sell more units at the higher tariff price. The loss to domestic consumers is greater than the gain to domestic producers, so tariffs create a deadweight loss to society.</p>
-<div class="sdg"><script type="application/json">{"title":"A Tariff on Solar Panels","lede":"Consumers lose more than producers and the government gain together.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","showP":false},{"p":42,"tag":"World price + tariff","showP":false,"at":1}],"points":[{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ"},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false},{"q":42,"p":42,"guides":"q","ql":"Qₛ′","pl":"Pᵀ","at":1},{"q":58,"p":42,"guides":"q","ql":"Qᴅ′","showP":false,"at":1}],"areas":[{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","until":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","until":2},{"pts":[[0,42],[0,100],[58,42]],"label":"CS","color":"teal","at":2},{"pts":[[0,42],[0,0],[42,42]],"label":"PS","color":"orange","at":2},{"pts":[[42,30],[42,42],[58,42],[58,30]],"label":"Tariff revenue","color":"navy","lp":[50,20],"at":3},{"pts":[[30,30],[42,42],[42,30]],"label":"","color":"red","at":3},{"pts":[[58,30],[58,42],[70,30]],"label":"","color":"red","at":3}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports before","below":true,"until":1},{"p":42,"q1":42,"q2":58,"label":"Imports after","below":true,"at":1}],"steps":["At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.","A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.","Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.","Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Tariff on Solar Panels",
+ "lede": "Consumers lose more than producers and the government gain together.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "World price",
+   "showP": false
+  },
+  {
+   "p": 42,
+   "tag": "World price + tariff",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "points": [
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᵂ"
+  },
+  {
+   "q": 70,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qᴅ",
+   "showP": false
+  },
+  {
+   "q": 42,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qₛ′",
+   "pl": "Pᵀ",
+   "at": 1
+  },
+  {
+   "q": 58,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qᴅ′",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     58,
+     42
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     42,
+     42
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 2,
+   "lp": [
+    14.54,
+    24.23
+   ]
+  },
+  {
+   "pts": [
+    [
+     42,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     58,
+     30
+    ]
+   ],
+   "label": "Tariff revenue",
+   "color": "navy",
+   "lp": [
+    50,
+    20
+   ],
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     42,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     58,
+     30
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  }
+ ],
+ "braces": [
+  {
+   "p": 30,
+   "q1": 30,
+   "q2": 70,
+   "label": "Imports before",
+   "below": true,
+   "until": 1
+  },
+  {
+   "p": 42,
+   "q1": 42,
+   "q2": 58,
+   "label": "Imports after",
+   "below": true,
+   "at": 1
+  }
+ ],
+ "steps": [
+  "At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.",
+  "A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.",
+  "Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.",
+  "Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."
+ ]
+}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-231-e1-q32" data-term="231" data-exam="1" data-topic="Supply and Demand">
@@ -4301,7 +6568,7 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li class="sol-right">good A, whose demand is less elastic</li><li>good A, whose demand is more elastic</li><li>good B, whose demand is less elastic</li><li>good B, whose demand is more elastic</li><li>either, since equal prices and quantities mean equal revenue</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(a)</strong> When the government imposes a tax on the good, the supply curve shifts upward by the amount of the tax. The government's tax revenue is equal to the amount of the tax multiplied by the new equilibrium quantity. The equilibrium quantity will fall by less if the demand curve is steeper—that is, if demand is less elastic. Therefore, if the government wanted to generate the most tax revenues, it should tax the good whose elasticity of demand is lower (Good A).</p>
-<div class="sdg"><script type="application/json">{"title":"Tax Revenue: Steep Demand Against Flat Demand","lede":"Revenue is the tax times Q₂, so the curve on which quantity holds up best raises more.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"pl":"P₁","ql":"Q₁"},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"pl":"P₁","ql":"Q₁","showP":false,"label":"P₁","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
+<div class="sdg"><script type="application/json">{"title":"Tax Revenue: Steep Demand Against Flat Demand","lede":"Revenue is the tax times Q₂, so the curve on which quantity holds up best raises more.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":10,"dy":4},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
 </div>
 </section>
 <section class="sol" id="eco2023-231-e1-q37" data-term="231" data-exam="1" data-topic="Supply and Demand">
@@ -4340,7 +6607,262 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>Production falls; consumers are better off</li><li>Production falls; consumers are worse off</li><li>Production rises; consumers are better off</li><li class="sol-right">Production rises; consumers are worse off</li><li>Production rises; consumers are unaffected</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(d)</strong> An <em>import quota</em> is a numerical restriction on the amount of a good that can be imported. If the United States imposes an import quota on sugar, U.S. production of sugar will increase, and domestic consumers will be worse off (because they have to pay a higher price than otherwise).</p>
-<div class="sdg"><script type="application/json">{"title":"An Import Quota on Sugar","lede":"A quota raises the domestic price the way a tariff does.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","showP":false},{"p":42,"tag":"Price with quota","showP":false,"at":1}],"points":[{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ"},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false},{"q":42,"p":42,"guides":"q","ql":"Qₛ′","pl":"Pᵠ","at":1},{"q":58,"p":42,"guides":"q","ql":"Qᴅ′","showP":false,"at":1}],"areas":[{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","until":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","until":2},{"pts":[[0,42],[0,100],[58,42]],"label":"CS","color":"teal","at":2},{"pts":[[0,42],[0,0],[42,42]],"label":"PS","color":"orange","at":2},{"pts":[[42,30],[42,42],[58,42],[58,30]],"label":"Importers' profit","color":"navy","lp":[50,20],"at":3},{"pts":[[30,30],[42,42],[42,30]],"label":"","color":"red","at":3},{"pts":[[58,30],[58,42],[70,30]],"label":"","color":"red","at":3}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports before","below":true,"until":1},{"p":42,"q1":42,"q2":58,"label":"Imports after","below":true,"at":1}],"steps":["At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.","A quota caps imports, which lifts the domestic price to Pᵠ. Producers sell more, Qₛ′, and buyers take less, Qᴅ′.","Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.","The band over the remaining imports goes to whoever holds the import licences, and the two red triangles are the deadweight loss."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "An Import Quota on Sugar",
+ "lede": "A quota raises the domestic price the way a tariff does.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "World price",
+   "showP": false
+  },
+  {
+   "p": 42,
+   "tag": "Price with quota",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "points": [
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᵂ"
+  },
+  {
+   "q": 70,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qᴅ",
+   "showP": false
+  },
+  {
+   "q": 42,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qₛ′",
+   "pl": "Pᵠ",
+   "at": 1
+  },
+  {
+   "q": 58,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qᴅ′",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     58,
+     42
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     42,
+     42
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 2,
+   "lp": [
+    14.54,
+    24.23
+   ]
+  },
+  {
+   "pts": [
+    [
+     42,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     58,
+     30
+    ]
+   ],
+   "label": "Importers' profit",
+   "color": "navy",
+   "lp": [
+    50,
+    20
+   ],
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     42,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     58,
+     30
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  }
+ ],
+ "braces": [
+  {
+   "p": 30,
+   "q1": 30,
+   "q2": 70,
+   "label": "Imports before",
+   "below": true,
+   "until": 1
+  },
+  {
+   "p": 42,
+   "q1": 42,
+   "q2": 58,
+   "label": "Imports after",
+   "below": true,
+   "at": 1
+  }
+ ],
+ "steps": [
+  "At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.",
+  "A quota caps imports, which lifts the domestic price to Pᵠ. Producers sell more, Qₛ′, and buyers take less, Qᴅ′.",
+  "Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.",
+  "The band over the remaining imports goes to whoever holds the import licences, and the two red triangles are the deadweight loss."
+ ]
+}</script></div>
 </div>
 </section>
 </div>
@@ -4352,7 +6874,343 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>Decrease both</li><li class="sol-right">Increase both</li><li>Increase consumer surplus; decrease producer surplus</li><li>Decrease consumer surplus; increase producer surplus</li><li>None of these</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(b)</strong> Imports benefit domestic consumers because they allow the consumers to consume more units of a good at the lower world price. Exports benefit domestic producers because they allow the producers to sell more units of the good at the higher world price.</p>
-<div class="sdg"><script type="application/json">{"title":"Imports and Exports","lede":"Pick a case. Trade moves the price to the world price and surplus with it.","axes":{"xmax":110,"ymax":110},"scenarios":{"imp":{"label":"A market that imports","curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","at":1,"showP":false}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ","at":1},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false,"at":1}],"areas":[{"pts":[[0,50],[0,100],[50,50]],"label":"CS","color":"teal","until":2},{"pts":[[0,50],[0,0],[50,50]],"label":"PS","color":"orange","until":2},{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","at":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","at":2}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports","below":true,"at":2}],"steps":["With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.","The world price is below P₁. At that price domestic producers offer Qₛ and domestic buyers want Qᴅ.","With trade the price falls to the world price and imports fill the gap. CS grows by more than PS shrinks, so total surplus rises."]},"exp":{"label":"A market that exports","curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":70,"tag":"World price","at":1,"showP":false}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":70,"p":70,"guides":"q","ql":"Qₛ","pl":"Pᵂ","at":1},{"q":30,"p":70,"guides":"q","ql":"Qᴅ","showP":false,"at":1}],"areas":[{"pts":[[0,50],[0,100],[50,50]],"label":"CS","color":"teal","until":2},{"pts":[[0,50],[0,0],[50,50]],"label":"PS","color":"orange","until":2},{"pts":[[0,70],[0,100],[30,70]],"label":"CS","color":"teal","at":2},{"pts":[[0,70],[0,0],[70,70]],"label":"PS","color":"orange","at":2}],"braces":[{"p":70,"q1":30,"q2":70,"label":"Exports","at":2}],"steps":["With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.","The world price is above P₁. At that price domestic producers offer Qₛ and domestic buyers want only Qᴅ.","With trade the price rises to the world price and the difference is exported. PS grows by more than CS shrinks, so total surplus rises."]}}}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "Imports and Exports",
+ "lede": "Pick a case. Trade moves the price to the world price and surplus with it.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "scenarios": {
+  "imp": {
+   "label": "A market that imports",
+   "curves": [
+    {
+     "id": "D",
+     "label": "D",
+     "pts": [
+      [
+       8,
+       92
+      ],
+      [
+       95,
+       5
+      ]
+     ],
+     "ldx": 6,
+     "ldy": -8
+    },
+    {
+     "id": "S",
+     "label": "S",
+     "pts": [
+      [
+       8,
+       8
+      ],
+      [
+       100,
+       100
+      ]
+     ]
+    }
+   ],
+   "hlines": [
+    {
+     "p": 30,
+     "tag": "World price",
+     "at": 1,
+     "showP": false
+    }
+   ],
+   "points": [
+    {
+     "q": 50,
+     "p": 50,
+     "pl": "P₁",
+     "ql": "Q₁"
+    },
+    {
+     "q": 30,
+     "p": 30,
+     "guides": "q",
+     "ql": "Qₛ",
+     "pl": "Pᵂ",
+     "at": 1
+    },
+    {
+     "q": 70,
+     "p": 30,
+     "guides": "q",
+     "ql": "Qᴅ",
+     "showP": false,
+     "at": 1
+    }
+   ],
+   "areas": [
+    {
+     "pts": [
+      [
+       0,
+       50
+      ],
+      [
+       0,
+       100
+      ],
+      [
+       50,
+       50
+      ]
+     ],
+     "label": "CS",
+     "color": "teal",
+     "until": 2
+    },
+    {
+     "pts": [
+      [
+       0,
+       50
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       50,
+       50
+      ]
+     ],
+     "label": "PS",
+     "color": "orange",
+     "until": 2,
+     "lp": [
+      17.31,
+      36.54
+     ]
+    },
+    {
+     "pts": [
+      [
+       0,
+       30
+      ],
+      [
+       0,
+       100
+      ],
+      [
+       70,
+       30
+      ]
+     ],
+     "label": "CS",
+     "color": "teal",
+     "at": 2
+    },
+    {
+     "pts": [
+      [
+       0,
+       30
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       30,
+       30
+      ]
+     ],
+     "label": "PS",
+     "color": "orange",
+     "at": 2
+    }
+   ],
+   "braces": [
+    {
+     "p": 30,
+     "q1": 30,
+     "q2": 70,
+     "label": "Imports",
+     "below": true,
+     "at": 2
+    }
+   ],
+   "steps": [
+    "With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.",
+    "The world price is below P₁. At that price domestic producers offer Qₛ and domestic buyers want Qᴅ.",
+    "With trade the price falls to the world price and imports fill the gap. CS grows by more than PS shrinks, so total surplus rises."
+   ]
+  },
+  "exp": {
+   "label": "A market that exports",
+   "curves": [
+    {
+     "id": "D",
+     "label": "D",
+     "pts": [
+      [
+       8,
+       92
+      ],
+      [
+       95,
+       5
+      ]
+     ],
+     "ldx": 6,
+     "ldy": -8
+    },
+    {
+     "id": "S",
+     "label": "S",
+     "pts": [
+      [
+       8,
+       8
+      ],
+      [
+       100,
+       100
+      ]
+     ]
+    }
+   ],
+   "hlines": [
+    {
+     "p": 70,
+     "tag": "World price",
+     "at": 1,
+     "showP": false
+    }
+   ],
+   "points": [
+    {
+     "q": 50,
+     "p": 50,
+     "pl": "P₁",
+     "ql": "Q₁"
+    },
+    {
+     "q": 70,
+     "p": 70,
+     "guides": "q",
+     "ql": "Qₛ",
+     "pl": "Pᵂ",
+     "at": 1
+    },
+    {
+     "q": 30,
+     "p": 70,
+     "guides": "q",
+     "ql": "Qᴅ",
+     "showP": false,
+     "at": 1
+    }
+   ],
+   "areas": [
+    {
+     "pts": [
+      [
+       0,
+       50
+      ],
+      [
+       0,
+       100
+      ],
+      [
+       50,
+       50
+      ]
+     ],
+     "label": "CS",
+     "color": "teal",
+     "until": 2,
+     "lp": [
+      17.31,
+      63.46
+     ]
+    },
+    {
+     "pts": [
+      [
+       0,
+       50
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       50,
+       50
+      ]
+     ],
+     "label": "PS",
+     "color": "orange",
+     "until": 2
+    },
+    {
+     "pts": [
+      [
+       0,
+       70
+      ],
+      [
+       0,
+       100
+      ],
+      [
+       30,
+       70
+      ]
+     ],
+     "label": "CS",
+     "color": "teal",
+     "at": 2
+    },
+    {
+     "pts": [
+      [
+       0,
+       70
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       70,
+       70
+      ]
+     ],
+     "label": "PS",
+     "color": "orange",
+     "at": 2
+    }
+   ],
+   "braces": [
+    {
+     "p": 70,
+     "q1": 30,
+     "q2": 70,
+     "label": "Exports",
+     "at": 2
+    }
+   ],
+   "steps": [
+    "With no trade the market clears at P₁ and Q₁, consumers keeping CS and producers PS.",
+    "The world price is above P₁. At that price domestic producers offer Qₛ and domestic buyers want only Qᴅ.",
+    "With trade the price rises to the world price and the difference is exported. PS grows by more than CS shrinks, so total surplus rises."
+   ]
+  }
+ }
+}</script></div>
 
 </div>
 </section>
@@ -4381,7 +7239,7 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>elastic</li><li>unit elastic</li><li class="sol-right">inelastic</li><li>none of these, since a cost increase does not raise the price</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(c)</strong> An increase in the cost of producing a product causes a leftward shift of the supply curve for that product. This causes the greatest increase in price when the demand curve is very vertical—that is, when demand is inelastic.</p>
-<div class="sdg"><script type="application/json">{"title":"A Cost Increase Against Steep and Flat Demand","lede":"The same supply shift; switch the buttons to change how steep demand is.","axes":{"xmax":110,"ymax":110},"steps":["Switch between the two demand curves. The supply curve and its shift are the same on both.","Higher costs shift supply left, from S₁ to S₂.","On the steep, inelastic curve the price climbs a long way to P₂; on the flat, elastic one it barely moves. The cost increase raises the price most when demand is inelastic."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S₁","pts":[[8,8],[100,100]]},{"id":"S2","label":"S₂","pts":[[8,32],[76,100]],"color":"red","from":"S1","at":1,"arrowP":88}],"points":[{"q":51.2,"p":51.2,"pl":"P₁","ql":"Q₁"},{"q":43.9,"p":67.9,"pl":"P₂","ql":"Q₂","color":"red","at":2}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,64],[100,33.3]],"ldx":6,"ldy":-8},{"id":"S1","label":"S₁","pts":[[8,8],[100,100]]},{"id":"S2","label":"S₂","pts":[[8,32],[76,100]],"color":"red","from":"S1","at":1,"arrowP":88}],"points":[{"q":50.0,"p":50.0,"pl":"P₁","ql":"Q₁"},{"q":32.0,"p":56.0,"pl":"P₂","ql":"Q₂","color":"red","at":2}]}}}</script></div>
+<div class="sdg"><script type="application/json">{"title":"A Cost Increase Against Steep and Flat Demand","lede":"The same supply shift; switch the buttons to change how steep demand is.","axes":{"xmax":110,"ymax":110},"steps":["Switch between the two demand curves. The supply curve and its shift are the same on both.","Higher costs shift supply left, from S₁ to S₂.","On the steep, inelastic curve the price climbs a long way to P₂; on the flat, elastic one it barely moves. The cost increase raises the price most when demand is inelastic."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S₁","pts":[[8,8],[100,100]]},{"id":"S2","label":"S₂","pts":[[8,32],[76,100]],"color":"red","from":"S1","at":1,"arrowP":88}],"points":[{"q":51.2,"p":51.2,"pl":"P₁","ql":"Q₁"},{"q":43.9,"p":67.9,"pl":"P₂","ql":"Q₂","color":"red","at":2}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,64],[100,33.3]],"ldx":6,"ldy":-8},{"id":"S1","label":"S₁","pts":[[8,8],[100,100]]},{"id":"S2","label":"S₂","pts":[[8,32],[76,100]],"color":"red","from":"S1","at":1,"arrowP":88}],"points":[{"q":50.0,"p":50.0,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":10,"dy":16},{"q":32.0,"p":56.0,"pl":"P₂","ql":"Q₂","color":"red","at":2}]}}}</script></div>
 
 </div>
 </section>
@@ -4411,7 +7269,7 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li class="sol-right">beyond the production possibilities frontier</li><li>on the frontier</li><li>inside the frontier</li><li>beyond the frontier and at some points on it</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(a)</strong> The production possibilities frontier shows the maximum combinations of two goods that can be produced, given a country's current resources and technology. Points that lie beyond the PPF are unattainable.</p>
-<div class="sdg"><script type="application/json">{"title":"Points On, Inside and Beyond the Frontier","lede":"The frontier is the outer limit of what the resources can produce.","axes":{"x":"Good X","y":"Good Y","xmax":110,"ymax":110},"curves":[{"id":"PPF","label":"PPF","pts":[[0,100],[30,94],[60,78],[85,48],[100,0]],"curved":true,"ldx":6,"ldy":-6}],"points":[{"q":35,"p":40,"label":"Attainable,\ninefficient","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":60,"p":78,"label":"On the frontier","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":85,"p":85,"label":"Unattainable","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false}],"caption":"A point inside the frontier is attainable but wastes resources; a point on it is production efficient; a point beyond it cannot be reached."}</script></div>
+<div class="sdg"><script type="application/json">{"title":"Points On, Inside and Beyond the Frontier","lede":"The frontier is the outer limit of what the resources can produce.","axes":{"x":"Good X","y":"Good Y","xmax":110,"ymax":110},"curves":[{"id":"PPF","label":"PPF","pts":[[0,100],[30,94],[60,78],[85,48],[100,0]],"curved":true,"ldx":6,"ldy":-6}],"points":[{"q":35,"p":40,"label":"Attainable,\ninefficient","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":60,"p":78,"label":"On the frontier","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false},{"q":92,"p":90,"label":"Unattainable","dx":10,"dy":4,"guides":false,"showP":false,"showQ":false}],"caption":"A point inside the frontier is attainable but wastes resources; a point on it is production efficient; a point beyond it cannot be reached."}</script></div>
 
 </div>
 </section>
@@ -4441,7 +7299,262 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>Consumers better off; producers better off; total surplus up</li><li>Consumers worse off; producers better off; total surplus up</li><li>Both worse off; total surplus down</li><li>Consumers better off; producers worse off; total surplus down</li><li class="sol-right">Consumers worse off; producers better off; total surplus down</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(e)</strong> The imposition of a tariff reduces domestic consumer surplus because domestic consumers can consume fewer units, and they have to pay a higher price under the tariff. A tariff increases domestic producer surplus because domestic producers get to sell more units at the higher tariff price. The loss to domestic consumers is greater than the gain to domestic producers, so tariffs reduce total surplus and create a deadweight loss to society.</p>
-<div class="sdg"><script type="application/json">{"title":"A Tariff on Solar Panels","lede":"Consumers lose more than producers and the government gain together.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","showP":false},{"p":42,"tag":"World price + tariff","showP":false,"at":1}],"points":[{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ"},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false},{"q":42,"p":42,"guides":"q","ql":"Qₛ′","pl":"Pᵀ","at":1},{"q":58,"p":42,"guides":"q","ql":"Qᴅ′","showP":false,"at":1}],"areas":[{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","until":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","until":2},{"pts":[[0,42],[0,100],[58,42]],"label":"CS","color":"teal","at":2},{"pts":[[0,42],[0,0],[42,42]],"label":"PS","color":"orange","at":2},{"pts":[[42,30],[42,42],[58,42],[58,30]],"label":"Tariff revenue","color":"navy","lp":[50,20],"at":3},{"pts":[[30,30],[42,42],[42,30]],"label":"","color":"red","at":3},{"pts":[[58,30],[58,42],[70,30]],"label":"","color":"red","at":3}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports before","below":true,"until":1},{"p":42,"q1":42,"q2":58,"label":"Imports after","below":true,"at":1}],"steps":["At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.","A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.","Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.","Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Tariff on Solar Panels",
+ "lede": "Consumers lose more than producers and the government gain together.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "World price",
+   "showP": false
+  },
+  {
+   "p": 42,
+   "tag": "World price + tariff",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "points": [
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᵂ"
+  },
+  {
+   "q": 70,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qᴅ",
+   "showP": false
+  },
+  {
+   "q": 42,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qₛ′",
+   "pl": "Pᵀ",
+   "at": 1
+  },
+  {
+   "q": 58,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qᴅ′",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     58,
+     42
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     42,
+     42
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 2,
+   "lp": [
+    14.54,
+    24.23
+   ]
+  },
+  {
+   "pts": [
+    [
+     42,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     58,
+     30
+    ]
+   ],
+   "label": "Tariff revenue",
+   "color": "navy",
+   "lp": [
+    50,
+    20
+   ],
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     42,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     58,
+     30
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  }
+ ],
+ "braces": [
+  {
+   "p": 30,
+   "q1": 30,
+   "q2": 70,
+   "label": "Imports before",
+   "below": true,
+   "until": 1
+  },
+  {
+   "p": 42,
+   "q1": 42,
+   "q2": 58,
+   "label": "Imports after",
+   "below": true,
+   "at": 1
+  }
+ ],
+ "steps": [
+  "At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.",
+  "A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.",
+  "Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.",
+  "Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."
+ ]
+}</script></div>
 
 </div>
 </section>
@@ -4496,7 +7609,130 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>rises by exactly</li><li class="sol-right">rises by less than</li><li>rises by more than</li><li>falls by less than</li><li>falls by exactly</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(b)</strong> When the demand for a good is neither perfectly elastic or inelastic, the imposition of an excise tax increases the price paid by the consumer by an amount less than the amount of the tax. That is, the consumer and producer share the tax burden.</p>
-<div class="sdg"><script type="application/json">{"title":"A 10¢ Tax on Gasoline","lede":"Buyers and sellers share the tax, so the pump price rises by less than 10¢.","axes":{"xmax":110,"ymax":110},"steps":["The gasoline market starts at P₁ and Q₁ with no tax.","The tax raises what sellers must collect at every quantity: the supply curve shifts up by the full 10¢, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ; the gap is the 10¢. Pᵇ is above P₁ by only part of it, because sellers absorb the rest.","The trades between Q₂ and Q₁ no longer happen, and the surplus they carried is the deadweight loss."],"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"pl":"P₁","ql":"Q₁"},{"q":35.0,"p":65.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":35.0,"p":35.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":35.0,"p2":65.0,"q":35.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[35.0,65.0],[50.0,50.0],[35.0,35.0]],"label":"DWL","color":"red","lp":[39.5,56.0],"at":3}]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A 10¢ Tax on Gasoline",
+ "lede": "Buyers and sellers share the tax, so the pump price rises by less than 10¢.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "steps": [
+  "The gasoline market starts at P₁ and Q₁ with no tax.",
+  "The tax raises what sellers must collect at every quantity: the supply curve shifts up by the full 10¢, to S + tax.",
+  "Buyers pay Pᵇ and sellers keep Pˢ; the gap is the 10¢. Pᵇ is above P₁ by only part of it, because sellers absorb the rest.",
+  "The trades between Q₂ and Q₁ no longer happen, and the surplus they carried is the deadweight loss."
+ ],
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S1",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  },
+  {
+   "id": "S2",
+   "label": "S + tax",
+   "pts": [
+    [
+     8,
+     38
+    ],
+    [
+     64,
+     94
+    ]
+   ],
+   "color": "red",
+   "from": "S1",
+   "at": 1,
+   "arrowP": 84,
+   "dimAt": 2
+  }
+ ],
+ "points": [
+  {
+   "q": 50.0,
+   "p": 50.0,
+   "pl": "P₁",
+   "ql": "Q₁"
+  },
+  {
+   "q": 35.0,
+   "p": 65.0,
+   "pl": "Pᵇ",
+   "ql": "Q₂",
+   "color": "red",
+   "at": 2
+  },
+  {
+   "q": 35.0,
+   "p": 35.0,
+   "pl": "Pˢ",
+   "guides": "p",
+   "showQ": false,
+   "at": 2
+  }
+ ],
+ "vbraces": [
+  {
+   "p1": 35.0,
+   "p2": 65.0,
+   "q": 35.0,
+   "label": "Tax",
+   "side": "left",
+   "at": 2
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     35.0,
+     65.0
+    ],
+    [
+     50.0,
+     50.0
+    ],
+    [
+     35.0,
+     35.0
+    ]
+   ],
+   "label": "DWL",
+   "color": "red",
+   "lp": [
+    40.19,
+    50.0
+   ],
+   "at": 3
+  }
+ ]
+}</script></div>
 
 </div>
 </section>
@@ -4516,7 +7752,7 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>Only the first</li><li class="sol-right">Only the second</li><li>The first and second</li><li>The first and third</li><li>None of these</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(b)</strong> The tax incidence—or how a tax is divided between buyers and sellers—depends on the relative elasticities of supply and demand. It is independent of the government's revenue needs or its choice of whom to tax.</p>
-<div class="sdg"><script type="application/json">{"title":"Who Pays a Tax: Steep Demand Against Flat Demand","lede":"Switch between the two demand curves to see how the same tax is shared.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"pl":"P₁","ql":"Q₁"},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"pl":"P₁","ql":"Q₁","showP":false,"label":"P₁","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
+<div class="sdg"><script type="application/json">{"title":"Who Pays a Tax: Steep Demand Against Flat Demand","lede":"Switch between the two demand curves to see how the same tax is shared.","axes":{"xmax":110,"ymax":110},"steps":["Same supply curve, same tax; switch the buttons to change how steep demand is.","The tax shifts the supply curve up by its full amount, to S + tax.","Buyers pay Pᵇ and sellers keep Pˢ. On the steep curve most of the gap is above P₁, so buyers bear most of it; on the flat curve most is below, on sellers.","The deadweight loss is the trades lost between Q₂ and Q₁, and it is larger on the flat curve, where quantity gives way more."],"scenarios":{"in":{"label":"Inelastic demand (steep)","curves":[{"id":"D","label":"D","pts":[[30,100],[70,8]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":51.2,"p":51.2,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":10,"dy":4},{"q":42.1,"p":72.1,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":42.1,"p":42.099999999999994,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":42.099999999999994,"p2":72.1,"q":42.1,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[42.1,72.1],[51.2,51.2],[42.1,42.099999999999994]],"label":"DWL","color":"red","lp":[46.650000000000006,33.099999999999994],"at":3}]},"el":{"label":"Elastic demand (flat)","curves":[{"id":"D","label":"D","pts":[[8,60.5],[100,37.5]],"ldx":6,"ldy":-8},{"id":"S1","label":"S","pts":[[8,8],[100,100]]},{"id":"S2","label":"S + tax","pts":[[8,38],[64,94]],"color":"red","from":"S1","at":1,"arrowP":84,"dimAt":2}],"points":[{"q":50.0,"p":50.0,"ql":"Q₁","showP":false,"label":"P₁","guides":"q","dx":12,"dy":18},{"q":26.0,"p":56.0,"pl":"Pᵇ","ql":"Q₂","color":"red","at":2},{"q":26.0,"p":26.0,"pl":"Pˢ","guides":"p","showQ":false,"at":2}],"vbraces":[{"p1":26.0,"p2":56.0,"q":26.0,"label":"Tax","side":"left","at":2}],"areas":[{"pts":[[26.0,56.0],[50.0,50.0],[26.0,26.0]],"label":"DWL","color":"red","lp":[33.2,47.0],"at":3}]}}}</script></div>
 
 </div>
 </section>
@@ -4556,7 +7792,262 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>Production falls; consumers are better off</li><li>Production falls; consumers are worse off</li><li>Production rises; consumers are better off</li><li class="sol-right">Production rises; consumers are worse off</li><li>Production rises; consumers are unaffected</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(d)</strong> A tariff is a tax on imports. When the U.S. imposes a tax on sugar imports, it benefits domestic producers, who can produce more sugar and charge a higher price. This leaves U.S. sugar consumers worse off, however, because they can consume less sugar, and they have to pay a higher price for it.</p>
-<div class="sdg"><script type="application/json">{"title":"A Tariff on Sugar","lede":"Producers sell more at a higher price; consumers pay it.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]}],"hlines":[{"p":30,"tag":"World price","showP":false},{"p":42,"tag":"World price + tariff","showP":false,"at":1}],"points":[{"q":30,"p":30,"guides":"q","ql":"Qₛ","pl":"Pᵂ"},{"q":70,"p":30,"guides":"q","ql":"Qᴅ","showP":false},{"q":42,"p":42,"guides":"q","ql":"Qₛ′","pl":"Pᵀ","at":1},{"q":58,"p":42,"guides":"q","ql":"Qᴅ′","showP":false,"at":1}],"areas":[{"pts":[[0,30],[0,100],[70,30]],"label":"CS","color":"teal","until":2},{"pts":[[0,30],[0,0],[30,30]],"label":"PS","color":"orange","until":2},{"pts":[[0,42],[0,100],[58,42]],"label":"CS","color":"teal","at":2},{"pts":[[0,42],[0,0],[42,42]],"label":"PS","color":"orange","at":2},{"pts":[[42,30],[42,42],[58,42],[58,30]],"label":"Tariff revenue","color":"navy","lp":[50,20],"at":3},{"pts":[[30,30],[42,42],[42,30]],"label":"","color":"red","at":3},{"pts":[[58,30],[58,42],[70,30]],"label":"","color":"red","at":3}],"braces":[{"p":30,"q1":30,"q2":70,"label":"Imports before","below":true,"until":1},{"p":42,"q1":42,"q2":58,"label":"Imports after","below":true,"at":1}],"steps":["At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.","A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.","Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.","Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Tariff on Sugar",
+ "lede": "Producers sell more at a higher price; consumers pay it.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  }
+ ],
+ "hlines": [
+  {
+   "p": 30,
+   "tag": "World price",
+   "showP": false
+  },
+  {
+   "p": 42,
+   "tag": "World price + tariff",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "points": [
+  {
+   "q": 30,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qₛ",
+   "pl": "Pᵂ"
+  },
+  {
+   "q": 70,
+   "p": 30,
+   "guides": "q",
+   "ql": "Qᴅ",
+   "showP": false
+  },
+  {
+   "q": 42,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qₛ′",
+   "pl": "Pᵀ",
+   "at": 1
+  },
+  {
+   "q": 58,
+   "p": 42,
+   "guides": "q",
+   "ql": "Qᴅ′",
+   "showP": false,
+   "at": 1
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     30
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "until": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     100
+    ],
+    [
+     58,
+     42
+    ]
+   ],
+   "label": "CS",
+   "color": "teal",
+   "at": 2
+  },
+  {
+   "pts": [
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     42,
+     42
+    ]
+   ],
+   "label": "PS",
+   "color": "orange",
+   "at": 2,
+   "lp": [
+    14.54,
+    24.23
+   ]
+  },
+  {
+   "pts": [
+    [
+     42,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     58,
+     30
+    ]
+   ],
+   "label": "Tariff revenue",
+   "color": "navy",
+   "lp": [
+    50,
+    20
+   ],
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     30,
+     30
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     42,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  },
+  {
+   "pts": [
+    [
+     58,
+     30
+    ],
+    [
+     58,
+     42
+    ],
+    [
+     70,
+     30
+    ]
+   ],
+   "label": "",
+   "color": "red",
+   "at": 3
+  }
+ ],
+ "braces": [
+  {
+   "p": 30,
+   "q1": 30,
+   "q2": 70,
+   "label": "Imports before",
+   "below": true,
+   "until": 1
+  },
+  {
+   "p": 42,
+   "q1": 42,
+   "q2": 58,
+   "label": "Imports after",
+   "below": true,
+   "at": 1
+  }
+ ],
+ "steps": [
+  "At the world price Pᵂ domestic producers sell Qₛ, buyers take Qᴅ, and imports fill the gap.",
+  "A tariff lifts the domestic price to Pᵀ. Producers sell more, Qₛ′, buyers take less, Qᴅ′, and imports shrink.",
+  "Consumer surplus shrinks and producer surplus grows, but consumers lose more than producers gain.",
+  "Of what consumers lose, the government collects the tariff revenue; the two red triangles are lost to everyone, the deadweight loss."
+ ]
+}</script></div>
 
 </div>
 </section>
@@ -4628,7 +8119,121 @@ E_D = \left| \frac{\%\Delta Q_D}{\%\Delta P} \right|
 <ol class="sol-choices" type="A"><li>falls; is</li><li>falls; is not</li><li class="sol-right">rises; is</li><li>rises; is not</li><li>None of these</li></ol>
 <div class="sol-answer"><p class="sol-answer-k">Solution</p>
 <p><strong>(c)</strong> A production quota is a numerical restriction on the production of a good. Production quotas only have an impact on the market if they are set below the equilibrium quantity. If a production quota is set below the equilibrium quantity, then it has the same impact as a tariff—the price that consumers pay for the good will increase, and a deadweight loss to society will be created.</p>
-<div class="sdg"><script type="application/json">{"title":"A Production Quota Below the Equilibrium Quantity","lede":"The quota caps output, and the price is read off demand.","axes":{"xmax":110,"ymax":110},"curves":[{"id":"D","label":"D","pts":[[8,92],[95,5]],"ldx":6,"ldy":-8},{"id":"S","label":"S","pts":[[8,8],[100,100]]},{"id":"Q","label":"Quota","pts":[[30,8],[30,100]],"color":"red","at":1,"ldx":4,"ldy":-4}],"points":[{"q":50,"p":50,"pl":"P₁","ql":"Q₁"},{"q":30,"p":70,"pl":"P₂","ql":"Qᵠ","guides":"p","showQ":false,"color":"red","at":2},{"q":30,"p":30,"guides":false,"showP":false,"showQ":false,"at":3}],"areas":[{"pts":[[30,70],[50,50],[30,30]],"label":"DWL","color":"red","lp":[37,56],"at":3}],"steps":["The market clears at P₁ and Q₁.","A production quota below Q₁ caps output at Qᵠ, so the quantity falls to the quota.","With less on offer, the price is read up to the demand curve: buyers pay P₂, above P₁.","The trades between Qᵠ and Q₁ no longer happen, and their surplus is the deadweight loss."]}</script></div>
+<div class="sdg"><script type="application/json">{
+ "title": "A Production Quota Below the Equilibrium Quantity",
+ "lede": "The quota caps output, and the price is read off demand.",
+ "axes": {
+  "xmax": 110,
+  "ymax": 110
+ },
+ "curves": [
+  {
+   "id": "D",
+   "label": "D",
+   "pts": [
+    [
+     8,
+     92
+    ],
+    [
+     95,
+     5
+    ]
+   ],
+   "ldx": 6,
+   "ldy": -8
+  },
+  {
+   "id": "S",
+   "label": "S",
+   "pts": [
+    [
+     8,
+     8
+    ],
+    [
+     100,
+     100
+    ]
+   ]
+  },
+  {
+   "id": "Q",
+   "label": "Quota",
+   "pts": [
+    [
+     30,
+     8
+    ],
+    [
+     30,
+     100
+    ]
+   ],
+   "color": "red",
+   "at": 1,
+   "ldx": 4,
+   "ldy": -4
+  }
+ ],
+ "points": [
+  {
+   "q": 50,
+   "p": 50,
+   "pl": "P₁",
+   "ql": "Q₁"
+  },
+  {
+   "q": 30,
+   "p": 70,
+   "pl": "P₂",
+   "ql": "Qᵠ",
+   "guides": "p",
+   "showQ": false,
+   "color": "red",
+   "at": 2
+  },
+  {
+   "q": 30,
+   "p": 30,
+   "guides": false,
+   "showP": false,
+   "showQ": false,
+   "at": 3
+  }
+ ],
+ "areas": [
+  {
+   "pts": [
+    [
+     30,
+     70
+    ],
+    [
+     50,
+     50
+    ],
+    [
+     30,
+     30
+    ]
+   ],
+   "label": "DWL",
+   "color": "red",
+   "lp": [
+    36.92,
+    50.0
+   ],
+   "at": 3
+  }
+ ],
+ "steps": [
+  "The market clears at P₁ and Q₁.",
+  "A production quota below Q₁ caps output at Qᵠ, so the quantity falls to the quota.",
+  "With less on offer, the price is read up to the demand curve: buyers pay P₂, above P₁.",
+  "The trades between Qᵠ and Q₁ no longer happen, and their surplus is the deadweight loss."
+ ]
+}</script></div>
 
 </div>
 </section>

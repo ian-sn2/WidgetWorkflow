@@ -344,7 +344,10 @@ def natural_monopoly(title, lede, order, steps):
                "areas": [{"pts": [[0, pu], [qu, pu], [qu, R(atc(qu))], [0, R(atc(qu))]], "label": "Profit", "color": "teal", "edge": True, "at": 2}]},
      "mc": {"label": "Marginal-cost pricing", "steps": steps["mc"],
             "points": [{"q": qmc, "p": pmc, "pl": "P = MC", "ql": "Q", "at": 1},
-                       {"q": qmc, "p": R(atc(qmc)), "label": "ATC", "dx": 10, "dy": -6, "guides": False, "showP": False, "showQ": False, "at": 2}],
+                       # The dot needs no name of its own: the ATC curve's
+                       # label is a few pixels away, and two "ATC"s side by
+                       # side read as a typo (2026-11-09).
+                       {"q": qmc, "p": R(atc(qmc)), "guides": False, "showP": False, "showQ": False, "at": 2}],
             "areas": [{"pts": [[0, R(atc(qmc))], [qmc, R(atc(qmc))], [qmc, pmc], [0, pmc]], "label": "Loss", "color": "red", "edge": True, "at": 2}]},
      "atc": {"label": "Average-cost pricing", "steps": steps["atc"],
              "points": [{"q": qa, "p": pa, "pl": "P = ATC", "ql": "Q", "at": 1},
