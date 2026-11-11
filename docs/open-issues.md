@@ -2,449 +2,226 @@
 
 Checkboxes. Keep `CLAUDE.md`'s status paragraph in sync with this file.
 
+Cleared out on 2026-11-09: every item was checked against the engine (v2.69),
+prompt v7 and the repo, and the ones already done moved to *Closed* at the
+bottom with what closed them. The full wording of every closed item is in
+this file's git history (`git log -p docs/open-issues.md`).
+
 ---
 
-- [x] ~~`ECO2013-263-SupplyAndDemand.html` widget 6, the shortage scenario's
-      last step: two of its three movement arrows touch a dashed guide (0.3px
-      and 0.6px on the rendered geometry).~~ Fixed in the 2026-10-05 redo,
-      which is the ask that moving arrows in shipped work needed. Searched
-      against the rendered geometry: of 75 placements tried, raising both
-      arrows a fifth of a dollar further inside the box the guides fence off
-      is the only one that clears, and it clears by 3.2px against the 3px
-      threshold. The panel is genuinely crowded — three elbows, two curves and
-      two arrows between them — so that margin is the measurement, not a
-      preference.
+## Ian's calls
 
-- [ ] The nine example files carry captions over rule 9's length cap, from
-      before the cap existed. Ian's call (2026-09-28) was to leave the older
-      files alone and apply the rule from ECO2023 chapter 14 onward, so these
-      are expected, not a regression:
-      - ECO2013-263-InternationalTrade.html                         1
-      - ECO2023-263-AllocativeEfficiency.html                       6
-      - ECO2023-263-Elasticity.html                                 4
-      - ECO2023-263-SupplyAndDemand.html                           10
-      - ECO2023-263-ThePPF.html                                    11
-      Say the word and they can be trimmed; the ones showing their working
-      already get the wider 260-character cap, which spares 25 of them.
-      ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html and
-      ECO2013-263-SupplyAndDemand.html came off this list on 2026-10-05: Ian
-      asked for both chapters to be redone, and a redo is the asking rule 9
-      wants before an older file's captions are rewritten.
+Nothing here can be settled from the repo.
 
-- [x] ~~**A payoff matrix is not in the engine's schema**, so ECO2023 chapter
-      15 converted to no widgets at all.~~ It is, since v2.39, with `given`
-      added at v2.40 to fill in the move a comparison holds fixed. Chapter 15
-      was reconverted on 2026-09-30: the matrix is a widget at both the places
-      the chapter prints it — six steps walking the dominant-strategy argument
-      in the chapter's own order, and four playing the same grid year by year.
-- [x] ~~**A repeated-game years table is still not in the schema.**~~ Built at
-      v2.48, and chapter 15's two of them are widgets: a row a year, a running
-      total, and a red arrow carrying one year's move into the next year's
-      answer. No image remains in that chapter.
-
-## From the 2026-10-12 review of Ian's chapter files
-
-Ian's checklist, with his own ticks: https://claude.ai/artifact/NWBQ4YoLGbnMKbdonVFDyF
-
-- [x] ~~Priority 1–2 items (broken widgets, heading structure, layout).~~
-      Fixed in branch `claude/toc-markup-issue-3cwiam` of the `Widget` repo,
-      under `Checking-fixed/`. They were made from the original
-      `Checking.zip`, so if Ian has edited his own copies since, the fixes
-      are merged into his, never copied over them.
 - [ ] **Upload `Checking-fixed/sn25-v6.css` to S3 as `content/sn25-v6.css`.**
-      It adds the phone rule that lets a wide table scroll inside its own box
-      instead of pushing the page sideways. Until it is live, every chapter
-      with a wide prose table still scrolls the page at 320px (see the
-      four-chapter overflow item under *Workflow*). Only Ian can do this.
-- [ ] Priority 3–5 items (content, missing information, housekeeping) are on
-      the checklist; some are already ticked there.
-
-## Found by running the checker on the delivered files
-
-- [x] ~~`ECO2013-263-SupplyAndDemand.html` names the class in its prose.~~ Three
-      references, not one: the section heading, the 15–20% sentence, and "the
-      classroom curve". All reworded; the 15–20% figure survives. The checker
-      had only caught one of the three because `the class` on a word boundary
-      does not match `classroom`; `classroom` is now in its word list.
-- [x] ~~Four `<strong>` in the same file are not vocabulary terms.~~ They *are*
-      terms — v6 names "inferior goods" as a `<strong>` example. The fault was
-      that `(+).` was inside the `<strong>`, so the glossary entry read "Normal
-      goods (+).". Now `<strong>Normal goods</strong><b> (+).</b>`, matching the
-      sibling `<b>Number of potential buyers (+).</b>`. The checker's advice was
-      wrong and has been reworded.
-- [ ] **`ECO2013-Widgets-All.html` fails v6's caption rules** — eight
-      "Before – / After –" prefixes and four "Price up, quantity up" shorthands.
-      Expected: the prototype is dated 9/11/26 and those rules came later. Left
-      as delivered. Worth a pass if the prototype is ever published rather than
-      kept as a reference.
-- [ ] **The prototype's apples widget puts six brace labels on curves.** In four
-      of its five scenarios, "Shortage of 80" / "Surplus of 80" sits above the
-      price line where a curve runs through it. The fix is `below: true`, which
-      is what the v6 step 4 template does for exactly this reason. Pre-existing;
-      confirmed identical before and after the v2.1 change. Left as delivered
-      along with the captions above.
-
-## Found by the 2026-10-06 rules (the Summer '26 macro conversions)
-
-- [ ] **Two shipped examples carry ticks that stand on the axis ahead of their
-      step**, which `check_file.py` fails on since 2026-10-06 (`check_tick_steps`).
-      `examples/ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html`
-      reports 11 (widgets 1, 2 and 7); `examples/ECO2013-Widgets-All.html` 24,
-      on top of its 28 earlier failures. Left as delivered, per the standing
-      rule; the fix is to drop each such tick and let the point print its
-      value at its own step. One for Ian.
-- [ ] **A prose table pushes the AD-AS chapter sideways on a phone** -- by 99px
-      at 390px and 169px at 320px. It is the chapter's five-column summary
-      table under the house sheet's 16px cell padding, not a widget; the AE
-      chapter's three-column consumption table does the same by 18px at 320px.
-      Same cause as the 320px item below, now at the common phone width. The
-      fix that holds for every chapter is a phone-width padding rule in
-      `sn25-v6.css`. One for Ian.
-
-## Engine feature requests from the macro chapters
-
-- [ ] **A `table` whose rows are one quantity and several prices.** The schedule
-  shape takes `[price, q1, q2…]`; a cost table (Q, AVC, ATC, MC per row) is the
-  other way round, so the chapter 11 Piesanos table cannot be linked to its
-  plot with hover-highlighting the way a demand schedule is. `byq: true` on
-  the table, or a transposed `rows`, would do it (2026-10-12).
-
-- [ ] **A `flow` widget kind for process diagrams** (Ian asked whether the
-  Fed open-market flowcharts in Exam 3 Monetary Policy could be widgets,
-  2026-10-07; "maybe another time"). Two parties, the arrows between them
-  with their labels, and a chain of effects revealed a step at a time
-  (reserves credited, then monetary base, money supply, interest rates, GDP).
-  Built as HTML and inline SVG from JSON the way the payoff matrix was. The
-  conversion prompt's "figure mode" is the same idea and has never existed in
-  the engine. Until then those two figures carry a KEEP note.
-
-- [ ] **Stacked panels.** The growth chapter stacks the labor market above the
-      production function and runs one dashed line down through both; the
-      engine draws two panels across. Drawn across, the two readings on the
-      output panel's quantity axis collided and were dropped (`guides:"p"`,
-      `showQ:false`), with the quantity read off the labor panel.
-- [ ] **A unit suffix on a tick.** The source writes 120M, $35B, $50M, $19T;
-      the engine has `k` for quantities and nothing else. Units sit in the
-      axis titles ("L (millions)", "Q of Loanable Funds ($B)", "AE ($T)").
-- [ ] **A price axis that does not start at 0.** Fig. 05 of the AD-AS chapter
-      compares price levels 100 and 110 on a vertical LAS; to scale from 0 both
-      sit in the top tenth of the panel. Drawn symbolically with the two
-      values as the points' `pl` labels.
-- [ ] **A brace without drop guides.** Every in-plot horizontal brace draws
-      guides to the Q axis; the consumption-function slope triangle wants the
-      brace under its dotted run and nothing to the axis.
-
-## PPF (production possibilities frontier)
-
-Docs not yet supplied. Probed against the real engine on 2026-09-17: the
-frontier, the combinations table with dots on the curve, points on/inside/
-outside, movement along the frontier, and **outward, inward and pivot shifts**
-all work with no engine change — a shift of the frontier is the same `from`
-mechanic as a shift of supply. What is missing:
-
-- [x] ~~Axis titles are sized for one character, so "Butter" ran into the plot
-      and "Guns" was clipped at the right edge.~~ Engine v2.2 anchors the x title
-      to the right edge and puts the y title in the headroom above the plot.
-- [x] ~~No vertical brace.~~ Engine v2.3 adds `vbraces`. `left: true` puts it
-      outside the P axis, mirroring a horizontal brace's `below: true`, with the
-      label running up the axis; without it the brace sits inside the plot at a
-      quantity. This also gives supply and demand a way to mark the size of a
-      price change, which is what `P₁`/`P₂` a pixel apart is standing in for
-      today.
-- [ ] **No label position along a curve.** Only the first or last point, nudged.
-      Both frontiers terminate on the same two axes, so end labels crowd in a way
-      D and S never do. Needs a "label at fraction t" option.
-- [ ] **No `vlines`** (a vertical reference line at a quantity). Guides cover
-      most of it; low priority.
-- [ ] Area fills of any kind, so the attainable region cannot be shaded. This one
-      is real work, not a small addition. Only needed if the source shades it.
-- [ ] The schedule table's first column is always the y-axis good, because rows
-      are read as `[price, q, …]`. A PPF table therefore lists the vertical good
-      first. Documented rather than changed: renaming would break every config.
-- [ ] Prompt v6 step 1 already lists PPF as a graph to convert, but step 3's
-      pattern table, step 4's templates and step 5's drawing rules are all supply
-      and demand, and hard rule 5 in `CLAUDE.md` still says "P and Q as axis
-      labels". Those need PPF rows and a template — more writing than engine
-      work.
-
-**Authoring note for whoever writes the first PPF config:** tick the axes where
-the combinations are *not*. Every PPF point is a round number, and a point prints
-its own value, so a point at 85 beside an `80` tick gives two labels a pixel
-apart. Set `showP:false`/`showQ:false` on illustrative points (an "inefficient"
-or "unattainable" dot) whose exact coordinates are not the lesson.
-
-## Prompt v6
-
-- [ ] **A PPF's frontier cannot reach an axis unless the intercepts are
-      stated.** The bowed-out chai/burrito frontier is drawn only between the
-      stated points, so it floats rather than meeting either axis. Extending a
-      *curve* to invented intercepts breaks rule 3; v6 permits extending a
-      straight line along itself but says nothing about curves. Worth a ruling
-      in v7.
-- [ ] **Word is not a listed input.** v6's four modes are PDF, notes HTML,
-      transcript (where Word *is* named) and change-by-message. Notes supplied as
-      a .docx are not covered, and are being handled as mode (a). Worth adding
-      properly in a v7, along with how to read a Word table and what to do with
-      its inline images.
-- [ ] **No PPF pattern or template.** Step 1 lists PPF as a graph to convert, but
-      step 3's pattern table and step 4's templates are supply and demand only,
-      so the first PPF configs are hand-written from the engine reference. Add a
-      PPF row and a worked template in v7 so the next chapter is not hand-built.
-- [ ] **v6 must keep forbidding questions** even though `CLAUDE.md` now allows
-      them here — it runs unattended in Cowork. Deliberate divergence, recorded
-      in `CLAUDE.md` under *Asking questions*.
-
-- [ ] **Does the two-movement-arrow rule apply to an equilibrium-shift widget?**
-      Step 5 says "every surplus or shortage walkthrough" ends with two movement
-      arrows; step 3's pattern table lists "Surplus / shortage" (hlines + braces)
-      and "Equilibrium shift" (shift + gap brace) as different patterns, and step
-      4's symbolic template for the second has no `moves`. The checker currently
-      reads the rule as applying to the first only. If that is wrong, the step 4
-      template needs `moves` added and the 263 file has two widgets to fix.
-- [ ] **Figure mode is specified but not implemented** (below). Either build it
-      or cut it from the prompt, because a config written to that part of the
-      prompt throws.
-
-- [ ] **Prompt v6 step 0 specifies the wrong head order.** It lists the two
-      preconnects and the font link before `sn25-v6.css`; the current house
-      files put `sn25-v6.css` first, then the three font links on one line.
-      Ian gave the correct block on 2026-09-17. `check_file.py` warns on the
-      old order rather than failing it, because the delivered
-      `ECO2013-263-SupplyAndDemand.html` still carries it.
-- [ ] **`content/sn25-v6.js` returns 403 from S3** and is the only one of the
-      five house assets that is not public (`content/sn25-v6.css`,
-      `content/sn25-v5.js`, `studyguide/sn25-v2.js` and `studyguide/sn25-v2.css`
-      all return 200). That script is what builds the table of contents and
-      drives the sticky header, so while it 403s a published notes page gets
-      neither. **One for Ian: check that object's permissions.** Until then
-      `scripts/add_toc.py` writes the contents into the file.
-- [ ] **Remove the written-in contents once that object is public.** The house
-      script does not look for an existing block before inserting its own, so a
-      page would then show two. `check_file.py`'s `toc` group reports the state
-      either way.
-- [ ] **Prompt v6 says nothing about the table of contents.** Step 0 should say
-      where it comes from and, while the script is unreachable, that
-      `scripts/add_toc.py` runs after step 7.
-- [ ] **Neither house file carries `<div id="sticky-header">`**, which the house
-      script needs before it will track the current heading. Worth asking
-      whether published pages are meant to have one.
-- [ ] **Reorder the head of `ECO2013-263-SupplyAndDemand.html`?** It is Ian's
-      delivered file, so it is reported rather than rewritten. One for Ian.
-
-## The label test
-
-- [x] ~~Arrows are tested against labels, but not against curves or each
-      other.~~ Added, and regression-tested against the two defects that
-      prompted them: two arrows abutting into what looks like one, and an arrow
-      lying across a frontier. Both warn.
-- [ ] **Arrow-versus-guide was tried and dropped.** It fired ten times on
-      correct work, because a surplus or shortage arrow has to cross the guides
-      between the price line and the equilibrium. A check that fires on correct
-      output teaches people to ignore it. Distinguishing "crosses a guide"
-      (fine) from "runs along one" (not) needs a parallelism test, not a
-      distance test.
-- [x] ~~The checker has no tests of its own.~~ `scripts/test_check_file.py`: one
-      deliberate defect per check, plus five sentences that must *not* trip the
-      source rules, plus an assertion that no arrow or source finding appears on
-      any example file. Verified by mutation — breaking the abut threshold, the
-      source nouns and the curve test each makes it fail.
-
-## Engine
-
-- [x] ~~A schedule-shift widget draws four red arrows: one per schedule row at
-      1.4px, plus a heavier 2.4px shift arrow at a price between rows.~~ Engine
-      v2.1: `shiftArrow: false` drops the redundant arrow while keeping the
-      slide and the dimming, and every arrow is now 2.4px. Both example files
-      and prompt v6 step 5 updated.
-
-- [ ] **Figure mode throws.** `buildPanel` reads `cfg.axes.cents` with no guard,
-      so a figure-mode config (title + steps only, hand-written SVG) dies with
-      `Cannot read properties of undefined (reading 'cents')` and renders
-      nothing. The fix is small — skip panel building when there are no `axes`,
-      and drive `data-at`/`data-until` on the div's own SVG from the step index —
-      but it is an engine change, so it needs a version bump and a re-embed
-      everywhere (hard rule 1).
-- [x] `preset:"shift"` drew its gap brace with `below` unset, so the label sat
-      above the axis and landed on whichever curve crossed that price. Fixed in
-      engine v2.7: the preset now matches the hand-written template. Found by
-      rendering the six worked examples in
-      `examples/ECO2023-263-SupplyAndDemand.html`, which are the repo's first
-      use of the preset -- `check_file.py` skips preset widgets, because the
-      engine computes their geometry, so only a render catches this class of
-      defect.
-- [ ] No automatic collision detection in the engine. `check_file.py` now does
-      the x-position test statically, which covers the common cases; genuinely
-      overlapping text at render time still needs `render_widgets.py` and a
-      person.
-- [ ] Only two panels are supported. A four-panel figure (the prompt mentions
-      `image-wide-85` for them) would need engine work.
-
-- [ ] **A curve label can only sit at the first or last point.** Both ends of a
-      full production possibilities frontier are on an axis, so a period label
-      ("2026", "Senior") has to be nudged into open space by hand with `ldx`/
-      `ldy` and re-rendered to check it. A way to anchor the label to a chosen
-      point of `pts`, or to a data coordinate, would remove the guesswork.
-- [ ] **Point labels are one line of SVG text.** The printed zone labels on a
-      PPF are two lines ("Attainable &" / "Efficient"), so
-      `ECO2023-263-ThePPF.html` shortens them to "Efficient" / "Inefficient" and
-      puts the full wording in the caption.
-- [ ] **A `moves` arrow spans the whole chord.** When the chord ends on an axis,
-      an inside offset drops the arrow below the axis, and the only way to stop
-      it short is to fake the `to` coordinate (the gumballs widget's D→E arrow
-      ends at `[3.8, 0.9]`). An explicit trim or a `shorten` would be honest.
-- [ ] **A shift arrow is always horizontal.** `arrowP` sets the price it is
-      drawn at, and the arrow then runs from the old curve to the new one at
-      that height. A pivot about the quantity axis is the movement of the
-      *vertical* intercept, and the source draws its arrow vertically for
-      exactly that reason -- the growth figure in
-      `ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html` has a
-      horizontal arrow near the x axis for the burritos-only pivot (which
-      matches) and a horizontal one high on the panel for the pizza-only pivot
-      (which does not). An `arrowQ`, the same thing measured down a vertical,
-      would settle it. Not worth an engine version on its own: the horizontal
-      arrow still shows the shift, and the caption names which intercept moved.
-
-- [ ] **No area fill in the engine.** The total revenue figure in
-      `ECO2023-263-Elasticity.html` shades the price-times-quantity rectangle
-      under the demand curve; the widget marks the midpoint and shows the
-      revenue hump beside it instead.
-- [ ] **`check_file.py` skips preset widgets**, because the engine computes
-      their geometry, so its label test never sees them. The v2.7 brace defect
-      lived in the repo unnoticed for exactly that reason and only a render
-      caught it. Either expand the preset in the checker, or make the render
-      pass mandatory for any file that uses one.
-- [ ] **LibreOffice here has no Writer module** (`libswlo.so` absent), so
-      `soffice` fails on every Word file, `.doc` and `.docx` alike. `antiword`
-      and `catdoc` read `.doc`; `.docx` is parsed directly. Worth installing
-      the Writer module if figure rendering from Word is ever wanted.
-- [x] **Heading levels come from the source's run formatting**, not from
-      structure. `scripts/doc_headings.py` now prints them for `.docx` and
-      `.doc` alike, and all four Fall '26 outputs were verified against it:
-      8/8, 1/5, 5/13 and 4/6 h1/h2, every one matching its source. Prompt v6
-      step 0 should still state the rule and point at the script.
-- [x] **`antiword` drops every floating text box.** In
-      `03-ECO2023-Fall26-Exam1-SupplyDemand.doc` that was six exam tips, three
-      worked examples including a demand schedule with real numbers, and every
-      figure label -- none of which reached the first conversion. `catdoc`
-      reads them. A `.doc` needs both readers, reconciled; this is now in
-      CLAUDE.md and in `doc_headings.py`'s docstring.
-- [ ] **Exam tip titles are written, and go under the paragraph they belong
-      to.** Ian's convention is a short topic phrase -- "Opportunity Costs
-      Calculation", "PPF Shape" -- and the block sits *after* the paragraph it
-      comments on, never before it. The source's boxes are headed only "Exam
-      Tip". Prompt v6 step 0 should say both things.
-
-- [x] **A brace over a short span drew as a scribble.** Both the horizontal and
-      the upright brace used a fixed 7px curl, so a brace across two dollars on
-      a twenty-five dollar axis had its segments overlap. Engine v2.9 sizes the
-      curl to the span. Found on the midpoint widget in
-      `examples/ECO2023-263-Elasticity.html`.
-
-- [x] **A shift arrow could land on a curve.** `qAt` interpolated the polyline
-      through a curve's points, but a `curved` curve is a spline that bows away
-      from it, so the 8px inset was measured from the wrong place. Engine v2.10
-      samples the drawn spline instead and insets 11px.
-      `scripts/render_widgets.py` now measures every arrow against every curve
-      from the rendered geometry and reports anything under 4px — which caught
-      a second case the screenshots had not: a `double` preset's demand arrow
-      ending on S1, since a shift arrow is only inset from its own pair.
-      `arrowD`/`arrowS` move it.
-- [x] **Row arrows needed their own threshold.** A schedule's per-row arrow is
-      inset only 6px and legitimately runs about 3.2px from its curves, so the
-      4px shift-arrow threshold flagged ten of them in the delivered
-      `ECO2013-263-SupplyAndDemand.html`. `MIN_ROW_GAP` is 2px, and row arrows
-      are exempt from the guide rule entirely -- they cross the schedule grid by
-      construction.
-- [x] ~~**The delivered `ECO2013-263-SupplyAndDemand.html` has eight arrows over
-      a guide or a curve** (widgets 5 and 6). It is Ian's file, so this is
-      reported rather than rewritten.~~ Ian asked for the chapter to be redone
-      on 2026-10-05, and `render_widgets.py` now reports no arrow within reach
-      of any curve or guide anywhere in the file. Widget 6's pair was the last
-      of them; the margin and how it was searched for are two items up.
-
-- [x] **Nothing made a semester swap mechanical.** Mode (d) says only the
-      wording changes when the good changes, but the wording was buried among
-      the coordinates in every config. `scripts/widget_text.py` lists and
-      rewrites exactly the renamable strings; round-trip is byte-identical on
-      all four converted files.
-
-## Workflow
-
-- [ ] **No list of who may be named, by choice.** Hard rule 4 covers the policy:
-      the checker raises a WARN on "Professor X" / "Dr. X" and never fails, and
-      Ian decides each time. If that ever becomes too much traffic, the options
-      already weighed were a committed names-only deny-list or a gitignored one;
-      both were declined in favour of keeping the judgement manual.
-- [ ] The name check only catches a title + name. Someone named by surname alone
-      is indistinguishable from any other capitalised word without a list, so it
-      passes silently.
-
+      It adds the phone rule that lets a wide prose table scroll inside its own
+      box instead of pushing the page sideways. Until it is live, a chapter
+      with a wide prose table scrolls the page on a phone: the AD-AS summary
+      table by 99px at 390px and 169px at 320px, the AE consumption table by
+      18px at 320px, four example chapters by a few pixels at 320px, and
+      `ECO2023-263-SupplyAndDemand.html` by 61px at 390px. The phone check
+      records these in `scripts/ci_phone_baseline.json`. It is the house
+      sheet's 16px/20px cell padding on the chapters' own tables, not a widget.
+- [ ] The 2026-10-12 review's priority 3–5 items (content, missing
+      information, housekeeping) are on Ian's checklist,
+      https://claude.ai/artifact/NWBQ4YoLGbnMKbdonVFDyF; some are ticked there.
 - [ ] **Where do finished files get published?** An S3 path, the LMS, or
-      somewhere else. Unknown — one for Ian.
-- [ ] **Does the professor's PDF for the Fall '26 chapter exist yet?** The
-      transcript build flagged examples as "needs numbers"; the PDF would settle
-      them. Unknown — one for Ian.
-- [ ] The rest of `eco-widgets.zip` never arrived: the 30 reference PNGs, the
-      original `ECO2013-Sample.html`, the GEB3373 style precedent, the
-      `transcript-test-changelog.md`, and the v4→v5 archive. The engine, both
-      examples and prompt v6 are here, which is the part that matters.
-- [ ] `scripts/render_widgets.py` needs `pip install playwright`. It uses the
-      Chromium already under `/opt/pw-browsers/` rather than downloading one.
-
-- [ ] **A two-panel widget renders at about half a one-panel widget's scale**,
-      so its smallest text — a subscripted axis tick — is 6.3px on a half-width
-      window where every other figure in the file gives it 11.4px. The layout
-      fix (full column, `--fig` cap per panel, stack below a 970px body) was
-      built as v2.32 and **reverted at Ian's request: stacked, the widget is
-      far too tall.** Do not re-propose stacking. The untried option is the
-      subscript itself — `.72em` at weight 600 under a 700–800 weight parent,
-      so both smaller and thinner than the letter it hangs off; matching the
-      parent's weight costs no space. `docs/decisions-and-history.md`,
-      2026-09-29, has the measurements.
-
+      somewhere else.
 - [ ] **Is document 2 a different course from document 1?** `1 - ECO2013 …` is
       Dr. Knight's; `03-ECO2023-Fall26-Exam1-PPF.docx` is Dr. Rush's, with its
-      own chapter numbering and its own examples, and the two overlap heavily on
-      the PPF. They were described as four chapters of one exam. The output is
-      named `ECO2023-263-ThePPF.html` from the file name, per v6 step 0; if that
-      is wrong the file name has to change before publication. One for Ian.
-- [ ] **The PPF document contradicts itself about the freshman → senior shift.**
-      One paragraph says study skills improved more, the next says socializing
-      skills did. The drawing says socializing, and the widget follows the
-      drawing. Recorded in `docs/changelogs/the-ppf-changelog.md`. One for Ian.
-
-- [ ] **Three label overlaps in shipped files became measurable at engine
-      v2.44** (and still the same three at v2.45) and are reported rather than rewritten, per the standing rule:
-      a `PS` on a supply curve and two `DWL` labels, all in
-      `examples/ECO2013-263-GovernmentIntervention.html`. They were always
-      there; the old width model, which split on weight rather than case,
-      measured them as clear. One for Ian.
-- [ ] **The ECO2023 chapter 7 figures disagree about the quota market** — the
+      own numbering and examples. The output is named
+      `ECO2023-263-ThePPF.html` from the file name; if that is wrong the name
+      changes before publication.
+- [ ] **The PPF document contradicts itself about the freshman → senior
+      shift.** One paragraph says study skills improved more, the next says
+      socializing. The widget follows the drawing (socializing); recorded in
+      `docs/changelogs/the-ppf-changelog.md`.
+- [ ] **The ECO2023 chapter 7 figures disagree about the quota market** -- the
       prose and figure 06 say 30 / 100, figure 07 says 40 / 70 with a 30M
-      quota, figure 08 says 50 / 100 with a 50M quota, and figure 08 as
-      printed leaves demand at its free-trade quantity, so its quota lifts no
-      price. Each widget follows its own figure (Ian, 2026-09-30). Worth
-      correcting in the artwork. One for Ian.
+      quota, figure 08 says 50 / 100 with a 50M quota and leaves demand at its
+      free-trade quantity. Each widget follows its own figure (Ian,
+      2026-09-30). Worth correcting in the artwork.
+- [ ] **Does the two-movement-arrow rule apply to an equilibrium-shift
+      widget?** The prompt's final checklist says every surplus or shortage
+      walkthrough ends with two movement arrows; its pattern table treats
+      "equilibrium shift" as a different pattern with no `moves`. The checker
+      reads the rule as surplus/shortage only. If that is wrong, the template
+      gains `moves` and the 263 file has two widgets to fix.
+- [ ] **Should the solutions start open?** They are shown in the open now;
+      `<details open>` was the alternative.
+- [ ] **Do published pages need `<div id="sticky-header">`?** The house script
+      tracks the current heading only when one is present, and no house file
+      carries it.
+- [ ] **The 2026-10-07 arrow findings in the supply-and-demand examples.**
+      `render_widgets.py` measures arrows centre to centre against 4px (about
+      1.3px of visible gap), and never against axes or labels; edge to edge
+      would surface three movement-arrow contacts in ECO2013 supply and demand.
+      In ECO2023 supply and demand widget 8 the demand arrow crosses Point 1's
+      guide at every usable price and the supply arrow sits 2.8px from S₂. A
+      larger `dS`, or no supply arrow, would settle both. Changing the measure
+      changes what passes, so it is Ian's.
 
-- [ ] **A prose table overflows a 320px screen in four example chapters**, by
-      a few pixels: the house stylesheet gives every `table:not(.financial)`
-      16px/20px cell padding, and at that width the chapter's own tables do
-      not fit. Found once `mobile_check` started loading that stylesheet
-      (2026-09-30). Nothing to do with the widgets -- one for Ian, since it is
-      his sheet on his own tables.
+## Files left as delivered (fix only when asked)
 
-- [ ] **`render_widgets.py` measures arrows centre to centre against 4px**,
-      which is about 1.3px of visible gap with a 3px curve and a 2.4px arrow,
-      and never tests an arrow against the axes or labels. v2.56 fixed every
-      shift arrow that measure was missing; movement arrows still have three
-      edge-to-edge contacts with curves in ECO2013 supply-and-demand. Moving the
-      measure to edge-to-edge would surface them -- worth doing with Ian, since
-      it changes what passes. (2026-10-07)
-- [ ] **ECO2023 supply-and-demand, "one shift is bigger" (widget 8).** The
-      demand arrow crosses Point 1's vertical guide at every price where both
-      demand curves are on the plot, so v2.56 takes the crossing (price 27)
-      rather than the D₂ label it sat on; `render_widgets` reports it. And the
-      12-unit supply shift leaves its arrow 2.8px from S₂: no arrow 10px long
-      fits 3.5px clear of both lines in that gap. A larger `dS`, or no supply
-      arrow, would settle both if Ian wants them gone. (2026-10-07)
+The standing rule (CLAUDE.md rule 9 and *Reviewing Ian's work*): files written
+before a rule are reported, not rewritten. `scripts/ci_baseline.json` holds
+their checker failures so CI blocks only new ones.
 
+- [ ] **Caption length.** The examples carry captions over rule 9's cap from
+      before it existed: International Trade 1, Allocative Efficiency 6,
+      Elasticity 4, ECO2023 Supply and Demand 10, The PPF 11. The ones showing
+      their working already get the 260-character cap.
+- [ ] **`ECO2013-Widgets-All.html` (the 9/11 prototype)** fails the caption
+      rules (eight "Before – / After –" prefixes, four "Price up, quantity up"),
+      its apples widget puts six brace labels on curves (`below: true` fixes
+      it), and it carries 24 ticks ahead of their step. Worth a pass only if it
+      is ever published rather than kept as a reference.
+- [ ] **Ticks ahead of their step** in
+      `ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html`: 11, in
+      widgets 1, 2 and 7. The fix is to drop each tick and let the point print
+      its value at its own step.
+- [ ] **Three label overlaps in `ECO2013-263-GovernmentIntervention.html`**
+      (a `PS` on a supply curve and two `DWL`s), measurable since v2.44.
+
+## Prompt (v7 → v8)
+
+- [ ] **The final checklist still forbids "class".** Since 2026-11-09 a
+      professor and what happened in class are fine (CLAUDE.md rule 4), but
+      v7's last paragraph says no caption, label or paragraph mentions a
+      "class". A v8 should drop it, so an unattended run does not reword notes
+      Ian wants kept.
+- [ ] **The head order.** v7 step 0 lists the two preconnects and the font link
+      before `sn25-v6.css`; the house files put the stylesheet first, then the
+      three font links on one line (Ian's block, 2026-09-17). `check_file.py`
+      warns on the old order rather than failing it.
+- [ ] **Exam tip titles.** Ian's convention is a short topic phrase
+      ("Opportunity Costs Calculation") and the block goes *after* the
+      paragraph it comments on. v7 says "EXAM TIP: Short title", placed where
+      it sits in the PDF.
+- [ ] **No PPF pattern or template.** Steps 3–5 are supply and demand only, so
+      every PPF config is hand-built from the engine reference. A PPF row, a
+      worked template, and the ruling below would fix it.
+- [ ] **A curved frontier cannot reach an axis unless the intercepts are
+      stated.** Extending a curve to invented intercepts breaks rule 3; v7
+      permits extending a straight line along itself and says nothing about
+      curves.
+- [ ] **Word input is named only for transcripts.** Notes supplied as a .docx
+      are handled as mode (a). A v8 could say how to read a Word table, its
+      MathType equations (`doc_formulas.py`) and its headings
+      (`doc_headings.py`).
+- [ ] **Figure mode is specified but not implemented.** A config with no
+      `axes` still throws in v2.69 (`Cannot read properties of undefined
+      (reading 'x')`, checked 2026-11-09). Process diagrams are `flow` widgets
+      or static HTML now (CLAUDE.md, 2026-10-19/21), so the likelier fix is to
+      cut figure mode from the prompt rather than build it.
+- [ ] **v7 must keep forbidding questions** even though `CLAUDE.md` allows them
+      here: it runs unattended in Cowork. A deliberate divergence, not a bug.
+
+## Engine gaps
+
+Each is a feature no figure has yet needed badly enough; the workaround is
+in brackets.
+
+- [ ] **A cost table cannot link to its plot.** The schedule shape takes
+      `[price, q1, q2…]`; a cost table (Q, AVC, ATC, MC per row) is the other
+      way round. `byq: true` or a transposed `rows` would do it (2026-10-12).
+      [A static table.]
+- [ ] **Stacked panels.** The growth chapter stacks the labor market above the
+      production function with one dashed line through both. [Two panels
+      across, the output panel with `guides:"p"` and `showQ:false`.] Do not
+      re-propose stacking two-panel widgets in general: built as v2.32 and
+      reverted, far too tall.
+- [ ] **Three or more panels.** [Scenario buttons, CLAUDE.md rule 10.]
+- [ ] **A unit suffix on a tick** (120M, $35B, $19T). [Units in the axis
+      title.]
+- [ ] **A brace without drop guides.** [The slope triangle's legs as
+      `thin`+`dashed` segments.]
+- [ ] **A curve label at a chosen point.** Only the first or last point,
+      nudged. [`lstart`, and `place_curve_labels.py` for the offset.]
+- [ ] **A vertical shift arrow (`arrowQ`).** [A `moves` arrow between the two
+      lines, CLAUDE.md.]
+- [ ] **A `moves` arrow cannot stop short of its chord's end.** [Fake the `to`
+      coordinate.]
+- [ ] **No `vlines`.** [Guides; `divider: true` where a line separates
+      regions.] Low priority.
+- [ ] **A region bounded by a `curved` pair cannot be filled.** `areas` are
+      straight-edged polygons. [Sample the curve into the polygon.]
+- [ ] **Two-panel subscripts are 6.3px.** A two-panel widget renders at about
+      half scale. The untried fix is the subscript itself (`.72em` at weight
+      600 under a 700–800 parent); `docs/decisions-and-history.md`, 2026-09-29,
+      has the measurements.
+
+## Checks
+
+- [ ] **`check_file.py` skips preset widgets**, because the engine computes
+      their geometry, so only a render catches a preset defect (v2.7's brace
+      was found that way). Expand the preset in the checker, or require the
+      render pass for any file using one.
+- [ ] **Arrow against guide** was tried and dropped: it fired ten times on
+      correct work. Telling "crosses a guide" (fine) from "runs along one"
+      (not) needs a parallelism test, not a distance test.
+- [ ] **A solutions mode for `check_file.py`**: quiet the `images` and `dates`
+      warnings, which every solutions page reports and none can act on.
+      (`mobile_check.py` opens every question itself since 2026-11-09;
+      `render_widgets.py` does not yet.)
+- [ ] **Equations push three example chapters sideways on a phone** once
+      MathJax has typeset them (Government Intervention, Tradeoffs, ECO2023
+      Elasticity), and at 320px the Tradeoffs page zooms out far enough that
+      its step buttons cannot be pressed. Found by the first CI run of the
+      phone check, 2026-11-09; this container never loads MathJax, so no
+      earlier check saw it. The house stylesheet's call, like the wide prose
+      tables: `mjx-container[display="true"] { overflow-x: auto }` in
+      `sn25-v6.css` would fix every chapter at once.
+
+## Environment
+
+- [ ] **LibreOffice here has no Writer module**, so `soffice` fails on every
+      Word file. `antiword`/`catdoc` read `.doc`; `.docx` is parsed directly.
+- [ ] The rest of `eco-widgets.zip` never arrived (the 30 reference PNGs,
+      `ECO2013-Sample.html`, the GEB3373 precedent, the earlier changelogs).
+      What matters is here.
+
+## Exam solutions
+
+- [ ] Topic tags on the four earlier Exam 1 papers are from the keyword pass
+      and not yet read through; Fall 2024's and all of Exam 3's are by hand.
+- [ ] Exam 2, and ECO2013's exams. The shell needs nothing new for them.
+
+---
+
+## Closed
+
+What closed each, newest first. Full text in git history.
+
+- **Exam 3 detailed solutions** -- built 2026-11-05 (117 questions, 78 widgets).
+- **The solutions generators** live in `solutions/build/` now, not scratch
+  space; Exam 3 reused them.
+- **The named-person check and its gaps** -- removed 2026-11-09 (CLAUDE.md
+  rule 4): a professor, named or not, is fine.
+- **`render_widgets.py` needs Playwright** -- in CLAUDE.md's opening paragraph.
+- **A `flow` widget for process diagrams** -- v2.57/v2.58, with cycles, two-way
+  links (2026-10-19) and vertical chains (v2.60–v2.62). The open-market
+  figures are `flow` widgets.
+- **A price axis that does not start at 0** -- `axes.ymin`/`axes.xmin`, v2.63.
+- **Point labels are one line** -- `\n` wraps a point's label since v2.34.
+- **No area fill / the attainable region / the total-revenue rectangle** --
+  `areas`, v2.11, outlined with `edge` since v2.18.
+- **No automatic collision detection** -- by design: `check_file.py`,
+  `place_labels.py` and `place_curve_labels.py` do it, and v2.69 cuts guides
+  round labels.
+- **`content/sn25-v6.js` returns 403 / the written-in contents / the TOC in
+  the prompt** -- the head uses the live `studyguide/sn25-v2.js` (2026-09-21),
+  no example carries a written-in TOC, `check_file.py` fails the pair, and v7
+  step 0 says all of it.
+- **Reorder the head of `ECO2013-263-SupplyAndDemand.html`** -- redone at Ian's
+  ask, 2026-10-05.
+- **Two shipped examples with arrows over guides** (ECO2013 supply and
+  demand) -- redone 2026-10-05; `render_widgets.py` reports none.
+- **A payoff matrix / a repeated-game years table** -- v2.39/v2.40 and v2.48.
+- **Heading levels, `antiword` dropping text boxes, a semester swap, the brace
+  curl, the shift arrow on a spline, row-arrow thresholds, the preset gap
+  brace, the schedule-shift's fourth arrow, PPF axis titles, vertical braces,
+  the checker's own tests, arrows against curves** -- all closed before
+  2026-10-12; see git history.
+- **The schedule table's first column is the y-axis good** -- documented,
+  not a defect (renaming would break every config).

@@ -103,9 +103,12 @@ case("two axis values crowded together", lambda r: C.check_labels(widget(
             {"q": 60, "p": 58, "showQ": False}]), r)
     or r.has("WARN", "labels", "crowded"))
 
-case("label pressed against a guide", lambda r: C.check_labels(widget(
+# From engine v2.69 a dashed guide is cut out round every in-plot label, so a
+# label against a guide is no longer a collision on the drawing and must not
+# be reported as one. The solid axis lines and price lines are still tested.
+case("label against a guide is not reported", lambda r: C.check_labels(widget(
     points=[{"q": 50, "p": 50, "label": "E", "dx": -18, "dy": 3}]), r)
-    or r.has("WARN", "labels", "close to the guides"))
+    or not r.has("WARN", "labels", "close to the guides"))
 
 # ---- steps and what is on screen -------------------------------------------
 
@@ -489,10 +492,7 @@ case("a calcs block makes every caption in the widget working", lambda r: C.chec
 for txt, tag in [("<p>built from a lecture recording alone.</p>", "a lecture recording"),
                  ("<p>as the transcript shows, demand rises.</p>", "the transcript"),
                  ("<p>he drew it on the board during the review.</p>", "on the board"),
-                 ("<p>roughly 20% of the class said otherwise.</p>", "the class said"),
-                 ("<p>he explained the model in class last week.</p>", "in class"),
-                 ("<p>his slide shows the shift going right.</p>", "his slide"),
-                 ("<p>the professor said demand shifts right.</p>", "the professor said")]:
+                 ("<p>his slide shows the shift going right.</p>", "his slide")]:
     case("source: %s" % tag,
          (lambda t: lambda r: C.check_source(t, [], r) or r.has("FAIL", "source", ""))(txt))
 
@@ -501,14 +501,14 @@ for txt, tag in [("<p>the class average was below 74.</p>", "the class average")
                  ("<p>you may be sitting in class.</p>", "sitting in class"),
                  ("<p>the board of a firm sets the price.</p>", "the board of a firm"),
                  ("<p>one class of goods behaves differently.</p>", "a class of goods"),
-                 ("<p>ask your professor which convention applies.</p>", "your professor")]:
+                 ("<p>ask your professor which convention applies.</p>", "your professor"),
+                 # Ian, 2026-11-09: a professor and what happened in class are fine
+                 ("<p>roughly 20% of the class said otherwise.</p>", "the class said"),
+                 ("<p>he explained the model in class last week.</p>", "in class"),
+                 ("<p>the professor said demand shifts right.</p>", "the professor said"),
+                 ("<p>Dr. Rush discussed the Coase theorem.</p>", "a named professor")]:
     case("not a source: %s" % tag,
          (lambda t: lambda r: C.check_source(t, [], r) or not r.lines)(txt))
-
-case("a named person is flagged, never failed", lambda r: (
-    C.check_names("<p>Professor Chen drew the example.</p>", [], r)
-    or (r.has("WARN", "names", "professor chen")
-        and not any(l == "FAIL" for l, _, _ in r.lines))))
 
 # ---- markup ----------------------------------------------------------------
 

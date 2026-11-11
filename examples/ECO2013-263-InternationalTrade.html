@@ -142,6 +142,10 @@ MathJax = {
    Fainter than `dim`, which only marks a curve a shift has moved on from. */
 .sdg .curve-g.faint .curve { stroke-width:2; opacity:.26; }
 .sdg .curve-g.faint .clbl { opacity:.5; }
+.sdg .clbl-g.faint .clbl { opacity:.5; }
+/* v2.69: a halo in the plot's own colour round every name inside the plot,
+   so a curve or a line passing under the letters is knocked out of them. */
+.sdg .knk { paint-order:stroke fill; stroke:var(--plot); stroke-width:3px; stroke-linejoin:round; }
 /* A measure named inside the plot is usually two or three words on as
    many lines, and it has to share the space with the curves it spans. */
 .sdg .tag.vin { font-size:11px; }
@@ -378,7 +382,7 @@ MathJax = {
 .sdg .sdg-body.two .sdg-flowfig { max-width:none; }
 </style>
 <script>
-/* ===== sd-graph.js v2.68 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.69 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)
@@ -437,7 +441,7 @@ MathJax = {
      Presets can be combined with title/lede/caption/steps overrides and with scenarios (each scenario gives its own shift/dir).
 */
 (function () {
-  var NS = 'http://www.w3.org/2000/svg';
+  var NS = 'http://www.w3.org/2000/svg', KNOCK = 0;
   var C = {ink: 'var(--ink)', red: 'var(--red)', teal: 'var(--teal)', orange: 'var(--orange)', grey: 'var(--grey)', navy: 'var(--navy)', gold: 'var(--gold)'};
   function col(c) { return C[c || 'ink']; }
   function el(tag, a, text) { var e = document.createElementNS(NS, tag); for (var k in a) if (a[k] != null) e.setAttribute(k, a[k]); if (text != null) e.textContent = text; return e; }
@@ -596,6 +600,29 @@ MathJax = {
     var g = el('g', {}); svg.appendChild(g);
     var parts = [], byId = {};
     function reg(node, spec) { node.classList.add('fade'); parts.push({node: node, spec: spec}); if (spec.id) byId[spec.id] = {node: node, spec: spec}; return node; }
+    // Text inside the plot is never crossed by a dashed guide (v2.69). Each
+    // label records a box -- sized with the same per-character table the
+    // margins and check_file use -- and the panel's guides are drawn through
+    // a mask with that box cut out of it, so a guide stops at the text and
+    // carries on past it. The cut-out is on screen only while its label is,
+    // so no step shows a gap with nothing in it. The label also takes a
+    // halo in the plot's own colour (.knk), which knocks a curve or a price
+    // line out of the letters it runs under. Ian, 2026-11-05: "make it so
+    // labels like DWL and other text are clearly visible and not covered by
+    // curves or lines ... have the dotted lines stop at the text block and
+    // continue past it."
+    var knocks = [], kparts = [];
+    function knock(t, spec, fs, lh, central, halo) {
+      if (halo !== false) t.classList.add('knk');
+      var rows = [].filter.call(t.childNodes, function (n) { return n.nodeName === 'tspan' && n.getAttribute('x') != null; });
+      var texts = rows.length ? rows.map(function (r) { return r.textContent; }) : [t.textContent];
+      var w = 0; texts.forEach(function (tx) { w = Math.max(w, fs * emw(tx)); });
+      var x = +t.getAttribute('x'), y = +t.getAttribute('y'), an = t.getAttribute('text-anchor') || 'start';
+      var x0 = an === 'middle' ? x - w / 2 : an === 'end' ? x - w : x;
+      var top = central ? y - 0.55 * fs : y - 0.8 * fs, hgt = 1.05 * fs + (texts.length - 1) * lh;
+      knocks.push({x: x0 - 3, y: top - 2.5, w: w + 6, h: hgt + 5, spec: spec});
+      return t;
+    }
 
     if (ax.bg !== false) g.appendChild(el('rect', {class: 'plotbg', x: O.x, y: 14, width: PW + 14, height: O.y - 14}));
     if (ax.grid) {
@@ -655,7 +682,7 @@ MathJax = {
     // passes beneath, which is what the printed figure gets for free by
     // filling its deadweight wedges solid black. (Ian, 2026-09-30: "have the
     // CS, DWL and the grey box be on top".)
-    var areaLabels = [];
+    var areaLabels = [], curveLabels = [];
     (cfg.areas || []).forEach(function (a) {
       var cc = col(a.color), grp = el('g', {class: 'area-g'});
       // edge:true outlines the polygon in its own colour. Two pieces of one
@@ -701,6 +728,7 @@ MathJax = {
           at.appendChild(el('tspan', {x: ax0, dy: i ? 10 : 0}, rw));
         });
         lgrp.appendChild(at);
+        knock(at, a, 10, 10, true, !a.boxed);
         areaLabels.push({node: lgrp, spec: a});
       }
       g.appendChild(reg(grp, a));
@@ -823,7 +851,10 @@ MathJax = {
         setLabel(line, row);
         cnode.appendChild(line);
       });
-      grp.appendChild(cnode);
+      // The name goes in the top layer (v2.69), so a curve drawn later does
+      // not run over it; it keeps this curve's step window and its dimAt fade.
+      var cwrap = el('g', {class: 'clbl-g'}); cwrap.appendChild(knock(cnode, c, 13, 14));
+      curveLabels.push({node: cwrap, spec: c});
       if (c.from && byId[c.from]) {
         var src = byId[c.from].spec, ap = c.arrowP != null ? c.arrowP : (c.pts[0][1] + last[1]) / 2;
         var yA = Y(ap);
@@ -839,6 +870,7 @@ MathJax = {
         }
       }
       g.appendChild(grp); reg(grp, c);
+      if (c.id && byId[c.id]) byId[c.id].lab = cwrap;
     });
 
     (cfg.hlines || []).forEach(function (l) {
@@ -857,17 +889,17 @@ MathJax = {
       // curve that climbs to the right-hand corner is already there.
       // tagq anchors the name over a chosen quantity instead of the line's
       // right-hand end, for a panel where a curve runs through that corner.
-      if (l.tag) grp.appendChild(setLabel(el('text', {class: 'tag',
+      if (l.tag) grp.appendChild(knock(setLabel(el('text', {class: 'tag',
         x: l.tagq != null ? X(l.tagq) : O.x + PW + 6,
         y: Y(l.p) + (l.tagdy != null ? l.tagdy : -6),
-        'text-anchor': l.tagq != null ? 'middle' : 'end', fill: cc}), l.tag));
+        'text-anchor': l.tagq != null ? 'middle' : 'end', fill: cc}), l.tag), l, 12, 13));
       g.appendChild(grp); reg(grp, l);
     });
 
-    // The area names, held back from their fills so the curves and the price
-    // lines draw underneath them (v2.46). Still before the points and braces:
-    // a marked reading is never covered by a name.
-    areaLabels.forEach(function (al) { g.appendChild(reg(al.node, al.spec)); });
+    // The area names now go in last of all (v2.69), over the points' guides
+    // as well as the curves: a guide drawn across "DWL" was the commonest
+    // collision left. check_file still fails a name on a marked reading, so
+    // going above the points covers nothing.
 
     (cfg.braces || []).forEach(function (b) {
       var cc = col(b.color || 'red'), grp = el('g', {});
@@ -898,6 +930,7 @@ MathJax = {
         txt.appendChild(el('tspan', {x: m, dy: ri ? 13 : 0}, row));
       });
       grp.appendChild(txt);
+      if (!out) knock(txt, b, 12, 13);
       if (!out) { [b.q1, b.q2].forEach(function (q) { grp.appendChild(el('line', {class: 'guide', stroke: cc, x1: X(q), y1: Y(b.p), x2: X(q), y2: O.y})); }); }
       g.appendChild(grp); reg(grp, b);
     });
@@ -954,7 +987,7 @@ MathJax = {
           setLabel(vline, row);
           vtxt.appendChild(vline);
         });
-        grp.appendChild(vtxt);
+        grp.appendChild(knock(vtxt, b, 11, 13));
       }
       g.appendChild(grp); reg(grp, b);
     });
@@ -1027,7 +1060,7 @@ MathJax = {
           var ts = el('tspan', {x: lx, dy: i ? lrh : 0});
           setLabel(ts, rw); lt.appendChild(ts);
         });
-        grp.appendChild(lt);
+        grp.appendChild(knock(lt, p, p.boxed ? 9.5 : 12, lrh, false, !p.boxed));
       }
       // A price line only suppresses the point's own label while the two are
       // on screen together. Ignoring the step windows here silently dropped
@@ -1063,7 +1096,22 @@ MathJax = {
         rowHooks.push(dots);
       });
     }
-    return {svg: svg, parts: parts, byId: byId, rowHooks: rowHooks, cfg: cfg};
+    // The label layers, last, so nothing is drawn over a name (v2.69).
+    curveLabels.forEach(function (cl) { cl.node.classList.add('fade'); parts.push({node: cl.node, spec: cl.spec}); g.appendChild(cl.node); });
+    areaLabels.forEach(function (al) { g.appendChild(reg(al.node, al.spec)); });
+    var guides = svg.querySelectorAll('.guide');
+    if (knocks.length && guides.length) {
+      var mid = 'sdg-knock-' + (++KNOCK), defs = el('defs', {}),
+          mk = el('mask', {id: mid, maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: W, height: H});
+      mk.appendChild(el('rect', {x: 0, y: 0, width: W, height: H, fill: '#fff'}));
+      knocks.forEach(function (k) {
+        var r = el('rect', {x: k.x, y: k.y, width: k.w, height: k.h, rx: 2, fill: '#000'});
+        mk.appendChild(r); kparts.push({node: r, spec: k.spec});
+      });
+      defs.appendChild(mk); svg.insertBefore(defs, svg.firstChild);
+      [].forEach.call(guides, function (gd) { gd.setAttribute('mask', 'url(#' + mid + ')'); });
+    }
+    return {svg: svg, parts: parts, byId: byId, rowHooks: rowHooks, cfg: cfg, knocks: kparts};
   }
 
   // ---------- widget ----------
@@ -1318,7 +1366,7 @@ MathJax = {
   }
 
   // ----------------------------------------------------------------- flow --
-  // A chain of boxes (v2.57): the leverage chapter's "Sales -> Operating
+  // A chain of boxes (v2.69): the leverage chapter's "Sales -> Operating
   // Income -> EPS" with the kind of leverage named on each link, a thick
   // arrow above a box for the change in it ("+10%"), and a thin red arrow
   // from one change to the next carrying the multiplier ("DOL = 2"). A
@@ -2079,7 +2127,15 @@ MathJax = {
       // quantity it is measured at, and the curve above runs right through the
       // only place that label fits.
       (pn.cfg.curves || []).forEach(function (c) {
-        if (c.dimAt != null && pn.byId[c.id]) pn.byId[c.id].node.classList.toggle('faint', s >= c.dimAt);
+        if (c.dimAt != null && pn.byId[c.id]) {
+          pn.byId[c.id].node.classList.toggle('faint', s >= c.dimAt);
+          if (pn.byId[c.id].lab) pn.byId[c.id].lab.classList.toggle('faint', s >= c.dimAt);
+        }
+      });
+      // a cut-out in the guides' mask is there only while its label is
+      (pn.knocks || []).forEach(function (k) {
+        var at = k.spec.at || 0, until = k.spec.until;
+        k.node.setAttribute('opacity', s >= at && (until == null || s < until) ? 1 : 0);
       });
     });
     (this.calcs || []).forEach(function (c) {

@@ -57,32 +57,20 @@ PLACEHOLDER = "<!--SDG-ENGINE-->"
 # that are only a giveaway in context: a "class" of goods and the "board" of a
 # company are both ordinary economics.
 #
-# Naming a person is a different question from naming the source, and it is not
-# a rule a script can settle: some professors are happy to be credited and
-# others must never appear. So attributing content to whoever taught it is a
-# FAIL here ("the professor said"), while a name itself is only ever a WARN --
-# see check_names below and hard rule 4 in CLAUDE.md. "your professor" is left
-# alone: it addresses the student rather than sourcing the material.
+# A professor, named or not, and what happened "in class" are not tested
+# (Ian, 2026-11-09: "get rid of the professor and in class warnings, the text in
+# the notes should be fine"). The notes Ian sends mention both on purpose.
 SOURCE_NOUNS = ["transcript", "lecture", "recording", "classroom"]
 # "on the board" and not "the board": a company has one of those too, and the
 # rule is about the classroom whiteboard. "the class" likewise skips "the class
 # of goods", which is ordinary economics.
 SOURCE_PHRASES = ["the slides",
                   "the handout", "the video", "the notes say", "the reading",
-                  "he said", "she said", "they said in",
-                  "the professor", "our professor", "the instructor",
-                  "the lecturer"]
-# "the class" and "in class" are ordinary English for a student -- a class
-# average, sitting in class -- and only give the source away when something is
-# attributed to what happened there.
+                  "he said", "she said", "they said in"]
 SOURCE_GUARDED = [
-    (r"the class\b(?!\s+(?:average|of\b))", "the class"),
     # the whiteboard, not a seat "on the Board of Governors" (the Money chapter
     # has a Fed chair's 14-year term there) or "on the board of directors"
     (r"(?:on|at) the board\b(?!\s+of\b)", "on the board"),
-    (r"(?:said|says|noted|explained|mentioned|covered|discussed|showed|drew|"
-     r"went over)[^.]{0,40}\bin class\b", "in class"),
-    (r"\bin class\b[^.]{0,40}(?:said|says|noted|explained|mentioned)", "in class"),
     # "his slide" / "her slides": the deck belongs to whoever taught it, which
     # names the source as surely as "the slides" (Ian, 2026-10-12)
     (r"(?:his|her|their) slides?\b", "his slide"),
@@ -1029,16 +1017,11 @@ def guide_segments(pn, X, Y, ox, oy, ax):
     else:
         out.append(([(ox, 14.0), (ox, oy), (ox + pw + 14, oy)], "the axis lines",
                     (0, None)))
-    for p in pn.get("points") or []:
-        if p.get("guides") is False:
-            continue
-        # v2.14: "p" draws only the leg to the price axis, "q" only the leg to
-        # the quantity axis. Testing the whole elbow either way invents a guide
-        # that is not on the drawing, and misses nothing when it is.
-        elbow = [(ox, Y(p["p"])), (X(p["q"]), Y(p["p"])), (X(p["q"]), oy)]
-        leg = {"p": elbow[:2], "q": elbow[1:]}.get(p.get("guides"), elbow)
-        out.append((leg, "the guides from (%s, %s)" % (p["q"], p["p"]),
-                    (p.get("at", 0), p.get("until"))))
+    # The points' dashed guides are not obstacles for a label any more: from
+    # engine v2.69 every guide is drawn through a mask with each in-plot
+    # label's box cut out of it, so a guide stops at the text and carries on
+    # past it, and nothing in the drawing touches. Testing them reported a
+    # collision the reader cannot see (Ian, 2026-11-05).
     for h in pn.get("hlines") or []:
         out.append(([(ox, Y(h["p"])), (ox + pw + 8, Y(h["p"]))],
                     "the %s price line" % h.get("label", h["p"]),
@@ -1047,12 +1030,8 @@ def guide_segments(pn, X, Y, ox, oy, ax):
         win = (b.get("at", 0), b.get("until"))
         # the engine draws the drop guides for every brace that is not outside
         # the axis -- below:"in" included
-        if b.get("below") is not True:
-            for q in (b.get("q1"), b.get("q2")):
-                if q is None:
-                    continue
-                out.append(([(X(q), Y(b["p"])), (X(q), oy)],
-                            "a guide under the %r brace" % b.get("label"), win))
+        # its drop guides are dashed, so the v2.69 mask cuts them round any
+        # label they would cross, as it does the points' guides
         # the bracket itself
         y, d = brace_y(b, Y, oy)
         x1, x2 = X(min(b["q1"], b["q2"])), X(max(b["q1"], b["q2"]))
@@ -2079,29 +2058,6 @@ def check_source(src, cfgs, r):
         r.ok("source", "no student-facing text names its source")
 
 
-NAME_RE = re.compile(r"\b(?:Professor|Prof\.|Dr\.|Mr\.|Mrs\.|Ms\.)\s+[A-Z][\w'\u2019-]+")
-
-
-def check_names(src, cfgs, r):
-    """Report people named in student-facing text. Never fails.
-
-    Whether a given professor may be named is Ian's call, not a rule a script
-    can hold, so this only ever raises a hand. It also only catches a name that
-    carries a title -- a bare surname is indistinguishable from any other
-    capitalised word, so a person named without one will pass silently."""
-    found = {}
-    for t in visible_text(src, cfgs):
-        for m in NAME_RE.finditer(t):
-            i = max(0, m.start() - 40)
-            found.setdefault(m.group(0), " ".join(t[i:m.end() + 40].split()))
-    if not found:
-        r.ok("names", "no person is named with a title in student-facing text")
-        return
-    for who, ctx in sorted(found.items()):
-        r.warn("names", "%r is named -- check whether this one may be: ...%s..."
-               % (who, ctx))
-
-
 DATE_RE = re.compile(r'<p class="date">(.*?)</p>', re.S)
 
 
@@ -2219,7 +2175,6 @@ def main():
     check_captions(cfgs, r)
     check_caption_prose(src, cfgs, r)
     check_source(src, cfgs, r)
-    check_names(src, cfgs, r)
     check_images(src, r)
     check_dates(src, r, pathlib.Path(args.source).read_text(encoding="utf-8")
                 if args.source else None)
