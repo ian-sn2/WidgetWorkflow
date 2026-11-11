@@ -66,6 +66,9 @@ scripts/
 
 The skills restate rules this file holds in full. When a rule here changes, update
 the skill that carries it in the same commit.
+For Ian's claude.ai Skills tab, `python scripts/package_skills.py skills-upload` zips
+each skill with the files it uses (same relative paths, plus this file); re-run and resend
+after changing a skill.
 
 ## The workflow in one paragraph
 
