@@ -74,7 +74,21 @@ scripts/
   curve_shapes.py             ← cost families, tangencies, supply fans, crossings. Import, don't retype.
   test_curve_shapes.py        ← tests for it. Run after changing it.
 .claude/commands/             ← /convert, /check, /render
+.claude/skills/               ← load on demand, one per kind of job:
+  widget-basics/              ← creating a widget: JSON, steps, scenarios, captions, embedding
+  curves-and-labels/          ← drawing curves (curve_shapes) and placing every label
+  other-charts/               ← diagrams, networks, matrices, calculators, hand-built page charts
+  study-guide-editions/       ← Full / Balanced / Concise
+  chapter-conversion/         ← converting a chapter; semester swaps
+  widget-qa/                  ← checks, renders, phone tests before delivery
+  review-notes/               ← reviewing Ian's files (report only)
 ```
+
+The skills restate rules this file holds in full. When a rule here changes, update
+the skill that carries it in the same commit.
+For Ian's claude.ai Skills tab, `python scripts/package_skills.py skills-upload` zips
+each skill with the files it uses (same relative paths, plus this file); re-run and resend
+after changing a skill.
 
 ## The workflow in one paragraph
 
@@ -1147,6 +1161,19 @@ Ian changed this rule on 2026-09-17, and the change applies **here only**:
   to a folder holding the unpacked P1/P2 zips and writes `FIN3403
   Widgets/Exam N/<chapter>/`). The finished files are not committed; Ian
   reviews them first.
+
+### MAN4504 step-by-step widgets (2026-11-11)
+
+* **Aggregate planning: Option A, the stepper, is the chosen design** (Ian's
+  boss, 2026-11-11). Build and deliver Option A only from now on; Option B
+  (the tabbed explorer) stays in `scripts/man4504/transport.py` but is not
+  delivered unless asked. A future step-by-step widget for a worked
+  calculation defaults to the same stepper pattern.
+* Builds: `transport.py` and `transport_editions.py` (aggregate planning),
+  `project_mgmt.py` (`--patch` updates an already-converted file) and
+  `project_mgmt_editions.py` (project management). A Concise keeps the Full's
+  h1/h2 headings exactly, plus Glossary and Key Takeaways; the edition
+  scripts assert it.
 
 ### Reviewing Ian's work
 
