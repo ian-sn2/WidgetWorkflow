@@ -641,7 +641,25 @@ def chapter(src):
     return t
 
 
+def patch(path, out):
+    """bring a file this script already converted up to the current figures, leaving every other edit in it alone"""
+    import re
+    t = open(path, encoding="utf-8").read()
+    subs = [
+        (r"<style>\n\.pmw \{.*?</style>", CSS),
+        (r"<script>\n\(function \(\) \{\n  var NS = 'http://www\.w3\.org/2000/svg', uid = 0;.*?</script>", RUNTIME),
+        (r'<div class="pmw pm-legend">.*?</p></div>', node_legend()),
+        (r'<div class="pmw pm-beta">.*?</svg></div>', beta_figure()),
+    ]
+    for pat, new in subs:
+        t, n = re.subn(pat, lambda m: new, t, count=1, flags=re.S)
+        assert n == 1, pat[:40]
+    open(out, "w", encoding="utf-8").write(t); print("patched", path, "->", out)
+
+
 if __name__ == "__main__":
+    if sys.argv[1] == "--patch":
+        patch(sys.argv[2], sys.argv[3]); sys.exit()
     src, outdir = sys.argv[1:3]; os.makedirs(outdir, exist_ok=True)
     p = os.path.join(outdir, "MAN4504-263-Exam3-Chapter3-RestofProjectManagement-Full.html")
     open(p, "w", encoding="utf-8").write(chapter(src)); print("wrote", p)
