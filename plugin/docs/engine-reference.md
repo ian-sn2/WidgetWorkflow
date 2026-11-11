@@ -1,0 +1,852 @@
+# Engine reference — `engine/sd-graph.js` v2.69
+
+**v2.69:** nothing covers a name. Dashed guides break round every in-plot label, in-plot labels carry a halo in the plot's colour, and curve and area names are drawn last; see *Labels over the drawing* below (Ian, 2026-11-05).
+
+**v2.68:** a network node's four times sit 5px out from its side and 1px above or below it, rather than 11px and 5px off, so they read as the node's own (Ian, 2026-10-26). Clear the arrows by spreading the nodes, not by moving the times.
+
+**v2.67:** `axes.years: true` prints quantity ticks as written (a year is 2010, not 2,010).
+
+**v2.65:** a quantity title that starts with `\n` sits below the tick row at the plot's foot even when `axes.cross` puts the axis line higher; it was measured from the crossing and sat above the numbers.
+
+Written from the engine source. The conversion prompt carries a shorter version
+of this in its own "Engine reference" section; that one is what the model needs
+to write a config, and this one adds the geometry and the behaviour you only
+find by reading the code.
+
+If a graph cannot be expressed here, that is an engine feature request
+(`docs/open-issues.md`), not a licence to hand-write SVG in a notes file.
+
+---
+
+## Markup
+
+```html
+<div class="sdg"><script type="application/json">{ …config… }</script></div>
+```
+
+The engine mounts every `.sdg` on `DOMContentLoaded`. A config that fails to
+parse replaces the widget with `Widget config error: …` rather than leaving a
+blank space.
+
+The engine is inserted into a notes file by `scripts/embed_engine.py`, which
+replaces the `<!--SDG-ENGINE-->` line the model emits. The model never types it.
+
+## Top level
+
+| key | meaning |
+| --- | --- |
+| `title` | heading above the widget (`<h4>`) |
+| `lede` | one intro line under the title |
+| `caption` | static caption — used **only** when there are no steps |
+| `steps` | array of caption **strings**; index 0 is the start state |
+| `scenarios` | `{key: {label, …overrides}}` — one button each |
+| `panels` | `[panelCfg, panelCfg]` for two markets side by side |
+| `link` | `false` removes the arrow drawn between two panels |
+
+With no `panels`, the panel keys live at the top level.
+
+### Steps, `at` and `until`
+
+An element is visible when `step >= at` and, if `until` is given,
+`step < until`. **`until` is exclusive**: `at:2, until:3` shows the element on
+step 2 only. `at` defaults to 0.
+
+Steps are strings, not objects. The counter shows step 0 as "Step 1 of N", so no
+caption should say "Start".
+
+Controls appear only when `steps.length > 1`: Back, Next step, Start over.
+
+### Scenarios
+
+Overrides are merged **shallowly** over the base config, and switching scenario
+rebuilds the widget from scratch. So a scenario that changes one curve must
+restate the whole `curves` array. Anything the scenarios share must be written
+identically in each, or it will appear to jump when the reader switches.
+
+## Panel
+
+`heading` titles a panel (two-panel widgets only). Text inside the plot is SVG
+and scales with the panel's width, so the heading is sized in container-width
+units to keep one order at every screen size: **heading, then axis title, then
+point label**. Set in fixed pixels it was overtaken by the axis titles on a wide
+screen.
+
+`pct: true` labels both axes as percentages (**v2.35**), money's opposite
+number: the income-distribution chapter plots a cumulative percent against a
+cumulative percent and writes % on every value of both.
+
+**Both axis titles wrap on `\n`** (**v2.33**). `Amount of Employment (L)` is 23
+characters at 14px and weight 800 — two thirds of the panel on one line — and
+the labor chapter stacks it on two, as it stacks `Wage Rate (W)`.
+
+**A wrapped title then goes where a one-line title cannot.** A one-line title
+is a letter or two and belongs where it has always sat; a wrapped one is a
+name, and a name in the same place reads as part of the plot. So the price
+title is anchored the other way, clear to the *left* of the axis (**v2.34**),
+and drops below the topmost tick (**v2.35**) so the two stand one above the
+other — side by side, `100%` and `Cumulative / % of Income` cost 40px of plot
+between them. The quantity title moves *below* the whole tick row, and the
+panel grows to 268 to hold it, the same trade a `below: true` brace makes: on
+the tick line it runs back across every number there. The left margin carries
+the price title the way it carries a price label, and a title tall enough to
+leave the panel is reported like any other label.
+
+
+### `matrix`
+
+A payoff matrix instead of a plot (**v2.39**) — a grid of numbers, so it is
+built as HTML the way the schedule `table` is, and it takes the same step
+controls.
+
+```json
+{"matrix": {
+  "rows": {"player": "FIRM B", "labels": ["Comply", "Cheat"]},
+  "cols": {"player": "FIRM A", "labels": ["Comply", "Cheat"]},
+  "cells": [[["A: $200M", "B: $200M"], ["A: $300M", "B: -$50M"]],
+            [["A: -$50M", "B: $300M"], ["A: $0M",   "B: $0M"]]],
+  "marks": [{"row": 0, "who": "a", "at": 1, "until": 2},
+            {"cell": [0, 1], "who": "a", "pick": true, "at": 1, "until": 2}]
+}}
+```
+
+`cells[i][j]` is `[what the column player earns, what the row player earns]`,
+written as the source writes them. A **mark** names a `row`, a `col` or one
+`cell`; `who: "a"|"b"` narrows it to one player's line inside those cells, and
+`pick: true` is the one a comparison lands on — shaded as a step's new point
+is. **`given: true` fills in that row's or column's own strategy label**
+(**v2.40**): the argument is "*if* B complies, A does better cheating", and
+without the "if" half on the drawing the two lit payoffs read as arbitrary
+cells. Marks take `at`/`until` like anything else, and `check_file.py` measures
+the "a step must change the drawing" rule against them, since on a matrix
+that is all a step can change.
+
+This exists because the game-theory chapter argues through its matrix one
+comparison at a time — if B complies A does better cheating, if B cheats A
+still does better cheating, and so on to the Nash cell — which is exactly what
+a picture of the finished grid cannot show.
+
+### `plays`
+
+The same game played year after year (**v2.48**) — one row a year, a running
+total underneath, and a red arrow carrying one year's move into the next
+year's answer. HTML like the matrix and the schedule `table`, and it takes the
+same step controls.
+
+```json
+{"plays": {
+  "rowhead": "Year",
+  "cols": ["Firm A", "Firm B"],
+  "years": [{"label": "2025", "cells": [["Comply", "+$200M"], ["Comply", "+$200M"]]},
+            {"label": "2026", "cells": [["Cheat", "+$300M"], ["Comply", "-$50M"]], "at": 1}],
+  "total": {"label": "Total", "cells": ["+$500M", "+$150M"], "at": 2},
+  "arrows": [{"from": [0, 0], "to": [1, 1], "at": 1}]
+}}
+```
+
+A cell is `[move, amount]`: the move is set in italic and the amount beside it
+in brackets, as the source sets them. `rowhead` names the corner cell, which
+the header's navy band runs through — left blank it is a navy block with
+nothing in it, and "Year" says what the column under it holds (**v2.49**). `from` and `to` are `[year, column]`,
+and an arrow may run either way, so the figure where both firms answer in kind
+draws its two crossings. Years, `total` and arrows take `at`/`until`, and a
+year that has not arrived keeps its space, so the table does not jump as they
+fill in.
+
+The arrows are drawn over the table rather than in it — each runs from inside
+one cell to inside another a row down, and there is no cell to put it in — so
+they are measured off the laid-out table, again when the web font arrives and
+again whenever the table changes size. Each one runs from where its first
+cell's writing ends to where its second cell's writing begins, measured off
+the text rather than set at some fraction of the cell: a fraction lands on the
+closing bracket at one end and on the move at the other, and somewhere
+different again the moment an amount is a character longer. Where the writing
+leaves no room between the columns, on a narrow screen, the arrow straddles
+the border they share instead.
+
+### `amort`
+
+An amortization explorer (**v2.50**) — the one widget here that is a *model*
+rather than a drawing. Every other config states what to draw; this one states
+the loan and the engine works out the schedule, because the share of a payment
+that is interest depends on the amount, the rate and the term at once, and no
+table of points can hold all three.
+
+```json
+{"amort": {"amount": 300000, "rate": 7, "term": 30, "terms": [15, 30],
+           "rateMin": 1, "rateMax": 15, "rateStep": 0.25, "compare": [4, 10]}}
+```
+
+The rate slider and the term buttons redraw the curve; the year slider reads
+the split off it and moves the cursor. Under the plot: the two shares, the
+monthly payment, the interest paid so far, the remaining balance with a bar,
+and a sentence that names the year principal overtakes interest. `compare`
+overlays those rates as dashed curves behind a checkbox; `hideCompare` drops
+it. Interest is orange and principal teal, the two colours this set already
+uses for what the other side gets and what you keep.
+
+A chip travels with the point, naming the year and the interest share, so the
+eye never has to leave the curve to read what it is pointing at (**v2.52**).
+The cursor's dashed line is drawn *under* "Interest" and "Principal" and the
+comparison rates' names, the same order an area's name has taken since v2.46;
+the chip itself is the one thing over everything, because it is the reading.
+
+The figure is the control (**v2.52**): a mouse reads it by moving over it with
+nothing held down (**v2.54**), a finger by dragging — there is no hover to
+track on a touch screen — and the keyboard by focusing it and walking the loan
+with the arrow keys. Every way in reads a **whole year** (**v2.55**) — the
+slider steps one, an arrow key steps one, PageUp and PageDown step five, and a
+drag snaps to the nearest — since a figure whose own ticks are 0, 15 and 30 has
+no use for 14.3. Changing the term keeps the year, clamped into the new one, so
+the toggle answers "year 13 of a 30-year loan against year 13 of a 15-year one"
+ — a month a press, a year on PageUp/PageDown,
+either end on Home/End. `touch-action: pan-y`, so a finger that lands on the
+chart can still scroll the page. The year control is in **months**, which is
+what the schedule is indexed by.
+
+A widget carrying one needs no `steps` and no `caption`: the reading the
+student scrubs to is what it is for.
+
+### `flow`
+
+A chain of boxes (**v2.57**): the leverage chapter's "Sales → Operating
+Income (EBIT) → EPS", with the kind of leverage named on each link, a thick
+arrow above a box for a change in it, and a thin red arrow from one change to
+the next carrying the multiplier. Drawn as one SVG, like a plot, and it takes
+the same step controls.
+
+```json
+{"flow": {"nodes": ["Sales", "Operating\nIncome (EBIT)", "EPS"],
+          "links": ["Operating\nLeverage", "Financial\nLeverage"],
+          "changes": [{"node": 0, "text": "+10%", "dir": "up", "at": 1},
+                      {"node": 1, "text": "+20%", "dir": "up", "at": 2}],
+          "spans": [{"from": 0, "to": 1, "label": "DOL_{S} = 2", "at": 2}]}}
+```
+
+`nodes` and `links` are strings or `{text, at, until}`; text wraps on `\n`
+and takes `_{...}`. A `change` is a solid arrow above its node, `dir: "up"`
+or `"down"`, with its text beside it; a `span` runs between the tops of two
+change arrows (or just above the boxes where there are none, which is how
+the DOL/DFL/DCL triangle is drawn as a row). `check_file.py` counts nodes,
+links, changes and spans as what a step can change.
+
+**v2.59**, from the UCF macro chapters: a link takes `back` for a second
+arrow running the other way, named under it (the Fed sends `$$$`, the bank
+sends back `U.S. Treasury Securities`), `gap` for the room the pair and their
+names need (150 for that figure, against the default 34), and `arrow: false`
+for a plain space; a node takes `plain: true` to be text with no box (the
+three outcomes listed beside the bank, one per line) and `w` for its share
+of the width (the boxes 0.9 each, the list 1.3).
+
+```json
+{"flow": {"nodes": [{"text": "FED", "w": 0.9}, {"text": "Bank", "w": 0.9},
+                    {"text": "↑ Money Supply\n↓ Interest Rates\n↑ GDP", "plain": true, "w": 1.3, "at": 2}],
+          "links": [{"text": "$$$", "back": "U.S. Treasury Securities", "gap": 150, "at": 1}, {"arrow": false}]}}
+```
+
+And `cycle: true` lays four nodes out as a ring, the circular flow of
+income: `nodes` are top, right, bottom, left (the two markets top and
+bottom, the two actors at the sides, drawn black as the artwork does), and
+each of `loops` is four elbow arrows between neighbours, named at their
+corners. A loop's `labels` are in arrow order starting from the top node:
+`dir: "cw"` runs top → right → bottom → left → top, `"ccw"` the other way.
+An `outer` loop's names sit outside its corners and an `inner` loop's
+inside, against the vertical leg. Each loop takes `at`/`until`, which is
+what a step changes (`check_file.py` counts `loops`).
+
+```json
+{"flow": {"cycle": true,
+          "nodes": ["Product Market", "HOUSEHOLDS", "Resource Market", "FIRMS"],
+          "loops": [{"side": "inner", "dir": "cw", "at": 1,
+                     "labels": ["Goods and\nservices bought", "Labor, land,\ncapital", "Factors of\nproduction", "Goods and\nservices sold"]},
+                    {"side": "outer", "dir": "ccw", "at": 2,
+                     "labels": ["Revenue", "Wages, Rent,\nProfit (Income)", "Income", "Consumption\nExpenditures"]}]}}
+```
+
+The ring is a fixed 420 × 322 layout: four boxes, two legs a side, and a
+label of up to four short lines at each corner. A fifth node or a third loop
+is a new feature, not a config.
+
+**v2.60**, from the MAR3023 channels chapter: `vertical: true` stacks the
+chain top to bottom -- the marketing-channel figures run that way, and the
+prose beside them says "upstream" and "downstream" -- with a link's name to
+the left of its arrow and `spans` drawn as braces down the right, named
+beside them and stacking outward by `row` ("Supplier network" and
+"Marketing channel" in row 0, "Supply Chain" over both in row 1). `changes`
+are not drawn in this layout. Each downward link carries an arrowhead at its
+foot (**v2.61**): a chain motif alone reads as a two-way join, and these
+channels run one way (Ian, 2026-10-21). A horizontal node takes `pipe: true` (**v2.62**)
+to be drawn as a tube with a dark open end, the old "pipeline" view's
+channel; give it the row's largest `w`. In the horizontal chain a span takes
+`brace: true` for the same bracket drawn over a run of boxes, a link takes
+`style: "arrow"` for a plain arrow where the chain motif would say the
+wrong thing (the old "pipeline" view of a channel) and `size` to set its
+name larger (the `+` between a value-added chain's links), and a node's
+name wider than its box is set smaller rather than clipped.
+
+```json
+{"flow": {"vertical": true, "nodes": ["Supplier", "Manufacturer", "Consumer"],
+          "links": ["Raw\nmaterials/parts", "Finished\nproducts"],
+          "spans": [{"from": 0, "to": 1, "label": "Supplier\nnetwork", "at": 1},
+                    {"from": 1, "to": 2, "label": "Marketing\nchannel", "at": 2},
+                    {"from": 0, "to": 2, "label": "Supply\nChain", "row": 1, "at": 3}]}}
+```
+
+### `network`
+
+A project network (**v2.66**), from the MAR3203 project-management chapter:
+activities as circles on a 100 × 100 grid, precedence as arrows, the four
+times at a node's corners (ES top-left, EF top-right, LS bottom-left, LF
+bottom-right), the critical path in gold. `show` names the step at which
+the forward pass (`ef`: ES and EF), the backward pass (`lf`: LS and LF) and
+the critical path (`crit`) arrive, so one widget walks the whole CPM
+example the printed chapter needs four figures for. Nodes and edges take
+`at`/`until` too.
+
+```json
+{"network": {"legend": true, "show": {"ef": 1, "lf": 2, "crit": 3},
+             "nodes": [{"id": "A", "x": 4, "y": 50, "es": 0, "ef": 3, "ls": 0, "lf": 3}, ...],
+             "edges": [{"from": "A", "to": "B", "crit": true}, ...]},
+ "steps": ["The network.", "A forward pass…", "A backward pass…", "The critical path…"]}
+```
+
+`style: "ellipse"` draws each node as the textbook's compartment ellipse
+(times inside, `dur` under the name). `aoa: true` draws the
+activity-on-arrow convention: blank nodes, activities named on the arrows
+(`label`), a dashed arrow (`dashed: true`) for a dummy. `panels` sets
+networks side by side, each with a `heading`; give each a `w` of about 280
+so the circles keep their size at half width. `w`/`h` set the viewBox
+(560 × 240 by default), `r` the circle radius (20). A scenario can replace
+the whole `network` (the crashed project).
+`check_file.py` counts nodes, edges and each `show` mark as what a step can
+change.
+
+### `axes`
+
+```json
+{"x": "Q", "y": "P", "xmax": 260, "ymax": 75,
+ "xticks": [40, 80, 120], "yticks": [10, 20, 30],
+ "money": true, "cents": true, "k": true, "grid": true, "bg": false}
+```
+
+`money` prefixes prices with `$`; `cents` forces two decimals; `k` renders
+quantities of 1000+ as `12k`. `grid` draws the dashed gridlines at every tick —
+the schedule-graph look. `bg:false` removes the tinted plot rectangle.
+
+`cross: [q, p]` draws the two axis lines through that data point instead of
+along the plot's left and bottom edges (**v2.58**): a scatter of a stock's
+returns against the market's has four quadrants and its axes meet at the
+origin in the middle. Pick a scale with the origin at the centre (`[55, 55]`
+on a 110 axis) and leave the ticks out. `check_file.py` tests labels against
+the lines where they are drawn.
+
+`xmin` and `ymin` (**v2.63**) put the plot's corner somewhere other than 0:
+a scatter of GPAs from 2.9 to 3.9 on an axis from 0 is a smear in one corner,
+and a profit that goes negative needs the axis to go below 0 (with
+`cross: [0, 0]` to draw the axis lines through the origin, the way Excel
+does). Ticks, points, guides and the checker's geometry all honour them.
+
+`x` and `y` are the axis **titles**, defaulting to `P` and `Q`, which is what
+the printed artwork uses. A production possibilities frontier names its axes with
+words instead ("Guns", "Butter"), so the x title is anchored to the right edge of
+the box and the y title sits in the headroom above the plot. Keep them to a word
+or two — nothing wraps them.
+
+**A point prints its own price and quantity on the axes** (see `points` below),
+so on any graph whose points sit at round numbers, choose ticks that those values
+will not land beside. A point at 85 next to an `80` tick produces two labels a
+pixel apart. `scripts/check_file.py` tests for this.
+
+### `curves`
+
+```json
+{"id": "D2", "label": "D₂", "pts": [[104,16],[20,100]], "color": "red",
+ "from": "D1", "arrowP": 88, "shiftArrow": false, "at": 1,
+ "curved": true, "thin": true, "dashed": true,
+ "lstart": true, "ldx": -26, "ldy": 15}
+```
+
+- **`_{...}` in a label or a `tag` sets a word subscript** (**v2.24**), smaller
+  and lighter than the name it hangs off: `S_{Market}`, `d_{Firm} = MR`. Small
+  capitals were the nearest the text could manage alone and render at full
+  weight, so `Sᴍᴀʀᴋᴇᴛ` read as capitals rather than as a subscript. Digits stay
+  as they are — `S₁` and `D₂` are already true subscript characters.
+- `pts` are `[q, p]` pairs in data units. Two points fix a straight line; three
+  or more with `curved:true` are smoothed into a Catmull-Rom-style spline — the
+  conceptual, non-linear look.
+- `from` names the curve this one shifts away from. It does three things: the
+  new curve **animates** in from the old one's position, a red shift arrow is
+  drawn between them at price `arrowP`, and the original curve is **dimmed**
+  (thinner, slightly transparent) from that step onward. Each end of the arrow
+  stands off its curve by at least 3.5px edge to edge, solved for the curve's
+  slope at that price (**v2.56**): 11px along the arrow on a steep curve, more
+  on a shallow one. Keep `arrowP` inside the price range of *both* curves;
+  outside it the arrow points at the line's extension, past its end, and
+  `check_file.py` warns.
+- `shiftArrow: false` keeps the animation and the dimming but draws no arrow.
+  Set it on any widget whose `table` has `arrows: true`: the per-row arrows
+  already show the shift once per schedule row, and a fourth arrow at a price
+  that is not in the schedule has no point at either end.
+- `thin` draws a secondary line at 2px (a 45-degree line, a line of equality);
+  `dashed` dashes it. **Not** the original curve of a shift pair: that is
+  drawn at full weight, and the engine's own `dim` lightens it once the
+  shifted curve arrives (Ian, 2026-10-07; CLAUDE.md drawing conventions).
+- `hiAt: 2` on a **point** re-marks it from step 2 onward, whenever it arrived
+  (**v2.32**). The engine rings what a step just revealed, which is what tells
+  the reader which dot the caption means — but a shape drawn by a later step
+  owns every corner it is built from, not just the one that step added. A
+  deadweight-loss wedge's three corners come in over two steps, and ringing
+  only the last says the other two belong to something else. Declared per
+  point, so a step that means to emphasise one dot still can.
+- `divider: true` on a **point** says its dashed guide separates two regions
+  rather than marking a reading, so `check_file.py` does not require a number
+  at its foot (**v2.34**). The labor chapter's supply curve turns at a wage the
+  chapter never names, and the source still draws the line across it, because
+  that is where the two effects balance. Declared, never inferred: a guide
+  running to a blank axis is still a defect everywhere it is not said to be
+  one.
+- A point's `label` wraps on `\n` and takes `_{...}` (**v2.34**), the way curve
+  labels, braces and axis labels already do.
+- `boxed: true` puts that label in a white box with a border in the point's own
+  colour, set at 9.5px (**v2.36**), so it can be **read over the curves it sits
+  on**. Three Lorenz curves converge on one corner and leave no gap between
+  them wide enough for a horizontal label — the income-distribution chapter
+  boxes each year and runs a short leader to its curve for exactly that reason,
+  and a name for a curve can then sit on the curve itself. `check_file.py`
+  skips a boxed label against curves, guides and the axis lines, since lying
+  over them is what it is for, and still measures it against every other label
+  and against the panel's edges. Declared on the point, never inferred: an
+  unboxed label over a curve is still a defect.
+- `leader: true` draws a curve as a 1px hairline (**v2.37**) — the line from a
+  boxed label to the curve it names. `thin` is the weight of a line that is
+  part of the drawing (a line of equality, the curve a shift moved away from);
+  a leader points at the drawing, and at `thin` it reads as another curve. It
+  keeps that weight on the step it arrives (**v2.38**), where a curve thickens
+  to mark what the step revealed: a leader is not what the step revealed.
+- `dimAt: 2` fades the curve from step 2 onward (**v2.31**), to a quarter
+  opacity, so a label can be read over it. That is the honest way to name a
+  gap where the curve bounding it runs through the only place the name fits:
+  the alternative is pushing the label off its own brace, where it stops
+  reading as that brace's name. `check_file.py` skips a label against a curve
+  that is fading while the label is on screen — declared, never inferred, and
+  only for the steps the config actually asks for.
+- The label sits at the **last** point, or the first with `lstart:true`, nudged
+  by `ldx`/`ldy` (defaults `+6` across, `+2` above an upward curve or `+6` below
+  a downward one). **`label: ""` draws no label at all** — a lone frontier needs
+  no name, since the axis titles already say what it is — while omitting `label`
+  falls back to the `id`, which `table.series` still needs.
+
+### `points`
+
+```json
+{"q": 120, "p": 30, "label": "Equilibrium", "marker": "1",
+ "pl": "P₁", "ql": "Q₁", "color": "red", "at": 3,
+ "dx": 13, "dy": 4, "guides": false, "showP": false, "showQ": false, "dot": false}
+```
+
+- Draws a hollow dot with dashed guides to both axes, unless `guides:false`.
+- `guides:"p"` draws only the leg to the price axis and `guides:"q"` only the
+  leg to the quantity axis (**v2.14**). The printed artwork rarely wants the
+  whole elbow: a quantity read off a world-price line gets the vertical alone,
+  because the price line is already drawn through it, and an equilibrium under
+  trade gets the horizontal alone, because its quantity is not the point being
+  made. Drawing both puts a dashed line on the page that the source does not
+  have.
+- `dot:false` (**v2.12**) keeps the axis labels and drops the marker, for a
+  quantity that a vertical line already marks. Its name then prints on the axis
+  in the same 10.5px tick style as every other number there. Getting that label
+  any other way means a curve label, which is 13px at weight 800 and reads as a
+  chunky block beside the ticks it sits among.
+- `marker:"1"`/`"2"` makes it a larger numbered circle — the Point 1 / Point 2
+  convention of the conceptual graphs.
+- **The axis labels are automatic.** Unless `showP:false`, the point prints its
+  price on the P axis whenever that price is not already a `ytick` and no
+  `hline` sits at it; `showQ` does the same on Q. `pl`/`ql` override the number
+  with a symbol (`"P₁"`, `"Q₁"`) — which is how symbolic graphs get their axes.
+  **The left margin is sized to the widest of them** (**v2.27**). It used to be
+  a fixed 40, 54 or 62px, so anything longer was cut off at the edge of the
+  viewBox: the monopolistic-competition chapter's `"P* = ATC"` rendered as
+  `"= ATC"`, and no check saw it, because the text itself was placed correctly
+  — the panel simply had no room for it. A wider margin takes its width from
+  the plot, so a long label costs plot width rather than its own first half.
+
+  **The right margin is sized to the curve labels** the same way (**v2.28**).
+  A curve drawn out to the edge of the plot anchors its name past the edge of
+  the panel, where it is cut off: `D = MB = MSB` rendered as `D = M`. The
+  margin was a fixed 36px, which fits `MC` and nothing longer. Widening it
+  narrows the plot, which pulls the anchors back left, so the engine settles
+  on a width over a few passes rather than solving in one, and never lets the
+  plot fall below 120px. Curve labels are 13px at weight 800, about .70em a
+  character — measured in the browser, not guessed.
+- **A value the point prints for itself is bold; a tick is not.** That makes
+  emphasis depend on which ticks you listed, not on what matters: a point at 85
+  comes out bold, and the same point comes out plain the moment you add an `85`
+  tick. Prompt v6 step 5 resolves it — "ticks are the values the prose uses,
+  nothing extra" — so every point value is a tick, nothing is bold, and the dots
+  and guides show which values are the points. Mix a generic scale with points
+  that miss it and you get some bold and some plain in one graph, which reads as
+  if the bold ones matter more. `check_file.py` warns on that mix.
+- `label` is separate from the axis labels and is offset by `dx`/`dy`
+  (defaults `+9`, `−9`).
+- **The step a point belongs to shows on the drawing.** The engine rings
+  whatever the current step revealed (`at` equal to the step) and fades back to
+  45% whatever an earlier step revealed, so a walkthrough that keeps its earlier
+  points on screen still says which one the caption is talking about. Hovering
+  any point brings it forward and turns its label orange, the same way hovering
+  a schedule row already highlighted its dots.
+
+### `areas`
+
+**v2.64:** `opacity` on an area overrides the sheet's .18 wash (a body the
+source prints solid, such as the UCF gold bell whose tails are left pale);
+`color: "gold"` is the UCF theme's gold (`--gold`, #c9a633), usable on
+areas, curves, points and moves; and a `moves[]` arrow with a `color`
+is drawn in it, where the sheet used to paint every movement arrow red.
+
+```json
+{"pts": [[0,11],[0,21],[8,11]], "label": "CS", "color": "teal", "at": 2}
+```
+
+A shaded polygon, named by its corners in `[q, p]` like everything else. Added
+in **v2.11**, because surplus and deadweight loss *are* areas and the engine
+could not draw one.
+
+A polygon is enough for this chapter: demand and supply are straight lines
+here, so consumer surplus, producer surplus, total surplus and a deadweight
+wedge all have straight edges. A region bounded by a `curved` pair is still not
+possible — `pts` are joined with straight segments, never splines.
+
+Areas draw **after the axes and before the curves**, so a fill never hides a
+line, a point, a guide or a label. The wash is `opacity: .18`, which is why the
+colour names matter more than usual: `teal` for consumer surplus, `orange` for
+producer surplus, `red` for a loss. Default `ink`.
+
+`label` goes at the polygon's centroid, which keeps it inside a triangle. A
+thin wedge has no room for one, so `lp: [q, p]` places it by hand — outside the
+shape if that is what fits — and `ldx`/`ldy` nudge it in pixels.
+
+An area label is the **only** label the engine centres vertically on its anchor
+point (`dominant-baseline: central`, **v2.13**). Every other piece of text in a
+panel is placed by its baseline and therefore hangs above the point it is given,
+which is what `box()` in `check_file.py` models; area labels need that test's
+`vcenter=True`. Before v2.13 an area label was baseline-anchored like the rest,
+so it sat about 3px **above** the centroid the engine had just computed for it —
+enough that the `$10` tariff label in the trade chapter rendered 0.7px over its
+own price line, and enough that a deadweight label had to be given room by
+widening the wedge rather than by centring the text. If you are placing an area
+label with `lp`, give it the point you want the text centred on.
+
+### `calcs`
+
+```json
+"calcs": ["CS = ½ × 80 × ($5 − $3) = $80",
+          {"text": "Tariff revenue = (50 − 30) × $0.50 = $10", "at": 2}]
+```
+
+Lines of working, the way the artwork prints them beside or beneath each
+diagram (**v2.15**). A reader given only "CS = $80" cannot get there
+themselves, which is the whole point of the figure.
+
+The block sits **beside the plot** in a widget at least 920px wide, and
+underneath in one narrower than that (**v2.21**/**v2.22**) -- so a desktop pays
+no height for it and a phone still gets it, and nothing has to be configured
+either way. Vertical space is the scarce thing on these pages: five lines of
+working under a figure is most of a phone screen.
+
+The threshold is a **container query on the widget**, not a media query on the
+window, so a widget in a narrow column behaves the same wherever it is. Beside
+the plot the figure stops being capped at `--fig` and grows into the width the
+working is no longer using, up to 780px -- a 580px plot with the working
+squeezed in next to it was smaller than the one it replaced, which is the whole
+reason the first attempt was wrong.
+
+Each line's closing `" = result"` is split off into a `<span class="res">` and
+set in red with a rule under it — the red underline the source uses. The split
+is on the **last** `" = "`, so `Total surplus = CS + PS = $120` emphasises
+`$120` and nothing else. A line with no `" = "` is printed as-is.
+
+The block scrolls sideways as a unit where a formula is wider than the widget,
+which on these chapters means a phone and nothing else (**v2.23**). Each line
+used to carry its own `overflow-x`, and setting one axis computes the other to
+`auto` as well, so every line was a scroll container in both directions: the
+result's red underline sits a pixel below the line box, and a browser with
+classic scrollbars drew up/down arrows beside every sum. Headless Chromium uses
+overlay scrollbars and showed none of it.
+
+A plain string always shows; `{text, at, until}` takes step windows like
+anything else, so a walkthrough can add each line as it reaches it. Hidden
+lines are `display:none`, not transparent, so the block closes up rather than
+leaving a gap. Lines do not wrap — they scroll sideways on a narrow screen
+instead of breaking an equation across two lines.
+
+### `moves`
+
+```json
+{"from": [58,1.95], "to": [44,1.6], "at": 3, "color": "red", "offset": 14}
+```
+
+An arrow between two points, drawn `offset` px **beside** the line joining them
+so it never lies on the curve. A negative `offset` puts it on the other side —
+which side is correct depends on the geometry, so check it against a render.
+
+**The head scales with the arrow's length** (**v2.26**), from full size at 46px
+and longer down to 55% for the shortest, and the movement arrow's stroke is
+1.9px rather than 2.4. The head used to be a fixed 7×3.6 whatever the arrow
+did, so a short one — two firms sliding a few units along one cost curve — was
+almost entirely head and read as a blot rather than a direction. Longer arrows
+are a shade lighter than before; nothing else about them changed.
+
+### `hlines`
+
+```json
+{"p": 2, "label": "$2", "tag": "World Price", "tagdy": 14, "at": 1, "color": "red"}
+```
+
+A thick horizontal price line across the plot — a price floor or ceiling, or any
+disequilibrium price. It prints its own label on the P axis when that price is
+not already a tick. Red by default.
+
+
+`label` names the line's **price on the P axis** (suppressed when that price is
+already a `ytick`). `tag` (**v2.14**) names the **line itself**, at its
+right-hand end, the way the artwork writes "World Price" beside the line rather
+than only on the axis. `tagdy` nudges the tag off the line in pixels — the
+default −6 sits above it, and a positive value drops it below, which is what an
+export panel needs because its supply curve climbs into that top-right corner.
+Two price lines close together cannot both carry a tag; label them with ticks
+instead.
+### `braces`
+
+```json
+{"p": 2, "q1": 20, "q2": 60, "label": "SURPLUS", "below": true, "at": 2}
+```
+
+A curly brace spanning `q1`→`q2` at price `p`. Red by default.
+
+A `label` may carry `\n` and is drawn on that many lines (**v2.17**), growing
+away from the price line. The artwork wraps its longer ones, and on one line
+the text is often wider than the gap between the curves it has to sit in.
+
+`below:true` puts it under the Q axis (and grows the panel from 250 to 268 units
+tall to make room). `below:false` puts it just above the price line **and also
+draws vertical guides** from each end down to the axis. `below:"in"`
+(**v2.14**) is the third position: inside the plot, hanging just *below* its
+price line, with the same vertical guides. `below:"axis"` (**v2.15**) is the
+fourth: the drop guides still run from the price line, but the bracket sits
+down by the Q axis with its label **above** it.
+
+The four exist because the artwork uses all four. An exports brace goes above
+the world-price line; an imports brace goes below it, because above it is where
+the curves cross; a tariff figure sends it down to the axis, because the space
+under its price line is taken by the revenue rectangle; and a numerical example
+puts the brace under the axis entirely. Note that `"in"` is truthy, so any code testing `if b.below` must ask
+`=== true` instead — `check_file.py` reads the position through one helper,
+`brace_y()`, for exactly that reason.
+
+### `vbraces`
+
+The same brace turned upright, spanning a **price** gap rather than a quantity
+gap — the other half of an opportunity cost, or the size of a price change.
+
+```json
+{"p1": 70, "p2": 85, "label": "15 butter given up", "left": true, "at": 1}
+{"p1": 70, "p2": 85, "q": 40, "label": "15 butter", "side": "left", "at": 1}
+```
+
+Both kinds of brace size their curl to the span they cover, so a brace across
+two dollars on a twenty-five dollar axis is drawn small and clean rather than as
+overlapping curves.
+
+`left: true` is the mirror of a horizontal brace's `below: true`: it sits **12px
+clear of whatever the price axis writes** (**v2.51**) — which is nothing at all
+on a panel with no ticks and no price labels, where the old 32px floor stood the
+brace out in empty space, a long way from the gap it was measuring. It is still
+outside the widest label that axis carries (**v2.33**) — it
+was a fixed 32px in from the axis, which drew the labor chapter's `CWD` brace
+straight through the `W_{Alaska}` and `W_{Hawaii}` it spans — and **widens the
+left margin by 44px** to fit — the same trade a `below` brace makes for 18px of panel
+height. Its label runs up the axis, because horizontal text does not fit in a
+54px margin.
+
+Without `left`, it sits inside the plot at quantity `q`, opening right unless
+`side: "left"`. Inside the plot it competes with the curves for space, so prefer
+`left` unless the gap has to be shown at a particular quantity.
+
+**The label wraps on `\n`** (**v2.30**), the way a horizontal brace (v2.17) and
+a curve label (v2.19) already do, takes `ldx`/`ldy` like every other label in
+the schema, and is set at 11px inside the plot (**v2.31**), where it is usually
+two or three words on as many lines and has to share the space with the curves
+it spans. Both exist because of the externalities chapter: its
+`Marginal External Cost` is three lines in the source for the good reason that
+one line fits nowhere inside a plot, and centring the block rigidly on the
+brace left no clear position at all on a panel where the gap being measured is
+barely taller than the label. The source does not centre these either.
+
+### `table`
+
+```json
+{"cols": ["Price","Before","After"], "series": ["D1","D2"],
+ "rows": [[5,225,300],[12.5,175,250]], "arrows": true}
+```
+
+A schedule beside the graph. `series` names one curve id per quantity column;
+each row plots a dot on each series at that price, inheriting the curve's colour
+and `at`. `arrows:true` draws a red arrow on the plot from each row's first
+quantity to its second — the per-row shift arrows.
+
+**Hovering a table row highlights its dots on the graph**, and vice versa. That
+interaction is the point of putting the schedule next to the curve.
+
+`plain: true` (**v2.59**) sets the table as written and plots nothing from
+it: any first column, cells as given, no hover. It is for a figure whose own
+table is not a schedule -- the MB = MC figure's `Q, MB, MC, TB, TC, WB`
+table, which the prose reads from ("the table to the right of the graph").
+`side: "right"` puts the table after the plot, where that figure prints it;
+the default is before. On a phone both collapse under the plot.
+
+```json
+{"table": {"plain": true, "side": "right",
+           "cols": ["Q", "MB", "MC", "TB", "TC", "WB"],
+           "rows": [[0, 0, 0, 0, 0, 0], [1, 9, 1, 9, 1, 8], [2, 8, 2, 17, 3, 14]]}}
+```
+
+## Colours
+
+`ink` (the default, a black-navy), `red` (shifted or new), `teal`, `orange`,
+`grey`. Red is reserved: the shifted curve, every arrow, the disequilibrium
+price line, its brace and the new equilibrium. Nothing else.
+
+Every arrow is drawn at the same 2.4px weight — shift, movement and per-row
+alike — so that two arrows in one graph never read as two different kinds of
+thing.
+
+## Presets
+
+```json
+{"preset": "shift", "shift": "D", "dir": "right", "size": 20,
+ "good": "pasta", "event": "…", "why": "…", "static": true}
+
+{"preset": "double", "demand": "right", "supply": "left",
+ "dD": 40, "dS": 15, "arrowD": 20, "arrowS": 88, "note": "…", "static": true}
+
+{"preset": "double", "demand": "right", "supply": "left", "compare": true,
+ "big": 40, "small": 15, "headings": ["…", "…"]}
+```
+
+A preset expands into a full symbolic config on `110 × 110` axes with the
+equilibrium at `[50,50]`. `shift` writes its own four step captions from `good`,
+`event` and `why`, and draws the gap brace at the old price on step 2 only,
+`below` the axis — above it the SHORTAGE/SURPLUS label lands on whichever curve
+crosses that price.
+`static:true` collapses everything to step 0 and draws **no brace**, which is
+what makes the four-cases-in-one-widget scenario set work.
+
+Both presets choose their own shift-arrow height (**v2.56**): the price nearest
+the old default (88, or 32 for a `double`'s demand arrow) where both of the
+pair's lines are on the plot, no other line or marked point lies inside the
+arrow's span, the curve labels at the lines' ends are clear, and -- where any
+such price exists -- no dashed guide is crossed. Before v2.56 a leftward demand
+shift drew its arrow across the P axis and some `double` shift sizes put the
+demand arrow through S₁. `arrowD` and `arrowS` still override the choice for a
+`double`; leave them out unless a measurement says otherwise.
+
+Presets combine with `title`/`lede`/`caption`/`steps` overrides and with
+scenarios, each scenario supplying its own `shift`/`dir`.
+
+## Geometry, for placing labels by hand
+
+| | |
+| --- | --- |
+| viewBox | `372 × 250`, or `372 × 268` when any brace is `below` |
+| origin | `x = 40`, or `54` with `yticks`, or `62` with `cents`; `y = 205` |
+| plot width | `372 − left − 36` |
+| plot height | `178` |
+| `X(q)` | `left + (q / xmax) × PW` |
+| `Y(p)` | `205 − (p / ymax) × PH` |
+
+The left margin grows past those numbers to hold the widest thing written on
+the price axis — a tick, a point's price, or an `hlines` label — and the right
+margin grows to hold the curve labels, so a panel with `P_{WORLD}` on the
+left and `S + Quota` on the right has a narrower plot than the table implies.
+
+**Draw order** is: axes, area fills, curves, price lines, **area labels**,
+braces, moves, points. An area's fill goes under the curves so a wash never
+hides a line, and its *name* goes over them (**v2.46**), so a curve running
+through the only place a name fits passes behind it rather than striking it
+through — which is what `boxed: true` is for, and what the printed figures
+get for free by filling a deadweight wedge solid black. Points and braces
+still come last: a marked reading is never covered by a name.
+
+**How wide a label is** comes from a per-character table measured in Chromium
+(**v2.45**, and measured *again* at **v2.53** — the first one recorded the
+fallback font, because nothing waited for Red Hat Display to load;
+`scripts/measure_em.py` refuses to measure until it has). It lives in
+`scripts/em_widths.py`; the engine carries a generated copy
+and `scripts/test_check_file.py` fails if the two drift. Before v2.45 the
+model was an average per case, which is 20% narrow for a capital-heavy string
+— `S + Quota` rendered as `S + Quo`, with every check passing — and before
+v2.44 an average per weight. Measure a new label with
+`python scripts/em_widths.py "<the label>"` rather than counting characters.
+
+A quantity title whose text starts with `\n` drops below the tick row instead
+of standing beside it — which is where a figure with a tick at the axis's own
+end has to put it, and where the amortization figure's "Year" sits in the
+source.
+
+`ldx`/`ldy`/`dx`/`dy`/`offset` are all in these SVG units, and `dy` is positive
+downward. `scripts/check_file.py` replicates this geometry to test every label
+against every curve, arrow, point dot, axis tick and the values a point prints
+for itself — a real overlap fails, and a gap under about six pixels, or a label
+pressed against a dashed guide, warns.
+
+Animation: elements cross-fade over 0.45s and shifted curves slide over 0.6s,
+both disabled under `prefers-reduced-motion`. A screenshot taken sooner than
+that catches a curve mid-slide.
+
+## The page's own stylesheet
+
+The plot's SVG uses short class names (`brace`, `tag`, `grid`, `arrow`,
+`area`, `guide`, `pt`, `curve`), and a chapter's own `<style>` block can
+target the same names: the FIN3403 risk chapter sets `.brace { position:
+absolute; transform: scaleX(.65) }` for a CSS diagram of its own, and every
+upright brace in the widgets on that page was squeezed into the left margin
+while the DOM said they were in the right place (**v2.57**). The stylesheet
+now pins `transform`, `position`, `margin`, `padding`, `border` and
+`visibility` on those elements. `check_file.py` cannot see this -- it is a
+render-only defect -- so a widget that looks wrong on a page that has its own
+CSS is a stylesheet collision until proved otherwise.
+
+## Labels over the drawing (v2.69)
+
+Nothing is drawn over a name, and no dashed guide runs through one:
+
+* **Guides break around text.** Every label inside the plot -- a curve's name,
+  an area's name, a point's label, a brace's or price line's tag -- records a
+  box, sized with the same per-character width table the margins and
+  `check_file` use. The panel's dashed guides (the points' elbows and the
+  braces' drop lines) are drawn through an SVG mask with each box cut out, so
+  a guide stops at the text and carries on past it. A cut-out is on screen
+  only on the steps its label is, so no step shows a gap with nothing in it.
+* **A halo on in-plot text.** Those labels take a 3px outline in the plot's
+  own colour (`.knk`), which knocks a curve or a solid line out of the
+  letters it passes under. A boxed label keeps its box instead.
+* **Names go in last.** Curve names and area names are drawn after the
+  points, in their own layer, keeping their curve's or area's step window and
+  `dimAt` fade, so a later curve or a point's guide cannot cover one.
+
+`check_file` no longer tests a label against the dashed guides, since the
+drawing no longer lets them touch. It still tests the axis lines, price
+lines, curves, arrows, points and other labels. (Ian, 2026-11-05.)
+
+## What the engine does not do
+
+- **Figure mode.** The prompt specifies hand-drawn SVG process diagrams with
+  `data-at`/`data-until`, but the engine has no such path: a config with no
+  `axes` throws `Cannot read properties of undefined (reading 'cents')` in
+  `buildPanel`, and nothing renders. See `docs/open-issues.md`.
+- **Collision avoidance.** Labels go where you put them.
+- Elasticity and tax wedges. Surplus shading arrived in v2.11 — see `areas` —
+  but only as straight-edged polygons: a region bounded by a `curved` pair
+  still cannot be filled.
+- Three or more panels. A three-panel figure becomes three scenario buttons
+  (CLAUDE.md rule 8), which is how the efficiency chapter's elasticity
+  comparison and its three deadweight cases are drawn.

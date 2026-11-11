@@ -54,6 +54,7 @@ examples/
   ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html ← FINISHED OUTPUT (Exam 1 ch. 1, 7 widgets)
   ECO2013-Widgets-All.html    ← the 9/11/26 prototype: 20 widgets, the JSON shape reference
 reference-images/             ← the source PNGs (empty — see open issues)
+chapters/<COURSE>/<chapter>/  ← the files Ian sent (source/) + chapter.json, the build that makes the editions
 scripts/
   embed_engine.py             ← inline engine/ into a notes file's <head> (prompt step 7)
   check_file.py               ← mechanical step-8 checks (JSON, </script>, head, engine identity…)
@@ -65,6 +66,9 @@ scripts/
   transcript_diff.py          ← does a new term's transcript change this file? Run it BEFORE swapping.
   test_check_file.py          ← tests for check_file.py. Run after changing it.
   ci_check.py                 ← what every pull request runs (.github/workflows/checks.yml)
+  build_chapters.py           ← rebuild every chapter in chapters/ from its sources (CI runs it)
+  check_arithmetic.py         ← recompute every calculation a page writes out (CI runs it)
+  test_check_arithmetic.py    ← tests for it, including planted errors. Run after changing it.
   ci_baseline.json            ← the examples' known failures, so CI blocks only new ones
   ci_phone_baseline.json      ← the same for the phone check (mobile_check.py), per screen size
   render_widgets.py           ← Playwright: screenshot every widget × scenario × step for collision review
@@ -86,9 +90,14 @@ scripts/
 
 The skills restate rules this file holds in full. When a rule here changes, update
 the skill that carries it in the same commit.
-For Ian's claude.ai Skills tab, `python scripts/package_skills.py skills-upload` zips
-each skill with the files it uses (same relative paths, plus this file); re-run and resend
-after changing a skill.
+**The skills reach claude.ai as a plugin, not as uploads** (Ian, 2026-11-12). The repo is a
+plugin marketplace (`.claude-plugin/marketplace.json`) whose one plugin, `plugin/`, holds all
+seven skills and one copy of the files they use; Ian added it once in claude.ai (Customize >
+Plugins > Add marketplace, `ian-sn2/WidgetWorkflow`, Sync automatically) and it updates when the
+default branch does. **After changing a skill, or any file in `plugin/`, or this file: run
+`python scripts/package_skills.py --plugin` and commit the result**; it bumps the plugin's
+version only when the content changed, and CI fails a pull request whose `plugin/` is stale.
+`python scripts/package_skills.py OUTDIR` still writes one zip per skill for a manual upload.
 
 ## The workflow in one paragraph
 
@@ -1174,6 +1183,29 @@ Ian changed this rule on 2026-09-17, and the change applies **here only**:
   `project_mgmt_editions.py` (project management). A Concise keeps the Full's
   h1/h2 headings exactly, plus Glossary and Key Takeaways; the edition
   scripts assert it.
+* **Hand-built widgets span about 75–80% of the page** (`width: 78%`, full
+  width under 600px), and their figures scale with the box instead of a fixed
+  pixel size (Ian, 2026-11-12). A leader line points *at* the thing it names,
+  ending a few pixels short of it, not at the shape's edge.
+
+### Chapter sources and the arithmetic check (2026-11-12)
+
+* **Every chapter Ian sends is filed in the repo**, so a container reset never
+  loses it and he never uploads it twice: `chapters/<COURSE>/<chapter>/source/`
+  holds his files unchanged, and `chapter.json` lists the build steps (script
+  and arguments, with `{source}` and `{out}`) and the files they must produce.
+  `python scripts/build_chapters.py [filter]` rebuilds them into `build/chapters/`
+  (git-ignored: only sources are committed). File a new chapter's sources the
+  moment they arrive, before building. When Ian sends a file back with his own
+  edits, it replaces the source, and the build patches widgets into it
+  (`--patch`) rather than rebuilding from an older original.
+* **`python scripts/check_arithmetic.py PAGE...` recomputes every calculation a
+  page writes out** in its prose or LaTeX ("2 + 2 + 4 + 5 + 2 = 15",
+  "(2.33)(1.76) + 15 = 19.10", chains, fractions, roots, percentages, totals
+  set out over several lines). A result must be right to the places it is
+  written with. It cannot see a wrong count in words ("seven tasks" for
+  eight), so reading is still needed. Run it on any chapter before delivery;
+  CI runs it on every page and every chapter build.
 
 ### Reviewing Ian's work
 

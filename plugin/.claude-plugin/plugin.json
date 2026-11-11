@@ -1,0 +1,8 @@
+{
+  "name": "smokin-notes-widgets",
+  "version": "1.0.5",
+  "description": "Smokin' Notes study-guide widgets: creating widgets, drawing curves and placing labels, other chart types, Full/Balanced/Concise editions, chapter conversion, checks before delivery, and reviews.",
+  "author": {
+    "name": "Smokin' Notes"
+  }
+}

@@ -7,7 +7,7 @@ checked against the values the notes print (the ES/EF/LS/LF table, the path
 lengths, the crashed network, the PERT table, the z-values), so a figure
 cannot drift from the prose beside it.
 """
-import json, math, os, sys
+import json, math, os, re, sys
 from decimal import Decimal, ROUND_HALF_UP
 
 IMG = "https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter3-"
@@ -426,8 +426,8 @@ def node_legend():
         ("Earliest Finish", 446, 40, "end", (348, 50), edge(1, -1), "f"),
         ("Latest Start", 14, 252, "start", (100, 240), edge(-1, 1), "b"),
         ("Latest Finish", 446, 252, "end", (360, 240), edge(1, 1), "b"),
-        ("Activity label", cx, 22, "middle", (cx, 33), (cx, cy - R), "k"),
-        ("Duration", cx, 276, "middle", (cx, 264), (cx, cy + R), "k")]
+        ("Activity label", cx, 22, "middle", (cx, 33), (cx, cy - vy - 0.36 * 30 - 9), "k"),   # ends just above the A
+        ("Duration", cx, 276, "middle", (cx, 264), (cx, cy + 0.5 * R + 0.36 * 19 + 8), "k")]   # ends just below the 2
     for t, x, y, anc, (x1, y1), (x2, y2), c in calls:
         s.append(f'<line x1="{x1}" y1="{y1}" x2="{x2:.1f}" y2="{y2:.1f}" class="lead {c}"/>')
         s.append(f'<circle cx="{x2:.1f}" cy="{y2:.1f}" r="3" class="dot {c}"/>')
@@ -479,7 +479,7 @@ def beta_figure():
     def note(x, y, lines, anchor):
         out = f'<text x="{x:.1f}" y="{y}" class="note" text-anchor="{anchor}">'
         for i, l in enumerate(lines):
-            l = l.replace(" a", ' <tspan font-style="italic">a</tspan>').replace(" b", ' <tspan font-style="italic">b</tspan>')
+            l = re.sub(r" ([ab])$", r' <tspan font-style="italic">\1</tspan>', l)   # only the variable itself, never the a in "after"
             out += f'<tspan x="{x:.1f}" dy="{0 if i == 0 else LH}">{l}</tspan>'
         return out + "</text>"
     s = (f'<svg viewBox="0 0 {W} {H}" class="pm-beta-svg" role="img" aria-label="A right-skewed beta distribution of an '

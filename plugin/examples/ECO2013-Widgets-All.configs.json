@@ -1,0 +1,2054 @@
+[
+ {
+  "title": "Demand for grande white raspberry mochas",
+  "axes": {
+   "xmax": 56,
+   "ymax": 22,
+   "money": true,
+   "xticks": [
+    0,
+    10,
+    20,
+    30,
+    40,
+    50
+   ],
+   "yticks": [
+    5,
+    10,
+    15,
+    20
+   ]
+  },
+  "curves": [
+   {
+    "id": "D",
+    "label": "Demand",
+    "pts": [
+     [
+      17,
+      20
+     ],
+     [
+      24,
+      15
+     ],
+     [
+      30,
+      12
+     ],
+     [
+      45,
+      10
+     ],
+     [
+      55,
+      5
+     ]
+    ],
+    "ldx": -74,
+    "ldy": 18
+   }
+  ],
+  "table": {
+   "cols": [
+    "Price",
+    "Quantity"
+   ],
+   "series": [
+    "D"
+   ],
+   "rows": [
+    [
+     5,
+     55
+    ],
+    [
+     10,
+     45
+    ],
+    [
+     12,
+     30
+    ],
+    [
+     15,
+     24
+    ],
+    [
+     20,
+     17
+    ]
+   ]
+  },
+  "caption": "Hover a row of the schedule to find its point on the curve. The curve is the whole schedule drawn at once: demand."
+ },
+ {
+  "title": "Demand for sushi rolls",
+  "axes": {
+   "xmax": 230,
+   "ymax": 18,
+   "money": true,
+   "xticks": [
+    50,
+    100,
+    150,
+    200
+   ],
+   "yticks": [
+    0,
+    4,
+    8,
+    12,
+    16
+   ]
+  },
+  "curves": [
+   {
+    "id": "D",
+    "label": "D",
+    "pts": [
+     [
+      0,
+      16
+     ],
+     [
+      200,
+      0
+     ]
+    ],
+    "ldy": -14
+   }
+  ],
+  "points": [
+   {
+    "q": 50,
+    "p": 12,
+    "showP": false,
+    "showQ": false
+   },
+   {
+    "q": 100,
+    "p": 8,
+    "showP": false,
+    "showQ": false
+   },
+   {
+    "q": 150,
+    "p": 4,
+    "showP": false,
+    "showQ": false
+   }
+  ],
+  "caption": "Read it left to right: at $12, 50 rolls are demanded. Read it bottom to top: the most anyone will pay for the 50th roll is $12. Moving from 50 rolls at $12 to 150 at $4 is a change in quantity demanded, not a change in demand."
+ },
+ {
+  "title": "Movement along the demand curve vs. shift of the demand curve",
+  "lede": "Pick a case, then step through it.",
+  "scenarios": {
+   "move": {
+    "label": "Movement along the curve (the price changes)",
+    "axes": {
+     "xmax": 420,
+     "ymax": 72,
+     "money": true
+    },
+    "curves": [
+     {
+      "id": "D",
+      "label": "D",
+      "pts": [
+       [
+        95,
+        68
+       ],
+       [
+        180,
+        40
+       ],
+       [
+        280,
+        20
+       ],
+       [
+        400,
+        11
+       ]
+      ],
+      "curved": true
+     }
+    ],
+    "points": [
+     {
+      "q": 280,
+      "p": 20,
+      "marker": "1"
+     },
+     {
+      "q": 180,
+      "p": 40,
+      "marker": "2",
+      "at": 1
+     }
+    ],
+    "moves": [
+     {
+      "from": [
+       262,
+       25
+      ],
+      "to": [
+       200,
+       37
+      ],
+      "at": 1,
+      "offset": 14
+     }
+    ],
+    "steps": [
+     "At a price of $20, buyers want 280 units (Point 1).",
+     "The price rises to $40, so quantity demanded falls to 180 (Point 2). Point 2 is on the same curve: a movement along the demand curve. This is the law of demand at work; demand itself has not changed."
+    ]
+   },
+   "shift": {
+    "label": "Shift of the curve (something other than price changes)",
+    "axes": {
+     "xmax": 500,
+     "ymax": 72,
+     "money": true
+    },
+    "curves": [
+     {
+      "id": "D1",
+      "label": "D₁",
+      "pts": [
+       [
+        70,
+        66
+       ],
+       [
+        180,
+        40
+       ],
+       [
+        300,
+        22
+       ],
+       [
+        400,
+        14
+       ]
+      ],
+      "curved": true
+     },
+     {
+      "id": "D2",
+      "label": "D₂",
+      "pts": [
+       [
+        230,
+        66
+       ],
+       [
+        340,
+        40
+       ],
+       [
+        460,
+        22
+       ]
+      ],
+      "curved": true,
+      "color": "red",
+      "from": "D1",
+      "at": 1,
+      "arrowP": 55
+     }
+    ],
+    "points": [
+     {
+      "q": 180,
+      "p": 40,
+      "marker": "1"
+     },
+     {
+      "q": 340,
+      "p": 40,
+      "marker": "2",
+      "at": 2
+     }
+    ],
+    "steps": [
+     "At a price of $40, buyers want 180 units (Point 1).",
+     "Something other than price changes: income, preferences, the price of a related good. Buyers now want more at every price, so the entire curve moves right, from D₁ to D₂.",
+     "The price is still $40, yet quantity demanded is now 340 (Point 2). Point 2 sits on a new curve: an increase in demand."
+    ]
+   }
+  }
+ },
+ {
+  "title": "A change in the quantity demanded at every price",
+  "axes": {
+   "xmax": 350,
+   "ymax": 32,
+   "money": true,
+   "grid": true,
+   "xticks": [
+    0,
+    50,
+    100,
+    150,
+    200,
+    250,
+    300
+   ],
+   "yticks": [
+    0,
+    5,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
+  },
+  "scenarios": {
+   "up": {
+    "label": "Demand increases: 75 more units at every price",
+    "curves": [
+     {
+      "id": "D1",
+      "label": "D₁",
+      "pts": [
+       [
+        255,
+        0.5
+       ],
+       [
+        58,
+        30
+       ]
+      ],
+      "thin": true,
+      "lstart": true,
+      "ldx": 8,
+      "ldy": -8
+     },
+     {
+      "id": "D2",
+      "label": "D₂",
+      "pts": [
+       [
+        330,
+        0.5
+       ],
+       [
+        133,
+        30
+       ]
+      ],
+      "color": "red",
+      "from": "D1",
+      "shiftArrow": false,
+      "at": 1,
+      "arrowP": 9,
+      "lstart": true,
+      "ldx": 8,
+      "ldy": -8
+     }
+    ],
+    "table": {
+     "cols": [
+      "Price",
+      "Before",
+      "After"
+     ],
+     "series": [
+      "D1",
+      "D2"
+     ],
+     "rows": [
+      [
+       5,
+       225,
+       300
+      ],
+      [
+       12.5,
+       175,
+       250
+      ],
+      [
+       20,
+       125,
+       200
+      ],
+      [
+       27.5,
+       75,
+       150
+      ]
+     ],
+     "arrows": true
+    },
+    "steps": [
+     "Before – The original schedule, D₁. At $12.50, for example, buyers want 175 units.",
+     "After – Every row gains 75 units, so every point moves 75 to the right. The whole curve shifts right, to D₂: an increase in demand."
+    ]
+   },
+   "down": {
+    "label": "Demand decreases: 50 fewer units at every price",
+    "curves": [
+     {
+      "id": "D1",
+      "label": "D₁",
+      "pts": [
+       [
+        255,
+        0.5
+       ],
+       [
+        58,
+        30
+       ]
+      ],
+      "thin": true,
+      "lstart": true,
+      "ldx": 8,
+      "ldy": -8
+     },
+     {
+      "id": "D2",
+      "label": "D₂",
+      "pts": [
+       [
+        205,
+        0.5
+       ],
+       [
+        8,
+        30
+       ]
+      ],
+      "color": "red",
+      "from": "D1",
+      "shiftArrow": false,
+      "at": 1,
+      "arrowP": 9,
+      "lstart": true,
+      "ldx": 8,
+      "ldy": -8
+     }
+    ],
+    "table": {
+     "cols": [
+      "Price",
+      "Before",
+      "After"
+     ],
+     "series": [
+      "D1",
+      "D2"
+     ],
+     "rows": [
+      [
+       5,
+       225,
+       175
+      ],
+      [
+       12.5,
+       175,
+       125
+      ],
+      [
+       20,
+       125,
+       75
+      ],
+      [
+       27.5,
+       75,
+       25
+      ]
+     ],
+     "arrows": true
+    },
+    "steps": [
+     "Before – The original schedule, D₁.",
+     "After – Every row loses 50 units, so every point moves 50 to the left. The whole curve shifts left, to D₂: a decrease in demand."
+    ]
+   }
+  }
+ },
+ {
+  "title": "Supply of boxes of pens",
+  "axes": {
+   "xmax": 700,
+   "ymax": 9.6,
+   "money": true,
+   "xticks": [
+    0,
+    200,
+    400,
+    600
+   ],
+   "yticks": [
+    0,
+    2,
+    4,
+    6,
+    8
+   ]
+  },
+  "curves": [
+   {
+    "id": "S",
+    "label": "Supply",
+    "pts": [
+     [
+      0,
+      2
+     ],
+     [
+      650,
+      8.5
+     ]
+    ],
+    "ldx": -30,
+    "ldy": 30
+   }
+  ],
+  "table": {
+   "cols": [
+    "P",
+    "Qs"
+   ],
+   "series": [
+    "S"
+   ],
+   "rows": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     200
+    ],
+    [
+     6,
+     400
+    ],
+    [
+     8,
+     600
+    ]
+   ]
+  },
+  "caption": "At $4 the market supplies 200 boxes; equivalently, $4 is the least a seller will accept for the 200th box. The curve meets the price axis at $2: below that, nobody supplies pens."
+ },
+ {
+  "title": "Movement along the supply curve vs. shift of the supply curve",
+  "lede": "Pick a case, then step through it.",
+  "scenarios": {
+   "move": {
+    "label": "Movement along the curve (the price changes)",
+    "axes": {
+     "xmax": 320,
+     "ymax": 72,
+     "money": true
+    },
+    "curves": [
+     {
+      "id": "S",
+      "label": "S",
+      "pts": [
+       [
+        40,
+        8
+       ],
+       [
+        110,
+        20
+       ],
+       [
+        180,
+        40
+       ],
+       [
+        218,
+        66
+       ]
+      ],
+      "curved": true
+     }
+    ],
+    "points": [
+     {
+      "q": 110,
+      "p": 20,
+      "marker": "1"
+     },
+     {
+      "q": 180,
+      "p": 40,
+      "marker": "2",
+      "at": 1
+     }
+    ],
+    "moves": [
+     {
+      "from": [
+       122,
+       23
+      ],
+      "to": [
+       170,
+       35
+      ],
+      "at": 1,
+      "offset": 14
+     }
+    ],
+    "steps": [
+     "At a price of $20, sellers offer 110 units (Point 1).",
+     "The price rises to $40, so quantity supplied rises to 180 (Point 2). Same curve, so this is a movement along the supply curve: the law of supply."
+    ]
+   },
+   "shift": {
+    "label": "Shift of the curve (something other than price changes)",
+    "axes": {
+     "xmax": 440,
+     "ymax": 72,
+     "money": true
+    },
+    "curves": [
+     {
+      "id": "S1",
+      "label": "S₁",
+      "pts": [
+       [
+        60,
+        6
+       ],
+       [
+        130,
+        22
+       ],
+       [
+        180,
+        40
+       ],
+       [
+        225,
+        66
+       ]
+      ],
+      "curved": true
+     },
+     {
+      "id": "S2",
+      "label": "S₂",
+      "pts": [
+       [
+        220,
+        6
+       ],
+       [
+        290,
+        22
+       ],
+       [
+        340,
+        40
+       ],
+       [
+        385,
+        66
+       ]
+      ],
+      "curved": true,
+      "color": "red",
+      "from": "S1",
+      "at": 1,
+      "arrowP": 55
+     }
+    ],
+    "points": [
+     {
+      "q": 180,
+      "p": 40,
+      "marker": "1"
+     },
+     {
+      "q": 340,
+      "p": 40,
+      "marker": "2",
+      "at": 2
+     }
+    ],
+    "steps": [
+     "At a price of $40, sellers offer 180 units (Point 1).",
+     "Something other than price changes: input costs, technology, the price of a related good in production. Sellers now offer more at every price, so the whole curve moves right, from S₁ to S₂.",
+     "The price is still $40, yet quantity supplied is now 340 (Point 2). Point 2 is on a new curve: an increase in supply."
+    ]
+   }
+  }
+ },
+ {
+  "title": "A change in the quantity of pineapples supplied at every price",
+  "axes": {
+   "xmax": 20000,
+   "ymax": 6.6,
+   "money": true,
+   "k": true,
+   "grid": true,
+   "xticks": [
+    0,
+    3000,
+    6000,
+    9000,
+    12000,
+    15000,
+    18000
+   ],
+   "yticks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "scenarios": {
+   "up": {
+    "label": "Supply increases: 3,000 more at every price",
+    "curves": [
+     {
+      "id": "S1",
+      "label": "S₁",
+      "pts": [
+       [
+        4800,
+        0.2
+       ],
+       [
+        13800,
+        6.2
+       ]
+      ],
+      "thin": true,
+      "ldx": -26,
+      "ldy": -2
+     },
+     {
+      "id": "S2",
+      "label": "S₂",
+      "pts": [
+       [
+        7800,
+        0.2
+       ],
+       [
+        16800,
+        6.2
+       ]
+      ],
+      "color": "red",
+      "from": "S1",
+      "shiftArrow": false,
+      "at": 1,
+      "arrowP": 4.1
+     }
+    ],
+    "table": {
+     "cols": [
+      "Price",
+      "Before",
+      "After"
+     ],
+     "series": [
+      "S1",
+      "S2"
+     ],
+     "rows": [
+      [
+       1,
+       6000,
+       9000
+      ],
+      [
+       3,
+       9000,
+       12000
+      ],
+      [
+       5,
+       12000,
+       15000
+      ]
+     ],
+     "arrows": true
+    },
+    "steps": [
+     "Before – The original schedule, S₁. At $3, sellers offer 9,000 pineapples.",
+     "After – Every row gains 3,000, so every point moves right by 3,000. The whole curve shifts right, to S₂: an increase in supply."
+    ]
+   },
+   "down": {
+    "label": "Supply decreases: 4,500 fewer at every price",
+    "curves": [
+     {
+      "id": "S1",
+      "label": "S₁",
+      "pts": [
+       [
+        4800,
+        0.2
+       ],
+       [
+        13800,
+        6.2
+       ]
+      ],
+      "thin": true
+     },
+     {
+      "id": "S2",
+      "label": "S₂",
+      "pts": [
+       [
+        300,
+        0.2
+       ],
+       [
+        9300,
+        6.2
+       ]
+      ],
+      "color": "red",
+      "from": "S1",
+      "shiftArrow": false,
+      "at": 1,
+      "arrowP": 4.1,
+      "ldx": -26,
+      "ldy": -2
+     }
+    ],
+    "table": {
+     "cols": [
+      "Price",
+      "Before",
+      "After"
+     ],
+     "series": [
+      "S1",
+      "S2"
+     ],
+     "rows": [
+      [
+       1,
+       6000,
+       1500
+      ],
+      [
+       3,
+       9000,
+       4500
+      ],
+      [
+       5,
+       12000,
+       7500
+      ]
+     ],
+     "arrows": true
+    },
+    "steps": [
+     "Before – The original schedule, S₁.",
+     "After – Every row loses 4,500, so every point moves left by 4,500. The whole curve shifts left, to S₂: a decrease in supply."
+    ]
+   }
+  }
+ },
+ {
+  "title": "Substitutes in production: the price of potato chips rises",
+  "lede": "Chips and fries are made from the same potatoes. Step through what a higher chip price does to each market.",
+  "panels": [
+   {
+    "heading": "Market for potato chips",
+    "axes": {
+     "xmax": 100,
+     "ymax": 100
+    },
+    "curves": [
+     {
+      "id": "S",
+      "label": "S",
+      "pts": [
+       [
+        20,
+        10
+       ],
+       [
+        45,
+        35
+       ],
+       [
+        60,
+        60
+       ],
+       [
+        70,
+        90
+       ]
+      ],
+      "curved": true
+     }
+    ],
+    "points": [
+     {
+      "q": 45,
+      "p": 35,
+      "pl": "P₁",
+      "ql": "Q₁"
+     },
+     {
+      "q": 60,
+      "p": 60,
+      "pl": "P₂",
+      "ql": "Q₂",
+      "at": 1
+     }
+    ],
+    "moves": [
+     {
+      "from": [
+       49,
+       42
+      ],
+      "to": [
+       57,
+       54
+      ],
+      "at": 1
+     }
+    ]
+   },
+   {
+    "heading": "Market for French fries",
+    "axes": {
+     "xmax": 100,
+     "ymax": 100
+    },
+    "curves": [
+     {
+      "id": "D",
+      "label": "D",
+      "pts": [
+       [
+        15,
+        85
+       ],
+       [
+        30,
+        60
+       ],
+       [
+        50,
+        45
+       ],
+       [
+        85,
+        28
+       ]
+      ],
+      "curved": true
+     },
+     {
+      "id": "S1",
+      "label": "S₁",
+      "pts": [
+       [
+        22,
+        10
+       ],
+       [
+        40,
+        30
+       ],
+       [
+        50,
+        45
+       ],
+       [
+        62,
+        80
+       ],
+       [
+        68,
+        95
+       ]
+      ],
+      "curved": true
+     },
+     {
+      "id": "S2",
+      "label": "S₂",
+      "pts": [
+       [
+        0,
+        10
+       ],
+       [
+        18,
+        30
+       ],
+       [
+        28,
+        45
+       ],
+       [
+        40,
+        80
+       ],
+       [
+        46,
+        95
+       ]
+      ],
+      "curved": true,
+      "color": "red",
+      "from": "S1",
+      "at": 2,
+      "arrowP": 78
+     }
+    ],
+    "points": [
+     {
+      "q": 50,
+      "p": 45,
+      "pl": "P₁",
+      "ql": "Q₁"
+     },
+     {
+      "q": 32.5,
+      "p": 58,
+      "pl": "P₂",
+      "ql": "Q₂",
+      "color": "red",
+      "at": 3
+     }
+    ]
+   }
+  ],
+  "steps": [
+   "Each market is at its own equilibrium.",
+   "The price of potato chips rises from P₁ to P₂. Chip makers respond by producing more: a movement up along the chip supply curve, from Q₁ to Q₂.",
+   "Potatoes are limited, so more chips means fewer potatoes left for fries. At every price, less fries are supplied: the fries supply curve shifts left, from S₁ to S₂.",
+   "Fries settle at a new equilibrium with a higher price (P₂) and a lower quantity (Q₂)."
+  ]
+ },
+ {
+  "title": "Complements in production: the price of cheese curds rises",
+  "lede": "Curds are a byproduct of making cheese. Step through what a higher curd price does to each market.",
+  "panels": [
+   {
+    "heading": "Market for cheese curds",
+    "axes": {
+     "xmax": 100,
+     "ymax": 100
+    },
+    "curves": [
+     {
+      "id": "S",
+      "label": "S",
+      "pts": [
+       [
+        20,
+        10
+       ],
+       [
+        45,
+        35
+       ],
+       [
+        60,
+        60
+       ],
+       [
+        70,
+        90
+       ]
+      ],
+      "curved": true
+     }
+    ],
+    "points": [
+     {
+      "q": 45,
+      "p": 35,
+      "pl": "P₁",
+      "ql": "Q₁"
+     },
+     {
+      "q": 60,
+      "p": 60,
+      "pl": "P₂",
+      "ql": "Q₂",
+      "at": 1
+     }
+    ],
+    "moves": [
+     {
+      "from": [
+       49,
+       42
+      ],
+      "to": [
+       57,
+       54
+      ],
+      "at": 1
+     }
+    ]
+   },
+   {
+    "heading": "Market for cheese",
+    "axes": {
+     "xmax": 100,
+     "ymax": 100
+    },
+    "curves": [
+     {
+      "id": "D",
+      "label": "D",
+      "pts": [
+       [
+        15,
+        85
+       ],
+       [
+        30,
+        60
+       ],
+       [
+        50,
+        45
+       ],
+       [
+        85,
+        28
+       ]
+      ],
+      "curved": true
+     },
+     {
+      "id": "S1",
+      "label": "S₁",
+      "pts": [
+       [
+        22,
+        10
+       ],
+       [
+        40,
+        30
+       ],
+       [
+        50,
+        45
+       ],
+       [
+        62,
+        80
+       ],
+       [
+        68,
+        95
+       ]
+      ],
+      "curved": true
+     },
+     {
+      "id": "S2",
+      "label": "S₂",
+      "pts": [
+       [
+        46,
+        10
+       ],
+       [
+        64,
+        30
+       ],
+       [
+        74,
+        45
+       ],
+       [
+        86,
+        80
+       ],
+       [
+        92,
+        95
+       ]
+      ],
+      "curved": true,
+      "color": "red",
+      "from": "S1",
+      "at": 2,
+      "arrowP": 78
+     }
+    ],
+    "points": [
+     {
+      "q": 50,
+      "p": 45,
+      "pl": "P₁",
+      "ql": "Q₁"
+     },
+     {
+      "q": 70.6,
+      "p": 35,
+      "pl": "P₂",
+      "ql": "Q₂",
+      "color": "red",
+      "at": 3
+     }
+    ]
+   }
+  ],
+  "steps": [
+   "Each market is at its own equilibrium.",
+   "The price of cheese curds rises from P₁ to P₂. Producers make more curds: a movement up along the curd supply curve, from Q₁ to Q₂.",
+   "Making more curds means making more cheese too, since the two are produced together. At every price, more cheese is supplied: the cheese supply curve shifts right, from S₁ to S₂.",
+   "Cheese settles at a new equilibrium with a lower price (P₂) and a higher quantity (Q₂)."
+  ]
+ },
+ {
+  "title": "Where supply meets demand",
+  "axes": {
+   "xmax": 100,
+   "ymax": 100
+  },
+  "curves": [
+   {
+    "id": "S",
+    "label": "S",
+    "pts": [
+     [
+      10,
+      15
+     ],
+     [
+      85,
+      90
+     ]
+    ]
+   },
+   {
+    "id": "D",
+    "label": "D",
+    "pts": [
+     [
+      10,
+      90
+     ],
+     [
+      85,
+      15
+     ]
+    ]
+   }
+  ],
+  "points": [
+   {
+    "q": 47.5,
+    "p": 52.5,
+    "pl": "P*",
+    "ql": "Q*",
+    "label": "Equilibrium",
+    "dx": 13,
+    "dy": 4
+   }
+  ],
+  "caption": "The intersection is the equilibrium point: at price P*, the quantity buyers demand exactly equals the quantity sellers supply, Q*."
+ },
+ {
+  "title": "Market for pizza",
+  "axes": {
+   "xmax": 1200,
+   "ymax": 28,
+   "money": true
+  },
+  "curves": [
+   {
+    "id": "S",
+    "label": "S",
+    "pts": [
+     [
+      350,
+      4
+     ],
+     [
+      1100,
+      24
+     ]
+    ]
+   },
+   {
+    "id": "D",
+    "label": "D",
+    "pts": [
+     [
+      350,
+      22
+     ],
+     [
+      1100,
+      6
+     ]
+    ]
+   }
+  ],
+  "points": [
+   {
+    "q": 725,
+    "p": 14
+   }
+  ],
+  "caption": "Equilibrium is $14 per pizza and 725 pizzas. At $14 there is neither a shortage nor a surplus, so there is no pressure on the price to change."
+ },
+ {
+  "title": "French fries: what happens away from the equilibrium price",
+  "lede": "Equilibrium is $1.50 and 40 orders. Pick a price and step through what the market does.",
+  "axes": {
+   "xmax": 105,
+   "ymax": 2.7,
+   "money": true,
+   "cents": true,
+   "xticks": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "yticks": [
+    0.5,
+    1,
+    1.5,
+    2,
+    2.5
+   ]
+  },
+  "curves": [
+   {
+    "id": "D",
+    "label": "D",
+    "pts": [
+     [
+      0,
+      2.5
+     ],
+     [
+      100,
+      0
+     ]
+    ],
+    "ldy": -12
+   },
+   {
+    "id": "S",
+    "label": "S",
+    "pts": [
+     [
+      0,
+      0.5
+     ],
+     [
+      80,
+      2.5
+     ]
+    ]
+   }
+  ],
+  "scenarios": {
+   "eq": {
+    "label": "At the equilibrium price ($1.50)",
+    "points": [
+     {
+      "q": 40,
+      "p": 1.5
+     },
+     {
+      "q": 20,
+      "p": 2,
+      "guides": false
+     },
+     {
+      "q": 60,
+      "p": 1,
+      "guides": false
+     },
+     {
+      "q": 20,
+      "p": 1,
+      "guides": false
+     },
+     {
+      "q": 60,
+      "p": 2,
+      "guides": false
+     }
+    ],
+    "caption": "At $1.50, quantity demanded equals quantity supplied: 40 orders. The market clears. Every other price creates a gap between the two curves."
+   },
+   "surplus": {
+    "label": "Price set above equilibrium ($2.00)",
+    "points": [
+     {
+      "q": 40,
+      "p": 1.5,
+      "color": "grey"
+     },
+     {
+      "q": 20,
+      "p": 2,
+      "color": "red",
+      "at": 1
+     },
+     {
+      "q": 60,
+      "p": 2,
+      "color": "red",
+      "at": 1
+     }
+    ],
+    "hlines": [
+     {
+      "p": 2,
+      "label": "$2",
+      "at": 1
+     }
+    ],
+    "braces": [
+     {
+      "p": 2,
+      "q1": 20,
+      "q2": 60,
+      "label": "SURPLUS",
+      "at": 2
+     }
+    ],
+    "moves": [
+     {
+      "from": [
+       58,
+       1.95
+      ],
+      "to": [
+       44,
+       1.6
+      ],
+      "at": 3,
+      "color": "red"
+     },
+     {
+      "from": [
+       22,
+       1.95
+      ],
+      "to": [
+       36,
+       1.6
+      ],
+      "at": 3,
+      "color": "red"
+     }
+    ],
+    "steps": [
+     "At $1.50 the market clears at 40 orders.",
+     "The price is set at $2.00. Sellers offer 60 orders, but buyers want only 20.",
+     "The gap between the curves at $2.00 is a surplus of 40 orders (excess supply). Only 20 are sold: demand is the short side of the market.",
+     "Sellers cut the price to get rid of the surplus. As it falls, quantity supplied drops and quantity demanded rises until the market clears again at $1.50."
+    ]
+   },
+   "shortage": {
+    "label": "Price set below equilibrium ($1.00)",
+    "points": [
+     {
+      "q": 40,
+      "p": 1.5,
+      "color": "grey"
+     },
+     {
+      "q": 20,
+      "p": 1,
+      "color": "red",
+      "at": 1
+     },
+     {
+      "q": 60,
+      "p": 1,
+      "color": "red",
+      "at": 1
+     }
+    ],
+    "hlines": [
+     {
+      "p": 1,
+      "label": "$1",
+      "at": 1
+     }
+    ],
+    "braces": [
+     {
+      "p": 1,
+      "q1": 20,
+      "q2": 60,
+      "label": "SHORTAGE",
+      "below": true,
+      "at": 2
+     }
+    ],
+    "moves": [
+     {
+      "from": [
+       22,
+       1.05
+      ],
+      "to": [
+       36,
+       1.4
+      ],
+      "at": 3,
+      "color": "red"
+     },
+     {
+      "from": [
+       58,
+       1.05
+      ],
+      "to": [
+       44,
+       1.4
+      ],
+      "at": 3,
+      "color": "red"
+     }
+    ],
+    "steps": [
+     "At $1.50 the market clears at 40 orders.",
+     "The price is set at $1.00. Buyers want 60 orders, but sellers offer only 20.",
+     "The gap between the curves at $1.00 is a shortage of 40 orders (excess demand). Only 20 are sold: supply is the short side of the market.",
+     "Sellers raise the price — because they can. As it rises, quantity demanded falls and quantity supplied rises until the market clears at $1.50."
+    ]
+   }
+  }
+ },
+ {
+  "title": "Market for bushels of apples",
+  "lede": "Start at $30 and 120 bushels. Pick an event, then step through how the equilibrium changes.",
+  "axes": {
+   "xmax": 260,
+   "ymax": 75,
+   "money": true,
+   "grid": true,
+   "xticks": [
+    40,
+    80,
+    120,
+    160,
+    200,
+    240
+   ],
+   "yticks": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70
+   ]
+  },
+  "scenarios": {
+   "eq": {
+    "label": "Initial equilibrium",
+    "curves": [
+     {
+      "id": "S",
+      "label": "S",
+      "pts": [
+       [
+        40,
+        10
+       ],
+       [
+        240,
+        60
+       ]
+      ]
+     },
+     {
+      "id": "D1",
+      "label": "D₁",
+      "pts": [
+       [
+        24,
+        54
+       ],
+       [
+        212,
+        7
+       ]
+      ]
+     }
+    ],
+    "points": [
+     {
+      "q": 120,
+      "p": 30
+     }
+    ],
+    "caption": "Supply meets demand at $30 per bushel and 120 bushels."
+   },
+   "dR": {
+    "label": "Demand increases (apples seen as healthier)",
+    "curves": [
+     {
+      "id": "S",
+      "label": "S",
+      "pts": [
+       [
+        40,
+        10
+       ],
+       [
+        240,
+        60
+       ]
+      ]
+     },
+     {
+      "id": "D1",
+      "label": "D₁",
+      "pts": [
+       [
+        24,
+        54
+       ],
+       [
+        212,
+        7
+       ]
+      ]
+     },
+     {
+      "id": "D2",
+      "label": "D₂",
+      "pts": [
+       [
+        104,
+        54
+       ],
+       [
+        260,
+        15
+       ]
+      ],
+      "color": "red",
+      "from": "D1",
+      "at": 1,
+      "arrowP": 52
+     }
+    ],
+    "points": [
+     {
+      "q": 120,
+      "p": 30
+     },
+     {
+      "q": 200,
+      "p": 30,
+      "color": "red",
+      "at": 2,
+      "until": 3,
+      "showP": false
+     },
+     {
+      "q": 160,
+      "p": 40,
+      "color": "red",
+      "at": 3
+     }
+    ],
+    "braces": [
+     {
+      "p": 30,
+      "q1": 120,
+      "q2": 200,
+      "label": "Shortage of 80",
+      "at": 2,
+      "until": 3
+     }
+    ],
+    "steps": [
+     "Supply meets demand at $30 and 120 bushels.",
+     "People come to believe apples are healthier. Buyers want more at every price, so demand shifts right, from D₁ to D₂.",
+     "At the old price of $30, buyers now want 200 bushels but sellers still offer 120: a temporary shortage of 80.",
+     "The shortage pushes the price up until the market clears again at $40 and 160 bushels. Price up, quantity up."
+    ]
+   },
+   "dL": {
+    "label": "Demand decreases (price of bananas falls)",
+    "curves": [
+     {
+      "id": "S",
+      "label": "S",
+      "pts": [
+       [
+        40,
+        10
+       ],
+       [
+        240,
+        60
+       ]
+      ]
+     },
+     {
+      "id": "D1",
+      "label": "D₁",
+      "pts": [
+       [
+        24,
+        54
+       ],
+       [
+        212,
+        7
+       ]
+      ]
+     },
+     {
+      "id": "D2",
+      "label": "D₂",
+      "pts": [
+       [
+        8,
+        38
+       ],
+       [
+        148,
+        3
+       ]
+      ],
+      "color": "red",
+      "from": "D1",
+      "at": 1,
+      "arrowP": 34
+     }
+    ],
+    "points": [
+     {
+      "q": 120,
+      "p": 30
+     },
+     {
+      "q": 40,
+      "p": 30,
+      "color": "red",
+      "at": 2,
+      "until": 3,
+      "showP": false
+     },
+     {
+      "q": 80,
+      "p": 20,
+      "color": "red",
+      "at": 3
+     }
+    ],
+    "braces": [
+     {
+      "p": 30,
+      "q1": 40,
+      "q2": 120,
+      "label": "Surplus of 80",
+      "at": 2,
+      "until": 3
+     }
+    ],
+    "steps": [
+     "Supply meets demand at $30 and 120 bushels.",
+     "Apples and bananas are substitutes, and bananas get cheaper. Buyers want fewer apples at every price, so demand shifts left, from D₁ to D₂.",
+     "At $30, buyers now want only 40 bushels while sellers offer 120: a temporary surplus of 80.",
+     "Sellers cut the price to clear the surplus. The market settles at $20 and 80 bushels. Price down, quantity down."
+    ]
+   },
+   "sR": {
+    "label": "Supply increases (cost of growing apples falls)",
+    "curves": [
+     {
+      "id": "D1",
+      "label": "D",
+      "pts": [
+       [
+        24,
+        54
+       ],
+       [
+        212,
+        7
+       ]
+      ]
+     },
+     {
+      "id": "S",
+      "label": "S₁",
+      "pts": [
+       [
+        40,
+        10
+       ],
+       [
+        240,
+        60
+       ]
+      ]
+     },
+     {
+      "id": "S2",
+      "label": "S₂",
+      "pts": [
+       [
+        100,
+        5
+       ],
+       [
+        260,
+        45
+       ]
+      ],
+      "color": "red",
+      "from": "S",
+      "at": 1,
+      "arrowP": 14
+     }
+    ],
+    "points": [
+     {
+      "q": 120,
+      "p": 30
+     },
+     {
+      "q": 200,
+      "p": 30,
+      "color": "red",
+      "at": 2,
+      "until": 3,
+      "showP": false
+     },
+     {
+      "q": 160,
+      "p": 20,
+      "color": "red",
+      "at": 3
+     }
+    ],
+    "braces": [
+     {
+      "p": 30,
+      "q1": 120,
+      "q2": 200,
+      "label": "Surplus of 80",
+      "at": 2,
+      "until": 3
+     }
+    ],
+    "steps": [
+     "Supply meets demand at $30 and 120 bushels.",
+     "Growing apples gets cheaper, so selling is more profitable at every price. Supply shifts right, from S₁ to S₂.",
+     "At $30, sellers now offer 200 bushels but buyers still want 120: a temporary surplus of 80.",
+     "The surplus pushes the price down. The market settles at $20 and 160 bushels. Price down, quantity up."
+    ]
+   },
+   "sL": {
+    "label": "Supply decreases (disease destroys apple trees)",
+    "curves": [
+     {
+      "id": "D1",
+      "label": "D",
+      "pts": [
+       [
+        24,
+        54
+       ],
+       [
+        212,
+        7
+       ]
+      ]
+     },
+     {
+      "id": "S",
+      "label": "S₁",
+      "pts": [
+       [
+        40,
+        10
+       ],
+       [
+        240,
+        60
+       ]
+      ]
+     },
+     {
+      "id": "S2",
+      "label": "S₂",
+      "pts": [
+       [
+        8,
+        22
+       ],
+       [
+        160,
+        60
+       ]
+      ],
+      "color": "red",
+      "from": "S",
+      "at": 1,
+      "arrowP": 56
+     }
+    ],
+    "points": [
+     {
+      "q": 120,
+      "p": 30
+     },
+     {
+      "q": 40,
+      "p": 30,
+      "color": "red",
+      "at": 2,
+      "until": 3,
+      "showP": false
+     },
+     {
+      "q": 80,
+      "p": 40,
+      "color": "red",
+      "at": 3
+     }
+    ],
+    "braces": [
+     {
+      "p": 30,
+      "q1": 40,
+      "q2": 120,
+      "label": "Shortage of 80",
+      "at": 2,
+      "until": 3
+     }
+    ],
+    "steps": [
+     "Supply meets demand at $30 and 120 bushels.",
+     "Disease wipes out many trees. Sellers offer less at every price, so supply shifts left, from S₁ to S₂.",
+     "At $30, sellers now offer only 40 bushels while buyers want 120: a temporary shortage of 80.",
+     "The shortage pushes the price up. The market settles at $40 and 80 bushels. Price up, quantity down."
+    ]
+   }
+  }
+ },
+ {
+  "preset": "shift",
+  "shift": "D",
+  "dir": "right",
+  "good": "pasta",
+  "title": "Pizza and pasta are substitutes; the price of pizza rises",
+  "event": "Pizza gets more expensive, and pasta is a substitute."
+ },
+ {
+  "preset": "shift",
+  "shift": "D",
+  "dir": "left",
+  "good": "caviar",
+  "title": "Caviar is a normal good; incomes fall in a recession",
+  "event": "Incomes fall, and caviar is a normal good."
+ },
+ {
+  "preset": "shift",
+  "shift": "S",
+  "dir": "left",
+  "good": "chicken wings",
+  "title": "Kitchen wages rise",
+  "event": "Higher wages raise the cost of making wings."
+ },
+ {
+  "preset": "shift",
+  "shift": "S",
+  "dir": "right",
+  "good": "kerosene",
+  "title": "Kerosene and gasoline are complements in production; the price of gasoline rises",
+  "event": "Refiners make more gasoline, and kerosene comes out of the same process."
+ },
+ {
+  "preset": "shift",
+  "static": true,
+  "title": "The four possibilities when one curve shifts",
+  "lede": "Pick a case. The dashed lines mark the old and new equilibrium.",
+  "scenarios": {
+   "dR": {
+    "label": "Demand shifts right",
+    "shift": "D",
+    "dir": "right",
+    "caption": "Shortage at the original price. Price increases, quantity increases."
+   },
+   "dL": {
+    "label": "Demand shifts left",
+    "shift": "D",
+    "dir": "left",
+    "caption": "Surplus at the original price. Price decreases, quantity decreases."
+   },
+   "sR": {
+    "label": "Supply shifts right",
+    "shift": "S",
+    "dir": "right",
+    "caption": "Surplus at the original price. Price decreases, quantity increases."
+   },
+   "sL": {
+    "label": "Supply shifts left",
+    "shift": "S",
+    "dir": "left",
+    "caption": "Shortage at the original price. Price increases, quantity decreases."
+   }
+  }
+ },
+ {
+  "preset": "double",
+  "demand": "right",
+  "supply": "left",
+  "compare": true,
+  "title": "Iced coffee: incomes rise (demand right) while coffee beans get pricier (supply left)",
+  "lede": "Step through both panels at once. The only difference between them is which shift is larger.",
+  "note": "Price rises in both panels. Quantity falls when the supply shift dominates and rises when the demand shift dominates, so the change in quantity is ambiguous."
+ },
+ {
+  "preset": "double",
+  "demand": "left",
+  "supply": "left",
+  "dD": 40,
+  "dS": 15,
+  "title": "Demand and supply both shift left; the demand shift is larger",
+  "note": "Because the demand shift is the larger one, both price and quantity fall — no ambiguity once the relative size is known."
+ }
+]
