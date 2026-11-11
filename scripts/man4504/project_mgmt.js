@@ -245,16 +245,35 @@
       return d + ' L' + f1(X(b)) + ',' + B + ' Z';
     }
     if (o.shade) E('path', { d: area(o.shade[0], o.shade[1]), 'class': 'crv-fill' }, svg);
+    if (o.tail) E('path', { d: area(o.tail[0], zmax), 'class': 'crv-tail' }, svg);
     var d = '', n = 160;
     for (var i = 0; i <= n; i++) { var z = zmin + (zmax - zmin) * i / n; d += (i ? ' L' : 'M') + f1(X(z)) + ',' + f1(Y(pdf(z))); }
     E('line', { x1: L - 10, y1: B, x2: Wd - Rr + 10, y2: B, 'class': 'ax' }, svg);
-    (o.lines || []).forEach(function (l) { E('line', { x1: f1(X(l.z)), y1: f1(Y(pdf(l.z))), x2: f1(X(l.z)), y2: B, 'class': 'gd' }, svg); });
+    (o.lines || []).forEach(function (l) {   /* a marked deadline stands at least 60px tall, wherever the curve is */
+      var top = l.cls ? Math.min(Y(pdf(l.z)), B - 60) : Y(pdf(l.z));
+      E('line', { x1: f1(X(l.z)), y1: f1(top), x2: f1(X(l.z)), y2: B, 'class': 'gd' + (l.cls ? ' ' + l.cls : '') }, svg);
+    });
+    (o.ticks || []).forEach(function (z) { E('line', { x1: f1(X(z)), y1: B, x2: f1(X(z)), y2: B + 5, 'class': 'tk' }, svg); });
     E('path', { d: d, 'class': 'crv' }, svg);
     (o.labels || []).forEach(function (l) {
       T(svg, f1(Math.min(Math.max(X(l.z), 40), Wd - 50)), B + 21, l.t, 'tl');
       if (l.s) T(svg, f1(Math.min(Math.max(X(l.z), 40), Wd - 50)), B + 39, l.s, 'tl sm');
     });
     if (o.big) T(svg, f1(X(o.big[0])), f1(o.big[1]), o.big[2], 'big halo');
+    if (o.tail && o.tail[1]) {   /* the tail's own name, off to the right with a leader into it */
+      var tz = o.tail[0] + 0.35, tyy = B - (B - Y(pdf(tz))) * 0.4;
+      E('line', { x1: f1(X(3.05)), y1: f1(B - 58), x2: f1(X(tz)), y2: f1(tyy), 'class': 'lead tail' }, svg);
+      T(svg, f1(X(3.05)), f1(B - 64), o.tail[1], 'mk tailtxt');
+    }
+    if (o.dim) {   /* a dimension arrow between two z values, named above */
+      var x0 = X(o.dim[0]) + 2, x1 = X(o.dim[1]) - 2, yy = B - 6;
+      E('line', { x1: f1(x0 + 6), y1: yy, x2: f1(x1 - 6), y2: yy, 'class': 'dim' }, svg);
+      E('polygon', { points: f1(x0) + ',' + yy + ' ' + f1(x0 + 8) + ',' + (yy - 4) + ' ' + f1(x0 + 8) + ',' + (yy + 4), 'class': 'dimh' }, svg);
+      E('polygon', { points: f1(x1) + ',' + yy + ' ' + f1(x1 - 8) + ',' + (yy - 4) + ' ' + f1(x1 - 8) + ',' + (yy + 4), 'class': 'dimh' }, svg);
+      /* the name sits in the tall part of the shaded area, two lines, clear of the curve */
+      T(svg, f1(X(0.82)), yy - 30, o.dim[2][0], 'mk dimtxt big2');
+      T(svg, f1(X(0.82)), yy - 13, o.dim[2][1], 'mk dimtxt');
+    }
     if (o.call) {
       var zt = Math.max(-3.2, o.call[1]), ty = (B + Y(pdf(zt))) / 2, tx = X(-2.55);
       E('line', { x1: f1(tx + 14), y1: 54, x2: f1(X(zt)), y2: f1(ty), 'class': 'lead' }, svg);
@@ -300,9 +319,22 @@
   W.ninety = function (body, M) {
     var fig = H('div', 'pm-figwrap'), setCap;
     var ctl = stepper(body, M.steps.length, function (i) {
-      setCap(i); var s = M.steps[i];
-      bellSVG(fig, { shade: [-3.6, s.z], lines: [{ z: 0 }, { z: s.z }], labels: [{ z: 0, t: 'μ', s: '15 weeks' }, { z: s.z, t: s.lab.indexOf('σ') > 0 ? s.lab : (i === 0 ? 'μ + zσ' : 'μ + 2.33σ'), s: s.lab.indexOf('σ') > 0 ? '' : s.lab }], call: ['0.99', -0.9],
-        aria: 'Normal curve with 0.99 of the area shaded, up to ' + s.lab });
+      setCap(i); var s = M.steps[i], z = s.z, o = { shade: [-3.6, z], call: ['0.99', -0.9] };
+      if (i === 0) {          /* the area we want: the deadline is still unknown */
+        o.lines = [{ z: 0 }, { z: z, cls: 'q' }];
+        o.labels = [{ z: 0, t: 'μ', s: '15 weeks' }, { z: z, t: '?', s: 'deadline' }];
+        o.aria = 'Normal curve with 0.99 of the area shaded up to an unknown deadline';
+      } else if (i === 1) {   /* find z: the 0.01 left over, and the axis in z units */
+        o.lines = [{ z: 0 }, { z: z, cls: 'b' }]; o.tail = [z, '0.01']; o.ticks = [1, 2, 3];
+        o.labels = [{ z: 0, t: 'z = 0' }, { z: 1, t: '1' }, { z: z, t: 'z = 2.33', s: 'P = 0.9901' }];
+        o.aria = 'Normal curve: 0.99 to the left of z = 2.33 and 0.01 to its right';
+      } else {                /* convert to weeks: 2.33 standard deviations above the mean */
+        o.lines = [{ z: 0 }, { z: z, cls: 'b' }]; o.tail = [z, ''];
+        o.labels = [{ z: 0, t: 'μ = 15 weeks' }, { z: z, t: 'x = 19.10 weeks' }];
+        o.dim = [0, z, ['4.10 weeks', '2.33 × 1.76']];
+        o.aria = 'Normal curve: the deadline 19.10 weeks lies 4.10 weeks above the 15-week mean';
+      }
+      bellSVG(fig, o);
     });
     setCap = caps(body, M.steps.map(function (s) { return s.cap; }));
     body.appendChild(fig); body.appendChild(ctl.dots); ctl.set(0);

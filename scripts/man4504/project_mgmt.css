@@ -103,6 +103,14 @@
 .pmw .tl.sm { font-size:11.5px; font-weight:600; fill:var(--muted); }
 .pmw .gd { stroke:var(--ink); stroke-width:1.1; stroke-dasharray:4 4; }
 .pmw .gd.t { stroke:var(--fwd); stroke-width:2.2; stroke-dasharray:none; }
+.pmw .gd.q { stroke:#b8400f; stroke-width:2; stroke-dasharray:5 4; }
+.pmw .gd.b { stroke:var(--ink); stroke-width:2.2; stroke-dasharray:none; }
+.pmw .crv-tail { fill:#ef8550; }
+.pmw .lead.tail { stroke:#b8400f; }
+.pmw .mk.tailtxt { fill:#b8400f; font-size:18px; }
+.pmw .dim { stroke:#16365f; stroke-width:1.6; } .pmw .dimh { fill:#16365f; }
+.pmw .mk.dimtxt { fill:#16365f; font-size:13.5px; } .pmw .mk.dimtxt.big2 { font-size:16px; }
+.pmw .mk.halo, .pmw .big.halo { paint-order:stroke; stroke:#cfe1f7; stroke-width:6px; stroke-linejoin:round; }
 .pmw .big { font-size:22px; font-weight:800; fill:#16365f; text-anchor:middle; }
 .pmw .big.halo { paint-order:stroke; stroke:#cfe1f7; stroke-width:6px; stroke-linejoin:round; }
 .pmw .lead { stroke:#16365f; stroke-width:1.2; }
