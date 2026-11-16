@@ -13,15 +13,14 @@ this file's git history (`git log -p docs/open-issues.md`).
 
 Nothing here can be settled from the repo.
 
-- [ ] **Upload `Checking-fixed/sn25-v6.css` to S3 as `content/sn25-v6.css`.**
-      It adds the phone rule that lets a wide prose table scroll inside its own
-      box instead of pushing the page sideways. Until it is live, a chapter
-      with a wide prose table scrolls the page on a phone: the AD-AS summary
-      table by 99px at 390px and 169px at 320px, the AE consumption table by
-      18px at 320px, four example chapters by a few pixels at 320px, and
-      `ECO2023-263-SupplyAndDemand.html` by 61px at 390px. The phone check
-      records these in `scripts/ci_phone_baseline.json`. It is the house
-      sheet's 16px/20px cell padding on the chapters' own tables, not a widget.
+- [ ] **Chapters delivered before engine v2.70 still scroll sideways on a
+      phone** where a prose table or an equation is wider than the column
+      (the AD-AS summary table by 99px at 390px, four example chapters at
+      320px). v2.70 carries the fix in the engine's own stylesheet, since
+      only S3 access could put it in `sn25-v6.css` (Ian, 2026-11-16), so a
+      chapter gets it when it is next converted, re-embedded or redelivered.
+      The patched `sn25-v6.css` is still the better fix if someone with S3
+      access will upload it: it would reach every published page at once.
 - [ ] The 2026-10-12 review's priority 3–5 items (content, missing
       information, housekeeping) are on Ian's checklist,
       https://claude.ai/artifact/NWBQ4YoLGbnMKbdonVFDyF; some are ticked there.
@@ -164,15 +163,6 @@ in brackets.
       warnings, which every solutions page reports and none can act on.
       (`mobile_check.py` opens every question itself since 2026-11-09;
       `render_widgets.py` does not yet.)
-- [ ] **Equations push three example chapters sideways on a phone** once
-      MathJax has typeset them (Government Intervention, Tradeoffs, ECO2023
-      Elasticity), and at 320px the Tradeoffs page zooms out far enough that
-      its step buttons cannot be pressed. Found by the first CI run of the
-      phone check, 2026-11-09; this container never loads MathJax, so no
-      earlier check saw it. The house stylesheet's call, like the wide prose
-      tables: `mjx-container[display="true"] { overflow-x: auto }` in
-      `sn25-v6.css` would fix every chapter at once.
-
 ## Environment
 
 - [ ] **LibreOffice here has no Writer module**, so `soffice` fails on every

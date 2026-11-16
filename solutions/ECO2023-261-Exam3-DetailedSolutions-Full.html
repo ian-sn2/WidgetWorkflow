@@ -383,9 +383,21 @@
 .sdg .sdg-network .nw-legend circle { fill:#fff; stroke:var(--ink); stroke-width:1.8; }
 .sdg .sdg-network .nw-legendtitle { font-size:12px; font-weight:800; fill:var(--navy); }
 .sdg .sdg-body.two .sdg-flowfig { max-width:none; }
+/* v2.70 -- the page around the widgets, on a phone. Every notes file embeds
+   this sheet, so it is the one place a fix reaches every chapter without the
+   house stylesheet on S3 (Ian, 2026-11-16, who cannot upload there). A table
+   or an equation wider than the column scrolls inside its own box instead of
+   pushing the whole page sideways -- which on a phone also zooms the page out
+   until no button can be tapped. These are the only rules here that reach
+   outside .sdg, and they change nothing on a desktop. */
+mjx-container[display="true"] { display:block; max-width:100%; overflow-x:auto; overflow-y:hidden; }
+@media (max-width:600px){
+  table:not(.financial):not(.sdg table) { display:block; max-width:100%; overflow-x:auto; }
+  mjx-container:not([display="true"]) { display:inline-block; max-width:100%; overflow-x:auto; overflow-y:hidden; vertical-align:middle; }
+}
 </style>
 <script>
-/* ===== sd-graph.js v2.69 — data-driven supply & demand widgets =====
+/* ===== sd-graph.js v2.70 — data-driven supply & demand widgets =====
    Markup:  <div class="sdg"><script type="application/json">{ ...config... }<\/script></div>
    Top-level config:
      title, lede, caption         heading / intro / static caption (caption used only when there are no steps)

@@ -24,10 +24,15 @@ import pathlib
 import sys
 
 SETTLE_MS = 750          # longer than the .6s shift transition
-CHROMIUM_GLOB = "chromium-*/chrome-linux/chrome"
+CHROMIUM_GLOB = "chromium-*/chrome-linux*/chrome"   # chrome-linux, or chrome-linux64 since Playwright 1.5x
 
 
 def find_chromium():
+    # The container's own browser: a stable link where the image provides one,
+    # else whichever versioned folder is there.
+    link = pathlib.Path("/opt/pw-browsers/chromium")
+    if link.is_file():
+        return str(link)
     for path in sorted(pathlib.Path("/opt/pw-browsers").glob(CHROMIUM_GLOB)):
         return str(path)
     return None  # fall back to Playwright's own download
