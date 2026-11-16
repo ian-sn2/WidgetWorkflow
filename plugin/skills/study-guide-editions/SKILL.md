@@ -14,7 +14,7 @@ description: Make the Balanced and Concise editions of a chapter from its Full e
 | **Concise** | Rewritten as bullets and tables (~20–30%), ending with `<h2>Glossary</h2>` and `<h2>Key Takeaways</h2>` | Only where the text is hard to grasp without it |
 
 ## Rules
-- **The Concise keeps the Full's `<h1>`/`<h2>` headings exactly**: same wording, same order, none merged or dropped. Add Glossary and Key Takeaways at the end, and `<h3>` subheads (often ending in a colon) where they help. **Assert it in the build**: `headings(concise) == headings(full) + ["Glossary", "Key Takeaways"]`.
+- **The Concise keeps the Full's `<h1>`/`<h2>` headings exactly**: same wording, same order, none merged or dropped. Add Glossary and Key Takeaways at the end, and `<h3>` subheads where they help; **every `<h3>` ends in a colon** ("Prezygotic Barriers:"; Ian, 2026-11-16). **Assert it in the build**: `headings(concise) == headings(full) + ["Glossary", "Key Takeaways"]`.
 - **Concise widget test** (Ian, 2026-10-26): keep a widget only if the concept is complex and the text cannot carry it (a CPM pass with its four times, a stepper filling a table, a financial calculator). A simple diagram goes; a figure with data becomes a table.
 - **Never two widgets back to back** with no text between them.
 - **Class dates**: Full and Balanced keep every `<p class="date">` (`check_file.py --source` fails a lost one). Concise pages may leave them out (Ian's call).
