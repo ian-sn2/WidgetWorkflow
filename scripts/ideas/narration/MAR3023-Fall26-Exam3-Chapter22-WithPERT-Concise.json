@@ -1,132 +1,97 @@
 {
   "sections": {
     "The Implementation Phase": [
-      ["", "Let's talk about implementation, which is the point where a marketing plan stops being a document and starts being real. It has a few parts: organizing the team, setting a timetable, deciding where the money goes, and then actually carrying the plan out. We'll take them one at a time."]
+      ["", "Implementation is where a marketing plan becomes real: organizing the team, setting a timetable, allocating the budget, and carrying it out."]
     ],
     "Establishing the Marketing Organization": [
-      ["Role / Concept |", "This section starts with a table of roles and concepts in the marketing organization, with the key facts for each one."],
-      ["Brand manager |", "The first role is the brand manager. A brand manager is responsible for the overall marketing effort for one specific brand, and recruits and motivates employees to support the organization's goals."],
-      ["CMO |", "Next is the chief marketing officer, or CMO. The CMO is the voice of the consumer inside the company, oversees budgets that are often more than 10 percent of revenue, and reports to the CEO or the COO. The average tenure is only about 4 years."],
-      ["Line positions |", "Then come line positions. People in line positions have the authority to issue direct orders to their subordinates."],
-      ["Staff positions |", "Staff positions are the opposite. They have advisory authority only, so they cannot issue direct orders. Line versus staff is a distinction that often shows up on exams."],
-      ["Category manager |", "The last role in the table is the category manager, who manages an entire product line."],
-      ["Grouping Type |", "The second table covers divisional groupings. For each grouping type, it gives the basis used to divide the organization."],
-      ["Product line |", "A product line grouping is based on specific product offerings."],
-      ["Functional |", "A functional grouping is based on the department or business activity."],
-      ["Geographical |", "A geographical grouping is based on the location of the sales territory."],
-      ["Market-based |", "And a market-based grouping is based on customer segments. When it is combined with a product line grouping, the result is called a matrix organization."]
+      ["Role / Concept |", "First, a table of roles and concepts, with the key facts for each."],
+      ["Brand manager |", "A brand manager is responsible for the overall marketing effort for one brand, and recruits and motivates employees to support the organization's goals."],
+      ["CMO |", "The CMO is the voice of the consumer inside the company, oversees budgets that are often more than 10 percent of revenue, and reports to the CEO or COO. Average tenure is about 4 years."],
+      ["Line positions |", "Line positions have the authority to issue direct orders to subordinates."],
+      ["Staff positions |", "Staff positions have advisory authority only, and cannot issue direct orders."],
+      ["Category manager |", "A category manager manages an entire product line."],
+      ["Grouping Type |", "Next, the divisional groupings: each grouping type, and its basis."],
+      ["Product line |", "Product line groupings are based on specific product offerings."],
+      ["Functional |", "Functional groupings are based on the department or business activity."],
+      ["Geographical |", "Geographical groupings are based on sales territory location."],
+      ["Market-based |", "Market-based groupings are based on customer segments, and combined with product line they form a matrix organization."]
     ],
     "Developing Timetables": [
-      ["Program Evaluation and Review Technique", "How do you schedule something as complicated as a product launch? The best tool for scheduling complex processes is a PERT chart, which stands for Program Evaluation and Review Technique. On a PERT chart, the nodes are milestones, the lines are tasks, and the numbers show each task's duration in months."],
-      ["determines minimum launch time", "The most important idea on the chart is the critical path. It is the longest path from start to finish, and it determines the minimum launch time. That makes it the bottleneck, so it is where any effort to speed things up should be focused."],
-      ["Specifies task", "The other scheduling tool is the Gantt chart, which specifies each task, the person responsible, the deadline, and the deliverable."],
-      ["Expect an exam question", "Here is an exam tip. Expect a question that asks you to interpret a PERT chart. Remember that the critical path is the longest path, and that speeding up a path that is not critical only adds slack. It does not reduce the total launch time."],
-      ["@pertw", "Now look at the PERT chart for a new product launch. It has six milestones, lettered A through F. A is the prototype, B is market research, C is building the production facility, D is developing the ad campaign, E is redesigning the product, and F is the launch.\nThe lines between the milestones are the tasks, and each one is labeled with its length in months. From A, it takes 5 months to reach B, and 7 months to reach C. From B, it takes 5 months to reach D, and 2 months to reach E. From C to E takes 4 months. Finally, D to F takes 2 months, and E to F takes 4."],
-      ["= 12", "There are three paths through the chart. The first goes from A to B to D to F. It takes 5 plus 5 plus 2, which is 12 months."],
-      ["= 11", "The second goes from A to B to E to F. It takes 5 plus 2 plus 4, which is 11 months."],
-      ["= 15", "The third goes from A to C to E to F. It takes 7 plus 4 plus 4, which is 15 months. Because it is the longest, this is the critical path."],
-      ["Total launch time", "So the total launch time is 15 months, and the only way to shorten it is to reduce the time on A, C, E, or F."]
+      ["Program Evaluation and Review Technique", "A PERT chart, short for Program Evaluation and Review Technique, is the best tool for scheduling complex processes. Its nodes are milestones, its lines are tasks, and its numbers are durations in months."],
+      ["determines minimum launch time", "The critical path is the longest path from start to finish. It determines the minimum launch time, so it is the bottleneck, and the place to focus any speed-up."],
+      ["Specifies task", "A Gantt chart specifies the task, the responsible person, the deadline, and the deliverable."],
+      ["Expect an exam question", "Exam tip: expect a question on interpreting a PERT chart. The critical path is the longest path, and speeding up a non-critical path only adds slack. It does not reduce the total launch time."],
+      ["@pertw", "The example chart runs from A, the prototype, to F, the launch. In between are B, market research, C, the production facility, D, the ad campaign, and E, the product redesign.\nA to B takes 5 months, and A to C takes 7. B to D takes 5, and B to E takes 2. C to E takes 4, D to F takes 2, and E to F takes 4."],
+      ["= 12", "The path A, B, D, F takes 5 plus 5 plus 2, or 12 months."],
+      ["= 11", "The path A, B, E, F takes 5 plus 2 plus 4, or 11 months."],
+      ["= 15", "The path A, C, E, F takes 7 plus 4 plus 4, or 15 months, so it is the critical path."],
+      ["Total launch time", "Total launch time is 15 months, and it can only be shortened on A, C, E, or F."]
     ],
     "Resource Allocation — Share Point Analysis": [
-      ["1% of total industry sales", "How does a company decide whether more marketing spending is worth it? One method is share point analysis. A share point is 1 percent of total industry sales."],
-      ["Cost of goods sold", "Gross margin is sales revenue minus the cost of goods sold. It is the contribution to fixed costs and profit."],
+      ["1% of total industry sales", "Share point analysis asks whether more marketing spending pays off. A share point is 1 percent of total industry sales."],
+      ["Cost of goods sold", "Gross margin is sales revenue minus cost of goods sold, which is the contribution to fixed costs and profit."],
       ["requires a 1.5%", "The 1.5 rule says that increasing market share by 1 percent requires a 1.5 percent increase in share of voice."],
-      ["Estimate industry sales", "The analysis has five steps. The first step is to estimate industry sales, using syndicated research or trade publications."],
-      ["Compute firm market share", "The second step is to compute the firm's market share, which is firm sales divided by industry sales."],
-      ["Compute gross margin per share point", "The third step is to compute the gross margin per share point, which is the gross margin divided by the number of share points."],
-      ["Apply 1.5 rule", "The fourth step is to apply the 1.5 rule, to find the required increase in voice points."],
-      ["Compute added marketing expense", "The fifth step is to compute the added marketing expense, and compare it with the added gross margin."],
-      ["Industry sales: $100B", "Here is a worked example. Industry sales are 100 billion dollars, the firm's sales are 15 billion, and its gross margin is 5 billion."],
-      ["Market share:", "The market share is 15 billion divided by 100 billion, which is 15 percent, or 15 share points."],
-      ["Gross margin per share point:", "The gross margin per share point is 5 billion divided by 15, which is about 333.3 million dollars."],
-      ["Goal: reach 18%", "Suppose the goal is to reach 18 percent. That means gaining 3 share points, which adds 1 billion dollars of gross margin."],
-      ["3 share points ×", "By the 1.5 rule, 3 share points times 1.5 means that 4.5 more voice points are needed."],
-      ["Industry marketing spend", "The industry spends 10 billion dollars on marketing, which works out to 100 million dollars per voice point."],
-      ["Added expense", "So the added expense is 4.5 times 100 million, or 450 million dollars."],
-      ["Net gain", "The net gain is 1 billion minus 450 million, which is 550 million dollars, so the extra spending is worthwhile. If the added expense had been larger than the added gross margin, it would not be."]
+      ["Estimate industry sales", "There are five steps. First, estimate industry sales, from syndicated research or trade publications."],
+      ["Compute firm market share", "Second, compute market share, which is firm sales divided by industry sales."],
+      ["Compute gross margin per share point", "Third, compute gross margin per share point, which is gross margin divided by share points."],
+      ["Apply 1.5 rule", "Fourth, apply the 1.5 rule to find the voice points required."],
+      ["Compute added marketing expense", "Fifth, compute the added marketing expense, and compare it with the added gross margin."],
+      ["Industry sales: $100B", "In the worked example, industry sales are 100 billion dollars, firm sales are 15 billion, and gross margin is 5 billion."],
+      ["Market share:", "Market share is 15 billion over 100 billion, which is 15 percent, or 15 share points."],
+      ["Gross margin per share point:", "Gross margin per share point is 5 billion dollars divided by 15 share points, about 333.3 million dollars."],
+      ["Goal: reach 18%", "The goal is 18 percent, which means 3 more share points and 1 billion dollars more gross margin."],
+      ["3 share points ×", "By the 1.5 rule, 3 share points times 1.5 is 4.5 voice points."],
+      ["Industry marketing spend", "Industry marketing spend is 10 billion dollars, or 100 million per voice point."],
+      ["Added expense", "So the added expense is 4.5 times 100 million, which is 450 million dollars."],
+      ["Net gain", "The net gain is 1 billion minus 450 million, or 550 million dollars, so it is worth doing."]
     ],
     "Planning vs. Implementation": [
-      ["Plan Quality |", "This section opens with a table that pairs plan quality with implementation quality, and gives the outcome of each combination."],
-      ["Success", "With a good plan and good implementation, the outcome is success."],
-      ["focus on execution", "With a good plan and poor implementation, the outcome is fixable, by focusing on execution."],
-      ["go back to plan", "With a poor plan and good implementation, the outcome is also fixable, but only by going back to the plan."],
-      ["Failure", "And with a poor plan and poor implementation, the outcome is failure."],
-      ["Planning > implementation", "Planning matters more than implementation, because the plan defines the product's benefits, the goals, the metrics, and the contingency responses."],
+      ["Plan Quality |", "This table crosses plan quality with implementation quality, and gives the outcome."],
+      ["Success", "A good plan with good implementation is a success."],
+      ["focus on execution", "A good plan with poor implementation is fixable, by focusing on execution."],
+      ["go back to plan", "A poor plan with good implementation is fixable too, by going back to the plan."],
+      ["Failure", "A poor plan with poor implementation is a failure."],
+      ["Planning > implementation", "Planning matters more than implementation, because the plan defines product benefits, goals, metrics, and contingency responses."],
       ["Good plan + poor execution", "A good plan with poor execution is easier to fix than a poor plan with good execution."],
-      ["Marketing strategy", "Two terms are worth keeping straight. Marketing strategy is how to achieve a goal, meaning the target market plus the marketing program."],
+      ["Marketing strategy", "Marketing strategy is how to achieve a goal: the target market plus the marketing program."],
       ["Marketing tactics", "Marketing tactics are the day-to-day operational decisions that execute the strategy."]
     ],
     "Improving Implementation": [
-      ["Tactic |", "The table in this section lists six tactics for improving implementation, with the key point of each."],
-      ["Communicate |", "The first tactic is to communicate. Explain the plan clearly, enable two-way feedback, and create a psychologically safe environment."],
-      ["Program champion |", "The second is to have a program champion, a person who cuts red tape and drives the program forward. Champions exist at all levels, and they push both strong and weak ideas."],
-      ["Reward performance |", "The third is to reward performance. Give people an incentive for good execution, and treat failures as lessons."],
-      ["Schedule tasks |", "The fourth is to schedule tasks, using PERT or Gantt charts for timing and priority."],
-      ["Just do it |", "The fifth is to just do it. Avoid paralysis by analysis, and act proactively."],
-      ["Seek feedback |", "The sixth is to seek feedback, both internal, from employees, and external, from customers and channel partners."]
+      ["Tactic |", "Six tactics improve implementation. Here is each tactic, with its key point."],
+      ["Communicate |", "Communicate: explain the plan clearly, enable two-way feedback, and create a psychologically safe environment."],
+      ["Program champion |", "Use a program champion, who cuts red tape and drives the program forward. Champions exist at all levels, and push both strong and weak ideas."],
+      ["Reward performance |", "Reward performance: incentivize good execution, and treat failures as lessons."],
+      ["Schedule tasks |", "Schedule tasks, using PERT or Gantt charts for timing and priority."],
+      ["Just do it |", "Just do it: avoid paralysis by analysis, and act proactively."],
+      ["Seek feedback |", "Seek feedback, internal from employees, and external from customers and channel partners."]
     ],
     "The Control Phase": [
-      ["Control (evaluation) phase", "Once the plan is running, the control phase begins. It is also called the evaluation phase, and it has three parts: measure the results, identify deviations, and take corrective action."],
-      ["Management by exception", "The guiding idea is management by exception, which means focusing attention on significant deviations from the plan."],
-      ["If results fall short", "If results fall short, the response is corrective action. If results exceed the goals, the response is to double down."]
+      ["Control (evaluation) phase", "In the control phase, also called evaluation, managers measure results, identify deviations, and take corrective action."],
+      ["Management by exception", "Management by exception means focusing attention on significant deviations from the plan."],
+      ["If results fall short", "If results fall short, take corrective action. If they exceed goals, double down."]
     ],
     "Measuring Results": [
-      ["Method |", "The table here compares two methods of measuring results. For each method, it gives the focus and the use."],
-      ["Sales analysis |", "The first method is sales analysis. Its focus is actual sales versus goals. Its use is to identify regional and segment strengths and weaknesses, and to shift resources."],
-      ["Profitability analysis |", "The second method is profitability analysis. Its focus is profit by product, segment, territory, channel, and order size. Its use is to decide whether to expand, maintain, reduce, or eliminate offerings."]
+      ["Method |", "Two methods measure results. The table gives each method's focus and use."],
+      ["Sales analysis |", "Sales analysis focuses on actual sales versus goals. It is used to identify regional and segment strengths and weaknesses, and to shift resources."],
+      ["Profitability analysis |", "Profitability analysis focuses on profit by product, segment, territory, channel, and order size. It is used to decide whether to expand, maintain, reduce, or eliminate offerings."]
     ],
     "Marketing Audit and ROI Tools": [
-      ["Marketing audit:", "Several tools support this measurement. A marketing audit is a comprehensive, unbiased, periodic review of the strategic marketing process. It determines marketing ROI, and it is often conducted by outside consultants for objectivity."],
-      ["Marketing ROI:", "Marketing ROI measures what marketing spending accomplishes, and quantifies it."],
-      ["Marketing metrics:", "Marketing metrics are quantified benchmarks identified in advance, such as sales goals, retention rates, and sales per square foot."],
-      ["Marketing dashboards:", "Marketing dashboards are real-time displays of key metrics, which make it possible to detect trends and problems rapidly."]
+      ["Marketing audit:", "A marketing audit is a comprehensive, unbiased, periodic review of the strategic marketing process. It determines marketing ROI, and is often conducted by outside consultants for objectivity."],
+      ["Marketing ROI:", "Marketing ROI measures and quantifies what marketing spending accomplishes."],
+      ["Marketing metrics:", "Marketing metrics are quantified benchmarks set in advance, such as sales goals, retention rates, and sales per square foot."],
+      ["Marketing dashboards:", "Marketing dashboards are real-time displays of key metrics, for rapid detection of trends and problems."]
     ],
     "Corrective Action and Contingency Plans": [
-      ["Corrective action:", "Corrective action is taken when actual performance deviates from the goals."],
-      ["Contingency plans:", "Contingency plans are responses established in advance, for scenarios where programs underperform. They are written into the annual plan."]
+      ["Corrective action:", "Corrective action is taken when actual performance deviates from goals."],
+      ["Contingency plans:", "Contingency plans are responses set in advance for when programs underperform, and they are written into the annual plan."]
     ],
-    "Glossary": [
-      ["Term |", "The glossary is a table with two columns: the term, and its definition."],
-      ["Implementation phase |", "The implementation phase is the stage of strategic marketing that establishes the organization, timetables, and budgets, and executes the program."],
-      ["Brand manager |", "A brand manager is the person responsible for the overall marketing effort for a specific brand."],
-      ["Line position |", "A line position is an organizational role with the authority to issue direct orders to subordinates."],
-      ["Staff position |", "A staff position is an organizational role with advisory authority only, which cannot issue direct orders."],
-      ["Matrix organization |", "A matrix organization is a structure that combines market-based and product line groupings."],
-      ["PERT chart |", "A PERT chart, short for Program Evaluation and Review Technique, maps tasks and durations for complex scheduling."],
-      ["Critical path |", "The critical path is the longest path in a PERT chart, and it determines the minimum time to completion."],
-      ["Share point |", "A share point is one percent of total industry sales, used as a basis for resource allocation."],
-      ["Gross margin |", "Gross margin is sales revenue minus cost of goods sold, which is the contribution to fixed costs and profit."],
-      ["1.5 rule |", "The 1.5 rule says that increasing market share by 1 percent requires a 1.5 percent increase in share of voice."],
-      ["Marketing strategy |", "Marketing strategy is the plan that specifies the target market and the marketing program used to achieve a goal."],
-      ["Marketing tactics |", "Marketing tactics are the day-to-day operational decisions that execute the strategy."],
-      ["Program champion |", "A program champion is a person who cuts red tape and drives a program forward despite resistance."],
-      ["Paralysis by analysis |", "Paralysis by analysis is a failure to act because of excessive deliberation and planning."],
-      ["Control phase |", "The control phase is the stage where managers measure results, detect deviations, and take corrective action."],
-      ["Management by exception |", "Management by exception means focusing managerial attention on significant deviations from the plan."],
-      ["Marketing audit |", "A marketing audit is a comprehensive, unbiased, periodic review of a firm's strategic marketing process."],
-      ["Marketing metrics |", "Marketing metrics are quantified benchmarks, identified in advance, that are used to judge performance."],
-      ["Marketing dashboard |", "A marketing dashboard is a real-time display of key marketing metrics for rapid decision-making."],
-      ["Contingency plan |", "And a contingency plan is a response plan established in advance, which is activated when marketing programs underperform."]
-    ],
+    "Glossary": [],
     "Key Takeaways": [
-      ["Expect an exam question", "To pull the chapter together: expect an exam question that requires interpreting a PERT chart, and always identify the longest path as the critical path."],
-      ["The critical path is the bottleneck", "The critical path is the bottleneck, so only reducing time on critical-path activities shortens the total launch time."],
-      ["Steps on non-critical paths", "Steps on non-critical paths can run in parallel, and speeding them up only adds slack."],
-      ["Share point analysis compares", "Share point analysis compares the gross margin gained per share point with the marketing expense required, which comes from the 1.5 rule."],
-      ["The 1.5 rule: every", "The 1.5 rule says that every 1 percent increase in market share requires a 1.5 percent increase in share of voice."],
-      ["Gross margin = ", "Gross margin equals sales revenue minus cost of goods sold."],
-      ["If added marketing expense", "If the added marketing expense exceeds the added gross margin, the investment is not worthwhile."],
-      ["Planning carries more weight", "Planning carries more weight than implementation, because the plan defines the goals, the metrics, and the contingency responses."],
-      ["Good plan + poor implementation", "A good plan with poor implementation is easier to fix than a poor plan with good implementation."],
-      ["Program champions exist", "Program champions exist at all levels and push both strong and weak ideas. They are defined by determination, not by guaranteed success."],
-      ["Avoid paralysis by analysis", "Avoid paralysis by analysis, because at some point additional planning adds no value and only delays action."],
-      ["Management by exception directs", "Management by exception directs attention to significant deviations from the plan during the control phase."],
-      ["Marketing audits are most objective", "Marketing audits are most objective when they are conducted by outside consultants."],
-      ["Marketing dashboards provide", "Marketing dashboards provide real-time displays of metrics, while marketing metrics are the benchmarks set in advance for judging performance."],
-      ["Corrective action and contingency plans", "Corrective action and contingency plans should be written into the annual plan in advance, to avoid reactive scrambling."],
-      ["Profitability analysis guides", "Profitability analysis guides the decision to expand, maintain, reduce, or eliminate, across products, segments, and channels."],
-      ["Category manager role", "The category manager manages an entire product line, which is a broader role than a single brand manager's."],
-      ["Matrix organization combines", "And a matrix organization combines market-based and product line groupings."]
+      [["Expect an exam question", "The critical path is the bottleneck", "Steps on non-critical paths"], "To recap. Expect an exam question on a PERT chart, where the longest path is the critical path. It is the bottleneck, so only cutting time on it shortens the launch. Steps on other paths can run in parallel, and speeding them up just adds slack."],
+      [["Share point analysis compares", "The 1.5 rule: every", "Gross margin = ", "If added marketing expense"], "Share point analysis compares the gross margin gained with the marketing expense required. By the 1.5 rule, every 1 percent of market share takes a 1.5 percent increase in share of voice. Gross margin is sales revenue minus cost of goods sold, and if the added expense exceeds the added gross margin, the investment is not worthwhile."],
+      [["Planning carries more weight", "Good plan + poor implementation", "Program champions exist", "Avoid paralysis by analysis"], "Planning carries more weight than implementation, and a good plan with poor implementation is the easier one to fix. Program champions exist at all levels, and are defined by determination, not guaranteed success. And avoid paralysis by analysis, because past a point more planning only delays action."],
+      [["Management by exception directs", "Marketing audits are most objective", "Marketing dashboards provide", "Corrective action and contingency plans", "Profitability analysis guides"], "In the control phase, management by exception directs attention to significant deviations. Marketing audits are most objective when outside consultants conduct them, and dashboards display metrics in real time. Corrective action and contingency plans belong in the annual plan, and profitability analysis guides what to expand, maintain, reduce, or eliminate."],
+      [["Category manager role", "Matrix organization combines"], "Finally, a category manager manages an entire product line, and a matrix organization combines market-based and product line groupings."]
     ]
   }
 }

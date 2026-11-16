@@ -12,7 +12,9 @@ A page with no script file is read as written (the old behaviour).
 These checks stop the build, so a script can be trusted without being listened to:
   * every number spoken is a number printed in that step or section of the page, and no script mentions a source;
   * every bullet, paragraph and table row of a section has a passage, and every number in it is spoken;
-  * every table is introduced by a passage on its header row that names each of its columns.
+  * every table is introduced by a passage on its header row that names each of its columns;
+  * the script is no more than 120% of the words of the text it speaks for, so listening is not longer than reading.
+A section whose script is an empty list ("Glossary": []) is declared as not narrated.
 With --report DIR the recording is also transcribed by hear.py and compared with the script; the paragraphs that do
 not match are written to a report and joined into one short clip to listen to.
 
@@ -22,6 +24,10 @@ from sentence to sentence. (Recording a sentence at a time, each at its own spee
 THE VOICE is one function, _voice(). It uses Kokoro, an open-source neural voice that runs offline at no cost per use:
     pip install kokoro-onnx soundfile
     put kokoro-v1.0.onnx and voices-v1.0.bin (kokoro-onnx GitHub releases, "model-files-v1.0") in ~/.cache/kokoro
+    pip install --only-binary=:all: misaki num2words spacy && python -m spacy download en_core_web_sm
+The last line is Kokoro's own dictionary-based pronunciation (misaki). Without it the voice still works, through a
+generic pronouncer that gets the stress of some words wrong ("subcontract"). A word that is still said wrong is fixed
+in narration/pronounce.json, as "word": "phonemes".
 NARRATE_VOICE picks the voice (default af_heart). For a paid studio voice, replace the body of _voice().
 Clips are embedded in the page as data URIs so a demo is one file; in production they would sit on S3 beside the images.
 """
@@ -44,6 +50,7 @@ CACHE = pathlib.Path(tempfile.gettempdir()) / 'narrate-cache'
 KOKORO = pathlib.Path(os.environ.get('KOKORO_DIR', '~/.cache/kokoro')).expanduser()
 VOICE = os.environ.get('NARRATE_VOICE', 'af_heart')
 RATE = 24000
+LISTEN_SPEED = 1.1          # a whole chapter is spoken a little faster than a single step is
 _kokoro = None
 
 # ---------------------------------------------------------------- text
@@ -61,12 +68,58 @@ LETTER_A = [re.compile(r'(?<![.!?:]\s)(?<!^)\bA\b(?!\'s)(?![a-z])'), re.compile(
 BANNED = ('the transcript', 'the lecture', 'the recording', 'on the board', 'the slides', 'his slide', 'the file')
 
 
+LETTER = 'Aeigh'                        # stands in for a capital A that is a name; phonemes() gives it the letter's sound
+_g2p = None
+
+
+def pronounce_fixes():
+    f = HERE / 'narration' / 'pronounce.json'
+    return {k: v for k, v in json.loads(f.read_text(encoding='utf8')).items() if not k.startswith('_')} if f.exists() else {}
+
+
 def prep(text):
-    """a written script, ready for the voice"""
+    """a written script, ready for the voice: a capital A that is a name is marked as the letter"""
     text = re.sub(r'[ \t]+', ' ', text).strip()
     for pat in LETTER_A:
-        text = pat.sub('eigh', text)
+        text = pat.sub(LETTER, text)
     return text
+
+
+def phonemes(text, say_with):
+    """text -> Kokoro phonemes, word by word, so one word's sound can be set without disturbing its neighbours.
+    (misaki's inline [word](/phonemes/) syntax dropped the word after it: the listening check caught a missing 'finish'.)"""
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        _, tokens = say_with(text)
+    fixes, out = pronounce_fixes(), []
+    for t in tokens:
+        p = t.phonemes or ''
+        if t.text == LETTER:
+            p = 'ˈA'
+        elif t.text.lower() in fixes:
+            p = fixes[t.text.lower()]
+        if re.fullmatch(r'[A-Za-z]\.', t.text) and not p.endswith('.'):
+            p += '.'                    # "Now C. C has to wait": the full stop after a single letter is a pause, not an abbreviation
+        out.append(p + t.whitespace)
+    return ''.join(out)
+
+
+def g2p():
+    """Kokoro's own pronouncer, or None if it is not installed"""
+    global _g2p
+    if _g2p is None:
+        try:
+            import espeakng_loader
+            from phonemizer.backend.espeak.wrapper import EspeakWrapper
+            EspeakWrapper.set_library(espeakng_loader.get_library_path())
+            EspeakWrapper.set_data_path(espeakng_loader.get_data_path())
+            from misaki import en, espeak
+            _g2p = en.G2P(trf=False, british=False, fallback=espeak.EspeakFallback(british=False))
+        except Exception as e:          # the build still records, with the generic pronouncer
+            print('          dictionary pronunciation unavailable (%s): using the generic pronouncer' % type(e).__name__)
+            _g2p = False
+    return _g2p or None
 
 
 def say(text):
@@ -96,19 +149,23 @@ def _voice(sentence, speed):
     """one sentence -> samples at RATE. The only function that knows which voice is used."""
     global _kokoro
     CACHE.mkdir(exist_ok=True)
-    f = CACHE / (hashlib.sha1(('%s|%.2f|%s' % (VOICE, speed, sentence)).encode()).hexdigest()[:20] + '.npy')
+    model = next((KOKORO / n for n in ('kokoro-v1.0.onnx', 'kokoro-v1.0.int8.onnx') if (KOKORO / n).exists()), None)
+    say_with = g2p() if model else None
+    f = CACHE / (hashlib.sha1(('%s|%.2f|%s|%s' % (VOICE, speed, 'misaki2' if say_with else 'espeak', sentence)).encode()).hexdigest()[:20] + '.npy')
     if f.exists():
         return np.load(f)
-    model = next((KOKORO / n for n in ('kokoro-v1.0.onnx', 'kokoro-v1.0.int8.onnx') if (KOKORO / n).exists()), None)
     if model:
         from kokoro_onnx import Kokoro
         _kokoro = _kokoro or Kokoro(str(model), str(KOKORO / 'voices-v1.0.bin'))
-        samples, rate = _kokoro.create(sentence, voice=VOICE, speed=speed, lang='en-us')
+        if say_with:
+            samples, rate = _kokoro.create(phonemes(sentence, say_with), voice=VOICE, speed=speed, is_phonemes=True)
+        else:
+            samples, rate = _kokoro.create(sentence.replace(LETTER, 'eigh'), voice=VOICE, speed=speed, lang='en-us')
         assert rate == RATE
     else:                                   # no model on this machine: the basic system voice, so a build still completes
         import soundfile
         with tempfile.TemporaryDirectory() as tmp:
-            subprocess.run(['pico2wave', '-l', 'en-US', '-w', tmp + '/a.wav', sentence.replace('eigh', 'A')], check=True)
+            subprocess.run(['pico2wave', '-l', 'en-US', '-w', tmp + '/a.wav', sentence.replace(LETTER, 'A')], check=True)
             subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', tmp + '/a.wav', '-ar', str(RATE), tmp + '/b.wav'], check=True)
             samples, _ = soundfile.read(tmp + '/b.wav', dtype='float32')
     samples = np.asarray(samples, dtype=np.float32)
@@ -123,13 +180,13 @@ def paragraphs(text):
 TAKES = []        # every paragraph recorded in this run, for the listening check: (where, as written, samples)
 
 
-def speak(text, where=''):
+def speak(text, where='', speed=1.0, beat=0.35):
     """a passage -> samples. A line break in the text starts a new take after a short beat."""
     out = []
     for par in paragraphs(text):
-        take = _voice(prep(par), 1.0)
+        take = _voice(prep(par), speed)
         TAKES.append((where, par, take))
-        out += [take, np.zeros(int(0.35 * RATE), dtype=np.float32)]
+        out += [take, np.zeros(int(beat * RATE), dtype=np.float32)]
     return np.concatenate(out) if out else np.zeros(1, dtype=np.float32)
 
 
@@ -305,10 +362,13 @@ def listen_scripted(s, written):
     titles = [plain(h.group(2)) for h in heads]
     assert set(titles) == set(written), 'headings without a script: %s; scripts without a heading: %s' % (
         sorted(set(titles) - set(written)), sorted(set(written) - set(titles)))
-    tags, data, thin, gap = {}, [], [], np.zeros(int(0.3 * RATE), dtype=np.float32)
+    tags, data, thin, gap = {}, [], [], np.zeros(int(0.15 * RATE), dtype=np.float32)
+    spoken = on_page = 0
     for k, h in enumerate(heads):
         end = heads[k + 1].start() if k + 1 < len(heads) else masked.index('</body>')
         title, passages = titles[k], written[titles[k]]
+        if not passages:                                    # "Glossary": [] -- declared as not narrated; the bar goes on to the next section
+            continue
         # the blocks a reader sees in this section; a block that is part of a widget's own chrome is not narrated line by line
         blocks = [dict(at=m.start(), tag=m.group(1), text=plain(m.group(2)), head='<th' in m.group(2), said='')
                   for m in BLOCK.finditer(masked, h.end(), end) if not WIDGET_PARTS.search(masked[m.start():masked.index('>', m.start())])]
@@ -316,18 +376,20 @@ def listen_scripted(s, written):
         configs = ' '.join(re.findall(r'<script type="application/json">(.*?)</script>', s[h.end():end], flags=re.S))   # a widget's own numbers
         check(' '.join(p[1] for p in passages), plain(masked[h.end():end]) + ' ' + configs, title)
         audio, seg, at = [], [], 0
-        for anchor, text in passages:
-            bid = -1
-            if anchor.startswith('@'):                      # a passage about a whole widget: "@pertw"
-                assert anchor[1:] in widgets, '%s: no %s widget in this section' % (title, anchor[1:])
-                bid = tags.setdefault(h.end() + widgets[anchor[1:]], len(tags))
-            elif anchor:
-                hit = [b for b in blocks if anchor in b['text']]
-                assert hit, '%s: nothing in this section contains "%s"' % (title, anchor)
-                hit[0]['said'] += ' ' + text
-                bid = tags.setdefault(hit[0]['at'], len(tags))
-            part = np.concatenate([speak(text, title), gap])
-            seg.append([round(at / RATE, 2), bid])
+        for anchors, text in passages:
+            bids = []
+            for anchor in ([anchors] if isinstance(anchors, str) else anchors):     # one passage may speak for several blocks
+                if anchor.startswith('@'):                  # a passage about a whole widget: "@pertw"
+                    assert anchor[1:] in widgets, '%s: no %s widget in this section' % (title, anchor[1:])
+                    bids.append(tags.setdefault(h.end() + widgets[anchor[1:]], len(tags)))
+                    on_page += 90                           # a widget's content is not in the page's text, so it earns its own words
+                elif anchor:
+                    hit = [b for b in blocks if anchor in b['text']]
+                    assert hit, '%s: nothing in this section contains "%s"' % (title, anchor)
+                    hit[0]['said'] += ' ' + text
+                    bids.append(tags.setdefault(hit[0]['at'], len(tags)))
+            part = np.concatenate([speak(text, title, speed=LISTEN_SPEED, beat=0.25), gap])
+            seg.append([round(at / RATE, 2), bids])
             audio.append(part)
             at += len(part)
         for b in blocks:                                    # nothing a reader sees goes unspoken
@@ -345,6 +407,11 @@ def listen_scripted(s, written):
                 if got < 0.5:
                     thin.append('%s | %d%% of its words | %s' % (title, round(got * 100), b['text'][:80]))
         data.append(dict(encode(np.concatenate(audio)), h=k, t=title, seg=seg))
+        spoken += sum(len(p[1].split()) for p in passages)
+        on_page += len(plain(masked[h.end():end]).split())
+    # listening must not take longer than reading: the script may not outgrow the text it speaks for
+    print('          %d words spoken for %d words on the page (%d%%)' % (spoken, on_page, round(100 * spoken / max(on_page, 1))))
+    assert spoken <= 1.2 * on_page, 'the script is %d words for %d words of page: over the 120%% budget, tighten it' % (spoken, on_page)
     for start in sorted(tags, reverse=True):                 # tag each block, last first so the offsets stay true
         close = s.index('>', start)
         s = s[:close] + ' data-ls="%d"' % tags[start] + s[close:]

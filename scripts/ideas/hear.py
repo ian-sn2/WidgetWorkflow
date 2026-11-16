@@ -88,7 +88,9 @@ def norm(text):
 def compare(written, heard):
     a, b = norm(written), norm(heard)
     m = difflib.SequenceMatcher(None, a, b, autojunk=False)
-    ops = [o for o in m.get_opcodes() if o[0] != 'equal' and ''.join(a[o[1]:o[2]]) != ''.join(b[o[3]:o[4]])]     # "on to" and "onto" are the same sound
+    def stem(ws):
+        return re.sub(r'(es|s|e)$', '', ''.join(ws))      # "on to" / "onto", "March's" / "marches": the same sound
+    ops = [o for o in m.get_opcodes() if o[0] != 'equal' and stem(a[o[1]:o[2]]) != stem(b[o[3]:o[4]])]
     diffs = [(' '.join(a[i1:i2]) or '(nothing)', ' '.join(b[j1:j2]) or '(nothing)') for op, i1, i2, j1, j2 in ops]
     same = len(a) - sum(i2 - i1 for op, i1, i2, j1, j2 in ops)
     return (same / max(len(a), 1)), diffs

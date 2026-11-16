@@ -7,7 +7,8 @@
   var clips; try { clips = JSON.parse(document.getElementById('ls-audio').textContent); } catch (e) { return; }
   if (!clips || !clips.length) return;
   var RATES = [1, 1.25, 1.5, 0.85], rate = 0, i = 0, aud = new Audio(), open = false, lit = null, cur = -2, userAt = 0, where = {};
-  clips.forEach(function (c, ci) { (c.seg || []).forEach(function (s, si) { if (s[1] >= 0 && !(s[1] in where)) where[s[1]] = [ci, si]; }); });
+  function ids(s) { return [].concat(s[1]).filter(function (b) { return b >= 0; }); }   /* a passage speaks for no block, one, or several */
+  clips.forEach(function (c, ci) { (c.seg || []).forEach(function (s, si) { ids(s).forEach(function (b) { if (!(b in where)) where[b] = [ci, si]; }); }); });
   try { i = Math.min(+localStorage.getItem('ls-at:' + location.pathname) || 0, clips.length - 1); } catch (e) {}
   function heads() { return Array.prototype.filter.call(document.querySelectorAll('h1, h2'), function (h) { return !h.closest('.toc-box, .ls-bar'); }); }
   function el(tag, cls, html, parent) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; if (parent) parent.appendChild(e); return e; }
@@ -32,19 +33,19 @@
   ['wheel', 'touchmove', 'keydown'].forEach(function (ev) {
     window.addEventListener(ev, function (e) { if (!e.target.closest || !e.target.closest('.ls-bar')) userAt = Date.now(); }, { passive: true });
   });
-  function light(block) {
-    if (lit === block) return;
-    if (lit) lit.classList.remove('ls-hi');
-    lit = block; if (lit) lit.classList.add('ls-hi');
+  function light(blocks) {
+    (lit || []).forEach(function (b) { b.classList.remove('ls-hi'); });
+    lit = blocks && blocks.length ? blocks : null;
+    (lit || []).forEach(function (b) { b.classList.add('ls-hi'); });
   }
   function passage(force) {            /* which passage of this section is being spoken, and what it is about */
     var seg = clips[i].seg; if (!seg) return;
     var t = aud.currentTime || 0, k = 0;
     for (var j = 0; j < seg.length; j++) if (seg[j][0] <= t + 0.05) k = j;
     if (k === cur && !force) return; cur = k;
-    var block = seg[k][1] >= 0 ? document.querySelector('[data-ls="' + seg[k][1] + '"]') : null;
-    light(block);
-    follow(block || (k === 0 ? heads()[clips[i].h] : null));
+    var blocks = ids(seg[k]).map(function (b) { return document.querySelector('[data-ls="' + b + '"]'); }).filter(Boolean);
+    light(blocks);
+    follow(blocks[0] || (k === 0 ? heads()[clips[i].h] : null));
   }
   function status() {
     var left = clips.slice(i).reduce(function (a, c) { return a + c.d; }, 0) - (aud.currentTime || 0);
@@ -86,6 +87,6 @@
     userAt = 0; load(i, true);
   };
   close.onclick = function () { aud.pause(); open = false; bar.hidden = true; pill.hidden = false; document.body.classList.remove('ls-open'); light(null); };
-  pill.title = 'About ' + Math.round(total / 60) + ' minutes';
-  window.__ls = { clips: clips, audio: aud, lit: function () { return lit; } };
+  pill.innerHTML = '&#127911; Listen &middot; ' + Math.max(1, Math.round(total / 60)) + ' min';     /* say how long before anyone presses it */
+  window.__ls = { clips: clips, audio: aud, lit: function () { return lit && lit[0]; } };
 })();

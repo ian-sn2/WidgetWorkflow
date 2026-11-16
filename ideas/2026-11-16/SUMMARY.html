@@ -70,7 +70,7 @@ button:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
       <dl>
         <dt>What</dt><dd>A Listen button speaks the chapter in a natural voice. Tables and charts are introduced and explained, not just read out. The line being discussed is highlighted and the page scrolls with it. Tapping any line jumps the audio there.</dd>
         <dt>Why</dt><dd>Students can study when they cannot look at a screen: driving, at the gym, walking to class. Following the highlight while listening also helps students who lose their place in dense text.</dd>
-        <dt>Page length</dt><dd>None added (a bar pinned to the bottom of the screen).</dd>
+        <dt>Page length</dt><dd>None added (a bar pinned to the bottom of the screen). Listening time: about 8 to 10 minutes for a Concise chapter, shown on the button.</dd>
       </dl>
     </div>
   </section>
@@ -102,7 +102,7 @@ button:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
   <div class="three">
     <section class="card">
       <h3>Cost</h3>
-      <p style="font-size:.9rem">The voice is free and open-source and runs on our own computer. The narration is not the page read aloud: Claude writes a spoken script for each chapter. The build checks that nothing on the page is skipped and that every number spoken appears on the page.</p>
+      <p style="font-size:.9rem">The voice is free and open-source and runs on our own computer, and uses a pronunciation dictionary so terms like "subcontract" are said correctly. The narration is not the page read aloud: Claude writes a spoken script for each chapter. The build checks that nothing on the page is skipped and that every number spoken appears on the page.</p>
     </section>
     <section class="card">
       <h3>Decisions needed</h3>
@@ -116,7 +116,7 @@ button:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
       <h3>Checking and what is left</h3>
       <ul>
         <li>Listen narration is written for two chapters. Each new chapter needs its script generated.</li>
-        <li>Nobody has to listen to a whole recording to check it. An automatic listener transcribes the audio and compares it with the script: 220 of 221 passages matched, and the one that differed is a 7-second clip. It cannot judge tone, so a person should still sample a minute per chapter.</li>
+        <li>Nobody has to listen to a whole recording to check it. An automatic listener transcribes the audio and compares it with the script. All 173 recorded passages now match, and it caught two real errors on the way (a dropped word and a phrase that sounded like a different number), both fixed. It cannot judge tone, so a person should still sample a minute per chapter.</li>
       </ul>
     </section>
   </div>
@@ -139,7 +139,7 @@ Page length: none added.
 3. Listen: the chapter as audio, with follow-along highlighting
 What: A Listen button speaks the chapter in a natural voice. Tables and charts are introduced and explained, not just read out. The line being discussed is highlighted and the page scrolls with it. Tapping any line jumps the audio there.
 Why: Students can study when they cannot look at a screen: driving, at the gym, walking to class. Following the highlight while listening also helps students who lose their place in dense text.
-Page length: none added (a bar pinned to the bottom of the screen).
+Page length: none added (a bar pinned to the bottom of the screen). Listening time: about 8 to 10 minutes for a Concise chapter, shown on the button.
 
 4. Tap-to-define
 What: Every glossary term in the text is tappable and shows its definition in a small pop-up.
@@ -152,7 +152,7 @@ Why: Motion shows what changed and in what order, which a still picture cannot. 
 Page length: none added.
 
 Cost
-The voice is free and open-source and runs on our own computer. The narration is not the page read aloud: Claude writes a spoken script for each chapter. The build checks that nothing on the page is skipped and that every number spoken appears on the page.
+The voice is free and open-source and runs on our own computer, and uses a pronunciation dictionary so terms like "subcontract" are said correctly. The narration is not the page read aloud: Claude writes a spoken script for each chapter. The build checks that nothing on the page is skipped and that every number spoken appears on the page.
 
 Decisions needed
 - Voice: keep the free voice, or pay for a studio voice with more expression (roughly $0.15 to $1 per chapter).
@@ -161,7 +161,7 @@ Decisions needed
 
 Checking and what is left
 - Listen narration is written for two chapters. Each new chapter needs its script generated.
-- Nobody has to listen to a whole recording to check it. An automatic listener transcribes the audio and compares it with the script: 220 of 221 passages matched, and the one that differed is a 7-second clip. It cannot judge tone, so a person should still sample a minute per chapter.
+- Nobody has to listen to a whole recording to check it. An automatic listener transcribes the audio and compares it with the script. All 173 recorded passages now match, and it caught two real errors on the way (a dropped word and a phrase that sounded like a different number), both fixed. It cannot judge tone, so a person should still sample a minute per chapter.
 </textarea>
 <script>
 document.getElementById('copy').addEventListener('click', function () {

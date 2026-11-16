@@ -17,6 +17,9 @@ in that section containing it, and the Listen bar highlights and scrolls to that
 For a table row use the first cell followed by ` |` (`"Brand manager |"`). `steps_from` reuses another edition's
 step scripts when the same widget appears on both.
 
+`pronounce.json` holds corrections for any word the voice says wrong, as `"word": "phonemes"`. The voice uses
+Kokoro's own pronunciation dictionary, so this should rarely be needed.
+
 ## How to write one (this is the prompt for Claude each semester)
 
 Write for the ear, as a tutor talking one student through the page.
@@ -24,8 +27,13 @@ Write for the ear, as a tutor talking one student through the page.
 * **Do not read the page, and do not chop it up.** Say what the bullet means in connected sentences. Each passage is
   recorded as one continuous take, so a run of two-word sentences sounds choppy; a line break starts a new take
   after a short beat (use one inside any passage longer than about 60 words).
-* **Leave nothing out.** Every bullet, paragraph and table row gets a passage, in page order, and every number in
-  it is spoken. The build stops otherwise.
+* **Keep it shorter than reading.** The build stops if a script is more than 120% of the words of the text it
+  speaks for. No warm-up ("Here is a worked example"), no restating. A Concise chapter should come to 7 to 9 minutes.
+* **Do not narrate the Glossary.** Give it an empty list (`"Glossary": []`): every term is already defined where
+  it comes up. Key Takeaways is a recap: group several bullets under one passage by giving a list of anchors,
+  `[["first bullet", "second bullet"], "one passage for both"]`.
+* **Leave nothing else out.** Every bullet, paragraph and table row gets a passage, in page order, and every number
+  in it is spoken. The build stops otherwise.
 * **Introduce every table.** Its first passage is anchored to the header row and names each column ("For each
   method, it gives the focus and the use"). Each row then says which column a value belongs to ("Its focus is ...
   Its use is ..."), so the listener never hears a cell without knowing what it is.
