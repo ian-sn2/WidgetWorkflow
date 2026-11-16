@@ -1,0 +1,35 @@
+/* Play: the two extra buttons, the progress line, and the motion a step gets when it arrives */
+.pmw button.pv-play, .tpw button.pv-play { background:#c8302a; border-color:#c8302a; color:#fff; min-width:6.2em; }
+.tpw button.pv-play, .tpw button.pv-voice { font:inherit; font-size:.85rem; font-weight:700; min-height:40px; padding:6px 14px;
+  border:1px solid #cfd6e2; border-radius:999px; cursor:pointer; line-height:1.2; }
+.tpw button.pv-voice { background:#fff; }
+.pmw button.pv-voice, .tpw button.pv-voice { padding:6px 10px; min-width:44px; }
+.pmw button.pv-play, .pmw button.pv-voice, .tpw button.pv-play, .tpw button.pv-voice { min-height:44px; }
+.pv-prog { height:3px; margin:-4px 0 6px; background:transparent; border-radius:2px; overflow:hidden; }
+.pv-on .pv-prog { background:#e6eaf1; }
+.pv-prog i { display:block; height:100%; width:0; background:#c8302a; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pmw .n.cur-f .n-halo, .pmw .n.cur-b .n-halo { transform-box:fill-box; transform-origin:center; animation:pv-pulse 1.1s ease-out 2; }
+  .pmw .n .cu { animation:pv-flash .9s ease-in-out 1; }
+  .pmw .n.cur-f .n-v.vf, .pmw .n.cur-b .n-v.vb { transform-box:fill-box; transform-origin:center; animation:pv-pop .5s .45s ease-out backwards; }
+  .pmw .e.f .e-l, .pmw .e.b .e-l { stroke-dasharray:320; stroke-dashoffset:320; animation:pv-draw .55s ease-out forwards; }
+  .pmw .e.f .e-h, .pmw .e.b .e-h { animation:pv-fade .25s .45s ease-out backwards; }
+  .pmw .pm-cap.on, .tpw.pv-on div.tp-cap { animation:pv-fade .3s ease-out; }
+  .tpw td.hi { animation:pv-flash .9s ease-in-out 1; }
+}
+@keyframes pv-pulse { from { transform:scale(.8); opacity:.6; } to { transform:scale(1.25); opacity:0; } }
+@keyframes pv-flash { 0%, 100% { opacity:1; } 35% { opacity:.25; } 70% { opacity:1; } 85% { opacity:.5; } }
+@keyframes pv-pop { from { transform:scale(2.2); opacity:0; } to { transform:scale(1); opacity:1; } }
+@keyframes pv-draw { to { stroke-dashoffset:0; } }
+@keyframes pv-fade { from { opacity:0; } to { opacity:1; } }
+
+/* video mode: the widget alone on a 16:9 stage */
+body.pv-mode { margin:0; padding:0; background:#eef1f6; max-width:none; }
+body.pv-mode > * { display:none !important; }
+body.pv-mode > .pv-stage { display:flex !important; align-items:center; justify-content:center; width:100vw; height:100vh; }
+body.pv-mode .pv-stage > .pmw, body.pv-mode .pv-stage > .tpw { width:94vw; max-width:1180px; margin:0; padding:22px 28px 18px; box-shadow:0 8px 30px rgba(28,42,68,.14); }
+body.pv-mode .pv-stage button, body.pv-mode .pv-stage .pm-count, body.pv-mode .pv-stage .tp-count, body.pv-mode .tp-lede { display:none; }
+body.pv-mode .pv-stage .pm-title, body.pv-mode .pv-stage .tp-title { font-size:1.5rem; margin-bottom:12px; }
+body.pv-mode .pv-stage .pm-cap, body.pv-mode .pv-stage div.tp-cap { font-size:1.12rem; }
+body.pv-mode .pv-stage .pm-fig { max-height:56vh; }

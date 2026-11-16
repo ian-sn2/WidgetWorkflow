@@ -29,7 +29,7 @@ import os
 import pathlib
 import sys
 
-CHROMIUM_GLOB = "chromium-*/chrome-linux/chrome"
+CHROMIUM_GLOB = "chromium-*/chrome-linux*/chrome"
 TAP_MIN = 44.0          # the smaller side of a control, in CSS px
 SETTLE_MS = 750
 
