@@ -29,12 +29,17 @@ import os
 import pathlib
 import sys
 
-CHROMIUM_GLOB = "chromium-*/chrome-linux/chrome"
+CHROMIUM_GLOB = "chromium-*/chrome-linux*/chrome"   # chrome-linux, or chrome-linux64 since Playwright 1.5x
 TAP_MIN = 44.0          # the smaller side of a control, in CSS px
 SETTLE_MS = 750
 
 
 def find_chromium():
+    # The container's own browser: a stable link where the image provides one,
+    # else whichever versioned folder is there.
+    link = pathlib.Path("/opt/pw-browsers/chromium")
+    if link.is_file():
+        return str(link)
     for path in sorted(pathlib.Path("/opt/pw-browsers").glob(CHROMIUM_GLOB)):
         return str(path)
     return None

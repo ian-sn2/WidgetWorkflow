@@ -1,4 +1,6 @@
-# Engine reference — `engine/sd-graph.js` v2.69
+# Engine reference — `engine/sd-graph.js` v2.70
+
+**v2.70:** the stylesheet keeps the page itself from scrolling sideways on a phone. A displayed equation wider than the column scrolls in its own box at every width; at 600px and under, so does a page table (`table:not(.financial)` outside a widget) and an inline equation. Stylesheet only, no change to the script's behaviour. See *The page's own stylesheet* below (Ian, 2026-11-16).
 
 **v2.69:** nothing covers a name. Dashed guides break round every in-plot label, in-plot labels carry a halo in the plot's colour, and curve and area names are drawn last; see *Labels over the drawing* below (Ian, 2026-11-05).
 
@@ -814,6 +816,18 @@ now pins `transform`, `position`, `margin`, `padding`, `border` and
 `visibility` on those elements. `check_file.py` cannot see this -- it is a
 render-only defect -- so a widget that looks wrong on a page that has its own
 CSS is a stylesheet collision until proved otherwise.
+
+**The other direction, since v2.70.** The engine's stylesheet carries three
+rules for the page around the widgets, the only ones that reach outside
+`.sdg`: a displayed MathJax equation scrolls in its own box, and on a phone
+(600px and under) so do an inline equation and any `table:not(.financial)`
+that is not inside a widget. The house stylesheet's tables are full width with
+16px/20px cell padding and `overflow: hidden`, so a wide one pushed the page
+sideways on a phone, and so did the equations once MathJax had typeset them;
+at 320px the Tradeoffs chapter zoomed out until its step buttons could not be
+pressed. The fix belongs in `sn25-v6.css`, which only someone with S3 access
+can change, so it rides in the sheet every notes file already embeds. A page
+table on a phone then sits at its content's width rather than the column's.
 
 ## Labels over the drawing (v2.69)
 
