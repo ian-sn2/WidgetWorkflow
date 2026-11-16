@@ -21,7 +21,8 @@
   "FAIL  ticks    widget 7 panel 1: the 300 tick on Q is a point's reading that arrives at step 1 -- it is on the axis before the thing it labels. Drop the tick and let the point print it.",
   "FAIL  ticks    widget 7 panel 2: the 0 tick on Q is a point's reading that arrives at step 1 -- it is on the axis before the thing it labels. Drop the tick and let the point print it.",
   "FAIL  ticks    widget 7 panel 2: the 100 tick on Q is a point's reading that arrives at step 2 -- it is on the axis before the thing it labels. Drop the tick and let the point print it.",
-  "FAIL  ticks    widget 7 panel 2: the 150 tick on P is a point's reading that arrives at step 1 -- it is on the axis before the thing it labels. Drop the tick and let the point print it."
+  "FAIL  ticks    widget 7 panel 2: the 150 tick on P is a point's reading that arrives at step 1 -- it is on the axis before the thing it labels. Drop the tick and let the point print it.",
+  "FAIL  toc      text above the first <h1> renders above the table of contents; move it under the heading (only the date pill stays up there): Dr. Knight devoted the entire class on Monday, August 24th to a review..."
  ],
  "examples/ECO2013-Widgets-All.html": [
   "FAIL  caption  widget 13: shorthand instead of words: ' and 160 bushels. Price up, quantity up.'",

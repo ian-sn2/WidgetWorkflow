@@ -487,6 +487,16 @@ case("a calcs block makes every caption in the widget working", lambda r: C.chec
           "steps": ["no digits here at all " + "w" * (C.CAPTION_MAX + 10) + "."]}, "")], r)
     or not [l for l in r.lines if "characters" in l])
 
+# ---- text above the contents box (Ian, 2026-11-16) ---------------------------
+
+HEAD_SG = '<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>'
+case("toc: an intro paragraph above the first h1 fails", lambda r: C.check_toc(
+    HEAD_SG + '<body><p class="date">Monday, 11/16/26</p><p>At the beginning of class...</p><h1>Species</h1></body>', r)
+    or r.has("FAIL", "toc", "above the table of contents"))
+case("toc: the date pill alone above the first h1 is fine", lambda r: C.check_toc(
+    HEAD_SG + '<body><p class="date">Monday, 11/16/26</p><h1>Species</h1><p>At the beginning of class...</p></body>', r)
+    or not r.has("FAIL", "toc", ""))
+
 # ---- the source-word rules, which have been narrowed three times -----------
 
 for txt, tag in [("<p>built from a lecture recording alone.</p>", "a lecture recording"),

@@ -470,6 +470,21 @@ def check_toc(src, r):
           for m in re.finditer(r"<h([123])\b([^>]*)>", body, re.I)]
     block = re.search(r'<details class="toc-box">(.*?)</details>', body, re.S)
 
+    # The study-guide script puts the contents box immediately before the first
+    # <h1>, so a paragraph above that heading reads above the contents -- an
+    # opening anecdote sat over the TOC in the BSC2010 macroevolution notes.
+    # Only the date pill belongs up there; intro text goes under the first
+    # heading (Ian, 2026-11-16: "make sure to do that from now on").
+    h1 = re.search(r"<h1\b", body, re.I)
+    if h1 and re.search(r"studyguide/sn25-v\d+\.js", src):
+        above = re.sub(r"<(script|style)\b.*?</\1>|<!--.*?-->", " ", body[:h1.start()], flags=re.S | re.I)
+        intro = [m for m in re.finditer(r"<(p|ul|ol|div|table|blockquote)\b([^>]*)>", above, re.I)
+                 if not re.search(r'class="[^"]*\bdate\b', m.group(2))]
+        if intro:
+            words = " ".join(re.sub(r"<[^>]+>", " ", above[intro[0].start():]).split())[:70]
+            r.fail("toc", "text above the first <h1> renders above the table of contents; "
+                          "move it under the heading (only the date pill stays up there): %s..." % words)
+
     if not block:
         if hs and not re.search(r"studyguide/sn25-v\d+\.js", src):
             r.warn("toc", "no table of contents; the house script cannot supply "

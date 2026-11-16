@@ -19,6 +19,7 @@ Put the files Ian sent, unchanged, in `chapters/<COURSE>/<chapter>/source/`, and
 ## House format (CLAUDE.md hard rule 7)
 - Head: Red Hat Display font, `content/sn25-v6.css`, `studyguide/sn25-v2.js` (builds the TOC, so no written-in TOC), then `<!--SDG-ENGINE-->`. **Leave the `<title>` exactly as given.**
 - `<p class="date">` per class date; `<h1>`/`<h2>` only (`<h3>` on Concise pages); `.exam-tip` with `<h4>`; Glossary and Key Takeaways are `<h2>`s.
+- **Only the date pill above the first `<h1>`.** The house script puts the TOC right before that heading, so intro text above it lands above the TOC: move it to just under the first heading (`check_file.py` fails it).
 - `<strong>` for vocabulary terms in text you write; **the source's own `<strong>` stays**. A displayed definition is a centred `<strong>\( … \)</strong>`.
 - **Names**: keep a named professor and list it in the changelog. Whether it publishes is Ian's call.
 
