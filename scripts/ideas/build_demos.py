@@ -1,14 +1,16 @@
-"""Build the three 2026-11-16 idea demos from the chapter files Ian sent.
+"""Build the 2026-11-16 idea demos from the chapter files Ian sent.
 
-    python scripts/ideas/build_demos.py <unpacked SentToClaude folder> <output folder>
+    python scripts/ideas/build_demos.py <unpacked SentToClaude folder> <output folder> [--only-play --only-all ...]
 
 1. Play        every step-by-step widget gets a Play button, narration and step motion (add-on only)
 2. What-if lab the CPM network can be delayed or crashed by tapping it (one new widget kind)
-3. Depth       Concise + Balanced + Full merged into one page with a depth switch
+3. Define      every glossary term in the text is tappable and shows its definition (any page)
 4. Listen      any page read aloud section by section from a bar pinned to the bottom (recorded voice)
 5. Motion      every MAN4504 widget animated, in all three editions of both chapters (plus the labs)
+6. All         one page per chapter carrying every idea that applies to it: the pages to send
 Every edit asserts that it landed; nothing else in a chapter is touched.
 """
+import html
 import json
 import subprocess
 import re
@@ -141,80 +143,41 @@ def build_lab():
     print('lab   ', Path(PM).name)
 
 
-# ---------------------------------------------------------------- 3. Depth switch
-HEAD = re.compile(r'<(h[12])\b[^>]*>(.*?)</\1>', re.S)
+# ---------------------------------------------------------------- 3. Tap to define (works on any notes page)
+MAR = '01 - MAR3023 Exam 3 Chapter 22-DONE - Posted/MAR3023-Fall26-Exam3-Chapter22-PERT-DONE/MAR3023-Fall26-Exam3-Chapter22-WithPERT-%s.html'
+PMC = PM.replace('-Full.html', '-Concise.html')
 
 
-def split(html):
-    """-> head, preface, [(heading html, heading text, chunk html)], tail (the closing engine script on)"""
-    b0 = html.index('<body')
-    b0 = html.index('>', b0) + 1
-    head, body = html[:b0], html[b0:]
-    cut = body.rindex('<script>')            # the widget engine closes the body in all three editions
-    body, tail = body[:cut], body[cut:]
-    masked = re.sub(r'<script.*?</script>', lambda m: ' ' * len(m.group(0)), body, flags=re.S)
-    hs = list(HEAD.finditer(masked))
-    secs = []
-    for i, h in enumerate(hs):
-        end = hs[i + 1].start() if i + 1 < len(hs) else len(body)
-        secs.append((body[h.start():h.end()], re.sub(r'<[^>]+>', '', h.group(2)).strip(), body[h.end():end]))
-    return head, body[:hs[0].start()], secs, tail
+def glossary(concise):
+    """the chapter's own Glossary table, from its Concise edition -> [[term, definition], ...]"""
+    s = (SRC / concise).read_text(encoding='utf8')
+    m = re.search(r'<h2[^>]*>\s*Glossary\s*</h2>\s*<table.*?</table>', s, flags=re.S)
+    assert m, 'no Glossary table in ' + concise
+    def text(x): return re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', '', x))).strip()
+    rows = [(text(a), text(b)) for a, b in re.findall(r'<tr>\s*<td[^>]*>(.*?)</td>\s*<td[^>]*>(.*?)</td>\s*</tr>', m.group(0), flags=re.S)]
+    assert len(rows) >= 5, rows
+    return [[t, d if d.endswith('.') else d + '.'] for t, d in rows]
 
 
-def nwords(chunk):
-    return len(re.sub(r'<script.*?</script>|<[^>]+>', ' ', chunk, flags=re.S).split())
+def add_define(s, concise):
+    block = ('<script type="application/json" id="df-terms">' + json.dumps(glossary(concise), ensure_ascii=False).replace('</', '<\\/') + '</script>\n'
+             '<style>\n' + read('define.css') + '</style>\n<script>\n' + read('define.js') + '</script>\n')
+    return once(s, '</body>', block + '</body>')
 
 
-def build_depth():
-    ed = {k: split((SRC / (AP % n)).read_text(encoding='utf8')) for k, n in (('c', 'CONCISE'), ('b', 'BALANCED'), ('f', 'FULL'))}
-    head, pre, full, tail = ed['f']
-    by = {k: {t: c for _, t, c in ed[k][2]} for k in ed}
-    for k in 'cb':                           # every Full heading exists in the shorter editions, word for word
-        assert [t for _, t, _ in ed[k][2]][:len(full)] == [t for _, t, _ in full], k
-    assert ed['c'][3].strip() == tail.strip() == ed['b'][3].strip(), 'the three editions close with different engines'
-    styles = set(re.findall(r'<style.*?</style>', head, flags=re.S))
-    extra = [st for k in 'cb' for st in re.findall(r'<style.*?</style>', ed[k][0], flags=re.S) if st not in styles]
-    extra = list(dict.fromkeys(extra))       # a shorter edition's own style block goes in first, so the Full's wins a tie
-    if extra:
-        head = head.replace('<style', '\n'.join(extra) + '\n<style', 1)
-        print('depth  extra style blocks from shorter editions:', len(extra))
-
-    total = {'c': 0, 'b': 0, 'f': 0}
-    body = [pre, '<div class="dz-bar" role="group" aria-label="How much detail to show"><span class="dz-lab">Detail</span>'
-            '<button type="button" data-d="c">Short</button><button type="button" data-d="b">Medium</button>'
-            '<button type="button" data-d="f">Full</button><span class="dz-time"></span></div>\n']
-    for hhtml, text, _ in full:
-        body.append(hhtml + '\n<div class="dz">')
-        seen = []
-        for k in 'cbf':
-            chunk = by[k][text]
-            if not nwords(chunk) and '<img' not in chunk and 'class="tpw"' not in chunk:
-                continue
-            if chunk in seen:                # same text at two depths: keep one copy
-                continue
-            seen.append(chunk)
-            total[k] += nwords(chunk)
-            body.append('<div class="dz-v" data-d="%s" data-w="%d" hidden>%s</div>' % (k, nwords(chunk), chunk))
-        body.append('<div class="dz-more"></div></div>\n')
-    for hhtml, text, chunk in ed['c'][2][len(full):]:   # Glossary and Key Takeaways close every depth
-        body.append(hhtml + chunk)
-    html = head + ''.join(body) + '<script>\n' + read('depth.js') + '</script>\n' + tail
-    html = once(html, '</head>', '<style>\n' + read('depth.css') + '</style>\n</head>')
-    out = OUT / '3-Depth-Switch'
+def build_define():
+    out = OUT / '3-Tap-To-Define'
     out.mkdir(parents=True, exist_ok=True)
-    name = 'MAN4504-263-Exam3-AggregatePlanning-AllDepths.html'
-    (out / name).write_text(html, encoding='utf8')
-    print('depth ', name, 'words by depth', total)
-
-
+    for src, concise in ((MAR % 'Full', MAR % 'Concise'), (PM, PMC), (AP % 'FULL', AP % 'CONCISE')):
+        (out / Path(src).name).write_text(add_define((SRC / src).read_text(encoding='utf8'), concise), encoding='utf8')
+        print('define', Path(src).name, len(glossary(concise)), 'terms')
 
 
 # ---------------------------------------------------------------- 4. Listen (works on any notes page)
 def build_listen():
     out = OUT / '4-Listen-AnyPage'
     out.mkdir(parents=True, exist_ok=True)
-    for src in ('01 - MAR3023 Exam 3 Chapter 22-DONE - Posted/MAR3023-Fall26-Exam3-Chapter22-PERT-DONE/MAR3023-Fall26-Exam3-Chapter22-WithPERT-Concise.html',
-                AP % 'CONCISE'):
+    for src in (MAR % 'Concise', AP % 'CONCISE'):
         subprocess.run([sys.executable, str(HERE / 'narrate.py'), 'listen', str(SRC / src), str(out / Path(src).name)], check=True)
 
 
@@ -236,11 +199,33 @@ def build_motion():
         print('motion', src.name, '+ what-if labs' if labs else '')
 
 
-if '--only-motion' in sys.argv:
-    build_motion()
-else:
-    build_play()
-    build_lab()
-    build_depth()
-    build_listen()
-    build_motion()
+# ---------------------------------------------------------------- 6. Everything together: the pages to send
+def add_motion(s):
+    return once(s, '</body>', '<style>\n' + read('motion.css') + '</style>\n<script>\n' + read('motion.js') + '</script>\n</body>')
+
+
+def build_all():
+    """one page per chapter carrying every idea that applies to it"""
+    out = OUT / 'ALL-IDEAS-send-these'
+    out.mkdir(parents=True, exist_ok=True)
+    narrate = str(HERE / 'narrate.py')
+    # Project Management, Full: what-if labs + motion + Play with narration + tap to define
+    f = out / Path(PM).name
+    f.write_text(add_play(add_motion(add_define(with_lab((SRC / PM).read_text(encoding='utf8')), PMC))), encoding='utf8')
+    subprocess.run([sys.executable, narrate, 'steps', str(f)], check=True)
+    # Aggregate Planning, Concise: Listen with highlighting + motion + Play with narration + tap to define
+    f = out / Path(AP % 'CONCISE').name
+    f.write_text(add_play(add_motion(add_define((SRC / (AP % 'CONCISE')).read_text(encoding='utf8'), AP % 'CONCISE'))), encoding='utf8')
+    subprocess.run([sys.executable, narrate, 'steps', str(f)], check=True)
+    subprocess.run([sys.executable, narrate, 'listen', str(f), str(f)], check=True)
+    # MAR3023 Chapter 22, Concise: Listen with highlighting + tap to define (it has no step-by-step widget)
+    f = out / Path(MAR % 'Concise').name
+    f.write_text(add_define((SRC / (MAR % 'Concise')).read_text(encoding='utf8'), MAR % 'Concise'), encoding='utf8')
+    subprocess.run([sys.executable, narrate, 'listen', str(f), str(f)], check=True)
+    print('all   ', [x.name for x in sorted(out.glob('*.html'))])
+
+
+ONLY = [a[7:] for a in sys.argv if a.startswith('--only-')]
+for name, fn in (('play', build_play), ('lab', build_lab), ('define', build_define), ('listen', build_listen), ('motion', build_motion), ('all', build_all)):
+    if not ONLY or name in ONLY:
+        fn()

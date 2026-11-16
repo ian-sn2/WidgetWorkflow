@@ -15,4 +15,8 @@
 .ls-track { height:14px; padding:5px 0; cursor:pointer; background:linear-gradient(rgba(255,255,255,.25), rgba(255,255,255,.25)) center / 100% 4px no-repeat; }
 .ls-track i { display:block; height:4px; width:0; background:#fff; border-radius:2px; }
 body.ls-open { padding-bottom:76px; }
-.ls-now { box-shadow:inset 4px 0 0 #c8302a; scroll-margin-top:70px; }
+/* what is being spoken about: a soft highlight on the bullet, row or paragraph. Headings are never restyled. */
+.ls-hi:not(tr):not(h1):not(h2):not(h3):not(h4) { background:#fff3bf; box-shadow:0 0 0 5px #fff3bf; border-radius:3px; }
+tr.ls-hi > td, tr.ls-hi > th { background:#fff3bf !important; }
+body.ls-open [data-ls] { cursor:pointer; transition:background-color .25s, box-shadow .25s; }
+body.ls-open tr[data-ls] > td { transition:background-color .25s; }

@@ -1,0 +1,20 @@
+{
+  "steps": {
+    "The Transportation Method, Step by Step": [
+      "Let's set up the table. Across the top: the months we need units for. Down the side: every place those units can come from. Now, add up the demand. 800, plus 1,000, plus 750. That's 2,550. And how much can we supply? 2,680, plus 100 units of beginning inventory. So we have more than we need. 230 more, to be exact. Where does the extra go? Into a dummy column, so that supply equals demand. One more thing. There's no back-ordering, so a month's production can't cover an earlier month's demand. Those cells are blacked out.",
+      "Now the costs. Start with March. If a unit is made in March and used in March, it just costs what it costs to make: 40 dollars on regular time, 50 on overtime, 70 if we subcontract. And the units already in inventory? Those cost 0 dollars.",
+      "April works the same way for anything made in April. But what about units made earlier, and saved for April? Holding a unit for a month costs 2 dollars. So everything from March goes up by 2. Inventory becomes 2 dollars, and the others become 42, 52, and 72.",
+      "By May, you can probably guess the pattern. May production costs its base price. April production waited one month, so add 2 dollars. And anything from March, or from inventory, waited two months. So add 4. What about the dummy column? That's 0 dollars everywhere, because unused capacity never actually gets made.",
+      "Time to fill the table. The rule is simple: work left to right, and always take the cheapest source that still has units. So, March first. What's cheapest? Beginning inventory, at 0 dollars. Take all 100 units. That leaves 700 units of March demand still to fill.",
+      "What's the next cheapest? March regular time, at 40 dollars. Take 700 units. And just like that, March is covered.",
+      "On to April. Line up the choices, cheapest first: April regular at 40. April overtime at 50. March overtime, held a month, at 52. Then subcontracting, at 70 and 72. Start at the top. April regular gives us 700 units. But April needs more than that. There are still 300 to find.",
+      "Next in line is April overtime, at 50 dollars. It only has 50 units, so take them all. 250 still to go.",
+      "Now here's a nice move. March had overtime we never used. We can make those units in March and hold them for a month, at 52 dollars each. That's another 50 units. 200 left.",
+      "We're out of the cheap options, so now it's subcontracting. April subcontracting costs 70 dollars. Take 150 units. We're almost there. Just 50 short.",
+      "Where do the last 50 come from? March subcontracting, held for a month, at 72 dollars. It has 150 units, but we only need 50. So the other 100 stay available. And April is covered.",
+      "Last month: May. And May is easy. May regular time, at 40 dollars, covers 700 units straight away. That leaves only 50.",
+      "And May overtime, at 50 dollars, gives us those 50 units. May is done.",
+      "So every month's demand is met. What about the capacity nobody used? That goes in the dummy column: 100 units of March subcontracting, and 130 from May. Together, that's 230. Supply and demand balance, and the plan is complete."
+    ]
+  }
+}

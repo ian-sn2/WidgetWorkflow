@@ -2,106 +2,172 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;800&family=Red+Hat+Text:wght@400;500;700&display=swap">
 <style>
-/* layout: a one-page memo. Verdict line, three idea columns, then two short reference blocks side by side. */
+/* layout: a one-page memo. Lead paragraph, five numbered ideas each with What / Why / Page length, then three short closing blocks. */
 :root { --bg:#f6f7fa; --card:#ffffff; --ink:#1c2a44; --muted:#5b6474; --rule:#dfe3ea; --accent:#c8302a; --blue:#1f62b8; --tint:#eef3fb;
   --display:"Red Hat Display", system-ui, sans-serif; --body:"Red Hat Text", system-ui, sans-serif; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#131926; --card:#1b2334; --ink:#e8ecf4; --muted:#a3adbf; --rule:#313b50; --accent:#ff7a70; --blue:#8ab8f5; --tint:#222d44; color-scheme:dark } }
 :root[data-theme="dark"] { --bg:#131926; --card:#1b2334; --ink:#e8ecf4; --muted:#a3adbf; --rule:#313b50; --accent:#ff7a70; --blue:#8ab8f5; --tint:#222d44; color-scheme:dark }
 body { background:var(--bg); color:var(--ink); font:400 15px/1.5 var(--body); padding-block:22px 28px;
   padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); }
-.page { max-width:1060px; margin:0 auto; display:grid; gap:14px; }
-h1 { font:800 1.7rem/1.15 var(--display); margin:0; text-wrap:balance; }
-h2 { font:800 1.02rem/1.25 var(--display); margin:0 0 6px; text-wrap:balance; }
-h3 { font:800 .74rem/1.2 var(--display); letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin:0 0 6px; }
-p { margin:0 0 8px; } p:last-child { margin-bottom:0; }
-.sub { color:var(--muted); margin-top:4px; }
-.lede { background:var(--card); border:1px solid var(--rule); border-left:5px solid var(--accent); border-radius:8px; padding:12px 16px; }
-.three { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
-.two { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; }
-.card { background:var(--card); border:1px solid var(--rule); border-radius:8px; padding:14px 16px; min-width:0; }
-.n { font:800 .78rem var(--display); color:var(--accent); letter-spacing:.06em; }
-.fact { font:800 1.5rem/1.1 var(--display); color:var(--blue); font-variant-numeric:tabular-nums; margin:8px 0 2px; }
-.factl { font-size:.82rem; color:var(--muted); margin-bottom:8px; }
-dl { margin:8px 0 0; display:grid; gap:5px; font-size:.88rem; }
-dt { font:700 .72rem var(--display); letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+.page { max-width:860px; margin:0 auto; display:grid; gap:12px; }
+header { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:10px; }
+h1 { font:800 1.6rem/1.15 var(--display); margin:0; text-wrap:balance; }
+h2 { font:800 1rem/1.25 var(--display); margin:0 0 4px; }
+h3 { font:800 .74rem/1.2 var(--display); letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin:0 0 5px; }
+p { margin:0 0 6px; } p:last-child { margin-bottom:0; }
+.lede { margin:0; }
+.card { background:var(--card); border:1px solid var(--rule); border-radius:8px; padding:12px 16px; min-width:0; }
+.idea { display:grid; grid-template-columns:2.2rem minmax(0, 1fr); gap:0 6px; }
+.n { font:800 1.3rem/1.2 var(--display); color:var(--accent); font-variant-numeric:tabular-nums; }
+.pick { font:800 .68rem var(--display); letter-spacing:.06em; text-transform:uppercase; color:var(--card); background:var(--accent); padding:2px 7px; border-radius:999px; vertical-align:2px; margin-left:6px; }
+dl { margin:0; display:grid; grid-template-columns:6.2em minmax(0, 1fr); gap:3px 8px; font-size:.92rem; }
+dt { font:700 .72rem/1.9 var(--display); letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
 dd { margin:0; }
-ul { margin:0; padding-left:18px; } li { margin-bottom:4px; }
-.small { font-size:.88rem; }
-code { font-size:.85em; background:var(--tint); padding:1px 5px; border-radius:4px; overflow-wrap:anywhere; }
-@media (max-width:820px) { .three, .two { grid-template-columns:1fr; } }
+.three { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; }
+ul { margin:0; padding-left:18px; font-size:.9rem; } li { margin-bottom:3px; }
+button { font:700 .85rem var(--display); min-height:44px; padding:8px 16px; border:1px solid var(--ink); border-radius:999px; background:var(--ink); color:var(--card); cursor:pointer; }
+button:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
+#plain { position:absolute; left:-9999px; top:0; width:1px; height:1px; opacity:0; }
+@media (max-width:720px) { .three { grid-template-columns:1fr; } dl { grid-template-columns:1fr; gap:0; } dt { margin-top:4px; } }
 </style>
 
 <div class="page">
   <header>
-    <h1>Three ways to add video, animation and less scrolling to the study guides</h1>
-    <p class="sub">Research day, 16 November 2026. Built on the three Exam 3 modules in SentToClaude.zip (MAN4504 Project Management, MAN4504 Aggregate Planning, MAR3023 Chapter 22).</p>
+    <h1>Study guide upgrades: five working ideas</h1>
+    <button type="button" id="copy">Copy as plain text</button>
   </header>
 
-  <p class="lede"><b>Bottom line.</b> All three ideas are working demos on this exam's own pages, none of them is a quiz, and each is produced by a script from files we already make every semester. The fastest win is the Play button: it needs no change to any existing widget. The largest effect on scrolling is the depth switch, which opens a chapter 60% shorter on a phone with the full text one tap away.</p>
+  <p class="lede">We tested five ways to add video, animation and audio to the study guides without making the pages longer. All five are working demos built on this exam's own pages (MAN4504 Project Management, MAN4504 Aggregate Planning, MAR3023 Chapter 22). None of them is a quiz. Each one is produced by a script from files we already make, so it can be repeated every semester.</p>
+
+  <section class="card idea">
+    <div class="n">1</div>
+    <div>
+      <h2>What-if lab <span class="pick">our pick</span></h2>
+      <dl>
+        <dt>What</dt><dd>Students tap an activity on the project network to delay it or crash it. The times, slack, critical path, finish date and cost update with an animation and a one-line explanation.</dd>
+        <dt>Why</dt><dd>Struggling students learn a method by changing the problem and seeing what happens. Exam questions are usually a twist on the worked example, and this lets them try the twists.</dd>
+        <dt>Page length</dt><dd>One line until opened.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="card idea">
+    <div class="n">2</div>
+    <div>
+      <h2>Play: narrated walkthroughs and automatic videos</h2>
+      <dl>
+        <dt>What</dt><dd>A Play button on our step-by-step widgets advances the steps while a voice explains each one. The same page can film itself into an MP4.</dd>
+        <dt>Why</dt><dd>A student can sit back and watch a method being worked, like having a tutor, and replay it as often as needed. The videos also give us YouTube and social content with no production work.</dd>
+        <dt>Page length</dt><dd>None added.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="card idea">
+    <div class="n">3</div>
+    <div>
+      <h2>Listen: the chapter as audio, with follow-along highlighting</h2>
+      <dl>
+        <dt>What</dt><dd>A Listen button speaks the chapter in a natural voice, tables included. The line being discussed is highlighted and the page scrolls with it. Tapping any line jumps the audio there.</dd>
+        <dt>Why</dt><dd>Students can study when they cannot look at a screen: driving, at the gym, walking to class. Following the highlight while listening also helps students who lose their place in dense text.</dd>
+        <dt>Page length</dt><dd>None added (a bar pinned to the bottom of the screen).</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="card idea">
+    <div class="n">4</div>
+    <div>
+      <h2>Tap-to-define</h2>
+      <dl>
+        <dt>What</dt><dd>Every glossary term in the text is tappable and shows its definition in a small pop-up.</dd>
+        <dt>Why</dt><dd>A student who has forgotten a term does not have to scroll to the glossary and lose their place. We also do not need to re-explain terms in the text, which keeps pages short.</dd>
+        <dt>Page length</dt><dd>None added. Works on every page of every course.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="card idea">
+    <div class="n">5</div>
+    <div>
+      <h2>Animated widgets</h2>
+      <dl>
+        <dt>What</dt><dd>Every MAN4504 widget now moves. Networks draw themselves, the critical path flows, Gantt bars slide, curves build.</dd>
+        <dt>Why</dt><dd>Motion shows what changed and in what order, which a still picture cannot. The pages feel like video without the file size or the scrolling.</dd>
+        <dt>Page length</dt><dd>None added.</dd>
+      </dl>
+    </div>
+  </section>
 
   <div class="three">
     <section class="card">
-      <div class="n">IDEA 1</div>
-      <h2>Play: every step-by-step widget becomes a narrated animation, and a video</h2>
-      <p class="small">A Play button on the widgets we already build. It advances the steps by itself, reads each caption aloud, and animates what changed (the node pulses, the arrow draws in, the new number lands). The same page films itself into an MP4.</p>
-      <div class="fact">0 px</div><div class="factl">added page height. Sample video: 2 min 49 s with narration, 3.8 MB, made unattended.</div>
-      <dl>
-        <dt>Shown on</dt><dd>Project Management (4 widgets) and the Aggregate Planning transportation stepper.</dd>
-        <dt>Repeats each semester</dt><dd>One add-on file for every page. One command per video. New numbers in the widget give a new video.</dd>
-        <dt>To ship</dt><dd>Choose the voice. The demo and its MP4 now use Kokoro, an open-source neural voice that runs on our own machine with no per-use cost and a licence that allows commercial use. Five sample clips are in the voice-samples folder. A paid studio voice (ElevenLabs, OpenAI) would be roughly $0.15 to $1 per chapter and is a one-function change.</dd>
-      </dl>
+      <h3>Cost</h3>
+      <p style="font-size:.9rem">The voice is free and open-source and runs on our own computer. The narration is not the page read aloud: Claude writes a spoken script for each chapter, and the build checks that every number spoken appears on the page.</p>
     </section>
-
     <section class="card">
-      <div class="n">IDEA 2</div>
-      <h2>What-if lab: students change the problem and watch the answer move</h2>
-      <p class="small">Tap an activity on the project network to make it run a week late, or to crash it. Early and late times, slack, the critical path, the finish date and the crash cost all update, with a sentence explaining why. The change is animated: it travels forward along the arrows and back, numbers land one by one, the critical path flows, and a finish-date bar slides toward the deadline.</p>
-      <div class="fact">1 line</div><div class="factl">of page height until opened (delay lab). The crash lab replaces a widget of the same size.</div>
-      <dl>
-        <dt>Shown on</dt><dd>Project Management, Step 6 ("either B or D, not both") and Project Crashing.</dd>
-        <dt>Repeats each semester</dt><dd>It reads the durations and crash costs from the chapter's own tables, so a new example needs no new work. The build stops if its answers differ from the ones the chapter prints.</dd>
-        <dt>To decide</dt><dd>The lab shows numbers the chapter does not print (for example 16 weeks when B and D both slip). They are calculated by the chapter's own rules, but this is a change from "every number comes from the source".</dd>
-      </dl>
-    </section>
-
-    <section class="card">
-      <div class="n">IDEA 3</div>
-      <h2>Depth switch: Concise, Balanced and Full in one page</h2>
-      <p class="small">The page opens on the short text. A Short / Medium / Full bar changes the whole page, and a "More detail" link under any section opens only that section, without losing your place. It also shows the reading time.</p>
-      <div class="fact">12,400 vs 30,800 px</div><div class="factl">phone page height, opening view against today's Full edition. One section expanded adds about 900 px.</div>
-      <dl>
-        <dt>Shown on</dt><dd>Aggregate Planning (the three Option A files merged into one).</dd>
-        <dt>Repeats each semester</dt><dd>Fully automatic wherever the three editions share headings, which our edition scripts already guarantee for MAN4504. MAR3023's Concise uses different headings, so it would need its headings aligned first.</dd>
-        <dt>To decide</dt><dd>Whether one page replacing three fits how the editions are sold or posted.</dd>
-      </dl>
-    </section>
-  </div>
-
-  <div class="two">
-    <section class="card small">
-      <h3>The two resources, summarized</h3>
-      <p><b>Video: when and how to use Fable 5.2 (Ben, AI agency founder).</b> His claims: Fable 5.2 costs about twice Opus 5.5 and used roughly 70% more in his three side-by-side tests, with clearly better visual and design work and fewer number mistakes. Use it for large, open-ended jobs you hand over and walk away from, and Opus 5.5 for daily work. His eight rules: do not switch models mid-chat; set effort deliberately (default high); give the whole task up front with job, why, guardrails and "done"; ask for progress updates; ask for plain, short reports; add the "finish the work" text; audit old cautious rules; ask for proof and sources, not reasoning.</p>
-      <p><b>Anthropic's Fable 5.2 prompting guide.</b> The same points from the source: effort level is the main dial, with most of the gain at high. The model follows rules literally, so a rule containing "never" is treated as absolute and exceptions must be written out. Old notes and cautions pile up and should be pruned. Long tasks need a line asking for updates and a "finish the whole task" block. Final reports should be written for a reader who saw none of the work.</p>
-      <p><b>What this means for us.</b> Today's brief already followed the job / why / guardrails / done pattern, and it worked: one message produced all of this. Two follow-ups are worth an hour: prune the project instruction file, which has grown long and is full of absolute rules, and keep the builders' habit of stopping when a number does not match its source, which is the "ask for proof" rule in practice.</p>
-    </section>
-
-    <section class="card small">
-      <h3>Other capabilities we are not using yet</h3>
+      <h3>Decisions needed</h3>
       <ul>
-        <li><b>Scheduled, unattended runs.</b> A new chapter dropped in a folder can be converted, checked on a phone-size screen and delivered overnight. This suits Fable; day-to-day edits suit a cheaper model.</li>
-        <li><b>Ask-this-chapter tutor.</b> A chat box that answers only from the chapter, with the section it used. It needs a small server and an API key, so it is a product decision, not a page add-on.</li>
-        <li><b>Listen bar (now built, folder 4).</b> Any page read aloud section by section from a bar pinned to the bottom of the screen, with skip and speed. It needs only the page's headings, so it works on every course. Shown on MAR3023 Chapter 22 and Aggregate Planning, about 7 minutes each.</li>
-        <li><b>Tap-to-define terms.</b> The Glossary is already in every Concise file; the same definitions can pop up on any bold term, so explanations need not be repeated in the text.</li>
-        <li><b>Short vertical clips.</b> The recorder in Idea 1 takes a size, so the same widget can be filmed 9:16 for social posts.</li>
+        <li>Voice: keep the free voice, or pay for a studio voice with more expression (roughly $0.15 to $1 per chapter).</li>
+        <li>The what-if lab shows calculated numbers that the notes do not print.</li>
+        <li>Pages with audio are 2 to 7 MB until the audio is hosted separately.</li>
       </ul>
-      <h3 style="margin-top:12px">Limits and one finding</h3>
+    </section>
+    <section class="card">
+      <h3>Not done yet</h3>
       <ul>
-        <li>The YouTube page itself could not be opened from this session; the video summary is based on its spoken content, which was supplied in the chat.</li>
-        <li>The recorded voice was checked for timing, loudness, pronunciation of tricky words and that it plays, but nobody has listened to it yet. Please play the samples before deciding.</li>
-        <li><b>All MAN4504 widgets are now animated (folder 5):</b> both chapters, all three editions. Each widget ends on exactly its original drawing, checked pixel by pixel, and readers who ask their device for reduced motion see the pages unchanged.</li>
-        <li>Blender was looked into, not used. It makes 3D film clips, which suits a short intro video more than a diagram inside a page; the motion here is built into the page itself, so it stays sharp, interactive and small.</li>
-        <li>Found while measuring: the posted Balanced and Full Aggregate Planning pages scroll sideways by 340 px on a phone because of one wide table. Not changed.</li>
+        <li>Listen narration is written for two chapters. Each new chapter needs its script generated.</li>
+        <li>The recordings were checked for timing, loudness and pronunciation, but nobody has listened to them start to finish.</li>
       </ul>
     </section>
   </div>
 </div>
+
+<textarea id="plain" readonly aria-hidden="true" tabindex="-1">Study guide upgrades: five working ideas
+
+We tested five ways to add video, animation and audio to the study guides without making the pages longer. All five are working demos built on this exam&#x27;s own pages (MAN4504 Project Management, MAN4504 Aggregate Planning, MAR3023 Chapter 22). None of them is a quiz. Each one is produced by a script from files we already make, so it can be repeated every semester.
+
+1. What-if lab (our pick)
+What: Students tap an activity on the project network to delay it or crash it. The times, slack, critical path, finish date and cost update with an animation and a one-line explanation.
+Why: Struggling students learn a method by changing the problem and seeing what happens. Exam questions are usually a twist on the worked example, and this lets them try the twists.
+Page length: one line until opened.
+
+2. Play: narrated walkthroughs and automatic videos
+What: A Play button on our step-by-step widgets advances the steps while a voice explains each one. The same page can film itself into an MP4.
+Why: A student can sit back and watch a method being worked, like having a tutor, and replay it as often as needed. The videos also give us YouTube and social content with no production work.
+Page length: none added.
+
+3. Listen: the chapter as audio, with follow-along highlighting
+What: A Listen button speaks the chapter in a natural voice, tables included. The line being discussed is highlighted and the page scrolls with it. Tapping any line jumps the audio there.
+Why: Students can study when they cannot look at a screen: driving, at the gym, walking to class. Following the highlight while listening also helps students who lose their place in dense text.
+Page length: none added (a bar pinned to the bottom of the screen).
+
+4. Tap-to-define
+What: Every glossary term in the text is tappable and shows its definition in a small pop-up.
+Why: A student who has forgotten a term does not have to scroll to the glossary and lose their place. We also do not need to re-explain terms in the text, which keeps pages short.
+Page length: none added. Works on every page of every course.
+
+5. Animated widgets
+What: Every MAN4504 widget now moves. Networks draw themselves, the critical path flows, Gantt bars slide, curves build.
+Why: Motion shows what changed and in what order, which a still picture cannot. The pages feel like video without the file size or the scrolling.
+Page length: none added.
+
+Cost
+The voice is free and open-source and runs on our own computer. The narration is not the page read aloud: Claude writes a spoken script for each chapter, and the build checks that every number spoken appears on the page.
+
+Decisions needed
+- Voice: keep the free voice, or pay for a studio voice with more expression (roughly $0.15 to $1 per chapter).
+- The what-if lab shows calculated numbers that the notes do not print.
+- Pages with audio are 2 to 7 MB until the audio is hosted separately.
+
+Not done yet
+- Listen narration is written for two chapters. Each new chapter needs its script generated.
+- The recordings were checked for timing, loudness and pronunciation, but nobody has listened to them start to finish.
+</textarea>
+<script>
+document.getElementById('copy').addEventListener('click', function () {
+  var b = this, t = document.getElementById('plain');
+  function done(ok) { b.textContent = ok ? 'Copied' : 'Select the text and copy'; setTimeout(function () { b.textContent = 'Copy as plain text'; }, 2200); }
+  function old() { try { t.select(); done(document.execCommand('copy')); } catch (e) { done(false); } }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t.value).then(function () { done(true); }, old); else old();
+});
+</script>

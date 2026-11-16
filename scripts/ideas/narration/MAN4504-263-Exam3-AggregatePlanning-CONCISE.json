@@ -1,0 +1,109 @@
+{
+  "steps_from": "MAN4504-263-Exam3-AggregatePlanning-FULL",
+  "sections": {
+    "The Nature of Aggregate Planning": [
+      ["blue sedans", "Let's start with the big picture. What is aggregate planning? It's planning production for the intermediate term, in aggregate units. What does that mean? It means asking how many cars to build. Not how many blue sedans. Why plan that way? Because totals forecast better than individual items. In industry, you'll also hear it called sales and production planning."],
+      ["meet forecast demand", "The goal is easy to say: meet the forecast demand, at minimum cost. And the levers you can pull are production rates, labor, inventory, overtime, and subcontracting."],
+      ["Requirements", "To do it, you need four things. A logical aggregate unit. A demand forecast. A way to determine costs. And a model that combines the forecasts with the costs."],
+      ["budget authorization", "The finished plan works like a budget authorization. It feeds the master production schedule and MRP, which break it down product by product."],
+      ["Long range", "So where does it sit among a company's plans? Long-range plans look more than 1 year ahead, and they belong to top executives. Research and development, new products, capital investment, where to put facilities."],
+      ["Intermediate", "Intermediate plans cover 3 to 18 months, and belong to operations managers. This is aggregate planning: sales and production planning, employment, inventory, subcontracting."],
+      ["Short range", "And short-range plans, under 3 months, belong to managers, supervisors, and foremen. Job assignments, ordering, scheduling, overtime."]
+    ],
+    "Aggregate Planning Strategies": [
+      ["Capacity options", "A planner has two kinds of moves. Capacity options change supply. Demand options change demand. And notice that they come in opposite pairs. Hire, or lay off. Build inventory, or back-order."]
+    ],
+    "Capacity Options": [
+      ["", "Let's go through the capacity options, because every one of them has a price."],
+      ["Change inventory levels", "You can change inventory levels, building up stock in slow periods. The downside? Holding costs, and shortages if demand runs high. And for services, it isn't possible at all."],
+      ["Hire or lay off", "You can hire or lay off, to match the workforce to demand. But that brings hiring, training, and separation costs, and it lowers productivity and morale."],
+      ["Overtime or idle time", "You can keep the workforce constant and vary the hours, with overtime or idle time. That means overtime premiums and fatigue, or idle time to absorb. And it only handles small changes."],
+      ["Subcontract |", "You can subcontract. It costs more, it puts quality and delivery at risk, and it exposes your customers to a competitor."],
+      ["Part-time workers", "Or you can use part-time workers. That's best for low-skilled labor, and a poor fit for skilled work."]
+    ],
+    "Demand Options": [
+      ["Influence demand", "The other approach is to work on demand itself. You can influence it, with promotions and off-peak discounts. The trouble is, the response is uncertain, and it may not bring demand and capacity into balance."],
+      ["Back-order in high-demand", "You can back-order during high-demand periods. But customers wait, you lose goodwill and sales, and it only works when there are few substitutes."],
+      ["Counter-seasonal mix", "Or you can sell a counter-seasonal mix. The classic example: jet-ski engines in summer, snowmobile engines in winter. The risk? It can take the firm outside its expertise."]
+    ],
+    "Methods of Aggregate Planning": [
+      ["No single option", "So which option is best? Honestly, no single one. Company policies limit each of them, so planners combine several."],
+      ["Chase strategy", "A chase strategy matches output to each period's demand. It's common in services, where it's often the only option."],
+      ["Level strategy", "A level strategy keeps daily production uniform, and lets inventory or idle time act as the buffer."],
+      ["Mixed strategy", "And a mixed strategy is a combination. It's usually the best. But finding it takes trial and error."],
+      ["The routine problems hide", "An exam tip while we're here: work a lot of practice problems. The routine ones hide small rules, like inventory carried in, or charging for a workforce change right at the start. Every wrinkle on the exam is also in the practice questions."]
+    ],
+    "Graphical Approaches (Trial and Error)": [
+      ["Graphical methods", "The simplest method is the graphical one. You compare demand with capacity, a few variables at a time. It's easy. But it isn't guaranteed to be optimal."],
+      ["Steps: demand per period", "The steps go like this. Find the demand in each period. Find the capacity: regular time, overtime, and subcontracting. Find the labor, hiring, layoff, and holding costs. Take company policies into account. Then compare the total cost of a few alternative plans."]
+    ],
+    "Example: Applying Aggregate Planning Strategies": [
+      ["", "Let's make this concrete, with a six-month example."],
+      ["Jan |", "January: demand of 900 units, over 22 production days. That's 41 a day."],
+      ["Feb |", "February: 700 units, in 18 days. 39 a day."],
+      ["Mar |", "March: 800 units, in 21 days. That's 38 a day, the slowest month."],
+      ["Apr |", "Then it jumps. April: 1,200 units, in 21 days. 57 a day."],
+      ["May |", "May is the peak: 1,500 units in 22 days, or 68 a day."],
+      ["Jun |", "And June: 1,100 units, in 20 days. 55 a day."],
+      ["Total |", "In total, that's 6,200 units, over 124 production days. But notice how uneven it is. That gap between the slow months and the busy ones is the whole problem."],
+      ["Costs: carrying", "Here are the costs we'll need. Carrying a unit costs 5 dollars a month. Subcontracting costs 20 dollars a unit. Labor is 80 dollars a day per worker, and each unit takes 1.6 labor-hours. And changing the daily rate is expensive: 300 dollars a unit to raise it, 600 dollars a unit to lower it. Keep those in mind. We're about to try three plans."]
+    ],
+    "Method 1: Pure Level Strategy": [
+      ["6,200 ÷ 124", "Plan one: keep production perfectly level. Take the 6,200 units, divide by 124 days, and you get 50 units a day, every day, with 10 workers. What does that cost? Two things. Ending inventory of 1,850 units, at 5 dollars each, costs 9,250 dollars. And labor comes to 99,200 dollars. Add them together: 108,450 dollars."]
+    ],
+    "Method 2: Level Strategy (Production at the Minimum Requirement and Use of Subcontracting)": [
+      ["38 units per day", "Plan two is a twist on that. Produce at the lowest rate we ever need, which is March's rate, 38 units a day. Then subcontract the rest. That takes only 7.6 workers, so labor drops to 75,392 dollars. But we come up 1,488 units short. Subcontracting those, at 20 dollars each, costs 29,760 dollars. The total? 105,152 dollars. That's the lowest of the three."]
+    ],
+    "Method 3: Pure Chase Strategy (Using Hiring and Layoffs)": [
+      ["Production $99,200", "Plan three is the pure chase: hire and lay off, so that production matches demand every month. Production costs 99,200 dollars. But now add hiring, at 9,000 dollars, and layoffs, at 9,600. The total climbs to 117,800 dollars."],
+      ["Other plans", "Two cautions, though. Other plans, like using overtime, weren't tried. And not every cost shows up in dollars. Think about what layoffs do to morale."]
+    ],
+    "Transportation Method of Linear Programming": [
+      ["An optimizing method", "Trial and error works. But can we find the best plan directly? Yes, with the transportation method. It's an optimizing method. Picture a table. The rows are sources of supply, by period. The columns are the periods of demand. And each cell holds the cost of one unit."]
+    ],
+    "Example: Transportation Method": [
+      ["A tire maker", "Here's the example: a tire maker. Regular time costs 40 dollars a tire. Overtime costs 50. Subcontracting costs 70. There are 100 tires in beginning inventory, carrying a tire costs 2 dollars a month, and there's no back-ordering."],
+      ["Demand |", "Demand is 800 in March, 1,000 in April, and 750 in May."],
+      ["Regular capacity", "Regular capacity is 700, every month."],
+      ["Overtime |", "Overtime adds 50 a month."],
+      ["Subcontracting |", "And subcontracting can supply 150 in March and in April, and 130 in May."]
+    ],
+    "Setting Up and Solving the Table": [
+      ["Capacity 2,680", "Let's set it up. Capacity is 2,680, plus 100 in inventory. Demand is only 2,550. So what happens to the 230 units nobody needs? They go in a dummy column, at 0 dollars."],
+      ["Each cell costs", "Each cell holds the source's price, plus 2 dollars for every month the unit is held. And any cell that would need back-ordering is blocked."],
+      ["Fill each month's demand", "Then the rule for filling it in. For each month, take from the cheapest source that still has units. And that includes production from earlier months. You can step through the table just below, to watch it fill one source at a time."],
+      ["The plan", "Here's where it ends up. March: 100 from inventory, and 700 on regular time. April: 700 regular, 50 overtime, and 150 subcontracted. Plus 50 of overtime and 50 of subcontracting, made back in March and held a month. May: 700 regular, and 50 overtime."],
+      ["Total cost", "The total cost comes to 105,700 dollars."],
+      ["stepping-stone", "Keep in mind, this gives a starting plan. The stepping-stone method, or Excel's Solver, can confirm it or improve it."],
+      ["A question about the period of production", "One last exam tip. If a question asks about the period of production, meaning when something was made, ordered, or delivered, read across a row. If it asks about the period of demand, meaning when it was sold or used, read down a column. For example: how much April demand was met by subcontracting? Go down the April column. 50 plus 150 is 200. And how much March overtime was paid for? Go across the March overtime row. 50."]
+    ],
+    "Management Coefficients Model": [
+      ["Management coefficients model", "One more method, briefly. The management coefficients model runs a regression on decisions managers have made in the past. The appeal? It's objective and consistent. The weakness? It assumes past trends continue, and that those past decisions were good ones."]
+    ],
+    "Summary of Aggregate Planning Methods": [
+      ["Graphical |", "So, three methods, side by side. The graphical method is easy, and it handles policies and constraints. But it usually isn't optimal."],
+      ["Transportation (linear programming)", "The transportation method does find the optimum. But only for linear relationships."],
+      ["Management coefficients |", "And the management coefficients model is objective and easy to use, but only as good as the past data."],
+      ["Services: controlling", "A note on services. Controlling labor cost is critical there, and an on-call labor resource covers unexpected demand."]
+    ],
+    "Glossary": [
+      ["", "Here's the glossary, quickly."],
+      ["Aggregate planning |", "Aggregate planning is intermediate-term planning of total production, to meet demand at minimum cost."],
+      ["Chase strategy |", "A chase strategy matches output to each period's demand."],
+      ["Level strategy |", "A level strategy keeps production uniform, buffered by inventory or idle time."],
+      ["Mixed strategy |", "A mixed strategy combines capacity and demand options."],
+      ["Graphical methods |", "Graphical methods compare demand with capacity, by trial and error."],
+      ["Transportation method |", "The transportation method is a linear-programming table: supply sources, against demand periods."],
+      ["Dummy column |", "The dummy column absorbs unused capacity, at zero cost."],
+      ["Management coefficients model |", "And the management coefficients model is a regression built on managers' past decisions."]
+    ],
+    "Key Takeaways": [
+      ["Aggregate planning covers", "Let's wrap up. Aggregate planning covers 3 to 18 months, in aggregate units, at minimum cost."],
+      ["Capacity options change supply", "Capacity options change supply. Demand options shift or reshape demand."],
+      ["In the shingle example", "In the shingle example, the cheapest plan was level production at the minimum rate, with subcontracting: 105,152 dollars."],
+      ["Transportation method: carrying", "For the transportation method, remember three things. Carrying cost grows with every month a unit is held. No back-ordering means later production can't meet earlier demand. And a dummy column balances supply with demand."],
+      ["The tire plan costs", "The tire plan costs 105,700 dollars."],
+      ["Production period", "And the reading rule. Production period? Read the row. Demand period? Read the column. That's the chapter."]
+    ]
+  }
+}

@@ -182,7 +182,8 @@ inlineMath: [['\\(','\\)']]
 /* what-if lab */
 .pmw .n.tap { cursor:pointer; }
 .pmw .n.tap:hover .n-bg { fill:#f4f7fc; }
-.pmw .n.tap:focus-visible { outline:none; } .pmw .n.tap:focus-visible .n-c { stroke:#2a78d6; stroke-width:4; }
+.pmw .n.tap, .pmw .n.tap:focus, .pmw .n.tap:focus-visible { outline:none; -webkit-tap-highlight-color:transparent; }   /* no browser focus box round a tapped node */
+.pmw .n.tap:focus-visible .n-c { stroke:#2a78d6; stroke-width:4; }
 .pmw .n.tap.full { cursor:not-allowed; }
 .pmw .n .n-d.n-x { font-size:14px; font-weight:800; }
 .pmw .pm-stat { display:flex; flex-wrap:wrap; justify-content:center; gap:4px 18px; margin:0 0 8px; font-size:.92rem; font-variant-numeric:tabular-nums; }
