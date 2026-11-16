@@ -250,12 +250,19 @@ itself still forbids questions outright.
    it applies from the next conversion onward.); keep every
    `<!-- IMAGE POSITION: … -->` comment where the image was.
 
-   **Nothing but the date pill sits above the first `<h1>`** (Ian,
-   2026-11-16: "make sure to do that from now on"). `studyguide/sn25-v2.js`
-   inserts the table of contents immediately before the first `<h1>`, so an
-   opening paragraph above that heading (a class-opening anecdote, an intro
-   note) reads above the contents box. Move it to just under the first
-   heading, and keep the date pill where it is. `check_file.py` fails it.
+   **An intro before the first heading is an `intro-note`, under the table of
+   contents** (Ian, 2026-11-16). `studyguide/sn25-v2.js` inserts the contents
+   box immediately before the first `<h1>`, so a plain paragraph above that
+   heading reads above the contents. Keep the intro where it is, first under
+   `<body>` (after the date pill) and before the first `<h1>`, written as
+   `<p id="intro-note"><i>…</i></p>`, and put this line in the head directly
+   after the `sn25-v2.js` script tag; it moves the contents box above the
+   intro, so the page reads date, contents, intro, first heading:
+
+   `<script>document.addEventListener('DOMContentLoaded', function () { var b = document.getElementById('intro-note'), t = document.querySelector('details.toc-box'); if (b && t) b.parentNode.insertBefore(t, b); });</script>`
+
+   Do not move the intro under the heading instead. `check_file.py` fails a
+   plain paragraph above the first `<h1>`, or an `intro-note` without the line.
 
    **Glossary and Key Takeaways are `<h2>`s, on purpose.** They are not
    promoted sections and not a heading the source lacks: the house format

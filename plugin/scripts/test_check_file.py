@@ -490,11 +490,19 @@ case("a calcs block makes every caption in the widget working", lambda r: C.chec
 # ---- text above the contents box (Ian, 2026-11-16) ---------------------------
 
 HEAD_SG = '<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>'
-case("toc: an intro paragraph above the first h1 fails", lambda r: C.check_toc(
+MOVER = ("<script>document.addEventListener('DOMContentLoaded', function () { var b = document.getElementById("
+         "'intro-note'), t = document.querySelector('details.toc-box'); if (b && t) b.parentNode.insertBefore(t, b); });</script>")
+case("toc: a bare intro paragraph above the first h1 fails", lambda r: C.check_toc(
     HEAD_SG + '<body><p class="date">Monday, 11/16/26</p><p>At the beginning of class...</p><h1>Species</h1></body>', r)
-    or r.has("FAIL", "toc", "above the table of contents"))
+    or r.has("FAIL", "toc", "intro-note"))
+case("toc: an intro-note without the mover script fails", lambda r: C.check_toc(
+    HEAD_SG + '<body><p id="intro-note"><i>At the beginning of class...</i></p><h1>Species</h1></body>', r)
+    or r.has("FAIL", "toc", "add the intro-note script"))
+case("toc: an intro-note with the mover script passes", lambda r: C.check_toc(
+    HEAD_SG + MOVER + '<body><p class="date">Monday, 11/16/26</p><p id="intro-note"><i>At the beginning of class...</i></p><h1>Species</h1></body>', r)
+    or not r.has("FAIL", "toc", ""))
 case("toc: the date pill alone above the first h1 is fine", lambda r: C.check_toc(
-    HEAD_SG + '<body><p class="date">Monday, 11/16/26</p><h1>Species</h1><p>At the beginning of class...</p></body>', r)
+    HEAD_SG + '<body><p class="date">Monday, 11/16/26</p><h1>Species</h1><p>Text.</p></body>', r)
     or not r.has("FAIL", "toc", ""))
 
 # ---- the source-word rules, which have been narrowed three times -----------
