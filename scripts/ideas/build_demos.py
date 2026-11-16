@@ -45,7 +45,7 @@ def build_play():
         s = add_play((SRC / src).read_text(encoding='utf8'))
         (out / Path(src).name).write_text(s, encoding='utf8')
         print('play  ', Path(src).name)
-        subprocess.run([sys.executable, str(HERE / 'narrate.py'), 'steps', str(out / Path(src).name)], check=True)
+        subprocess.run([sys.executable, str(HERE / 'narrate.py'), 'steps', str(out / Path(src).name), '--report', str(OUT / 'narration-check')], check=True)
 
 
 # ---------------------------------------------------------------- 2. What-if lab
@@ -178,7 +178,7 @@ def build_listen():
     out = OUT / '4-Listen-AnyPage'
     out.mkdir(parents=True, exist_ok=True)
     for src in (MAR % 'Concise', AP % 'CONCISE'):
-        subprocess.run([sys.executable, str(HERE / 'narrate.py'), 'listen', str(SRC / src), str(out / Path(src).name)], check=True)
+        subprocess.run([sys.executable, str(HERE / 'narrate.py'), 'listen', str(SRC / src), str(out / Path(src).name), '--report', str(OUT / 'narration-check')], check=True)
 
 
 # ---------------------------------------------------------------- 5. Motion on every MAN4504 widget, all editions

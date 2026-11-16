@@ -21,18 +21,26 @@ step scripts when the same widget appears on both.
 
 Write for the ear, as a tutor talking one student through the page.
 
-* **Do not read the page.** Say what the bullet means. Fragments become sentences; `=` and `→` become words.
-* **Vary the sentences.** Short ones land a point. Ask the question the student should be asking, then answer it.
-  Use contractions. One idea per sentence. This is what gives the voice its rise and fall: it has no other control.
-* **Cover everything, tables included.** One passage per row, in the order the page shows them, so the highlight
-  walks down the table.
+* **Do not read the page, and do not chop it up.** Say what the bullet means in connected sentences. Each passage is
+  recorded as one continuous take, so a run of two-word sentences sounds choppy; a line break starts a new take
+  after a short beat (use one inside any passage longer than about 60 words).
+* **Leave nothing out.** Every bullet, paragraph and table row gets a passage, in page order, and every number in
+  it is spoken. The build stops otherwise.
+* **Introduce every table.** Its first passage is anchored to the header row and names each column ("For each
+  method, it gives the focus and the use"). Each row then says which column a value belongs to ("Its focus is ...
+  Its use is ..."), so the listener never hears a cell without knowing what it is.
+* **Explain a widget, do not skip it.** Anchor a passage to the widget itself with `@pertw`, `@tpw`, `@pmw` or
+  `@sdg` and describe what it shows: what the rows, columns, nodes or axes are, then the values.
 * **Every number comes from that step or section of the page**, written as digits (`105,152 dollars`, `1.5 percent`).
-  The build stops on a number the page does not print there. Spell out counts of things (`three paths`).
+  Spell out counts of things (`three paths`).
 * **Never mention a source** (the transcript, the lecture, the slides, the recording, the board, the file).
-* Write money as `40 dollars`, percentages as `10 percent`, and abbreviations the way they are said (`ROI`, `CMO`
-  are spelled out by the voice; `PERT` is read as a word).
-* A capital `A` used as a name (Activity A) is handled by the builder. Avoid opening a sentence with the article
-  "A" followed by a verb-like word ("A first look..."), which would be misread as the letter.
+* Do not put "too", "to" or "for" straight after a number ("at 0 too" is heard as "zero two"): say "as well" or "also".
+* Write money as `40 dollars`, percentages as `10 percent`. `ROI`, `CMO`, `MRP` are spelled out by the voice;
+  `PERT` is read as a word. A capital `A` used as a name (Activity A) is handled by the builder.
 
-Check a new script without recording anything: run the build with a missing model folder
-(`KOKORO_DIR=/nonexistent`) or read the assertion it stops on.
+## Checking a recording without listening to all of it
+
+`narrate.py ... --report DIR` transcribes every recorded paragraph with speech recognition (`hear.py`) and compares
+it with the script. It writes `<page>.listening-check.txt`, listing each paragraph where a number or a content word
+was heard differently, and `<page>.listen-to-these.mp3`, which is only those paragraphs. Review is: read the script
+(the build has already checked its numbers and its coverage), then play that one clip.

@@ -70,7 +70,7 @@
   /* tap a narrated block to hear it from there */
   document.addEventListener('click', function (ev) {
     if (!open || !ev.target.closest) return;
-    if (ev.target.closest('a, button, summary, input, .df-term, .ls-bar, .pmw, .tpw, .sdg')) return;
+    if (ev.target.closest('a, button, summary, input, .df-term, .ls-bar, .pmw, .tpw, .sdg, .pertw')) return;
     var b = ev.target.closest('[data-ls]'); if (!b) return;
     var w = where[b.getAttribute('data-ls')]; if (!w) return;
     userAt = 0;

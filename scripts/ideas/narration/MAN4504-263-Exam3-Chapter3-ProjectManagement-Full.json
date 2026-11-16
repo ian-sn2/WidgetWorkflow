@@ -8,11 +8,11 @@
     "The Forward Pass": [
       "Let's do the forward pass. We're asking one thing about every activity: how early can it start, and how early can it finish? The Start node is easy. Everything about it is 0. And look at the bottom of each node. That's its duration, which we already know.",
       "First up, A. Nothing comes before it except Start, so A can begin right away, at 0. How long does it take? 2 weeks. So A's early finish is 0 plus 2, which is 2.",
-      "B is the same story. It also follows Start, so it begins at 0 too. B takes 3 weeks, so its early finish is 3.",
+      "B is the same story. It also follows Start, so it begins at 0 as well. B takes 3 weeks, so its early finish is 3.",
       "Now C. C has to wait for A, and only A. When does A finish? Week 2. So that's C's early start. Add C's 2 weeks, and C finishes at 4.",
       "Here's the first tricky one. D has two predecessors, A and B, and it can't start until both of them are done. A finishes at 2. B finishes at 3. So which number do we use? The bigger one — 3. D has to wait for the slower of the two. Then 3 plus 4 gives an early finish of 7.",
       "E is a quick one. It follows C, and C finishes at week 4, so E starts at 4. It takes 4 weeks, so it finishes at 8.",
-      "F follows C as well, so it can start at week 4 too, right alongside E. F only needs 3 weeks, so it's done by week 7.",
+      "F follows C as well, so it can also start at week 4, right alongside E. F only needs 3 weeks, so it's done by week 7.",
       "Now G, and it's the same trap as before. G needs both D and E. D finishes at 7. E finishes at 8. Remember the rule? Take the later one. So G starts at 8, runs for 5 weeks, and finishes at 13.",
       "Last one: H. It needs both F and G. F is done at 7, but G isn't done until 13. So H has to wait until 13. Add 2 weeks for H, and we land on 15. And that answers the big question: the earliest this whole project can finish is 15 weeks."
     ],

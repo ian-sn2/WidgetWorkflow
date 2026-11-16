@@ -1,7 +1,7 @@
 """Recorded narration for a page.
 
-    python scripts/ideas/narrate.py steps   <page with the Play add-on>     one clip per step of every step-by-step widget
-    python scripts/ideas/narrate.py listen  <any notes page> <out page>     one clip per h1/h2 section, plus the Listen bar
+    python scripts/ideas/narrate.py steps   <page with the Play add-on> [--report DIR]    one clip per step of every stepper
+    python scripts/ideas/narrate.py listen  <any notes page> <out page> [--report DIR]    one clip per h1/h2 section + the Listen bar
 
 WHAT IS SAID. The voice does not read the page. It speaks a script written for the ear, kept in
 scripts/ideas/narration/<page name>.json (see narration/README.md for how one is written):
@@ -9,11 +9,15 @@ scripts/ideas/narration/<page name>.json (see narration/README.md for how one is
      "sections": {"<h1/h2 text>":   [["<words found in the bullet, row or paragraph this is about>", "what to say"], ...]}}
 Each section passage names the block it talks about, so the Listen bar can highlight that block and scroll to it.
 A page with no script file is read as written (the old behaviour).
-Two checks stop the build: every number spoken must be a number in that step or section of the page, and no script
-may mention a source.
+These checks stop the build, so a script can be trusted without being listened to:
+  * every number spoken is a number printed in that step or section of the page, and no script mentions a source;
+  * every bullet, paragraph and table row of a section has a passage, and every number in it is spoken;
+  * every table is introduced by a passage on its header row that names each of its columns.
+With --report DIR the recording is also transcribed by hear.py and compared with the script; the paragraphs that do
+not match are written to a report and joined into one short clip to listen to.
 
-HOW IT IS SAID. One sentence at a time, each at its own pace (a question slower and followed by a beat, a short
-punch-line slower still, a long sentence a little quicker), with a longer pause between passages.
+HOW IT IS SAID. Each paragraph is recorded as one continuous take at one speed, so the voice carries its own rhythm
+from sentence to sentence. (Recording a sentence at a time, each at its own speed, sounded choppy.)
 
 THE VOICE is one function, _voice(). It uses Kokoro, an open-source neural voice that runs offline at no cost per use:
     pip install kokoro-onnx soundfile
@@ -112,29 +116,35 @@ def _voice(sentence, speed):
     return samples
 
 
-def pace(sentence):
-    """-> (speed, pause after in seconds). This is where the delivery stops being even."""
-    n = len(sentence.split())
-    if sentence.endswith('?'):
-        return 0.95, 0.45
-    if n <= 4:
-        return 0.90, 0.40
-    if sentence.endswith('!'):
-        return 1.03, 0.30
-    if n >= 22:
-        return 1.04, 0.30
-    return 1.0, 0.28
+def paragraphs(text):
+    return [p.strip() for p in text.split('\n') if p.strip()]
 
 
-def speak(text):
-    """a passage -> samples, spoken a sentence at a time; a line break in the text is a longer beat"""
+TAKES = []        # every paragraph recorded in this run, for the listening check: (where, as written, samples)
+
+
+def speak(text, where=''):
+    """a passage -> samples. A line break in the text starts a new take after a short beat."""
     out = []
-    for par in [p for p in text.split('\n') if p.strip()]:
-        for sent in re.split(r'(?<=[.!?])\s+(?=[A-Z0-9])', par.strip()):
-            speed, pause = pace(sent)
-            out += [_voice(prep(sent), speed), np.zeros(int(pause * RATE), dtype=np.float32)]
-        out.append(np.zeros(int(0.35 * RATE), dtype=np.float32))
+    for par in paragraphs(text):
+        take = _voice(prep(par), 1.0)
+        TAKES.append((where, par, take))
+        out += [take, np.zeros(int(0.35 * RATE), dtype=np.float32)]
     return np.concatenate(out) if out else np.zeros(1, dtype=np.float32)
+
+
+def listening_check(page_name, report_dir):
+    """transcribe everything recorded for this page and report what does not match its script"""
+    if not report_dir:
+        return
+    import hear
+    if not hear.available():
+        print('          listening check skipped: no speech-recognition model on this machine (see hear.py)')
+        return
+    flagged = hear.audit(TAKES)
+    n, minutes = hear.report(page_name, TAKES, flagged, report_dir)
+    print('          listening check: %d of %d paragraphs matched their script; %d to listen to (%.1f of %.1f minutes)' % (
+        len(TAKES) - n, len(TAKES), n, sum(len(f[5]) for f in flagged) / RATE / 60, minutes))
 
 
 def encode(samples):
@@ -174,7 +184,7 @@ WALK = '''() => window.__pv.players.map(p => {
   return { title: t ? t.textContent.trim() : '', steps: out }; })'''
 
 
-def narrate_steps(path):
+def narrate_steps(path, report_dir=None):
     sys.path.insert(0, str(HERE.parent))
     from mobile_check import launch_kwargs
     from playwright.sync_api import sync_playwright
@@ -194,15 +204,16 @@ def narrate_steps(path):
         lines = written.get(w['title'])
         if lines is None:
             as_written.append(w['title'])
-            data.append([encode(speak(say(c))) for c in w['steps']])
+            data.append([encode(speak(say(c), '%s, step %d' % (w['title'], i + 1))) for i, c in enumerate(w['steps'])])
             continue
         assert len(lines) == len(w['steps']), '%s: %d scripts for %d steps' % (w['title'], len(lines), len(w['steps']))
         for i, (line, cap) in enumerate(zip(lines, w['steps'])):
             check(line, cap, '%s, step %d' % (w['title'], i + 1))
-        data.append([encode(speak(line)) for line in lines])
+        data.append([encode(speak(line, '%s, step %d' % (w['title'], i + 1))) for i, line in enumerate(lines)])
     path.write_text(inject(path.read_text(encoding='utf8'), 'pv-audio', data), encoding='utf8')
     print('narrated', path.name, len(data), 'widgets,', sum(len(w) for w in data), 'steps, %.0f s of audio' % sum(c['d'] for w in data for c in w),
           ('(read as written: %s)' % ', '.join(as_written)) if as_written else '')
+    listening_check(path.name, report_dir)
 
 
 # ---------------------------------------------------------------- listen: one clip per section of any notes page
@@ -269,56 +280,100 @@ def plain(fragment):
     return re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', ' ', t))).strip()
 
 
+WIDGET_PARTS = re.compile(r'class="[^"]*\b(?:tp|pt|pm|sdg|hp)-|class="[^"]*\bdate\b')
+STOP = set('the a an and or of to in on at by for with from is are was were be it its this that these those as than then so but not no '
+           'can may will each per which who whom into over under only also such etc via'.split())
+
+
+def content_words(text):
+    return {w for w in re.findall(r'[a-z]{3,}', text.lower()) if w not in STOP}
+
+
+def coverage(block, said):
+    """share of the block's words the passage also uses, comparing the first four letters (Jan / January, cost / costs)"""
+    want, got = content_words(block), content_words(said)
+    if len(want) < 3:
+        return 1.0                      # a row of numbers: the number check already covers it
+    return sum(1 for w in want if any(g.startswith(w[:4]) or w.startswith(g[:4]) for g in got)) / len(want)
+
+
 def listen_scripted(s, written):
-    """-> (the page with each spoken-about block tagged data-ls, the clips). Every heading needs a script."""
+    """-> (the page with each spoken-about block tagged data-ls, the clips, a list of thin passages to review)"""
     masked = re.sub(r'<(script|style|noscript)\b.*?</\1>', lambda m: ' ' * len(m.group(0)), s, flags=re.S)
     body = masked.index('<body')
     heads = [h for h in HEAD.finditer(masked) if h.start() > body]
     titles = [plain(h.group(2)) for h in heads]
     assert set(titles) == set(written), 'headings without a script: %s; scripts without a heading: %s' % (
         sorted(set(titles) - set(written)), sorted(set(written) - set(titles)))
-    tags, data, gap = {}, [], np.zeros(int(0.5 * RATE), dtype=np.float32)
+    tags, data, thin, gap = {}, [], [], np.zeros(int(0.3 * RATE), dtype=np.float32)
     for k, h in enumerate(heads):
         end = heads[k + 1].start() if k + 1 < len(heads) else masked.index('</body>')
-        blocks = [(m.start(), plain(m.group(2))) for m in BLOCK.finditer(masked, h.end(), end)]
-        passages = written[titles[k]]
-        check(' '.join(p[1] for p in passages), plain(masked[h.end():end]), titles[k])
+        title, passages = titles[k], written[titles[k]]
+        # the blocks a reader sees in this section; a block that is part of a widget's own chrome is not narrated line by line
+        blocks = [dict(at=m.start(), tag=m.group(1), text=plain(m.group(2)), head='<th' in m.group(2), said='')
+                  for m in BLOCK.finditer(masked, h.end(), end) if not WIDGET_PARTS.search(masked[m.start():masked.index('>', m.start())])]
+        widgets = {m.group(1): m.start() for m in re.finditer(r'<div class="(tpw|pertw|pmw|sdg)\b', masked[h.end():end])}
+        configs = ' '.join(re.findall(r'<script type="application/json">(.*?)</script>', s[h.end():end], flags=re.S))   # a widget's own numbers
+        check(' '.join(p[1] for p in passages), plain(masked[h.end():end]) + ' ' + configs, title)
         audio, seg, at = [], [], 0
         for anchor, text in passages:
             bid = -1
-            if anchor:
-                hit = [b for b in blocks if anchor in b[1]]
-                assert hit, '%s: nothing in this section contains "%s"' % (titles[k], anchor)
-                bid = tags.setdefault(hit[0][0], len(tags))
-            part = np.concatenate([speak(text), gap])
+            if anchor.startswith('@'):                      # a passage about a whole widget: "@pertw"
+                assert anchor[1:] in widgets, '%s: no %s widget in this section' % (title, anchor[1:])
+                bid = tags.setdefault(h.end() + widgets[anchor[1:]], len(tags))
+            elif anchor:
+                hit = [b for b in blocks if anchor in b['text']]
+                assert hit, '%s: nothing in this section contains "%s"' % (title, anchor)
+                hit[0]['said'] += ' ' + text
+                bid = tags.setdefault(hit[0]['at'], len(tags))
+            part = np.concatenate([speak(text, title), gap])
             seg.append([round(at / RATE, 2), bid])
             audio.append(part)
             at += len(part)
-        data.append(dict(encode(np.concatenate(audio)), h=k, t=titles[k], seg=seg))
+        for b in blocks:                                    # nothing a reader sees goes unspoken
+            if b['tag'] not in ('li', 'p', 'tr') or not b['text'].strip(' |'):
+                continue
+            assert b['said'], '%s: no passage for this %s: "%s"' % (title, b['tag'], b['text'][:90])
+            missing = nums(b['text']) - nums(b['said'])
+            assert not missing, '%s: the passage for "%s" never says %s' % (title, b['text'][:60], sorted(missing))
+            if b['head']:                                   # a table is introduced by naming its columns
+                cols = [c for c in (x.strip() for x in b['text'].split('|')) if c]
+                unnamed = [c for c in cols if not all(w.lower() in b['said'].lower() for w in re.findall(r'[A-Za-z]{3,}', c))]
+                assert not unnamed, '%s: the table introduction does not name the column(s) %s' % (title, unnamed)
+            else:
+                got = coverage(b['text'], b['said'])
+                if got < 0.5:
+                    thin.append('%s | %d%% of its words | %s' % (title, round(got * 100), b['text'][:80]))
+        data.append(dict(encode(np.concatenate(audio)), h=k, t=title, seg=seg))
     for start in sorted(tags, reverse=True):                 # tag each block, last first so the offsets stay true
         close = s.index('>', start)
         s = s[:close] + ' data-ls="%d"' % tags[start] + s[close:]
-    return s, data
+    return s, data, thin
 
 
-def narrate_listen(src, out):
+def narrate_listen(src, out, report_dir=None):
     s = pathlib.Path(src).read_text(encoding='utf8')
     written = script_for(pathlib.Path(src).name).get('sections')
+    thin = []
     if written:
-        s, data = listen_scripted(s, written)
+        s, data, thin = listen_scripted(s, written)
     else:
         p = Sections()
         p.feed(s)
-        data = [dict(encode(speak(say(sec['title'].strip().rstrip(':.') + '. ' + unmath(html.unescape(sec['text']))))), h=i,
+        data = [dict(encode(speak(say(sec['title'].strip().rstrip(':.') + '. ' + unmath(html.unescape(sec['text']))), sec['title'].strip())), h=i,
                      t=re.sub(r'\s+', ' ', sec['title']).strip()) for i, sec in enumerate(p.secs)]
     extra = '<style>\n' + (HERE / 'listen.css').read_text() + '</style>\n<script>\n' + (HERE / 'listen.js').read_text() + '</script>\n'
     pathlib.Path(out).write_text(inject(s, 'ls-audio', data, extra), encoding='utf8')
     print('listen  ', pathlib.Path(out).name, len(data), 'sections,', sum(len(c.get('seg', [])) for c in data), 'passages,',
           '%.1f min of audio' % (sum(c['d'] for c in data) / 60), '' if written else '(read as written)')
+    for t in thin:
+        print('          thin passage, worth a read:', t)
+    listening_check(pathlib.Path(out).name, report_dir)
 
 
 if __name__ == '__main__':
+    rep = sys.argv[sys.argv.index('--report') + 1] if '--report' in sys.argv else None
     if sys.argv[1] == 'steps':
-        narrate_steps(sys.argv[2])
+        narrate_steps(sys.argv[2], rep)
     else:
-        narrate_listen(sys.argv[2], sys.argv[3])
+        narrate_listen(sys.argv[2], sys.argv[3], rep)

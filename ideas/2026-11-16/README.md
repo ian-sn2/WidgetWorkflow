@@ -11,7 +11,8 @@ Exam 3 files from SentToClaude.zip.
 | `3-Tap-To-Define/` | Tap any term with a dotted underline. |
 | `4-Listen-AnyPage/` | Tap Listen at the bottom right. The line being spoken is highlighted and followed; tap a line to jump to it. |
 | `5-Animated-MAN4504/` | All six MAN4504 pages, animated. `Animated-widgets-preview.mp4` is a 40-second tour. |
-| `voice-before-after/` | One caption read as written, then spoken from a script. |
+| `listen-samples/` | Two sections of the MAR3023 audio: tables introduced with their columns, and the PERT chart explained. |
+| `narration-check/` | What the automatic listener found for each narrated page: a short report, and one clip of only the passages it wants a person to hear. |
 
 Rebuild: `python scripts/ideas/build_demos.py <unpacked zip> ideas/2026-11-16` (add `--only-all`, `--only-listen`, ... for one part).
 

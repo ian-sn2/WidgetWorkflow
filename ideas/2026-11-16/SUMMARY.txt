@@ -13,7 +13,7 @@ Why: A student can sit back and watch a method being worked, like having a tutor
 Page length: none added.
 
 3. Listen: the chapter as audio, with follow-along highlighting
-What: A Listen button speaks the chapter in a natural voice, tables included. The line being discussed is highlighted and the page scrolls with it. Tapping any line jumps the audio there.
+What: A Listen button speaks the chapter in a natural voice. Tables and charts are introduced and explained, not just read out. The line being discussed is highlighted and the page scrolls with it. Tapping any line jumps the audio there.
 Why: Students can study when they cannot look at a screen: driving, at the gym, walking to class. Following the highlight while listening also helps students who lose their place in dense text.
 Page length: none added (a bar pinned to the bottom of the screen).
 
@@ -28,13 +28,13 @@ Why: Motion shows what changed and in what order, which a still picture cannot. 
 Page length: none added.
 
 Cost
-The voice is free and open-source and runs on our own computer. The narration is not the page read aloud: Claude writes a spoken script for each chapter, and the build checks that every number spoken appears on the page.
+The voice is free and open-source and runs on our own computer. The narration is not the page read aloud: Claude writes a spoken script for each chapter. The build checks that nothing on the page is skipped and that every number spoken appears on the page.
 
 Decisions needed
 - Voice: keep the free voice, or pay for a studio voice with more expression (roughly $0.15 to $1 per chapter).
 - The what-if lab shows calculated numbers that the notes do not print.
 - Pages with audio are 2 to 7 MB until the audio is hosted separately.
 
-Not done yet
+Checking and what is left
 - Listen narration is written for two chapters. Each new chapter needs its script generated.
-- The recordings were checked for timing, loudness and pronunciation, but nobody has listened to them start to finish.
+- Nobody has to listen to a whole recording to check it. An automatic listener transcribes the audio and compares it with the script: 220 of 221 passages matched, and the one that differed is a 7-second clip. It cannot judge tone, so a person should still sample a minute per chapter.
