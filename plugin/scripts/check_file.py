@@ -60,6 +60,7 @@ PLACEHOLDER = "<!--SDG-ENGINE-->"
 # A professor, named or not, and what happened "in class" are not tested
 # (Ian, 2026-11-09: "get rid of the professor and in class warnings, the text in
 # the notes should be fine"). The notes Ian sends mention both on purpose.
+# "This lecture" is fine too (Ian, 2026-11-16); see OWN_LECTURE below.
 SOURCE_NOUNS = ["transcript", "lecture", "recording", "classroom"]
 # "on the board" and not "the board": a company has one of those too, and the
 # rule is about the classroom whiteboard. "the class" likewise skips "the class
@@ -2039,9 +2040,16 @@ def visible_text(src, cfgs):
     return parts
 
 
+# "In this lecture, we will..." is how the notes Ian sends open a topic, and it is
+# fine (Ian, 2026-11-16). It is the lecture as a *source* that stays out: "the
+# lecture", "a lecture recording", "as the lecture showed".
+OWN_LECTURE = re.compile(r"\b(?:this|today's|today’s) lecture\b", re.I)
+
+
 def check_source(src, cfgs, r):
     hits = {}
     for t in visible_text(src, cfgs):
+        t = OWN_LECTURE.sub(" ", t)
         probes = ([(r"\b" + re.escape(w) + r"\w*\b", w) for w in SOURCE_NOUNS]
                   + [(r"\b" + re.escape(w) + r"\b", w) for w in SOURCE_PHRASES]
                   + [(r"\b" + pat, w) for pat, w in SOURCE_GUARDED])

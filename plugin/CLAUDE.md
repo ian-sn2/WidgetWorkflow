@@ -156,6 +156,11 @@ itself still forbids questions outright.
    "the professor", "the instructor", "in class" or "the class"; it still
    fails "the transcript", "the lecture", "the recording", "on the board",
    "the slides" and "his slide".
+
+   **"In this lecture" is fine too** (Ian, 2026-11-16, on the BSC2010
+   macroevolution notes: "in this lecture is fine"). It is how the notes open a
+   topic, not a citation. `check_file.py` passes "this lecture" and "today's
+   lecture" and still fails "the lecture" and "a lecture recording".
 5. **No label touches a curve, an axis line, or a curve's own name.**
    The axis lines were the last thing on a panel that nothing tested against,
    and a curve that runs down to the axis parks its label right on it — which

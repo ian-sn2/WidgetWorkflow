@@ -12,7 +12,7 @@ Put the files Ian sent, unchanged, in `chapters/<COURSE>/<chapter>/source/`, and
 
 ## Inputs
 - **Word file**: `python scripts/doc_headings.py FILE` for the heading levels; use exactly that list. `python scripts/doc_formulas.py FILE` for MathType equations (`--check NOTES.html` audits the output). A `.doc` needs both `antiword` and `catdoc`, since antiword drops floating text boxes (exam tips, worked examples).
-- **Transcript**: paraphrase, and never name the source ("the lecture", "in class", "the slides").
+- **Transcript**: paraphrase, and never name the source ("the lecture", "the slides"). "In this lecture", "in class" and the professor are fine (CLAUDE.md rule 4).
 
 ## House format (CLAUDE.md hard rule 7)
 - Head: Red Hat Display font, `content/sn25-v6.css`, `studyguide/sn25-v2.js` (builds the TOC, so no written-in TOC), then `<!--SDG-ENGINE-->`. **Leave the `<title>` exactly as given.**

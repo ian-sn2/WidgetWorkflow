@@ -492,7 +492,8 @@ case("a calcs block makes every caption in the widget working", lambda r: C.chec
 for txt, tag in [("<p>built from a lecture recording alone.</p>", "a lecture recording"),
                  ("<p>as the transcript shows, demand rises.</p>", "the transcript"),
                  ("<p>he drew it on the board during the review.</p>", "on the board"),
-                 ("<p>his slide shows the shift going right.</p>", "his slide")]:
+                 ("<p>his slide shows the shift going right.</p>", "his slide"),
+                 ("<p>as the lecture showed, supply shifts.</p>", "the lecture")]:
     case("source: %s" % tag,
          (lambda t: lambda r: C.check_source(t, [], r) or r.has("FAIL", "source", ""))(txt))
 
@@ -506,7 +507,10 @@ for txt, tag in [("<p>the class average was below 74.</p>", "the class average")
                  ("<p>roughly 20% of the class said otherwise.</p>", "the class said"),
                  ("<p>he explained the model in class last week.</p>", "in class"),
                  ("<p>the professor said demand shifts right.</p>", "the professor said"),
-                 ("<p>Dr. Rush discussed the Coase theorem.</p>", "a named professor")]:
+                 ("<p>Dr. Rush discussed the Coase theorem.</p>", "a named professor"),
+                 # Ian, 2026-11-16: "in this lecture" is how the notes open a topic
+                 ("<p>In this lecture, we will begin to talk about macroevolution.</p>", "in this lecture"),
+                 ("<p>Today's lecture covers speciation.</p>", "today's lecture")]:
     case("not a source: %s" % tag,
          (lambda t: lambda r: C.check_source(t, [], r) or not r.lines)(txt))
 

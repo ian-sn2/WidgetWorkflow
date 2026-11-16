@@ -14,7 +14,7 @@ description: Review files Ian has written or edited (a chapter, a Concise or Bal
 2. **Layout and page errors.** Sideways scrolling at 390/320px, a lost class date, a missing or duplicated TOC (the `sn25-v5.js` vs `studyguide/sn25-v2.js` head script), house-CSS clashes.
 3. **Wrong or contradictory content.** Recompute every number the page states: `python scripts/check_arithmetic.py FILE` finds the written-out calculations; counts in words still need reading.
 4. **Missing information.** Compare with the Full or the source.
-5. **Housekeeping.** `<u>` tags, stray markup, a source-revealing phrase ("the slides", "in class").
+5. **Housekeeping.** `<u>` tags, stray markup, a source-revealing phrase ("the slides", "the transcript"); "in this lecture", "in class" and the professor are fine.
 
 ## Judge each edition by what it is meant to be
 - **Full**: the source as converted.
