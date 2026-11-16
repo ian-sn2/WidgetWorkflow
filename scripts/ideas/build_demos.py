@@ -5,9 +5,11 @@
 1. Play        every step-by-step widget gets a Play button, narration and step motion (add-on only)
 2. What-if lab the CPM network can be delayed or crashed by tapping it (one new widget kind)
 3. Depth       Concise + Balanced + Full merged into one page with a depth switch
+4. Listen      any page read aloud section by section from a bar pinned to the bottom (recorded voice)
 Every edit asserts that it landed; nothing else in a chapter is touched.
 """
 import json
+import subprocess
 import re
 import sys
 from pathlib import Path
@@ -40,6 +42,7 @@ def build_play():
         s = add_play((SRC / src).read_text(encoding='utf8'))
         (out / Path(src).name).write_text(s, encoding='utf8')
         print('play  ', Path(src).name)
+        subprocess.run([sys.executable, str(HERE / 'narrate.py'), 'steps', str(out / Path(src).name)], check=True)
 
 
 # ---------------------------------------------------------------- 2. What-if lab
@@ -199,6 +202,18 @@ def build_depth():
     print('depth ', name, 'words by depth', total)
 
 
+
+
+# ---------------------------------------------------------------- 4. Listen (works on any notes page)
+def build_listen():
+    out = OUT / '4-Listen-AnyPage'
+    out.mkdir(parents=True, exist_ok=True)
+    for src in ('01 - MAR3023 Exam 3 Chapter 22-DONE - Posted/MAR3023-Fall26-Exam3-Chapter22-PERT-DONE/MAR3023-Fall26-Exam3-Chapter22-WithPERT-Concise.html',
+                AP % 'CONCISE'):
+        subprocess.run([sys.executable, str(HERE / 'narrate.py'), 'listen', str(SRC / src), str(out / Path(src).name)], check=True)
+
+
 build_play()
 build_lab()
 build_depth()
+build_listen()

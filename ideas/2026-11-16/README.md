@@ -7,5 +7,9 @@ Open `SUMMARY.html` first. Each folder holds a working demo built on the Exam 3 
 | `1-Play-NarratedWalkthrough/` | the Project Management page, "The Forward Pass" | press Play; the speaker button turns the voice on or off. The `.mp4` is the same widget filmed by `scripts/ideas/record_video.py`. |
 | `2-WhatIf-Lab/` | the Project Management page, Step 6 and Project Crashing | open "Try it", tap B, then D. In the crash lab, tap F, then G. |
 | `3-Depth-Switch/` | the Aggregate Planning page | use Short / Medium / Full at the top, and "More detail" under a section. |
+| `4-Listen-AnyPage/` | either page | tap Listen at the bottom right; skip sections, change speed. Works on any page with headings. |
+
+The voice is an offline stand-in (`tts()` in `scripts/ideas/narrate.py`); swap that one function for a studio voice.
+`2-WhatIf-Lab/WhatIf-Lab-motion-preview.mp4` is a short screen capture of the lab's animation.
 
 Rebuild: `python scripts/ideas/build_demos.py <unpacked zip> ideas/2026-11-16`

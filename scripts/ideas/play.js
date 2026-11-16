@@ -5,10 +5,12 @@
    video recorder films. */
 (function () {
   var KINDS = [
-    { root: '.pmw', bar: '.pm-bar', next: '.pm-next', back: '.pm-back', cap: '.pm-cap.on', title: '.pm-title' },
-    { root: '.tpw', bar: '.tp-bar', next: '.tp-next', back: '.tp-back', cap: 'div.tp-cap', title: '.tp-title' }
+    { root: '.pmw', bar: '.pm-bar', next: '.pm-next', back: '.pm-back', cap: '.pm-cap.on', count: '.pm-count' },
+    { root: '.tpw', bar: '.tp-bar', next: '.tp-next', back: '.tp-back', cap: 'div.tp-cap', count: '.tp-count' }
   ];
-  var synth = window.speechSynthesis, players = [], current = null;
+  var synth = window.speechSynthesis, players = [], current = null, CLIPS = [];
+  /* recorded narration, one clip per step per widget: [[{s: audio, d: seconds}, ...], ...] (narrate.py writes it) */
+  function loadClips() { try { CLIPS = JSON.parse(document.getElementById('pv-audio').textContent); } catch (e) {} }
   var SAY = [[/\bES\b/g, 'early start'], [/\bEF\b/g, 'early finish'], [/\bLS\b/g, 'late start'], [/\bLF\b/g, 'late finish'],
     [/→/g, ' to '], [/−/g, ' minus '], [/÷/g, ' divided by '], [/×/g, ' times '], [/=/g, ' equals '], [/≤/g, ' at most '],
     [/\$(\d[\d,]*)/g, '$1 dollars'], [/\bwk\b/g, 'week'], [/--/g, ' none ']];
@@ -32,7 +34,9 @@
     var prog = document.createElement('div'); prog.className = 'pv-prog'; prog.innerHTML = '<i></i>';
     bar.insertBefore(play, bar.firstChild); bar.appendChild(voice);
     bar.parentNode.insertBefore(prog, bar.nextSibling);
-    var on = false, sound = !!synth, timer = null, token = 0;
+    var clips = CLIPS[players.length] || null, aud = null, film = false;
+    var on = false, sound = !!(synth || clips), timer = null, token = 0;
+    function idx() { var c = root.querySelector(k.count), m = c && /(\d+)\s+of/.exec(c.textContent); return m ? +m[1] - 1 : 0; }
     try { if (localStorage.getItem('pv-sound') === '0') sound = false; } catch (e) {}
 
     function label() {
@@ -40,14 +44,14 @@
       play.setAttribute('aria-label', on ? 'Pause the walkthrough' : 'Play the walkthrough');
       voice.innerHTML = sound ? '&#128266;' : '&#128263;';
       voice.setAttribute('aria-label', sound ? 'Narration on. Turn narration off' : 'Narration off. Turn narration on');
-      voice.hidden = !synth;
+      voice.hidden = !(synth || clips);
     }
     function bar_(ms) {
       var i = prog.firstChild; i.style.transition = 'none'; i.style.width = '0';
       void i.offsetWidth; i.style.transition = 'width ' + ms + 'ms linear'; i.style.width = '100%';
     }
     function stop() {
-      on = false; token++; clearTimeout(timer); if (synth) synth.cancel();
+      on = false; token++; clearTimeout(timer); if (synth) synth.cancel(); if (aud) aud.pause();
       prog.firstChild.style.transition = 'none'; prog.firstChild.style.width = '0';
       root.classList.remove('pv-on'); if (current === api) current = null; label();
     }
@@ -59,16 +63,24 @@
     function say() {
       var my = ++token, cap = root.querySelector(k.cap), t = cap ? spoken(cap) : '', n = words(t);
       var silent = Math.max(2400, n * 290 + 1300), cap_ms = n * 520 + 4000;
-      clearTimeout(timer);
-      if (sound && synth && synth.getVoices().length) {
+      var clip = clips && clips[idx()], quiet = function () { bar_(silent); timer = setTimeout(function () { advance(my); }, silent); };
+      clearTimeout(timer); if (aud) aud.pause();
+      if (film && clip) {            /* being filmed: hold each step for its clip, and log when it began */
+        (window.__pvLog = window.__pvLog || []).push([idx(), performance.now()]);
+        bar_(clip.d * 1000 + 500); timer = setTimeout(function () { advance(my); }, clip.d * 1000 + 500);
+      } else if (sound && clip) {
+        aud = new Audio(clip.s);
+        aud.onended = function () { clearTimeout(timer); timer = setTimeout(function () { advance(my); }, 450); };
+        bar_(clip.d * 1000);
+        timer = setTimeout(function () { advance(my); }, clip.d * 1000 + 4000);
+        var pr = aud.play(); if (pr && pr.catch) pr.catch(function () { if (my === token) { clearTimeout(timer); quiet(); } });
+      } else if (sound && synth && synth.getVoices().length) {
         synth.cancel();
         var u = new SpeechSynthesisUtterance(t); u.rate = 1.02; u.lang = 'en-US';
         u.onend = function () { clearTimeout(timer); timer = setTimeout(function () { advance(my); }, 450); };
         bar_(n * 400 + 600); synth.speak(u);
         timer = setTimeout(function () { advance(my); }, cap_ms);   /* a voice that never reports its end */
-      } else {
-        bar_(silent); timer = setTimeout(function () { advance(my); }, silent);
-      }
+      } else quiet();
     }
     var auto = false;
     function start() {
@@ -83,22 +95,24 @@
       label(); if (on) say();
     };
     [next, back].forEach(function (b) { b.addEventListener('click', function () { if (!auto && on) stop(); else if (!on) label(); }); });
-    var api = { root: root, start: start, stop: stop, mute: function () { sound = false; label(); } };
+    var api = { root: root, k: k, next: next, back: back, start: start, stop: stop, film: function () { film = true; sound = false; label(); } };
     players.push(api); label();
   }
 
   function boot() {
+    loadClips();   /* the clips sit after this script in the page, so they are read once the page is parsed */
     KINDS.forEach(function (k) { Array.prototype.forEach.call(document.querySelectorAll(k.root), function (r) { make(r, k); }); });
     var m = /video=(\d+)/.exec(location.hash);
     if (m && players[+m[1] - 1]) {
       var p = players[+m[1] - 1], stage = document.createElement('div');
       stage.className = 'pv-stage'; document.body.appendChild(stage); stage.appendChild(p.root);
       document.body.classList.add('pv-mode');
-      p.mute(); p.root.addEventListener('pv-done', function () { window.__pvDone = true; });
+      p.film(); p.root.addEventListener('pv-done', function () { window.__pvDone = true; });
       window.__pvCount = players.length;
       setTimeout(function () { window.__pvStarted = true; p.start(); }, 900);
     }
   }
+  window.__pv = { players: players, spoken: spoken };
   window.addEventListener('pagehide', function () { if (synth) synth.cancel(); });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();

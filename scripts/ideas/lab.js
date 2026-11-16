@@ -30,7 +30,39 @@
       })('Start', []);
       return { d: d, vals: vals, slack: slack, crit: crit, ce: ce, T: T, paths: paths };
     }
-    var base = solve(delta);
+    var base = solve(delta), prev = null, shownT = base.T, shownCost = 0;
+    var MAXW = crash ? base.T + 1 : base.T + 5;
+    function motion() { return !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
+    function count(el, from, to, fmt) {   /* a number that runs to its new value instead of jumping */
+      if (!el) return; if (from === to || !motion()) { el.textContent = fmt(to); return; }
+      var t0 = null; (function step(ts) { if (t0 === null) t0 = ts; var k = Math.min((ts - t0) / 600, 1), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = fmt(Math.round(from + (to - from) * e)); if (k < 1) requestAnimationFrame(step); })(performance.now());
+    }
+    function animate(S, hit) {   /* the change travels: forward along the arrows, then back, then the critical path starts to flow */
+      var svg = fig.querySelector('svg'), gs = fig.querySelectorAll('svg g.n'), es = fig.querySelectorAll('svg g.e'), maxc = 0, NSV = 'http://www.w3.org/2000/svg';
+      ids.forEach(function (id) { maxc = Math.max(maxc, net.nodes[id].pos[0]); });
+      net.edges.forEach(function (e, i) {
+        var g = es[i]; if (!g) return;
+        if (S.ce[e[0] + '>' + e[1]]) {   /* white dashes running along every critical arrow, in the direction of the work */
+          var l = g.querySelector('.e-l'), f = l.cloneNode(false); f.setAttribute('class', 'e-flow'); g.appendChild(f);
+          if (prev && !prev.ce[e[0] + '>' + e[1]]) g.classList.add('newcrit');
+        }
+        if (prev && hit && JSON.stringify(prev.vals[e[1]]) !== JSON.stringify(S.vals[e[1]])) { g.classList.add('wave'); g.style.setProperty('--d', (net.nodes[e[0]].pos[0] * 0.16) + 's'); }
+      });
+      if (!prev) return;
+      ids.forEach(function (id, i) {
+        var g = gs[i]; if (!g) return; var col = net.nodes[id].pos[0], tv = g.querySelectorAll('.n-v');
+        g.style.setProperty('--d', (col * 0.16 + 0.1) + 's'); g.style.setProperty('--db', (maxc * 0.16 + 0.35 + (maxc - col) * 0.16) + 's');
+        [0, 1, 2, 3].forEach(function (k) { if (tv[k] && prev.vals[id][k] !== S.vals[id][k]) tv[k].classList.add('chg'); });
+        if (id === hit) { g.classList.add('hit'); var ring = document.createElementNS(NSV, 'circle'); ring.setAttribute('r', 36); ring.setAttribute('class', 'burst'); g.insertBefore(ring, g.firstChild); }
+        if (S.crit[id] && !prev.crit[id] && id !== 'Start') g.classList.add('newcrit');
+        if (!S.crit[id] && prev.crit[id]) g.classList.add('uncrit');
+      });
+      Array.prototype.forEach.call(fig.querySelectorAll('svg g.sl'), function (b, i) {
+        var id = ids.filter(function (q) { return q !== 'Start'; })[i];
+        if (id && prev.slack[id] !== S.slack[id]) { b.classList.add('chg'); b.style.setProperty('--db', (maxc * 0.16 + 0.5 + (maxc - net.nodes[id].pos[0]) * 0.16) + 's'); }
+      });
+    }
     function money(n) { return '$' + n.toLocaleString('en-US'); }
     function wk(n) { return n + (n === 1 ? ' week' : ' weeks'); }
     function cost(dl) { var c = 0; ids.forEach(function (id) { if (dl[id]) c += dl[id] * M.crash[id].cost; }); return c; }
@@ -44,7 +76,7 @@
       draw(M.presets[i].cap || null, null);
     });
     var undo = H('button', 'pm-undo', ctl.buttons[0].parentNode, '&#8630; Undo'); undo.type = 'button';
-    var stat = H('div', 'pm-stat', body), capbox = H('div', 'pm-caps', body), cap = H('div', 'pm-cap on', capbox);
+    var stat = H('div', 'pm-stat', body), meter = H('div', 'pm-meter', body, '<i class="base"></i><i class="fill"></i>' + (M.deadline ? '<i class="dl"><b>deadline</b></i>' : '') + '<span class="lab"></span>'), capbox = H('div', 'pm-caps', body), cap = H('div', 'pm-cap on', capbox);
     capbox.setAttribute('aria-live', 'polite');
     body.appendChild(fig);
     H('p', 'pm-hint', body, crash ? 'Tap an activity to crash it by one week.' : 'Tap an activity to make it run one week late.');
@@ -88,11 +120,21 @@
         g.addEventListener('click', act);
         g.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); act(); } });
       });
+      if (motion()) animate(S, why ? why[0] : null);
+      prev = S;
+      var late = M.deadline && S.T > M.deadline;
+      meter.querySelector('.fill').style.width = (S.T / MAXW * 100) + '%';
+      meter.querySelector('.fill').className = 'fill' + (late ? ' bad' : (S.T < base.T ? ' good' : ''));
+      meter.querySelector('.base').style.left = (base.T / MAXW * 100) + '%';
+      if (M.deadline) meter.querySelector('.dl').style.left = (M.deadline / MAXW * 100) + '%';
+      var lab = meter.querySelector('.lab'); lab.style.left = (S.T / MAXW * 100) + '%'; lab.className = 'lab' + (late ? ' bad' : '');
+      count(lab, shownT, S.T, function (n) { return 'week ' + n; }); shownT = S.T;
       var diff = S.T - base.T, s = '<span><b>' + wk(S.T) + '</b> to finish' + (diff ? ' <em class="' + (diff > 0 ? 'bad' : 'good') + '">' + (diff > 0 ? '+' : '−') + Math.abs(diff) + '</em>' : '') + '</span>';
-      if (crash) s += '<span>Crash cost <b>' + money(cost(delta)) + '</b></span>';
+      if (crash) s += '<span>Crash cost <b class="cost"></b></span>';
       else if (M.deadline) s += '<span class="' + (S.T > M.deadline ? 'bad' : 'good') + '">' + (S.T > M.deadline ? '&#10007; misses' : '&#10003; meets') + ' the ' + M.deadline + '-week deadline</span>';
       if (list(delta)) s += '<span class="chg">' + list(delta) + '</span>';
       stat.innerHTML = s;
+      if (crash) { count(stat.querySelector('.cost'), shownCost, cost(delta), money); shownCost = cost(delta); }
       cap.innerHTML = text || (why ? explain(why[0], why[1], S) : M.intro);
       undo.disabled = !hist.length;
     }

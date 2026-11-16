@@ -1,0 +1,18 @@
+/* Listen: a pill in the corner until opened, then one bar pinned to the bottom. Neither takes page height. */
+.ls-pill, .ls-bar, .ls-bar button { font-family:"Red Hat Display", system-ui, sans-serif; }
+.ls-pill { position:fixed; right:14px; bottom:calc(14px + env(safe-area-inset-bottom, 0px)); z-index:60; min-height:44px; padding:8px 16px; border:0; border-radius:999px;
+  background:#1c2a44; color:#fff; font-size:.9rem; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(28,42,68,.3); }
+.ls-bar { position:fixed; left:0; right:0; bottom:0; z-index:60; display:flex; align-items:center; gap:6px; padding:8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+  background:#1c2a44; color:#fff; box-shadow:0 -4px 14px rgba(28,42,68,.25); }
+.ls-bar[hidden], .ls-pill[hidden] { display:none; }
+.ls-bar button { flex:none; min-width:44px; min-height:44px; border:0; border-radius:999px; background:rgba(255,255,255,.12); color:#fff; font-size:1rem; font-weight:800; cursor:pointer; }
+.ls-bar button.ls-play { background:#c8302a; }
+.ls-bar button.ls-speed { font-size:.8rem; min-width:52px; }
+.ls-bar button:disabled { opacity:.35; cursor:default; }
+.ls-bar button:focus-visible, .ls-pill:focus-visible { outline:3px solid #7fb2ff; outline-offset:2px; }
+.ls-mid { flex:1; min-width:0; }
+.ls-title { font-size:.8rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:5px; }
+.ls-track { height:14px; padding:5px 0; cursor:pointer; background:linear-gradient(rgba(255,255,255,.25), rgba(255,255,255,.25)) center / 100% 4px no-repeat; }
+.ls-track i { display:block; height:4px; width:0; background:#fff; border-radius:2px; }
+body.ls-open { padding-bottom:76px; }
+.ls-now { box-shadow:inset 4px 0 0 #c8302a; scroll-margin-top:70px; }
