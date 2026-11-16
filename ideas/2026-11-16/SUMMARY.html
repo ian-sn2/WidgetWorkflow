@@ -44,11 +44,11 @@ code { font-size:.85em; background:var(--tint); padding:1px 5px; border-radius:4
       <div class="n">IDEA 1</div>
       <h2>Play: every step-by-step widget becomes a narrated animation, and a video</h2>
       <p class="small">A Play button on the widgets we already build. It advances the steps by itself, reads each caption aloud, and animates what changed (the node pulses, the arrow draws in, the new number lands). The same page films itself into an MP4.</p>
-      <div class="fact">0 px</div><div class="factl">added page height. Sample video: 2 min 57 s with narration, 3.3 MB, made unattended.</div>
+      <div class="fact">0 px</div><div class="factl">added page height. Sample video: 2 min 49 s with narration, 3.8 MB, made unattended.</div>
       <dl>
         <dt>Shown on</dt><dd>Project Management (4 widgets) and the Aggregate Planning transportation stepper.</dd>
         <dt>Repeats each semester</dt><dd>One add-on file for every page. One command per video. New numbers in the widget give a new video.</dd>
-        <dt>To ship</dt><dd>Choose the voice. The demo and its MP4 now carry a recorded voice, one clip per step. It is a basic offline voice used as a stand-in: a studio-quality voice from a text-to-speech service costs cents per chapter and is a one-function change.</dd>
+        <dt>To ship</dt><dd>Choose the voice. The demo and its MP4 now use Kokoro, an open-source neural voice that runs on our own machine with no per-use cost and a licence that allows commercial use. Five sample clips are in the voice-samples folder. A paid studio voice (ElevenLabs, OpenAI) would be roughly $0.15 to $1 per chapter and is a one-function change.</dd>
       </dl>
     </section>
 
@@ -97,7 +97,8 @@ code { font-size:.85em; background:var(--tint); padding:1px 5px; border-radius:4
       <h3 style="margin-top:12px">Limits and one finding</h3>
       <ul>
         <li>The YouTube page itself could not be opened from this session; the video summary is based on its spoken content, which was supplied in the chat.</li>
-        <li>The recorded voice was checked for timing, loudness and that it plays, but nobody has listened to it yet. It is a basic voice and will sound robotic.</li>
+        <li>The recorded voice was checked for timing, loudness, pronunciation of tricky words and that it plays, but nobody has listened to it yet. Please play the samples before deciding.</li>
+        <li><b>All MAN4504 widgets are now animated (folder 5):</b> both chapters, all three editions. Each widget ends on exactly its original drawing, checked pixel by pixel, and readers who ask their device for reduced motion see the pages unchanged.</li>
         <li>Blender was looked into, not used. It makes 3D film clips, which suits a short intro video more than a diagram inside a page; the motion here is built into the page itself, so it stays sharp, interactive and small.</li>
         <li>Found while measuring: the posted Balanced and Full Aggregate Planning pages scroll sideways by 340 px on a phone because of one wide table. Not changed.</li>
       </ul>

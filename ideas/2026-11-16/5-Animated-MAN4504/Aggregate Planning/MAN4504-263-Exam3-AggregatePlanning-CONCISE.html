@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAN4504 Exam 3 - Aggregate Planning</title>
+<link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v6.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<script>
+MathJax = {
+tex: {
+displayMath: [['\\[','\\]']],
+inlineMath: [['\\(','\\)']]
+}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>
+<style>@media (max-width:600px){table:not(.tp){display:block;overflow-x:auto !important;-webkit-overflow-scrolling:touch} mjx-container{display:inline-block !important;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:middle}}</style>
+<style>
+.tpw { --ink:#1c2a44; --muted:#5b6474; --rule:#cfd6e2; --soft:#f1f4f9; --hi:#fff4c2; --blue:#1d4f94; max-width:760px; margin:20px auto; padding:16px 16px 14px; background:#fff; border:1px solid #dfe3ea; border-radius:10px; box-sizing:border-box; font-family:"Red Hat Display", system-ui, sans-serif; color:var(--ink); clear:both; }
+.tpw * { box-sizing:border-box; }
+.tpw .tp-title { font-weight:800; font-size:1.02rem; margin:0 0 2px; text-align:center; }
+.tpw .tp-lede { font-size:.85rem; color:var(--muted); margin:0 0 10px; text-align:center; }
+.tpw .tp-bar { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px; margin:0 0 8px; }
+.tpw button { font:inherit; font-size:.85rem; font-weight:700; min-height:40px; padding:6px 14px; border:1px solid var(--rule); border-radius:999px; background:#fff; color:var(--ink); cursor:pointer; }
+.tpw button[aria-pressed="true"], .tpw button.tp-next { background:var(--ink); border-color:var(--ink); color:#fff; }
+.tpw button:disabled { opacity:.4; cursor:default; }
+.tpw button:focus-visible { outline:3px solid #2a78d6; outline-offset:2px; }
+.tpw .tp-count { font-size:.8rem; color:var(--muted); min-width:6.5em; text-align:center; }
+.tpw .tp-cap { margin:0 0 10px; padding:8px 12px; border-left:4px solid var(--blue); background:var(--soft); border-radius:0 6px 6px 0; font-size:.9rem; line-height:1.45; min-height:4.4em; }
+.tpw .tp-cap b.tp-h { display:block; font-size:.92rem; margin-bottom:2px; }
+.tpw .tp-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.tpw table.tp { border-collapse:separate; border-spacing:0; margin:0 auto; font-size:.82rem; font-variant-numeric:tabular-nums; width:100%; min-width:430px; background:transparent; }
+.tpw table.tp th, .tpw table.tp td, .tpw table.tp tr { padding:0 !important; border:0 !important; background:transparent !important; color:var(--ink) !important; text-align:center; vertical-align:middle; box-shadow:none !important; }
+.tpw table.tp tr:nth-child(even) td, .tpw table.tp tr:nth-child(odd) td, .tpw table.tp td:first-child, .tpw table.tp th:first-child { background:transparent !important; font-weight:inherit; }
+.tpw table.tp thead th { font-weight:800 !important; font-size:.8rem; padding:4px 2px 6px !important; line-height:1.15; }
+.tpw table.tp thead th.tp-sub { font-weight:600 !important; font-size:.72rem; color:var(--muted) !important; }
+.tpw table.tp .tp-rl { text-align:left !important; padding:0 6px 0 0 !important; white-space:nowrap; font-weight:600 !important; font-size:.8rem; }
+.tpw .tp-per { display:inline-block; min-width:3.1em; margin-right:4px; padding:1px 5px; border-radius:4px; font-size:.68rem; font-weight:800; color:#fff; background:#5b6474; text-align:center; }
+.tpw .tp-per.p0 { background:#1c2a44; } .tpw .tp-per.p1 { background:#2f6fbf; } .tpw .tp-per.p2 { background:#5b6474; }
+.tpw table.tp td.tp-c { position:relative; height:44px; min-width:62px; border:1px solid var(--rule) !important; background:#fff !important; transition:background .2s; }
+.tpw td.tp-c .tp-u { position:absolute; top:0; right:0; min-width:24px; padding:1px 4px; border-left:1px solid var(--rule); border-bottom:1px solid var(--rule); font-size:.7rem; font-weight:700; color:var(--ink); background:#fff; line-height:1.3; }
+.tpw td.tp-c .tp-u.off { visibility:hidden; }
+.tpw td.tp-c .tp-q { position:absolute; left:6px; bottom:3px; font-size:.95rem; font-weight:800; }
+.tpw td.tp-c .tp-q.dash { color:#aab3c2; font-weight:600; }
+.tpw table.tp tr td.tp-x.tp-x { background:#2b343c !important; border:1px solid #2b343c !important; }
+.tpw table.tp tr td.tp-x.tp-note { color:#fff !important; font-size:.68rem; font-weight:600; line-height:1.25; padding:6px !important; }
+.tpw table.tp td.tp-c.col { background:#eef4fd !important; }
+.tpw table.tp tr.rowhi td.tp-c { background:#eef4fd !important; }
+.tpw table.tp td.tp-c.hi { background:var(--hi) !important; }
+.tpw table.tp td.tp-cap, .tpw table.tp td.tp-dem { font-weight:800 !important; font-size:.86rem; padding:0 4px !important; white-space:nowrap; }
+.tpw table.tp td.tp-dem { padding-top:6px !important; }
+.tpw s { color:#9aa3b2; font-weight:600; margin-right:3px; }
+.tpw .tp-done { color:#9aa3b2; text-decoration:line-through; font-weight:600; }
+.tpw .tp-dots { display:flex; justify-content:center; gap:4px; margin:10px 0 0; flex-wrap:wrap; }
+.tpw .tp-dots span { width:7px; height:7px; border-radius:50%; background:#d5dbe5; }
+.tpw .tp-dots span.on { background:var(--blue); }
+.tpw .tp-list { margin:6px 0 0; padding:0; list-style:none; counter-reset:tp; }
+.tpw .tp-list li { counter-increment:tp; display:grid; grid-template-columns:1.6em 1fr auto auto; gap:8px; align-items:center; padding:3px 0; font-size:.86rem; border-bottom:1px dashed #e3e7ee; }
+.tpw .tp-list li::before { content:counter(tp) "."; color:var(--muted); font-weight:700; }
+.tpw .tp-list .tp-cost { color:var(--muted); font-variant-numeric:tabular-nums; }
+.tpw .tp-list .tp-take { font-weight:800; font-variant-numeric:tabular-nums; text-align:right; }
+.tpw [data-r], .tpw [data-colhead], .tpw td.tp-c[data-k] { cursor:pointer; }
+.tpw.tp-read td.tp-c[data-k], .tpw.tp-cost td.tp-c[data-k] { cursor:pointer; }
+@media (max-width:600px) { .tpw { padding:12px 8px; } .tpw .tp-cap { font-size:.85rem; } .tpw table.tp { font-size:.76rem; } .tpw td.tp-c { min-width:54px; height:40px; } }
+@media (prefers-reduced-motion: reduce) { .tpw * { transition:none !important; } }
+</style>
+</head>
+<body>
+
+<h1>The Nature of Aggregate Planning</h1>
+
+<ul>
+<li><b>Aggregate planning</b> (in industry, <b>sales and production (S&amp;P) planning</b>): planning intermediate-term production in aggregate units (how many cars, not how many blue sedans), because totals forecast better than individual items.</li>
+<li><b>Goal</b>: meet forecast demand at minimum cost over the planning period by adjusting production rates, labor, inventory, overtime, and subcontracting.</li>
+<li><b>Requirements</b>: a logical aggregate unit; an aggregate demand forecast; a way to determine costs; a model combining forecasts and costs.</li>
+<li>The plan works like a budget authorization and feeds the master production schedule and MRP, which break it down by product.</li>
+</ul>
+
+<table>
+<thead><tr><th>Horizon</th><th>Who plans</th><th>Examples</th></tr></thead>
+<tbody>
+<tr><td>Long range (over 1 year)</td><td>Top executives</td><td>R&amp;D, new products, capital investment, facility location</td></tr>
+<tr><td><b>Intermediate (3–18 months)</b></td><td>Operations managers</td><td>Sales and production planning, employment, inventory, subcontracting (<b>aggregate planning</b>)</td></tr>
+<tr><td>Short range (under 3 months)</td><td>Managers, supervisors, foremen</td><td>Job assignments, ordering, scheduling, overtime</td></tr>
+</tbody>
+</table>
+
+<h1>Aggregate Planning Strategies</h1>
+
+<ul>
+<li><b>Capacity options</b> change supply; <b>demand options</b> change demand. Each comes in opposite pairs (hire or lay off; build inventory or back-order).</li>
+</ul>
+
+<h2>Capacity Options</h2>
+
+<table>
+<thead><tr><th>Option</th><th>Drawbacks</th></tr></thead>
+<tbody>
+<tr><td><b>Change inventory levels</b>: build stock in slow periods</td><td>Holding costs; shortages if demand runs high; not possible for services</td></tr>
+<tr><td><b>Hire or lay off</b>: match workforce to demand</td><td>Hiring, training, and separation costs; lower productivity and morale</td></tr>
+<tr><td><b>Overtime or idle time</b>: vary hours of a constant workforce</td><td>Overtime premiums and fatigue; idle time to absorb; only small changes</td></tr>
+<tr><td><b>Subcontract</b></td><td>Cost; quality and delivery risk; exposes customers to a competitor</td></tr>
+<tr><td><b>Part-time workers</b></td><td>Best for low-skilled labor; poor fit for skilled work</td></tr>
+</tbody>
+</table>
+
+<h2>Demand Options</h2>
+
+<table>
+<thead><tr><th>Option</th><th>Drawbacks</th></tr></thead>
+<tbody>
+<tr><td><b>Influence demand</b>: promotions and off-peak discounts</td><td>Uncertain response; may not balance demand and capacity</td></tr>
+<tr><td><b>Back-order</b> in high-demand periods</td><td>Customers wait; goodwill and sales lost; works only with few substitutes</td></tr>
+<tr><td><b>Counter-seasonal mix</b> (jet-ski engines in summer, snowmobile engines in winter)</td><td>May take the firm outside its expertise</td></tr>
+</tbody>
+</table>
+
+<h1>Methods of Aggregate Planning</h1>
+
+<ul>
+<li>No single option is likely to be optimal, partly because company policies limit each one, so planners combine several.</li>
+<li><b>Chase strategy</b>: match output to each period's demand (common, often the only option, in services).</li>
+<li><b>Level strategy</b>: uniform daily production, with inventory or idle time as the buffer.</li>
+<li><b>Mixed strategy</b>: a combination, usually best; finding it takes trial and error.</li>
+</ul>
+
+<div class="exam-tip">
+<h4>EXAM TIP: Work Many Practice Problems</h4>
+<p>The routine problems hide small rules (inventory carried in, charging for a workforce change at the start). The exam has no wrinkle that is not also in the practice questions.</p>
+</div>
+
+<h2>Graphical Approaches (Trial and Error)</h2>
+
+<ul>
+<li><b>Graphical methods</b> compare demand with capacity a few variables at a time; easy, but not guaranteed optimal.</li>
+<li>Steps: demand per period; capacity (regular, overtime, subcontracting); labor, hiring, layoff, and holding costs; company policies; then compare alternative plans' total costs.</li>
+</ul>
+
+<h2>Example: Applying Aggregate Planning Strategies</h2>
+
+<table>
+<thead><tr><th>Month</th><th>Demand</th><th>Production days</th><th>Demand per day</th></tr></thead>
+<tbody>
+<tr><td>Jan</td><td>900</td><td>22</td><td>41</td></tr>
+<tr><td>Feb</td><td>700</td><td>18</td><td>39</td></tr>
+<tr><td>Mar</td><td>800</td><td>21</td><td>38</td></tr>
+<tr><td>Apr</td><td>1,200</td><td>21</td><td>57</td></tr>
+<tr><td>May</td><td>1,500</td><td>22</td><td>68</td></tr>
+<tr><td>Jun</td><td>1,100</td><td>20</td><td>55</td></tr>
+<tr><td><b>Total</b></td><td><b>6,200</b></td><td><b>124</b></td><td></td></tr>
+</tbody>
+</table>
+
+<p>Costs: carrying $5 per unit per month; subcontracting $20 per unit; labor $80 per day per worker (1.6 labor-hours per unit); raising the daily rate $300 per unit; lowering it $600 per unit.</p>
+
+<h2>Method 1: Pure Level Strategy</h2>
+
+<ul>
+<li>6,200 ÷ 124 = 50 units per day with 10 workers. Ending inventory 1,850 × $5 = $9,250; labor 10 × $80 × 124 = $99,200. <b>Total $108,450.</b></li>
+</ul>
+
+<h2>Method 2: Level Strategy (Production at the Minimum Requirement and Use of Subcontracting)</h2>
+
+<ul>
+<li>38 units per day (March's rate) with 7.6 workers: 7.6 × $80 × 124 = $75,392. 6,200 − 4,712 = 1,488 units subcontracted × $20 = $29,760. <b>Total $105,152</b>, the lowest of the three.</li>
+</ul>
+
+<h2>Method 3: Pure Chase Strategy (Using Hiring and Layoffs)</h2>
+
+<ul>
+<li>Production $99,200 + hiring $9,000 + layoffs $9,600. <b>Total $117,800.</b></li>
+<li>Other plans (overtime, for one) were not tried, and nonmonetary costs such as layoffs' effect on morale also count.</li>
+</ul>
+
+<h2>Transportation Method of Linear Programming</h2>
+
+<ul>
+<li>An optimizing method: supply (by period and source) in the rows, demand periods in the columns, and the unit cost in each cell.</li>
+</ul>
+
+<h2>Example: Transportation Method</h2>
+
+<p>A tire maker has regular time at $40, overtime at $50, and subcontracting at $70 per tire; 100 tires in beginning inventory; $2 per tire per month carrying cost; and no back-ordering.</p>
+
+<table>
+<thead><tr><th></th><th>March</th><th>April</th><th>May</th></tr></thead>
+<tbody>
+<tr><td><b>Demand</b></td><td>800</td><td>1,000</td><td>750</td></tr>
+<tr><td>Regular capacity</td><td>700</td><td>700</td><td>700</td></tr>
+<tr><td>Overtime</td><td>50</td><td>50</td><td>50</td></tr>
+<tr><td>Subcontracting</td><td>150</td><td>150</td><td>130</td></tr>
+</tbody>
+</table>
+
+<h2>Setting Up and Solving the Table</h2>
+
+<ul>
+<li>Capacity 2,680 + 100 inventory exceeds demand of 2,550, so a <b>dummy column</b> takes the 230 unused units at $0.</li>
+<li>Each cell costs the source's price plus $2 for every month held; cells that would need back-ordering are blocked.</li>
+<li>Fill each month's demand from the cheapest source with units left, earlier months' production included. Step through it to see the table built and filled one source at a time.</li>
+</ul>
+
+<div class="tpw" data-mode="stepper" tabindex="-1">
+<p class="tp-title">The Transportation Method, Step by Step</p>
+<p class="tp-lede">Press Next to build the table and the plan one step at a time.</p>
+<div class="tp-bar"><button type="button" class="tp-back">◀ Back</button><span class="tp-count"></span><button type="button" class="tp-next">Next ▶</button></div>
+<div class="tp-cap" aria-live="polite"></div>
+<div class="tp-scroll"></div>
+<div class="tp-dots" aria-hidden="true"></div>
+<noscript><img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-10-transportation-final-solution.png" alt="Complete transportation table with all allocations" class="image-wide-75 content-image"></noscript>
+<script type="application/json">{"rows": [{"id": "inv", "per": "", "src": "Beginning inv.", "cap": 100, "t": 0}, {"id": "mR", "per": "March", "src": "Regular", "cap": 700, "t": 0}, {"id": "mO", "per": "March", "src": "Overtime", "cap": 50, "t": 0}, {"id": "mS", "per": "March", "src": "Subcontract", "cap": 150, "t": 0}, {"id": "aR", "per": "April", "src": "Regular", "cap": 700, "t": 1}, {"id": "aO", "per": "April", "src": "Overtime", "cap": 50, "t": 1}, {"id": "aS", "per": "April", "src": "Subcontract", "cap": 150, "t": 1}, {"id": "yR", "per": "May", "src": "Regular", "cap": 700, "t": 2}, {"id": "yO", "per": "May", "src": "Overtime", "cap": 50, "t": 2}, {"id": "yS", "per": "May", "src": "Subcontract", "cap": 130, "t": 2}], "cols": [{"id": "mar", "label": "March", "dem": 800}, {"id": "apr", "label": "April", "dem": 1000}, {"id": "may", "label": "May", "dem": 750}, {"id": "dum", "label": "Unused (dummy)", "dem": 230}], "cost": {"inv|mar": 0, "inv|apr": 2, "inv|may": 4, "inv|dum": 0, "mR|mar": 40, "mR|apr": 42, "mR|may": 44, "mR|dum": 0, "mO|mar": 50, "mO|apr": 52, "mO|may": 54, "mO|dum": 0, "mS|mar": 70, "mS|apr": 72, "mS|may": 74, "mS|dum": 0, "aR|mar": null, "aR|apr": 40, "aR|may": 42, "aR|dum": 0, "aO|mar": null, "aO|apr": 50, "aO|may": 52, "aO|dum": 0, "aS|mar": null, "aS|apr": 70, "aS|may": 72, "aS|dum": 0, "yR|mar": null, "yR|apr": null, "yR|may": 40, "yR|dum": 0, "yO|mar": null, "yO|apr": null, "yO|may": 50, "yO|dum": 0, "yS|mar": null, "yS|apr": null, "yS|may": 70, "yS|dum": 0}, "final": {"alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700, "yO|may": 50, "mS|dum": 100, "yS|dum": 130}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 0, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 0, "yS": 0}, "dleft": {"mar": 0, "apr": 0, "may": 0, "dum": 0}}, "steps": [{"title": "Set up the table", "text": "Demand periods run across the top and sources of supply down the side. Total demand is 800 + 1,000 + 750 = <b>2,550<\/b>. Capacity is (700 + 50 + 150) + (700 + 50 + 150) + (700 + 50 + 130) = <b>2,680<\/b>, plus <b>100<\/b> units of beginning inventory. A dummy column for unused capacity takes the <b>230<\/b> extra units so that supply equals demand. With no back-ordering, a period's production cannot meet an earlier period's demand, so those cells are blacked out.", "costs": [], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["dum"]}, {"title": "Costs: March demand", "text": "Meeting March demand costs only the source's own price: <b>$0<\/b> from beginning inventory, <b>$40<\/b> on regular time, <b>$50<\/b> on overtime, <b>$70<\/b> subcontracted.", "costs": ["mar"], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["mar"]}, {"title": "Costs: April demand", "text": "April production meeting April demand costs the same base prices. Beginning inventory and March production held until April add the <b>$2<\/b> carrying cost: $2, $42, $52 and $72.", "costs": ["apr", "mar"], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["apr"]}, {"title": "Costs: May demand and unused capacity", "text": "May production costs its base price; April production held one month adds <b>$2<\/b>; inventory and March production held two months add <b>$4<\/b>. The dummy column costs <b>$0<\/b>: unused capacity is never produced.", "costs": ["apr", "dum", "mar", "may"], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["may", "dum"]}, {"title": "March: Beginning inventory", "text": "Fill each demand column from left to right, always from the cheapest source with capacity left. Sources that can still supply March, cheapest first, including earlier months' production held in inventory: Beginning inventory $0, March regular $40, March overtime $50, March subcontract $70. Next cheapest source with units left: <b>Beginning inventory<\/b> at <b>$0<\/b>. Take <b>100<\/b> units. <b>700<\/b> units of March demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100}, "left": {"inv": 0, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 700, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": ["inv|mar"], "hirows": ["inv"], "hicols": ["mar"]}, {"title": "March: March regular", "text": "Next cheapest source with units left: <b>March regular<\/b> at <b>$40<\/b>. Take <b>700<\/b> units. March demand is met.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700}, "left": {"inv": 0, "mR": 0, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": ["mR|mar"], "hirows": ["mR"], "hicols": ["mar"]}, {"title": "April: April regular", "text": "Sources that can still supply April, cheapest first, including earlier months' production held in inventory: April regular $40, April overtime $50, March overtime (held 1 month) $52, April subcontract $70, March subcontract (held 1 month) $72. Next cheapest source with units left: <b>April regular<\/b> at <b>$40<\/b>. Take <b>700<\/b> units. <b>300<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700}, "left": {"inv": 0, "mR": 0, "mO": 50, "mS": 150, "aR": 0, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 300, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["aR|apr"], "hirows": ["aR"], "hicols": ["apr"]}, {"title": "April: April overtime", "text": "Next cheapest source with units left: <b>April overtime<\/b> at <b>$50<\/b>. Take <b>50<\/b> units. <b>250<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50}, "left": {"inv": 0, "mR": 0, "mO": 50, "mS": 150, "aR": 0, "aO": 0, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 250, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["aO|apr"], "hirows": ["aO"], "hicols": ["apr"]}, {"title": "April: March overtime (held 1 month)", "text": "Next cheapest source with units left: <b>March overtime (held 1 month)<\/b> at <b>$52<\/b>. Take <b>50<\/b> units. <b>200<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 150, "aR": 0, "aO": 0, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 200, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["mO|apr"], "hirows": ["mO"], "hicols": ["apr"]}, {"title": "April: April subcontract", "text": "Next cheapest source with units left: <b>April subcontract<\/b> at <b>$70<\/b>. Take <b>150<\/b> units. <b>50<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 150, "aR": 0, "aO": 0, "aS": 0, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 50, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["aS|apr"], "hirows": ["aS"], "hicols": ["apr"]}, {"title": "April: March subcontract (held 1 month)", "text": "Next cheapest source with units left: <b>March subcontract (held 1 month)<\/b> at <b>$72<\/b>. Take <b>50<\/b> units. Only 50 of its 150 units are needed, so 100 stay available. April demand is met.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 100, "aR": 0, "aO": 0, "aS": 0, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 0, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["mS|apr"], "hirows": ["mS"], "hicols": ["apr"]}, {"title": "May: May regular", "text": "Sources that can still supply May, cheapest first, including earlier months' production held in inventory: May regular $40, May overtime $50, May subcontract $70, March subcontract (held 2 months) $74. Next cheapest source with units left: <b>May regular<\/b> at <b>$40<\/b>. Take <b>700<\/b> units. <b>50<\/b> units of May demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 100, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 0, "may": 50, "dum": 230}, "done": ["apr", "mar"], "hi": ["yR|may"], "hirows": ["yR"], "hicols": ["may"]}, {"title": "May: May overtime", "text": "Next cheapest source with units left: <b>May overtime<\/b> at <b>$50<\/b>. Take <b>50<\/b> units. May demand is met.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700, "yO|may": 50}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 100, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 0, "yS": 130}, "dleft": {"mar": 0, "apr": 0, "may": 0, "dum": 230}, "done": ["apr", "mar"], "hi": ["yO|may"], "hirows": ["yO"], "hicols": ["may"]}, {"title": "Unused capacity", "text": "Every month's demand is met. The capacity nobody used goes to the dummy column: <b>100<\/b> units of March subcontracting and <b>130<\/b> of May subcontracting, 230 in all. Supply and demand now balance.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700, "yO|may": 50, "mS|dum": 100, "yS|dum": 130}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 0, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 0, "yS": 0}, "dleft": {"mar": 0, "apr": 0, "may": 0, "dum": 0}, "done": ["apr", "dum", "mar", "may"], "hi": ["mS|dum", "yS|dum"], "hirows": [], "hicols": ["dum"]}]}</script>
+</div>
+
+<ul>
+<li><b>The plan</b>: March: 100 from inventory + 700 regular. April: 700 regular, 50 overtime, 150 subcontracted in April, plus 50 overtime and 50 subcontracted in March and held a month. May: 700 regular + 50 overtime.</li>
+<li><b>Total cost</b> = 100(0) + 700(40) + 50(52) + 50(72) + 700(40) + 50(50) + 150(70) + 700(40) + 50(50) = <b>$105,700</b>.</li>
+<li>The method gives a starting plan; the stepping-stone method or Excel's Solver can confirm or improve it.</li>
+</ul>
+
+<div class="exam-tip">
+<h4>EXAM TIP: Reading Aggregate Production Plans</h4>
+<p>A question about the <em>period of production</em> (made, ordered, delivered) reads a <b>row</b>; one about the <em>period of demand</em> (sold, used to meet demand) reads a <b>column</b>. April demand met by subcontracting: 50 + 150 = 200 (April column). March overtime paid for: 50 (March overtime row).</p>
+</div>
+
+<h2>Management Coefficients Model</h2>
+
+<ul>
+<li><b>Management coefficients model</b>: a regression on managers' past decisions; objective and consistent, but assumes past trends continue and past decisions were good.</li>
+</ul>
+
+<h2>Summary of Aggregate Planning Methods</h2>
+
+<table>
+<thead><tr><th>Method</th><th>Strength</th><th>Weakness</th></tr></thead>
+<tbody>
+<tr><td>Graphical</td><td>Easy; handles policies and constraints</td><td>Usually not optimal</td></tr>
+<tr><td>Transportation (linear programming)</td><td>Finds the optimum</td><td>Linear relationships only</td></tr>
+<tr><td>Management coefficients</td><td>Objective, easy to use</td><td>Only as good as the past data</td></tr>
+</tbody>
+</table>
+
+<ul>
+<li>Services: controlling labor cost is critical, and an on-call labor resource covers unexpected demand.</li>
+</ul>
+
+<h2>Glossary</h2>
+
+<table>
+<thead><tr><th>Term</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td><b>Aggregate planning</b></td><td>Intermediate-term planning of total production to meet demand at minimum cost</td></tr>
+<tr><td><b>Chase strategy</b></td><td>Matching output to each period's demand</td></tr>
+<tr><td><b>Level strategy</b></td><td>Uniform production, buffered by inventory or idle time</td></tr>
+<tr><td><b>Mixed strategy</b></td><td>A combination of capacity and demand options</td></tr>
+<tr><td><b>Graphical methods</b></td><td>Trial-and-error comparison of demand with capacity</td></tr>
+<tr><td><b>Transportation method</b></td><td>Linear-programming table of supply sources against demand periods</td></tr>
+<tr><td><b>Dummy column</b></td><td>Column that absorbs unused capacity at zero cost</td></tr>
+<tr><td><b>Management coefficients model</b></td><td>Regression model built on managers' past decisions</td></tr>
+</tbody>
+</table>
+
+<h2>Key Takeaways</h2>
+
+<ul>
+<li>Aggregate planning covers 3 to 18 months, in aggregate units, at minimum cost.</li>
+<li>Capacity options change supply; demand options shift or reshape demand.</li>
+<li>In the shingle example, the level-at-minimum plan with subcontracting is cheapest at $105,152.</li>
+<li>Transportation method: carrying cost grows with every month held; no back-ordering blocks later production meeting earlier demand; a dummy column balances supply and demand.</li>
+<li>The tire plan costs $105,700.</li>
+<li>Production period → row; demand period → column.</li>
+</ul>
+
+<script>
+(function () {
+  function table(root, M) {
+    var t = '<table class="tp financial"><thead><tr><th class="tp-rl"></th>';
+    M.cols.forEach(function (c) { t += '<th data-colhead="' + c.id + '">' + c.label + '</th>'; });
+    t += '<th class="tp-sub">Total<br>available</th></tr></thead><tbody>';
+    var blocked = {};
+    M.rows.forEach(function (r, ri) {
+      t += '<tr data-row="' + r.id + '"><th class="tp-rl" data-r="' + r.id + '">' + (r.per ? '<span class="tp-per p' + r.t + '">' + r.per.slice(0, 3) + '</span>' : '') + r.src + '</th>';
+      M.cols.forEach(function (c) {
+        var k = r.id + '|' + c.id, u = M.cost[k];
+        if (u === null) {
+          if (!blocked[c.id]) {   // one black block per column, spanning every row that cannot serve it
+            var span = M.rows.filter(function (q) { return M.cost[q.id + '|' + c.id] === null; }).length;
+            t += '<td class="tp-x' + (c.id === 'mar' ? ' tp-note' : '') + '" rowspan="' + span + '">' + (c.id === 'mar' ? 'No back-ordering' : '') + '</td>';
+            blocked[c.id] = 1;
+          }
+        } else {
+          t += '<td class="tp-c" data-k="' + k + '"><span class="tp-u">' + (r.id === 'inv' && c.id === 'dum' ? '&nbsp;' : u) + '</span><span class="tp-q"></span></td>';
+        }
+      });
+      t += '<td class="tp-cap" data-cap="' + r.id + '"></td></tr>';
+    });
+    t += '<tr><th class="tp-rl">Total demand</th>';
+    M.cols.forEach(function (c) { t += '<td class="tp-dem" data-dem="' + c.id + '"></td>'; });
+    t += '<td></td></tr></tbody></table>';
+    root.querySelector('.tp-scroll').innerHTML = t;
+  }
+  function paint(root, M, S) {
+    root.querySelectorAll('td.tp-c').forEach(function (td) {
+      var k = td.dataset.k, col = k.split('|')[1], q = S.alloc[k], u = td.querySelector('.tp-u'), qq = td.querySelector('.tp-q');
+      u.classList.toggle('off', S.costs.indexOf(col) < 0);
+      if (q) { qq.textContent = q.toLocaleString('en-US'); qq.className = 'tp-q'; }
+      else if (S.done.indexOf(col) >= 0) { qq.textContent = '--'; qq.className = 'tp-q dash'; }
+      else { qq.textContent = ''; qq.className = 'tp-q'; }
+      td.classList.toggle('hi', S.hi.indexOf(k) >= 0);
+      td.classList.toggle('col', S.hicols.indexOf(col) >= 0);
+    });
+    root.querySelectorAll('tr[data-row]').forEach(function (tr) { tr.classList.toggle('rowhi', S.hirows.indexOf(tr.dataset.row) >= 0 && S.hi.length === 0); });
+    M.rows.forEach(function (r) {
+      var left = S.left[r.id], cell = root.querySelector('[data-cap="' + r.id + '"]');
+      cell.innerHTML = left === r.cap ? r.cap.toLocaleString('en-US') : (left === 0 ? '<span class="tp-done">' + r.cap.toLocaleString('en-US') + '</span>' : '<s>' + r.cap.toLocaleString('en-US') + '</s>' + left.toLocaleString('en-US'));
+    });
+    M.cols.forEach(function (c) {
+      var left = S.dleft[c.id], cell = root.querySelector('[data-dem="' + c.id + '"]');
+      cell.innerHTML = left === 0 ? '<span class="tp-done">' + c.dem.toLocaleString('en-US') + '</span>' : (left === c.dem ? c.dem.toLocaleString('en-US') : '<s>' + c.dem.toLocaleString('en-US') + '</s>' + left.toLocaleString('en-US'));
+    });
+  }
+  function stepper(root, M) {
+    table(root, M);
+    var i = 0, cap = root.querySelector('.tp-cap'), back = root.querySelector('.tp-back'), next = root.querySelector('.tp-next'), count = root.querySelector('.tp-count'), dots = root.querySelector('.tp-dots');
+    dots.innerHTML = M.steps.map(function () { return '<span></span>'; }).join('');
+    function go(k) {
+      i = Math.max(0, Math.min(M.steps.length - 1, k)); var S = M.steps[i];
+      paint(root, M, S);
+      cap.innerHTML = '<b class="tp-h">' + S.title + '</b>' + S.text;
+      count.textContent = 'Step ' + (i + 1) + ' of ' + M.steps.length;
+      back.disabled = i === 0; next.disabled = i === M.steps.length - 1;
+      dots.querySelectorAll('span').forEach(function (d, j) { d.classList.toggle('on', j <= i); });
+    }
+    back.addEventListener('click', function () { go(i - 1); });
+    next.addEventListener('click', function () { go(i + 1); });
+    root.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') go(i + 1); if (e.key === 'ArrowLeft') go(i - 1); });
+    go(0);
+  }
+  function explorer(root, M) {
+    table(root, M);
+    var cap = root.querySelector('.tp-cap'), tabs = root.querySelectorAll('.tp-bar button'), mode = 'costs', final = M.final;
+    function base(extra) {
+      var S = { costs: ['mar', 'apr', 'may', 'dum'], alloc: {}, left: {}, dleft: {}, done: [], hi: [], hirows: [], hicols: [] };
+      M.rows.forEach(function (r) { S.left[r.id] = r.cap; }); M.cols.forEach(function (c) { S.dleft[c.id] = c.dem; });
+      return Object.assign(S, extra || {});
+    }
+    function full(extra) { return Object.assign(base({ alloc: final.alloc, left: final.left, dleft: final.dleft, done: ['mar', 'apr', 'may', 'dum'] }), extra || {}); }
+    function fill(colId) {
+      var label = M.cols.filter(function (c) { return c.id === colId; })[0].label, alloc = {}, done = [], left = {}, dleft = {}, order = ['mar', 'apr', 'may', 'dum'];
+      M.rows.forEach(function (r) { left[r.id] = r.cap; }); M.cols.forEach(function (c) { dleft[c.id] = c.dem; });
+      for (var j = 0; j <= order.indexOf(colId); j++) {   // the plan as it stands once this column is filled
+        Object.keys(final.alloc).forEach(function (k) { var p = k.split('|'); if (p[1] === order[j]) { alloc[k] = final.alloc[k]; left[p[0]] -= final.alloc[k]; dleft[p[1]] -= final.alloc[k]; } });
+        done.push(order[j]);
+      }
+      var hi = Object.keys(alloc).filter(function (k) { return k.split('|')[1] === colId; });
+      paint(root, M, base({ alloc: alloc, left: left, dleft: dleft, done: done, hi: hi, hicols: [colId] }));
+      if (colId === 'dum') {
+        cap.innerHTML = '<b class="tp-h">Unused capacity</b>Once every month is filled, what is left goes to the dummy column at $0:<ol class="tp-list">' +
+          M.dummyRows.map(function (x) { return '<li><span>' + x[0] + '</span><span class="tp-cost">$0</span><span class="tp-take">' + x[1] + '</span></li>'; }).join('') + '</ol>';
+        return;
+      }
+      cap.innerHTML = '<b class="tp-h">Filling ' + label + ' demand (' + M.cols.filter(function (c) { return c.id === colId; })[0].dem.toLocaleString('en-US') + ' units), cheapest source first</b>Earlier months\' leftover production counts as a source too, at its cost plus $2 a month held.<ol class="tp-list">' +
+        M.fills[colId].map(function (x) { return '<li><span>' + x[0] + '</span><span class="tp-cost">$' + x[1] + '</span><span class="tp-take">' + x[2].toLocaleString('en-US') + '</span></li>'; }).join('') + '</ol>';
+    }
+    function setMode(m) {
+      mode = m; tabs.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.mode === m ? 'true' : 'false'); });
+      root.classList.toggle('tp-read', m === 'read'); root.classList.toggle('tp-cost', m === 'costs');
+      if (m === 'costs') { paint(root, M, base({ done: [] })); cap.innerHTML = '<b class="tp-h">How each cost is built</b>Each cell is the source\'s price plus $2 for every month the tire is held. Tap any cell to see its sum.'; }
+      else if (m === 'read') { paint(root, M, full()); cap.innerHTML = '<b class="tp-h">Reading the plan</b>Tap a <b>row</b> name for everything produced by one source in one period, or a <b>column</b> name for everything that meets one month\'s demand.'; }
+      else if (m === 'total') { paint(root, M, full({ hi: Object.keys(final.alloc).filter(function (k) { return k.split('|')[1] !== 'dum'; }) })); cap.innerHTML = '<b class="tp-h">Total cost</b>' + M.totalText; }
+      else fill(m);
+    }
+    tabs.forEach(function (b) { b.addEventListener('click', function () { setMode(b.dataset.mode); }); });
+    root.querySelector('.tp-scroll').addEventListener('click', function (e) {
+      if (mode === 'costs') {
+        var td = e.target.closest('td.tp-c'); if (!td) return;
+        paint(root, M, base({ done: [], hi: [td.dataset.k] })); cap.innerHTML = M.why[td.dataset.k];
+      } else if (mode === 'read') {
+        var rh = e.target.closest('[data-r]'), ch = e.target.closest('[data-colhead]');
+        if (rh) {
+          var id = rh.dataset.r, r = M.rows.filter(function (x) { return x.id === id; })[0], ks = Object.keys(final.alloc).filter(function (k) { return k.split('|')[0] === id && k.split('|')[1] !== 'dum'; });
+          var used = ks.reduce(function (s, k) { return s + final.alloc[k]; }, 0);
+          paint(root, M, full({ hi: ks, hirows: [id] }));
+          cap.innerHTML = '<b class="tp-h">Row: ' + (r.per ? r.per + ' ' + r.src.toLowerCase() : r.src) + '</b>A period of <b>production</b>: read across the row. ' + used.toLocaleString('en-US') + ' units are used' +
+            (ks.length ? ' (' + ks.map(function (k) { return final.alloc[k].toLocaleString('en-US') + ' for ' + M.cols.filter(function (c) { return c.id === k.split('|')[1]; })[0].label; }).join(', ') + ')' : '') + '.';
+        } else if (ch && ch.dataset.colhead !== 'dum') {
+          var cid = ch.dataset.colhead, c = M.cols.filter(function (x) { return x.id === cid; })[0], ks2 = Object.keys(final.alloc).filter(function (k) { return k.split('|')[1] === cid; });
+          paint(root, M, full({ hi: ks2, hicols: [cid] }));
+          cap.innerHTML = '<b class="tp-h">Column: ' + c.label + ' demand</b>A period of <b>demand</b>: read down the column. ' + ks2.map(function (k) {
+            var r = M.rows.filter(function (x) { return x.id === k.split('|')[0]; })[0]; return final.alloc[k].toLocaleString('en-US') + ' from ' + (r.per ? r.per + ' ' + r.src.toLowerCase() : r.src.toLowerCase()); }).join(', ') + ' = ' + c.dem.toLocaleString('en-US') + '.';
+        }
+      }
+    });
+    setMode('costs');
+  }
+  document.querySelectorAll('.tpw[data-mode]').forEach(function (root) {
+    try { var M = JSON.parse(root.querySelector('script[type="application/json"]').textContent); (root.dataset.mode === 'stepper' ? stepper : explorer)(root, M); }
+    catch (e) { if (window.console) console.error('transportation widget', e); }
+  });
+})();
+</script>
+<style>
+/* Motion for the MAN4504 widgets. Everything here is an entry or change animation that ends on the widget's own
+   normal drawing, so a browser that skips it (reduced motion, no script) shows exactly the page as it was.
+   html.mv  = the script is running and the reader has not asked for reduced motion
+   .mv-wait = widget still below the screen: its figure is held back so the entry plays when it is first seen
+   .mv-in   = widget has been seen */
+html.mv .mv-wait .pm-figwrap, html.mv .mv-wait .pg-scroll, html.mv .mv-wait .pm-conv, html.mv .mv-wait > svg, html.mv .mv-wait .tp-scroll { opacity:0; }
+html.mv .mv-in .pm-figwrap, html.mv .mv-in .pm-conv, html.mv .mv-in .tp-scroll { animation:mv-fade .35s ease-out; }
+
+/* ---------- captions and progress dots ---------- */
+html.mv .pmw .pm-cap.on { animation:mv-cap .32s ease-out; }
+html.mv .tpw div.tp-cap.mv-chg > b { display:block; animation:mv-cap .32s ease-out; }
+html.mv .pmw .pm-dots span, html.mv .tpw .tp-dots span { transition:background-color .3s, transform .3s; }
+html.mv .pmw .pm-dots span.on, html.mv .tpw .tp-dots span.on { transform:scale(1.15); }
+
+/* ---------- networks: the step being worked (forward and backward pass) ---------- */
+html.mv .pmw.mv-in .n.cur-f .n-halo, html.mv .pmw.mv-in .n.cur-b .n-halo { transform-box:fill-box; transform-origin:center; animation:mv-pulse 1.1s ease-out 2; }
+html.mv .pmw.mv-in .n .cu { animation:mv-flash .9s ease-in-out 1; }
+html.mv .pmw.mv-in .n.cur-f .n-v.vf, html.mv .pmw.mv-in .n.cur-b .n-v.vb { transform-box:fill-box; transform-origin:center; animation:mv-num .5s .45s cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in .n.cur-f .cf, html.mv .pmw.mv-in .n.cur-b .cb { animation:mv-fade .4s .25s ease-out backwards; }
+html.mv .pmw.mv-in .e.f .e-l, html.mv .pmw.mv-in .e.b .e-l { animation:mv-draw .55s ease-out backwards; }
+html.mv .pmw.mv-in .e.f .e-h, html.mv .pmw.mv-in .e.b .e-h { animation:mv-fade .25s .45s ease-out backwards; }
+
+/* ---------- networks: nodes and arrows that have just been added (drawing the network) ---------- */
+html.mv .pmw.mv-in .n.new .n-bg, html.mv .pmw.mv-in .n.new .n-c { transform-box:fill-box; transform-origin:center; animation:mv-pop .45s calc(.25s + var(--i, 0) * 60ms) cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in .n.new .n-l { animation:mv-fade .3s calc(.45s + var(--i, 0) * 60ms) ease-out backwards; }
+html.mv .pmw.mv-in .e.new .e-l { animation:mv-draw .5s ease-out backwards; }
+html.mv .pmw.mv-in .e.new .e-h { animation:mv-fade .2s .4s ease-out backwards; }
+
+/* ---------- small networks that appear whole (AON / AOA conventions) ---------- */
+html.mv .pmw.mv-in .pm-conv .n .n-bg, html.mv .pmw.mv-in .pm-conv .n .n-c, html.mv .pmw.mv-in[data-pm="both"] .n .n-bg, html.mv .pmw.mv-in[data-pm="both"] .n .n-c {
+  transform-box:fill-box; transform-origin:center; animation:mv-pop .4s calc(var(--i, 0) * 110ms) cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in .pm-conv .n .n-l, html.mv .pmw.mv-in[data-pm="both"] .n .n-l { animation:mv-fade .25s calc(.15s + var(--i, 0) * 110ms) ease-out backwards; }
+html.mv .pmw.mv-in .pm-conv .e .e-l:not(.dash), html.mv .pmw.mv-in[data-pm="both"] .e .e-l:not(.dash) { animation:mv-draw .45s calc(.2s + var(--i, 0) * 110ms) ease-out backwards; }
+html.mv .pmw.mv-in .pm-conv .e .e-l.dash, html.mv .pmw.mv-in[data-pm="both"] .e .e-l.dash, html.mv .pmw.mv-in .pm-conv .e .e-h, html.mv .pmw.mv-in[data-pm="both"] .e .e-h,
+html.mv .pmw.mv-in .pm-conv .e .e-t, html.mv .pmw.mv-in[data-pm="both"] .e .e-t { animation:mv-fade .25s calc(.55s + var(--i, 0) * 110ms) ease-out backwards; }
+
+/* ---------- networks: the critical path, or a chosen path, traced from start to finish ---------- */
+html.mv .pmw.mv-in[data-pm="net"] .e.crit .e-l, html.mv .pmw.mv-in[data-pm="net"] .e.path .e-l { animation:mv-draw .4s calc(var(--i, 0) * 170ms) ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="net"] .e.crit .e-h, html.mv .pmw.mv-in[data-pm="net"] .e.path .e-h { animation:mv-fade .15s calc(.3s + var(--i, 0) * 170ms) ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="net"] .n.crit .n-c, html.mv .pmw.mv-in[data-pm="net"] .n.path .n-c { animation:mv-ring .5s calc(var(--i, 0) * 170ms) ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="net"] .sl rect, html.mv .pmw.mv-in[data-pm="net"] .sl text { transform-box:fill-box; transform-origin:center; animation:mv-num .4s calc(.5s + var(--i, 0) * 170ms) cubic-bezier(.3,1.5,.5,1) backwards; }
+.pmw .e .e-flow { fill:none; stroke:#fff; stroke-width:1.7; stroke-dasharray:3 13; stroke-linecap:round; opacity:.95; }
+html.mv .pmw.mv-in[data-pm="net"] .e .e-flow { animation:mv-flow .8s linear infinite, mv-fade95 .4s calc(.5s + var(--i, 0) * 170ms) ease-out backwards; }
+
+/* ---------- Gantt charts ---------- */
+html.mv .pmw .pg-row:nth-child(1) { --r:0; } html.mv .pmw .pg-row:nth-child(2) { --r:1; } html.mv .pmw .pg-row:nth-child(3) { --r:2; }
+html.mv .pmw .pg-row:nth-child(4) { --r:3; } html.mv .pmw .pg-row:nth-child(5) { --r:4; } html.mv .pmw .pg-row:nth-child(6) { --r:5; }
+html.mv .pmw .pg-row:nth-child(7) { --r:6; } html.mv .pmw .pg-row:nth-child(8) { --r:7; } html.mv .pmw .pg-row:nth-child(9) { --r:8; }
+html.mv .pmw.mv-in .pg-bar, html.mv .pmw.mv-in .pg-b { transform-origin:left center; animation:mv-growx .55s calc(.1s + var(--r, 0) * 90ms) cubic-bezier(.2,.9,.3,1) backwards; }
+html.mv .pmw.mv-in .pg-s { animation:mv-fade .4s calc(.5s + var(--r, 0) * 90ms) ease-out backwards; }
+html.mv .pmw .pg-b, html.mv .pmw .pg-s { transition:left .55s calc(var(--r, 0) * 45ms) cubic-bezier(.3,1.2,.5,1); }
+
+/* ---------- curves ---------- */
+html.mv .pmw.mv-in[data-pm="bands"] .crv-fill { animation:mv-open .6s cubic-bezier(.2,.9,.3,1) backwards; }
+html.mv .pmw.mv-in[data-pm="bands"] .big { transform-box:fill-box; transform-origin:center; animation:mv-num .45s .35s cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in[data-pm="pert"] .crv-fill, html.mv .pmw.mv-in[data-pm="pert"] .crv { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .55s cubic-bezier(.2,.9,.3,1) backwards; }
+html.mv .pmw.mv-in[data-pm="pert"] .gd { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .4s .4s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="pert"] .mk { animation:mv-fade .3s .6s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="ninety"] .crv-tail { animation:mv-fade .5s .2s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="ninety"] .gd.q, html.mv .pmw.mv-in[data-pm="ninety"] .gd.b { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .45s .1s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="ninety"] .gd.q { animation:mv-rise .45s .1s ease-out backwards, mv-blink 1.4s 1s ease-in-out 3; }
+html.mv .pmw.mv-in[data-pm="ninety"] .dimline, html.mv .pmw.mv-in[data-pm="ninety"] .dimhead, html.mv .pmw.mv-in[data-pm="ninety"] .dimtxt,
+html.mv .pmw.mv-in[data-pm="ninety"] .tailtxt, html.mv .pmw.mv-in[data-pm="ninety"] .lead.tail { animation:mv-fade .4s .5s ease-out backwards; }
+
+/* the two drawn-once figures: the beta curve and the node legend */
+html.mv .pm-beta.mv-in .curve { animation:mv-draw1 1.5s .1s ease-in-out backwards; }
+html.mv .pm-beta.mv-in .tail { animation:mv-fade .5s 1.4s ease-out backwards; }
+html.mv .pm-beta.mv-in .mline { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .5s .9s ease-out backwards; }
+html.mv .pm-beta.mv-in .tick, html.mv .pm-beta.mv-in .xl { animation:mv-fade .4s 1.1s ease-out backwards; }
+html.mv .pm-beta.mv-in .lead, html.mv .pm-beta.mv-in .note { animation:mv-fade .5s 1.8s ease-out backwards; }
+html.mv .pm-legend.mv-in .ring { transform-box:fill-box; transform-origin:center; animation:mv-pop .5s cubic-bezier(.3,1.4,.5,1) backwards; }
+html.mv .pm-legend.mv-in .div, html.mv .pm-legend.mv-in .lab, html.mv .pm-legend.mv-in .dur { animation:mv-fade .3s .35s ease-out backwards; }
+html.mv .pm-legend.mv-in .cf, html.mv .pm-legend.mv-in .vf, html.mv .pm-legend.mv-in .lead.f, html.mv .pm-legend.mv-in .dot.f, html.mv .pm-legend.mv-in .call.f { animation:mv-fade .45s .7s ease-out backwards; }
+html.mv .pm-legend.mv-in .cb, html.mv .pm-legend.mv-in .vb, html.mv .pm-legend.mv-in .lead.b, html.mv .pm-legend.mv-in .dot.b, html.mv .pm-legend.mv-in .call.b { animation:mv-fade .45s 1.25s ease-out backwards; }
+html.mv .pm-legend.mv-in .lead.k, html.mv .pm-legend.mv-in .dot.k, html.mv .pm-legend.mv-in .call.k { animation:mv-fade .45s 1.8s ease-out backwards; }
+
+/* ---------- transportation table ---------- */
+html.mv .tpw td.tp-c .tp-q.mv-pop { transform-origin:left bottom; animation:mv-num .45s cubic-bezier(.3,1.5,.5,1); }
+html.mv .tpw td.tp-c.hi { animation:mv-cell .9s ease-out; }
+html.mv .tpw td.tp-c .tp-u:not(.off) { animation:mv-fade .35s ease-out; }
+html.mv .tpw td.mv-chg { animation:mv-flash .8s ease-in-out; }
+html.mv .tpw table.tp td.tp-c { transition:background .35s; }
+
+@keyframes mv-fade { from { opacity:0; } to { opacity:1; } }
+@keyframes mv-fade95 { from { opacity:0; } to { opacity:.95; } }
+@keyframes mv-cap { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
+@keyframes mv-pulse { from { transform:scale(.8); opacity:.6; } to { transform:scale(1.25); opacity:0; } }
+@keyframes mv-flash { 0%, 100% { opacity:1; } 35% { opacity:.25; } 70% { opacity:1; } 85% { opacity:.5; } }
+@keyframes mv-num { from { transform:scale(2.4); opacity:0; } to { transform:scale(1); opacity:1; } }
+@keyframes mv-pop { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
+/* the dash pattern lives only inside the animation, so a line that is not animating is always drawn whole */
+@keyframes mv-draw { from { stroke-dasharray:420; stroke-dashoffset:420; } to { stroke-dasharray:420; stroke-dashoffset:0; } }
+@keyframes mv-draw1 { from { stroke-dasharray:1; stroke-dashoffset:1; } to { stroke-dasharray:1; stroke-dashoffset:0; } }
+@keyframes mv-flow { from { stroke-dashoffset:16; } to { stroke-dashoffset:0; } }
+@keyframes mv-ring { 0% { stroke-width:1.6; } 55% { stroke-width:8; } 100% { stroke-width:3.2; } }
+@keyframes mv-growx { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+@keyframes mv-rise { from { transform:scaleY(0); } to { transform:scaleY(1); } }
+@keyframes mv-open { from { clip-path:inset(0 50% 0 50%); } to { clip-path:inset(0 0 0 0); } }
+@keyframes mv-blink { 0%, 100% { opacity:1; } 50% { opacity:.25; } }
+@keyframes mv-cell { 0% { outline:3px solid #e3b23c; outline-offset:-3px; } 100% { outline:3px solid rgba(227,178,60,0); outline-offset:-3px; } }
+</style>
+<script>
+/* Motion for the MAN4504 widgets (see motion.css). An add-on: it reads the widgets' drawings and never changes their code.
+   It does four things CSS alone cannot: starts a widget's entry when the widget is first seen, numbers nodes and arrows
+   in the order work flows so a path is traced start to finish, notices which table cells changed, and sweeps the
+   deadline slider once so the reader sees it can be moved. */
+(function () {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.IntersectionObserver || !window.MutationObserver) return;
+  document.documentElement.classList.add('mv');
+  var each = function (list, fn) { Array.prototype.forEach.call(list, fn); };
+
+  /* ---- the order of flow: --i on every node and arrow, left to right (top to bottom on a phone) ---- */
+  function decorate(svg, flow) {
+    if (svg.dataset.mv) return; svg.dataset.mv = '1';
+    var vb = (svg.getAttribute('viewBox') || '0 0 2 1').split(/\s+/), down = +vb[3] > +vb[2] * 1.15, keys = [], items = [];
+    each(svg.querySelectorAll('g.n'), function (g) {
+      var m = /translate\(([-\d.]+)[ ,]+([-\d.]+)\)/.exec(g.getAttribute('transform') || ''); if (!m) return;
+      items.push([g, down ? +m[2] : +m[1]]);
+    });
+    each(svg.querySelectorAll('g.e'), function (g) {
+      var l = g.querySelector('.e-l'); if (!l) return;
+      items.push([g, +(down ? l.getAttribute('y1') : l.getAttribute('x1')) - 30]);   /* an arrow goes with the node it leaves */
+      if (flow && /\b(crit|path)\b/.test(g.getAttribute('class')) && !g.querySelector('.e-flow')) {
+        var f = l.cloneNode(false); f.setAttribute('class', 'e-flow'); g.appendChild(f);   /* dashes that run along the path */
+      }
+    });
+    items.forEach(function (it) { var k = Math.round(it[1] / 40); if (keys.indexOf(k) < 0) keys.push(k); });
+    keys.sort(function (a, b) { return a - b; });
+    items.forEach(function (it) { it[0].style.setProperty('--i', keys.indexOf(Math.round(it[1] / 40))); });
+  }
+  each(document.querySelectorAll('.pmw[data-pm]'), function (w) {
+    if (w.dataset.pm === 'lab') return;            /* the what-if lab animates itself */
+    var body = w.querySelector('.pm-body'); if (!body) return;
+    var run = function () { each(body.querySelectorAll('svg'), function (s) { decorate(s, w.dataset.pm === 'net'); }); };
+    run(); new MutationObserver(run).observe(body, { childList: true, subtree: true });
+  });
+  each(document.querySelectorAll('.pm-beta-svg .curve'), function (p) { p.setAttribute('pathLength', '1'); });
+
+  /* ---- transportation table: pop a quantity when it is written, flash a total when it changes ---- */
+  each(document.querySelectorAll('.tpw'), function (w) {
+    var last = new WeakMap(), sc = w.querySelector('.tp-scroll'), cap = w.querySelector('div.tp-cap'), ready = false;
+    function kick(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+    function scan() {
+      each(w.querySelectorAll('.tp-q, td.tp-cap, td.tp-dem'), function (el) {
+        var now = el.textContent, was = last.get(el); last.set(el, now);
+        if (!ready || was === undefined || was === now || !now) return;
+        kick(el, el.classList.contains('tp-q') ? 'mv-pop' : 'mv-chg');
+      });
+      ready = true;
+    }
+    if (sc) { scan(); new MutationObserver(scan).observe(sc, { childList: true, subtree: true, characterData: true }); }
+    if (cap) new MutationObserver(function () { kick(cap, 'mv-chg'); }).observe(cap, { childList: true });
+  });
+
+  /* ---- the deadline slider moves by itself once, from the left to where it starts ---- */
+  function sweep(w) {
+    var inp = w.querySelector('input[type=range]'); if (!inp || inp.dataset.mv) return; inp.dataset.mv = '1';
+    var to = +inp.value, from = +inp.min || 0, t0 = null, stop = false;
+    if (to - from < 2) return;
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { inp.addEventListener(ev, function () { stop = true; }, { once: true }); });
+    function put(v) { inp.value = v; inp.dispatchEvent(new Event('input', { bubbles: true })); }
+    put(from);
+    setTimeout(function () {
+      requestAnimationFrame(function step(ts) {
+        if (stop) return; if (t0 === null) t0 = ts;
+        var k = Math.min((ts - t0) / 1600, 1), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2, v = Math.round(from + (to - from) * e);
+        if (+inp.value !== v) put(v);
+        if (k < 1) requestAnimationFrame(step); else if (+inp.value !== to) put(to);
+      });
+    }, 350);
+  }
+
+  /* ---- a widget's entry plays when it is first seen, not while it is still below the screen ---- */
+  var widgets = document.querySelectorAll('.pmw, .tpw');
+  function seen(w) { w.classList.remove('mv-wait'); w.classList.add('mv-in'); if (w.dataset.pm === 'deadline') sweep(w); }
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); seen(e.target); } });
+  }, { threshold: 0.2 });
+  each(widgets, function (w) {
+    if (w.dataset.pm === 'lab') return;
+    if (w.getBoundingClientRect().top > window.innerHeight) w.classList.add('mv-wait');
+    io.observe(w);
+  });
+  function all() { each(widgets, function (w) { if (w.classList.contains('mv-wait')) seen(w); }); }
+  window.addEventListener('beforeprint', all);
+  window.__mv = { showAll: all };
+})();
+</script>
+</body>
+</html>

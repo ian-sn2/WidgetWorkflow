@@ -6,6 +6,7 @@
 2. What-if lab the CPM network can be delayed or crashed by tapping it (one new widget kind)
 3. Depth       Concise + Balanced + Full merged into one page with a depth switch
 4. Listen      any page read aloud section by section from a bar pinned to the bottom (recorded voice)
+5. Motion      every MAN4504 widget animated, in all three editions of both chapters (plus the labs)
 Every edit asserts that it landed; nothing else in a chapter is touched.
 """
 import json
@@ -59,8 +60,8 @@ def solve(nodes, edges, dur):
     return {n: [es[n], ef[n], ls[n], lf[n]] for n in nodes}, T
 
 
-def build_lab():
-    s = (SRC / PM).read_text(encoding='utf8')
+def with_lab(s):
+    """the page with its crash picture turned into the crash lab, and the folded delay lab added under Step 6"""
     # the crash widget the chapter already has: its network, and its two views with their captions
     m = re.search(r'<div class="pmw " data-pm="net">\s*<p class="pm-title">Crashing Activity A by One Week</p>.*?</script>\s*</div>', s, flags=re.S)
     assert m, 'crash widget not found'
@@ -130,9 +131,13 @@ def build_lab():
     # the new widget kind goes into the page's own engine, and its styles beside the engine's
     s = once(s, '  function boot() {\n    Array.prototype.forEach.call(document.querySelectorAll(\'.pmw[data-pm]\')', read('lab.js') + '  function boot() {\n    Array.prototype.forEach.call(document.querySelectorAll(\'.pmw[data-pm]\')')
     s = once(s, '</head>', '<style>\n' + read('lab.css') + '</style>\n</head>')
+    return s
+
+
+def build_lab():
     out = OUT / '2-WhatIf-Lab'
     out.mkdir(parents=True, exist_ok=True)
-    (out / Path(PM).name).write_text(s, encoding='utf8')
+    (out / Path(PM).name).write_text(with_lab((SRC / PM).read_text(encoding='utf8')), encoding='utf8')
     print('lab   ', Path(PM).name)
 
 
@@ -213,7 +218,29 @@ def build_listen():
         subprocess.run([sys.executable, str(HERE / 'narrate.py'), 'listen', str(SRC / src), str(out / Path(src).name)], check=True)
 
 
-build_play()
-build_lab()
-build_depth()
-build_listen()
+# ---------------------------------------------------------------- 5. Motion on every MAN4504 widget, all editions
+def build_motion():
+    block = '<style>\n' + read('motion.css') + '</style>\n<script>\n' + read('motion.js') + '</script>\n'
+    pm_dir = Path(PM).parent
+    jobs = [('Project Management', pm_dir / ('MAN4504-263-Exam3-Chapter3-ProjectManagement-%s.html' % e)) for e in ('Full', 'Balanced', 'Concise')]
+    jobs += [('Aggregate Planning', Path(AP % e)) for e in ('FULL', 'BALANCED', 'CONCISE')]
+    for folder, src in jobs:
+        s = (SRC / src).read_text(encoding='utf8')
+        labs = 'Crashing Activity A by One Week' in s          # the Concise has no crash picture, so no lab
+        if labs:
+            s = with_lab(s)
+        s = once(s, '</body>', block + '</body>')
+        out = OUT / '5-Animated-MAN4504' / folder
+        out.mkdir(parents=True, exist_ok=True)
+        (out / src.name).write_text(s, encoding='utf8')
+        print('motion', src.name, '+ what-if labs' if labs else '')
+
+
+if '--only-motion' in sys.argv:
+    build_motion()
+else:
+    build_play()
+    build_lab()
+    build_depth()
+    build_listen()
+    build_motion()

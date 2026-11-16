@@ -13,11 +13,12 @@
   function loadClips() { try { CLIPS = JSON.parse(document.getElementById('pv-audio').textContent); } catch (e) {} }
   var SAY = [[/\bES\b/g, 'early start'], [/\bEF\b/g, 'early finish'], [/\bLS\b/g, 'late start'], [/\bLF\b/g, 'late finish'],
     [/→/g, ' to '], [/−/g, ' minus '], [/÷/g, ' divided by '], [/×/g, ' times '], [/=/g, ' equals '], [/≤/g, ' at most '],
-    [/\$(\d[\d,]*)/g, '$1 dollars'], [/\bwk\b/g, 'week'], [/--/g, ' none ']];
+    [/\$(\d[\d,]*\d|\d)/g, '$1 dollars'], [/ \+ /g, ' plus '], [/σ/g, ' sigma '], [/μ/g, ' mu '], [/\)\(/g, ' times '], [/\bwk\b/g, 'week'], [/--/g, ' none ']];
 
   function spoken(el) {
     var c = el.cloneNode(true);
-    Array.prototype.forEach.call(c.querySelectorAll('br, b.pm-h, .pm-calc, li, p, div'), function (n) { n.insertAdjacentText('afterend', '. '); });
+    Array.prototype.forEach.call(c.querySelectorAll('br, b.pm-h, b.tp-h, .pm-calc, li, p, div'), function (n) { n.insertAdjacentText('afterend', '. '); });
+    Array.prototype.forEach.call(c.querySelectorAll('.pm-calc'), function (n) { n.insertAdjacentText('beforebegin', '. '); });
     var t = c.textContent.replace(/\s+/g, ' ').replace(/\.\s*\./g, '.').trim();
     SAY.forEach(function (p) { t = t.replace(p[0], p[1]); });
     return t;
