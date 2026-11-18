@@ -21,7 +21,7 @@ import tempfile
 import numpy as np
 
 MODEL = pathlib.Path(os.environ.get('ASR_DIR', '~/.cache/asr/sherpa-onnx-whisper-small.en')).expanduser()
-CACHE = pathlib.Path(tempfile.gettempdir()) / 'narrate-cache'
+CACHE = pathlib.Path(os.environ.get('NARRATE_CACHE', '~/.cache/narrate')).expanduser()
 RATE = 24000
 FLAG_BELOW = 0.93            # share of words that must match before a paragraph is left alone
 _rec = None

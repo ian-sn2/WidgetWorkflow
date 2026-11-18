@@ -16,6 +16,8 @@ Exam 3 files from SentToClaude.zip.
 
 Rebuild: `python scripts/ideas/build_demos.py <unpacked zip> ideas/2026-11-16` (add `--only-all`, `--only-listen`, ... for one part).
 
-The voice is Kokoro (open source, offline). Once per machine: `pip install kokoro-onnx soundfile numpy`, then put
+To record with Google's Chirp 3: HD voices instead, see `scripts/ideas/GOOGLE-VOICE-SETUP.md`.
+
+The default voice is Kokoro (open source, offline). Once per machine: `pip install kokoro-onnx soundfile numpy`, then put
 `kokoro-v1.0.onnx` and `voices-v1.0.bin` (kokoro-onnx GitHub releases, "model-files-v1.0") in `~/.cache/kokoro/`.
 What the voice says is in `scripts/ideas/narration/`; its README is the prompt for writing a new chapter's script.

@@ -28,7 +28,9 @@ THE VOICE is one function, _voice(). It uses Kokoro, an open-source neural voice
 The last line is Kokoro's own dictionary-based pronunciation (misaki). Without it the voice still works, through a
 generic pronouncer that gets the stress of some words wrong ("subcontract"). A word that is still said wrong is fixed
 in narration/pronounce.json, as "word": "phonemes".
-NARRATE_VOICE picks the voice (default af_heart). For a paid studio voice, replace the body of _voice().
+NARRATE_VOICE picks the voice (default af_heart).
+NARRATE_ENGINE=google records with Google Cloud's Chirp 3: HD voices instead (voice_google.py, GOOGLE-VOICE-SETUP.md).
+Either way every take is kept in ~/.cache/narrate, so a rebuild sends only the paragraphs whose script changed.
 Clips are embedded in the page as data URIs so a demo is one file; in production they would sit on S3 beside the images.
 """
 import base64
@@ -46,9 +48,10 @@ from html.parser import HTMLParser
 import numpy as np
 
 HERE = pathlib.Path(__file__).parent
-CACHE = pathlib.Path(tempfile.gettempdir()) / 'narrate-cache'
+CACHE = pathlib.Path(os.environ.get('NARRATE_CACHE', '~/.cache/narrate')).expanduser()     # every take, kept: a rebuild re-records only what changed
 KOKORO = pathlib.Path(os.environ.get('KOKORO_DIR', '~/.cache/kokoro')).expanduser()
-VOICE = os.environ.get('NARRATE_VOICE', 'af_heart')
+ENGINE = os.environ.get('NARRATE_ENGINE', 'kokoro')          # kokoro: offline and free.  google: Chirp 3: HD, see voice_google.py
+VOICE = os.environ.get('NARRATE_VOICE', 'af_heart' if ENGINE == 'kokoro' else 'en-US-Chirp3-HD-Aoede')
 RATE = 24000
 LISTEN_SPEED = 1.1          # a whole chapter is spoken a little faster than a single step is
 _kokoro = None
@@ -148,7 +151,15 @@ def check(script, source, where):
 def _voice(sentence, speed):
     """one sentence -> samples at RATE. The only function that knows which voice is used."""
     global _kokoro
-    CACHE.mkdir(exist_ok=True)
+    CACHE.mkdir(parents=True, exist_ok=True)
+    if ENGINE == 'google':
+        import voice_google
+        text = sentence.replace(LETTER, 'A')
+        f = CACHE / (hashlib.sha1(('google|%s|%.2f|%s' % (VOICE, speed, text)).encode()).hexdigest()[:20] + '.npy')
+        if not f.exists():
+            np.save(f, voice_google.synthesize(text, VOICE, speed))
+        return np.load(f)
+    assert ENGINE == 'kokoro', 'NARRATE_ENGINE must be kokoro or google, not %r' % ENGINE
     model = next((KOKORO / n for n in ('kokoro-v1.0.onnx', 'kokoro-v1.0.int8.onnx') if (KOKORO / n).exists()), None)
     say_with = g2p() if model else None
     f = CACHE / (hashlib.sha1(('%s|%.2f|%s|%s' % (VOICE, speed, 'misaki2' if say_with else 'espeak', sentence)).encode()).hexdigest()[:20] + '.npy')
@@ -192,6 +203,9 @@ def speak(text, where='', speed=1.0, beat=0.35):
 
 def listening_check(page_name, report_dir):
     """transcribe everything recorded for this page and report what does not match its script"""
+    if ENGINE == 'google':
+        import voice_google
+        print('          ' + voice_google.summary())
     if not report_dir:
         return
     import hear
@@ -440,7 +454,16 @@ def narrate_listen(src, out, report_dir=None):
 
 if __name__ == '__main__':
     rep = sys.argv[sys.argv.index('--report') + 1] if '--report' in sys.argv else None
-    if sys.argv[1] == 'steps':
+    if sys.argv[1] == 'voices':                 # which Google voices this key can use
+        import voice_google
+        for name, gender in voice_google.voices():
+            print(name, gender.lower())
+    elif sys.argv[1] == 'sample':               # one clip in the current engine and voice, to compare by ear
+        clip = encode(speak(sys.argv[2]))
+        pathlib.Path(sys.argv[3]).write_bytes(base64.b64decode(clip['s'].split(',', 1)[1]))
+        print('wrote', sys.argv[3], '%.1f s' % clip['d'], 'engine', ENGINE, 'voice', VOICE)
+        listening_check(sys.argv[3], None)
+    elif sys.argv[1] == 'steps':
         narrate_steps(sys.argv[2], rep)
     else:
         narrate_listen(sys.argv[2], sys.argv[3], rep)
