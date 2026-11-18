@@ -17,8 +17,10 @@ in that section containing it, and the Listen bar highlights and scrolls to that
 For a table row use the first cell followed by ` |` (`"Brand manager |"`). `steps_from` reuses another edition's
 step scripts when the same widget appears on both.
 
-`pronounce.json` holds corrections for any word the voice says wrong, as `"word": "phonemes"`. The voice uses
-Kokoro's own pronunciation dictionary, so this should rarely be needed.
+Hard words are looked up before recording and the voice is told how to say them (`../pronounce.py`).
+`pronounce.json` is the list entered by hand: names and terms no dictionary has, and anything said wrong, as
+`"word": {"ipa": "...", "from": "where it came from"}`. `learned.json` is written by the builder: what it looked
+up on Wiktionary, so each word is asked for once. Both apply to every chapter.
 
 ## How to write one (this is the prompt for Claude each semester)
 

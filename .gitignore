@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 .DS_Store
 skills-upload/
+
+# prototype pages with a whole chapter of audio embedded (15 MB and up): delivered directly, not committed
+ideas/2026-11-18/*.html

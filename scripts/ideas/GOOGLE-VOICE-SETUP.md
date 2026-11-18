@@ -14,8 +14,30 @@ Menu names in the Google Cloud console change from time to time; the search box 
    **API restrictions**, restrict it to **Cloud Text-to-Speech API** only, so the key can do nothing else.
 5. Go to **Billing > Budgets & alerts** and create a budget of a few dollars with email alerts. A budget warns; it
    does not stop charges. The builder's own monthly limit (below) is what stops them.
-6. Check the free allowance for Chirp 3: HD on the official pricing page (cloud.google.com/text-to-speech/pricing).
-   It was reported as 1,000,000 characters a month when this was written.
+6. The free allowance, read from Google's pricing page on 2026-11-18: the first **1,000,000 characters each month**
+   with Chirp 3: HD voices cost nothing; after that it is US$30 per million characters. Spaces count as characters.
+
+## Free characters, the $300 trial credit, and the card
+
+These are three separate things, used in this order:
+
+1. **The monthly free characters.** The first million each month are simply not charged. They never appear as
+   spending, which is why the trial credit still reads $0 used after a 45,000-character chapter.
+2. **The $300 trial credit.** Only usage *past* the free million in a month is priced, and while the trial lasts
+   that price is taken from the credit. A second million characters in one month would take $30 of it. The credit
+   expires at the end of the trial whether or not it was used.
+3. **The card.** Charged only after the trial has ended (and the account upgraded) *and* a month goes past the
+   free million.
+
+The builder stops itself at 900,000 characters a month, so on its default setting it never reaches step 2. To
+record more than that in a month, raise `GOOGLE_TTS_MONTHLY_LIMIT`; the cost is then $30 per extra million.
+
+## What Google keeps
+
+Nothing, by its own statement ("Google does not log any customer Cloud TTS text or audio data", data-logging
+page, read 2026-11-18). The service is stateless: text goes up, audio comes back in the same response, and no
+file is created in the Google Cloud project. The recordings exist in two places only: `~/.cache/narrate` on the
+machine that ran the build, and the page (or, in production, the S3 folder beside the images).
 
 ## Giving the builder the key
 
@@ -52,6 +74,19 @@ builds the pages with the chosen voice.
   `GOOGLE_TTS_MONTHLY_LIMIT` (default 900,000). Each build prints the month's total.
 * **Volume.** A Concise chapter with its Play steps is about 12,000 characters, so the default limit is about 75
   chapters a month.
+
+## Hard words
+
+Before a paragraph is recorded, every rare word in it is looked up and the voice is told how to say it
+(`pronounce.py`: the built-in dictionary, then Wiktionary, then a prefix plus a known word). The listening report
+lists what was taught and from where, with a clip of each looked-up word said on its own. A name no dictionary
+has, or a word still said wrong, goes in `scripts/ideas/narration/pronounce.json` once and is right in every
+chapter after that. Wiktionary has to be an allowed site for the live look-up (`en.wiktionary.org`); without it
+the built-in dictionary and the two files are still used.
+
+```bash
+python scripts/ideas/pronounce.py heterochrony cichlids "Van Valen"
+```
 
 ## Things to check on the first real recording
 

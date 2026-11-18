@@ -1,3 +1,39 @@
 {
-  "_how": "A word the voice says wrong goes here as \"word\": \"phonemes\" (Kokoro's phoneme letters, stress marks included). The build applies it everywhere the word appears. Keys starting with _ are notes."
+ "_how": "Entered by hand: names and terms no dictionary has, and anything a dictionary or the voice gets wrong. \"word\": {\"ipa\": ..., \"from\": where it came from}. An entry may be two words (\"van valen\"). It wins over every other source and applies to every chapter. python scripts/ideas/pronounce.py WORD shows what a word would be taught as. Keys starting with _ are notes.",
+ "gillooly": {
+  "ipa": "ɡɪˈluli",
+  "from": "surname; entered by hand, 2026-11-18: confirm by ear against how it is said in class"
+ },
+ "dobzhansky": {
+  "ipa": "dəbˈʒɑnski",
+  "from": "surname; entered by hand, 2026-11-18: confirm by ear"
+ },
+ "eldredge": {
+  "ipa": "ˈɛldɹɛdʒ",
+  "from": "surname; entered by hand, 2026-11-18: confirm by ear"
+ },
+ "van valen": {
+  "ipa": "væn ˈveɪlən",
+  "from": "surname; entered by hand, 2026-11-18: confirm by ear"
+ },
+ "hasler": {
+  "ipa": "ˈhæslɚ",
+  "from": "surname; entered by hand, 2026-11-18: confirm by ear"
+ },
+ "heterochrony": {
+  "ipa": "ˌhɛtəˈɹɑkɹəni",
+  "from": "Wiktionary lists no pronunciation; entered by hand, 2026-11-18: confirm by ear"
+ },
+ "rhogeessa": {
+  "ipa": "ˌɹoʊdʒiˈɛsə",
+  "from": "genus name, uncertain; entered by hand, 2026-11-18: confirm by ear"
+ },
+ "hyla versicolor": {
+  "ipa": "ˈhaɪlə ˈvɝsɪˌkʌlɚ",
+  "from": "species name; entered by hand, 2026-11-18: confirm by ear"
+ },
+ "lystrosaurus": {
+  "ipa": "ˌlɪstɹoʊˈsɔɹəs",
+  "from": "genus name; entered by hand, 2026-11-18: confirm by ear"
+ }
 }

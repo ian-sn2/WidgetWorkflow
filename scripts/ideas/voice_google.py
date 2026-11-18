@@ -91,8 +91,10 @@ def _stretch(samples, speed):
     return np.asarray(out, dtype=np.float32)
 
 
-def synthesize(text, voice, speed=1.0):
-    """text -> samples at RATE. Refuses to start a request that would take the month past the free allowance."""
+def synthesize(text, voice, speed=1.0, pronunciations=()):
+    """text -> samples at RATE. Refuses to start a request that would take the month past the free allowance.
+    pronunciations: [(phrase as written, IPA)], hard words the voice is told how to say (pronounce.py). Google matches
+    a phrase whatever its capitals and before 's, but not a plural, so each written form is its own entry."""
     month_total = used()
     if month_total + len(text) > LIMIT:
         raise SystemExit('Google voice: %s characters already sent this month and this paragraph is %d more, which passes the limit of %s '
@@ -100,6 +102,11 @@ def synthesize(text, voice, speed=1.0):
                          % (format(month_total, ','), len(text), format(LIMIT, ',')))
     body = {'input': {'text': text}, 'voice': {'languageCode': '-'.join(voice.split('-')[:2]), 'name': voice},
             'audioConfig': {'audioEncoding': 'LINEAR16', 'sampleRateHertz': RATE}}
+    if pronunciations:
+        seen = {}
+        for phrase, ipa in pronunciations:
+            seen.setdefault(phrase.lower(), {'phrase': phrase, 'phoneticEncoding': 'PHONETIC_ENCODING_IPA', 'pronunciation': ipa})
+        body['input']['customPronunciations'] = {'pronunciations': list(seen.values())}
     if abs(speed - 1.0) > 0.001:
         body['audioConfig']['speakingRate'] = speed
     try:

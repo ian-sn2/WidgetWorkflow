@@ -1,0 +1,35 @@
+{
+ "_how": "Written by pronounce.py: what a build looked up, so each word is looked up once. An empty entry means it was asked for and not found. To correct one, put the word in pronounce.json, which wins.",
+ "allometric": {},
+ "allopolyploidy": {},
+ "autopolyploidy": {},
+ "behaviorally": {},
+ "coevolving": {},
+ "exaptation": {
+  "ipa": "ˌɛksæpˈteɪʃən",
+  "from": "Wiktionary"
+ },
+ "heterochrony": {},
+ "hypoglossal": {
+  "ipa": "ˌhaɪpəˈɡlɑsəl",
+  "from": "Wiktionary"
+ },
+ "nectaries": {},
+ "permease": {},
+ "photocopied": {},
+ "pizzly": {
+  "ipa": "ˈpɪzli",
+  "from": "Wiktionary"
+ },
+ "postzygotic": {},
+ "prezygotic": {},
+ "transacetylase": {},
+ "trigeminal": {
+  "ipa": "tɹaɪˈdʒɛmɪnl",
+  "from": "Wiktionary",
+  "clip": "LL-Q1860 (eng)-Vealhurl-trigeminal.wav"
+ },
+ "valen": {},
+ "versicolor": {},
+ "yucatan": {}
+}

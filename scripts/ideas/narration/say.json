@@ -1,0 +1,8 @@
+{
+ "_how": "The swap list: an abbreviation or symbol on the left is read as the words on the right, on every page. Matched as a whole word, capitals as written. Add a line when the voice reads an abbreviation wrongly; nothing else needs changing. (Hard ordinary words are pronounce.json, not here.) Keys starting with _ are notes.",
+ "FSBO": "fizz-bo",
+ "cAMP": "cyclic A M P",
+ "acetyl-CoA": "acetyl co-A",
+ "CoA": "co-A",
+ "lac operon": "lack operon"
+}

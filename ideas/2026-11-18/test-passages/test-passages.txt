@@ -1,0 +1,65 @@
+Five test passages, voice en-US-Chirp3-HD-Charon at 1.1x (the pace a Listen page uses)
+
+TEST 1: roman numerals and subscripts (31 seconds)
+
+What the voice was given:
+Trigeminal nerve (CN 5): The trigeminal nerve (CN 5) is the largest cranial nerve and the first mixed nerve. It has three divisions, ophthalmic (V 1), maxillary (V 2), and mandibular (V 3), that divide the face into thirds. Three cranial nerves divide up taste. CN 7 covers the front two-thirds of the tongue, CN 9 covers the back third, and CN 10 covers the epiglottis. The accessory nerves (CN 11) originate from the cervical spinal cord.
+
+What the automatic listener heard:
+Trigeminal nerve, CN5. The trigeminal nerve, CN5, is the largest cranial nerve and the first mixed nerve. It has three divisions, ophthalmic V1, maxillary V2, and mandibular V3. that divide the face into thirds. Three cranial nerves divide up taste. CN7 covers the front two-thirds of the tongue. CN9 covers the back third. And CN10 covers the epiglottis. The accessory nerves, CN11, originate from the cervical spinal cord.
+
+Hard words taught: Trigeminal (try-JEH-mihnl; Wiktionary), ophthalmic (ahp-THAL-mihk; dictionary), maxillary (MAK-suh-leh-ree; dictionary), mandibular (man-DIH-byuh-ler; dictionary), epiglottis (eh-puh-GLAH-tuhs; dictionary)
+No pronunciation found, left to the voice: none
+
+TEST 2: greek letters and abbreviations (37 seconds)
+
+What the voice was given:
+The conversion of lactose to glucose requires three enzymes: beta-galactosidase, beta-galactoside permease, and beta-galactoside transacetylase. beta-galactoside transacetylase is an enzyme that transfers an acetyl group from acetyl co-A to beta-galactosidase. When glucose is not present, E. coli produce cyclic AMP (cyclic A M P), a derivative of ATP that acts as an activator in the lack operon. cyclic A M P binds to and activates cyclic A M P regulatory protein (CRP), which is also sometimes called catabolite activator protein (CAP).
+
+What the automatic listener heard:
+The conversion of lactose to glucose requires three enzymes, beta-galactosidase, beta-galactoside-permes, and beta-galactoside-transacetylase. Beta-galactoside-transacetylase is an enzyme that transfers an acetyl group from acetyl CoA to beta-galactosidase. When glucose is not present, E. coli produces cyclic AMP. Cyclic AMP, a derivative of ATP that acts as an activator in the lac operon. Cyclic AMP binds to and activates cyclic AMP regulatory protein, CRP, which is also sometimes called catabolite activator protein, CAP.
+
+Hard words taught: galactosidase (guh-lak-tuh-SY-dayz; dictionary), galactoside (guh-LAK-toh-syd; dictionary), operon (AH-per-ahn; dictionary), catabolite (kuh-TA-buh-lyt; dictionary)
+No pronunciation found, left to the voice: permease, transacetylase
+
+Differences the listener reported: "permease" heard as "perme"
+
+Differences the listener reported: "lack" heard as "lac"
+
+TEST 3: formula money percent (33 seconds)
+
+What the voice was given:
+If the broker's commission is 6 percent, the following math can be used to determine the gross price: Gross Price equals Target Net Price divided by (1 minus Commission Rate) equals 200,000 dollars divided by (1 minus point zero six) equals 212,766 dollars. Commissions on commercial real estate are typically much lower, as low as 1 percent to 1.5 percent. The Internet has created a growing market of for sale by owner (fizz-bo) properties listed outside the MLS. The best-known commercial designation is probably the Certified Commercial Investment Member (CCIM).
+
+What the automatic listener heard:
+If the broker's commission is 6%, the following math can be used to determine the gross price. Gross price equals target net price divided by 1 minus commission rate equals $200,000 divided by 1 minus .06 equals 212,766 dollars. Commissions on commercial real estate are typically much lower, as low as 1% to 1.5%. The internet has created a growing market of for-sale-buy-owner (FISBO) properties listed outside the MLS. The best-known commercial designation is probably the Certified Commercial Investment Member, CCIM.
+
+Hard words taught: none
+No pronunciation found, left to the voice: none
+
+Differences the listener reported: "0.06" heard as "06"; "by" heard as "buy"; "fizz bo" heard as "fisbo"
+
+TEST 4: table rows (32 seconds)
+
+What the voice was given:
+Truckload (TL): Medium cost per ton-mile. Average haul of 274 miles; capacity of 42,000 to 50,000 pounds (about 20 to 25 tons). Key issues: utilization, consistent service, backhauls. Less-than-truckload (LTL): Higher cost per ton-mile. Average haul of 646 miles; partial loads for multiple customers. A 2016 figure was about $1.59 per mile, while recent estimates cluster around $2.25 per mile.
+
+What the automatic listener heard:
+Truckload TL, medium cost per ton mile. Average haul of 274 miles. Capacity of 42,000 to 50,000 pounds, about 20 to 25 tons. Key issues, utilization, consistent service, backhalls, less than truckload LTL. Higher costs per ton-mile. Average haul of 646 miles. Partial loads for multiple customers. The 2016 figure was about $1.59 per mile, while recent estimates cluster around $2.25 per mile.
+
+Hard words taught: Truckload (TRUH-klohd; dictionary), backhauls (BAK-hawlz; dictionary)
+No pronunciation found, left to the voice: none
+
+Differences the listener reported: "backhaul" heard as "backhall"; "a" heard as "the"
+
+TEST 5: long paragraph pacing (45 seconds)
+
+What the voice was given:
+Hypoglossal nerve (CN 12): The hypoglossal nerve is a purely motor nerve that innervates the tongue from underneath. This nerve allows for voluntary movement of the tongue and provides constant tone so that the tongue maintains its shape. Its rootlets emerge between the pyramids and the olives on the ventral medulla, where they join to form the hypoglossal nerve. It is the prime mover of the visible part of the tongue, the portion you use for chewing and speech, whereas CN 9 and CN 10 handle the deeper tongue and throat muscles used in swallowing. If one side loses its tone, the halves no longer pull evenly and the tongue drifts to one side instead of protruding straight. A quick clinical check is to ask someone to stick out their tongue: if it veers off-center, suspect the hypoglossal nerve or the brainstem nucleus that houses its cell bodies.
+
+What the automatic listener heard:
+Hypoglossal nerve, CN12. The hypoglossal nerve is a purely motor nerve that innervates the tongue from underneath. This nerve allows for voluntary movement of the tongue and provides constant tone so that the tongue maintains its shape. Its rootlets emerge between the pyramids and the olives on the ventral medulla, where they join to form the hypoglossal nerve. It is the prime mover of the visible part of the tongue, the portion you use for chewing and speech, whereas CN9 and CN10 handle the deeper tongue and throat muscles used in swallowing. If one side loses its tone, the halves no longer pull evenly and the tongue drifts to one side instead of protruding straight. A quick clinical check is to ask someone to stick out their tongue. If it veers off-center, suspect the hypoglossal nerve or the brainstem nucleus that houses its cell bodies.
+
+Hard words taught: Hypoglossal (hy-puh-GLAH-suhl; Wiktionary), innervates (ih-NER-vayts; dictionary), rootlets (ROOT-luhts; dictionary), medulla (muh-DUH-luh; dictionary), veers (VIHRZ; dictionary), brainstem (BRAYN-stehm; dictionary)
+No pronunciation found, left to the voice: none
+

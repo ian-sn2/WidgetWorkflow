@@ -72,11 +72,23 @@ def norm(text):
     t = t.replace('$', ' ')                                 # where the word "dollars" falls is the listener's choice, not an error
     t = re.sub(r'(\d),(?=\d{3})', r'\1', t).replace('%', ' percent').replace('&', ' and ')
     t = re.sub(r"[’']", '', t)
+    t = re.sub(r'(?<![\d.])\.(?=\d)', '0.', t)               # ".06" is 0.06
     t = re.sub(r'(?<=\d)\.(?=\d)', '_', t)                 # keep the decimal point through the punctuation strip
     t = re.sub(r'[^a-z0-9_]+', ' ', t).replace('_', '.')
     out = []
-    for w in t.split():
-        w = WORDS.get(w, w)
+    words = [WORDS.get(w, w) for w in t.split()]
+    k = 0
+    while k < len(words):                                   # "point zero six" and "0.06" are the same number
+        if words[k] == 'point' and k + 1 < len(words) and words[k + 1].isdigit() and len(words[k + 1]) == 1:
+            j = k + 1
+            while j < len(words) and words[j].isdigit() and len(words[j]) == 1:
+                j += 1
+            head = words.pop(k - 1) if k and words[k - 1].isdigit() else None
+            if head is not None:
+                k, j = k - 1, j - 1
+            words[k:j] = [(head or '0') + '.' + ''.join(words[k + 1:j])]
+        k += 1
+    for w in words:
         if w in ('dollar', 'dollars'):
             continue
         if re.fullmatch(r'\d+\.\d+', w):
@@ -104,39 +116,124 @@ def serious(diff):
     return any(len(w) >= 5 for w in written.split()) or len(written.split()) >= 2
 
 
+def is_term(diff):
+    """a name or technical word the listener spelled its own way (Gillooly as "galloulli", prezygotic as "presygotic"):
+    a long word, heard as something starting with the same letter. The voice may well have said it right; a recognizer
+    cannot tell, so these are collected and each is heard once, not once per paragraph."""
+    w, h = diff[0].replace(' ', ''), diff[1].replace(' ', '')
+    if '(' in w + h or re.search(r'\d', w + h):
+        return False
+    return len(w) >= 6 and w[0] == h[0]
+
+
 def audit(items):
-    """items: [(where, paragraph as written, samples)] -> [(where, written, heard, score, diffs, samples)] for the ones to hear"""
-    flagged = []
+    """items: [(where, paragraph as written, samples)] -> [(where, written, heard, score, wrong, terms, samples)]
+    wrong: differences that look like a wrong word or number. terms: names and technical words spelled differently."""
+    found = []
     for where, written, samples in items:
         heard = transcribe(samples)
         score, diffs = compare(written, heard)
-        if score < FLAG_BELOW or any(serious(d) for d in diffs):
-            flagged.append((where, written, heard, score, diffs, samples))
-    return flagged
+        terms = [d for d in diffs if is_term(d)]
+        rest = [d for d in diffs if not is_term(d)]
+        wrong = [d for d in rest if serious(d)] or (rest if rest and score < FLAG_BELOW else [])
+        if wrong or terms:
+            found.append((where, written, heard, score, wrong, terms, samples))
+    return found
 
 
-def report(page_name, items, flagged, folder):
-    """a text report of every paragraph that did not match, and one clip of just those paragraphs"""
+def sentence(written, samples, phrase):
+    """the one sentence of a take that contains the phrase, cut out of the recording"""
+    import narrate
+    sents = narrate.sentences(written)
+    starts = narrate.sentence_starts(samples, sents)
+    for k, sent in enumerate(sents):
+        if phrase in ' '.join(norm(sent)):
+            a, b = int(starts[k] * RATE), int(starts[k + 1] * RATE) if k + 1 < len(starts) else len(samples)
+            return samples[max(0, a - int(0.05 * RATE)):b]
+    return samples
+
+
+def word_list(taught, unknown):
+    """-> [(word, ipa or None, (respelling, source, clip))], the plain word once (cichlid and cichlids are one line)"""
+    import pronounce
+    rows = {}
+    for w, (ipa, entry) in taught.items():
+        src = entry['from']
+        base = re.search(r', as (\S+) \+ \w+$', src)
+        if base:
+            w, src = base.group(1), src[:base.start()]
+            ipa = pronounce.lookup(w)['ipa']
+        rows.setdefault(w, (w, ipa, (pronounce.respell(ipa), src, entry.get('clip'))))
+    for w in unknown:
+        rows.setdefault(w, (w, None, ('', 'not found', None)))
+    order = lambda r: (r[2][1] == 'dictionary', r[1] is None, r[0])          # hand-entered and looked-up words first: those are the ones to hear
+    return sorted(rows.values(), key=order)
+
+
+def report(page_name, items, found, folder, words=(), said=()):
+    """a text report, and one clip holding only the sentences a person should hear: each wrong-looking difference, and
+    each name or technical term once. -> (wrong, distinct terms, minutes in the clip, minutes recorded)"""
     import soundfile
     folder = pathlib.Path(folder)
     folder.mkdir(parents=True, exist_ok=True)
     stem = pathlib.Path(page_name).stem
-    minutes = sum(len(s) for _, _, s in items) / RATE / 60
+    minutes = sum(len(x) for _, _, x in items) / RATE / 60
+    wrong = [f for f in found if f[4]]
+    terms = {}                                  # written term -> [times heard differently, spellings heard, first take it is in]
+    for f in found:
+        for w, h in f[5]:
+            t = terms.setdefault(w, [0, [], f])
+            t[0] += 1
+            if h not in t[1]:
+                t[1].append(h)
+    cuts = [sentence(f[1], f[6], d[0]) for f in wrong for d in f[4][:1]] + [sentence(t[2][1], t[2][6], w) for w, t in terms.items()]
+    reel = sum(len(c) + int(0.8 * RATE) for c in cuts) / RATE / 60
+    clean = len(items) - len(found)
     lines = ['Automatic listening check: ' + page_name, '',
-             '%d paragraphs recorded (%.1f minutes). %d matched their script. %d to listen to (%.1f minutes, in %s).' % (
-                 len(items), minutes, len(items) - len(flagged), len(flagged), sum(len(f[5]) for f in flagged) / RATE / 60, stem + '.listen-to-these.mp3'),
-             'A paragraph is listed when a number or a content word was heard differently, or fewer than %d%% of its words matched.' % round(FLAG_BELOW * 100),
-             'Some of these are the listener mishearing, not the voice: that is what the clip is for.', '']
-    for n, (where, written, heard, score, diffs, _) in enumerate(flagged, 1):
-        lines += ['%d. %s  (%d%% matched)' % (n, where, round(score * 100)), '   written: ' + written, '   heard:   ' + heard,
-                  '   differs: ' + '; '.join('"%s" heard as "%s"' % d for d in diffs), '']
-    (folder / (stem + '.listening-check.txt')).write_text('\n'.join(lines), encoding='utf8')
+             '%d takes recorded (%.1f minutes). %d were heard exactly as written.' % (len(items), minutes, clean),
+             '%d have a word or number that may be wrong. %d names or technical terms were spelled differently by the listener.' % (len(wrong), len(terms)),
+             'To listen to: %.1f minutes, in %s (one sentence for each item below, in this order).' % (reel, stem + '.listen-to-these.mp3'), '',
+             'WORDS OR NUMBERS THAT MAY BE WRONG', '']
+    for n, (where, written, heard, score, wr, _, _) in enumerate(wrong, 1):
+        lines += ['%d. %s' % (n, where), '   written: ' + written, '   heard:   ' + heard,
+                  '   differs: ' + '; '.join('"%s" heard as "%s"' % d for d in wr), '']
+    if not wrong:
+        lines += ['   none', '']
+    lines += ['NAMES AND TECHNICAL TERMS (the listener cannot spell these; hear each once and judge the pronunciation)', '']
+    for n, (w, (count, heard, f)) in enumerate(terms.items(), len(wrong) + 1):
+        lines.append('%d. %s: heard as %s%s' % (n, w, ', '.join('"%s"' % h for h in heard[:4]), ' (%d times)' % count if count > 1 else ''))
+    if not terms:
+        lines.append('   none')
+    if words:
+        new = [w for w in words if w[1] and w[2][1] != 'dictionary']
+        known = [w for w in words if w[1] and w[2][1] == 'dictionary']
+        lost = [w for w in words if not w[1]]
+        lines += ['', 'HARD WORDS: LOOKED UP AND TAUGHT TO THE VOICE', '',
+                  'Every rare word was looked up before recording and the voice was told how to say it.',
+                  '%d came from the built-in dictionary. %d came from Wiktionary, were built from a prefix and a known word, or were entered by hand:' % (len(known), len(new)),
+                  'hear those once in %s (each word said alone, in this order). A wrong one is corrected in' % (stem + '.hard-words.mp3'),
+                  'scripts/ideas/narration/pronounce.json and is then right in every chapter.', '']
+        for w, ipa, (spelled, src, clip) in new:
+            lines.append('   %-18s %-26s /%s/   %s%s' % (w, spelled, ipa, src, '   (recorded clip on Wiktionary: File:%s)' % clip if clip else ''))
+        lines += ['', '   from the dictionary: ' + ', '.join('%s (%s)' % (w, sp) for w, _, (sp, _, _) in known)]
+        if lost:
+            lines += ['', 'NO PRONUNCIATION FOUND: the voice guessed these. They are at the end of the same clip. Add the ones it gets wrong to pronounce.json.', '',
+                      '   ' + ', '.join(w for w, _, _ in lost)]
+    (folder / (stem + '.listening-check.txt')).write_text('\n'.join(lines) + '\n', encoding='utf8')
     clip = folder / (stem + '.listen-to-these.mp3')
-    if flagged:
+    if cuts:
         gap = np.zeros(int(0.8 * RATE), dtype=np.float32)
         with tempfile.TemporaryDirectory() as tmp:
-            soundfile.write(tmp + '/a.wav', np.concatenate([np.concatenate([f[5], gap]) for f in flagged]), RATE)
+            soundfile.write(tmp + '/a.wav', np.concatenate([np.concatenate([c, gap]) for c in cuts]), RATE)
             subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', tmp + '/a.wav', '-ac', '1', '-b:a', '48k', str(clip)], check=True)
     elif clip.exists():
         clip.unlink()
-    return len(flagged), minutes
+    clip = folder / (stem + '.hard-words.mp3')
+    if said:
+        gap = np.zeros(int(0.6 * RATE), dtype=np.float32)
+        with tempfile.TemporaryDirectory() as tmp:
+            soundfile.write(tmp + '/a.wav', np.concatenate([np.concatenate([c, gap]) for _, c in said]), RATE)
+            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', tmp + '/a.wav', '-ac', '1', '-b:a', '48k', str(clip)], check=True)
+    elif clip.exists():
+        clip.unlink()
+    return len(wrong), len(terms), reel, minutes
