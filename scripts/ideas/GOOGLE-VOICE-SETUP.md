@@ -75,6 +75,33 @@ builds the pages with the chosen voice.
 * **Volume.** A Concise chapter with its Play steps is about 12,000 characters, so the default limit is about 75
   chapters a month.
 
+## Serving the audio from a Google Cloud Storage bucket
+
+A chapter's audio is about 10 MB. Inside the page it makes a 13 MB file; served from a bucket the page is under
+100 KB and the audio streams. The bucket is `sntext2speech`, in the same Google Cloud project as the voice.
+
+One-time setup of a bucket (done 2026-11-18): **Cloud Storage > Buckets > Create**, a US region (us-east1,
+us-west1 or us-central1 count toward the free allowance), Standard class, *Enforce public access prevention*
+off; then the bucket's **⋮ > Edit access > Add principal** `allUsers` with the role **Storage Object Viewer**.
+Leave Hierarchical namespace and Rapid Cache off. Drive is not a substitute: it is not built to stream to a page.
+
+Building a page for the bucket:
+
+```bash
+NARRATE_ENGINE=google NARRATE_VOICE=en-US-Chirp3-HD-Charon python scripts/ideas/narrate.py listen <chapter>.html out/<chapter>.html --read --sections h1 --audio-dir out/audio --audio-url https://storage.googleapis.com/sntext2speech/audio
+```
+
+That writes `out/audio/<chapter>/` with one MP3 per section. Drag the `audio` folder into the bucket (the
+console's bucket page accepts a dropped folder) and the page plays. Each file's name ends in a fingerprint of its
+contents, so a re-recorded section gets a new address; old files can be deleted from the bucket at leisure.
+
+The speech key cannot write to a bucket, so the upload is by hand for now. From a computer signed in with
+`gcloud auth login`, `gcloud storage cp -r out/audio gs://sntext2speech/` does the same.
+
+Free each month (Google's free-tier page, read 2026-11-18): 5 GB stored in a US region and 100 GB downloaded
+from North America, which is about 500 chapters stored and 10,000 complete listens. Past that, about $0.02 per
+GB-month stored and $0.12 per GB downloaded.
+
 ## Hard words
 
 Before a paragraph is recorded, every rare word in it is looked up and the voice is told how to say it
@@ -87,6 +114,15 @@ the built-in dictionary and the two files are still used.
 ```bash
 python scripts/ideas/pronounce.py heterochrony cichlids "Van Valen"
 ```
+
+## The swap list and its tests
+
+Abbreviations and symbols are turned into words before the voice sees them. The rules that apply everywhere are
+in `narrate.say()` (Roman numerals after a numbering word, subscripts, Greek letters, ÷ = − %, money, ranges,
+pounds, arithmetic written tight, and any number with a thousands separator spelled out in words, because the
+voice read "4,712 units" as "four, seven twelve"). One-off abbreviations go in `narration/say.json` ("FSBO": "fizz-bo"), which
+needs no code change. `python scripts/ideas/test_narration.py` checks them, starting from the five-passage test
+sheet; run it after changing either.
 
 ## Things to check on the first real recording
 

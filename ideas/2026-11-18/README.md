@@ -1,5 +1,8 @@
 # First run with Google's Chirp 3: HD voice, 2026-11-18
 
+Two chapters were run: BSC2010 Module 5 (mostly prose, described below) and
+`MAN4504-263-Exam3-AggregatePlanning-FULL.html` (tables, money and worked arithmetic), built the same way.
+
 `BSC2010-263-Exam3-Module5-Final-Full.html` (not committed: it carries about 41 minutes of audio, 13 MB) is the
 Full chapter with the Listen bar. The whole chapter is read as written in the Chirp voice "Charon" (Ian's pick
 from the six samples).
@@ -18,6 +21,7 @@ What the page does:
 |---|---|
 | `google-voice-samples/` | The same passage in six Chirp voices, to choose from. |
 | `test-passages/` | Ian's five test passages (Roman numerals, Greek letters, a formula, table rows, a long paragraph) recorded in Charon, with what the voice was given and what the automatic listener heard. |
+| `bucket-version/` | The same pages with the audio taken out: each page is under 100 KB and plays from the `sntext2speech` bucket once its `audio` folder (built beside it, not committed) has been dragged in. See `scripts/ideas/GOOGLE-VOICE-SETUP.md`. |
 | `narration-check/` | The automatic listener's report, a clip of only the sentences it wants a person to hear, and a clip of each looked-up hard word said on its own. |
 
 Hard words (names, technical terms) are looked up before recording and the voice is told how to say them:

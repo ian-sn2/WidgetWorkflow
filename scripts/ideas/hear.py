@@ -66,17 +66,54 @@ def transcribe(samples):
     return text
 
 
+UNIT = {w: n for n, w in enumerate('zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen '
+                                   'eighteen nineteen'.split())}
+TEN = {w: 20 + 10 * n for n, w in enumerate('twenty thirty forty fifty sixty seventy eighty ninety'.split())}
+SCALE = {'thousand': 10 ** 3, 'million': 10 ** 6, 'billion': 10 ** 9, 'trillion': 10 ** 12}
+
+
+def numbers(words):
+    """'four thousand seven hundred twelve' -> '4712', so a number the script spells out compares equal to the digits the
+    listener writes. Digits said one after another ("point zero six", "one two three") stay separate."""
+    out, k = [], 0
+    while k < len(words):
+        if words[k] not in UNIT and words[k] not in TEN:
+            out.append(words[k])
+            k += 1
+            continue
+        total, cur, last, j = 0, 0, '', k
+        while j < len(words):
+            w = words[j]
+            if w in UNIT and last in ('', 'hundred', 'scale', 'ten') and not (last == 'ten' and UNIT[w] > 9) and not (last == '' and j > k):
+                cur, last = cur + UNIT[w], 'unit'
+            elif w in TEN and last in ('', 'hundred', 'scale') and not (last == '' and j > k):
+                cur, last = cur + TEN[w], 'ten'
+            elif w == 'hundred' and last in ('unit', 'ten') and 0 < cur < 100:
+                cur, last = cur * 100, 'hundred'
+            elif w in SCALE and last in ('unit', 'ten', 'hundred') and cur:
+                total, cur, last = total + cur * SCALE[w], 0, 'scale'
+            elif w == 'and' and last in ('hundred', 'scale') and j + 1 < len(words) and (words[j + 1] in UNIT or words[j + 1] in TEN):
+                pass
+            else:
+                break
+            j += 1
+        out.append(str(total + cur))
+        k = j
+    return out
+
+
 def norm(text):
     """words only, so '105,152 dollars' and '$105,152' and 'two weeks' and '2 weeks' compare equal"""
     t = text.lower()
     t = t.replace('$', ' ')                                 # where the word "dollars" falls is the listener's choice, not an error
+    t = t.replace('=', ' equals ').replace('+', ' plus ')   # the listener writes the sign for the word it heard
     t = re.sub(r'(\d),(?=\d{3})', r'\1', t).replace('%', ' percent').replace('&', ' and ')
     t = re.sub(r"[’']", '', t)
     t = re.sub(r'(?<![\d.])\.(?=\d)', '0.', t)               # ".06" is 0.06
     t = re.sub(r'(?<=\d)\.(?=\d)', '_', t)                 # keep the decimal point through the punctuation strip
     t = re.sub(r'[^a-z0-9_]+', ' ', t).replace('_', '.')
     out = []
-    words = [WORDS.get(w, w) for w in t.split()]
+    words = [WORDS.get(w, w) for w in numbers(t.split())]
     k = 0
     while k < len(words):                                   # "point zero six" and "0.06" are the same number
         if words[k] == 'point' and k + 1 < len(words) and words[k + 1].isdigit() and len(words[k + 1]) == 1:

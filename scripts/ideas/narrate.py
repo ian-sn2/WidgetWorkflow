@@ -34,7 +34,8 @@ said wrong, or a name no dictionary has, goes in narration/pronounce.json and is
 NARRATE_VOICE picks the voice (default af_heart).
 NARRATE_ENGINE=google records with Google Cloud's Chirp 3: HD voices instead (voice_google.py, GOOGLE-VOICE-SETUP.md).
 Either way every take is kept in ~/.cache/narrate, so a rebuild sends only the paragraphs whose script changed.
-Clips are embedded in the page as data URIs so a demo is one file; in production they would sit on S3 beside the images.
+Clips are embedded in the page as data URIs so a demo is one file. For a real page, `listen ... --audio-dir FOLDER
+--audio-url ADDRESS` writes them as files to be served from a bucket instead (GOOGLE-VOICE-SETUP.md).
 """
 import base64
 import hashlib
@@ -146,6 +147,31 @@ def roman(letters):
     return total if back is not None and 'X' * (total // 10) + units == letters else None
 
 
+SMALL = ('zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen').split()
+TENS = 'twenty thirty forty fifty sixty seventy eighty ninety'.split()
+
+
+def in_words(n):
+    """4712 -> 'four thousand seven hundred twelve' (American: no "and")"""
+    if n < 20:
+        return SMALL[n]
+    if n < 100:
+        return TENS[n // 10 - 2] + ('-' + SMALL[n % 10] if n % 10 else '')
+    if n < 1000:
+        return SMALL[n // 100] + ' hundred' + (' ' + in_words(n % 100) if n % 100 else '')
+    for size, name in ((10 ** 12, 'trillion'), (10 ** 9, 'billion'), (10 ** 6, 'million'), (1000, 'thousand')):
+        if n >= size:
+            return in_words(n // size) + ' ' + name + (' ' + in_words(n % size) if n % size else '')
+
+
+def grouped(m):
+    """a number written with thousands separators, in words. Given "4,712 units" in digits the voice said "four, seven
+    twelve" (heard as "for 712"; the same sentence in words came back right), and a wrong number is the worst error
+    a study guide can make aloud. A year has no comma and is left to the voice."""
+    words = in_words(int(m.group(1).replace(',', '')))
+    return words + (' point ' + ' '.join(DIGITS[int(c)] for c in m.group(2)) if m.group(2) else '')
+
+
 def swaps():
     f = HERE / 'narration' / 'say.json'
     return [(k, v) for k, v in json.loads(f.read_text(encoding='utf8')).items() if not k.startswith('_')] if f.exists() else []
@@ -164,10 +190,18 @@ def say(text):
     text = re.sub(r'[₀-₉]+', lambda m: ' ' + ' '.join(str(ord(c) - 0x2080) for c in m.group(0)) + ' ', text)       # V₁ is "V one", CO₂ "C O two"
     text = re.sub(r'[%s]' % ''.join(GREEK), lambda m: GREEK[m.group(0)], text)
     text = re.sub(r'(?<![\d.,])0\.(\d+)(?![\d])', lambda m: 'point ' + ' '.join(DIGITS[int(c)] for c in m.group(1)), text)   # 0.06 is "point zero six"
+    text = re.sub(r'\$\s+(?=\d)', '$', text)                                    # "$ 600" in a table cell
+    text = re.sub(r'(?<=\d)\((\d[\d,.]*)\)', r' times \1', text)                # 700(40) is "700 times 40"
+    text = re.sub(r'(?<=[\d)a-z])\s*\+\s*(?=[\d($])', ' plus ', text)            # 28,000+2,600
+    text = re.sub(r'(?<![\w)])\+(?=\d)', 'plus ', text)                          # +200 in a table
+    text = re.sub(r'#\s*of\b', 'Number of', text)
+    text = re.sub(r'#(?=\d)', 'number ', text)
+    text = re.sub(r'(?<=[A-Za-z])\s/\s(?=[A-Za-z])', ' or ', text)                # Hiring / Layoffs
     text = re.sub(r'(?<=\d)\s*lbs?\.(?=\s+[A-Z])', ' pounds.', text)
     text = re.sub(r'(?<=\d)\s*lbs?\b\.?', ' pounds', text)
     for a, b in SAY:
         text = re.sub(a, b, text)
+    text = re.sub(r'(?<![\d.,])(\d{1,3}(?:,\d{3})+)(?:\.(\d+))?(?![\d,]*\d)', grouped, text)
     text = re.sub(r'\s+', ' ', text).strip()
     text = re.sub(r'\s+([,.;:)])', r'\1', text)
     return re.sub(r'\.\s*\.', '.', text)
@@ -288,6 +322,26 @@ def encode(samples):
                         '-ac', '1', '-ar', str(RATE), '-b:a', '32k', tmp + '/a.mp3'], check=True)
         data = pathlib.Path(tmp + '/a.mp3').read_bytes()
     return {'s': 'data:audio/mpeg;base64,' + base64.b64encode(data).decode(), 'd': round(len(samples) / RATE, 2)}
+
+
+def host_audio(data, page_name, folder, base_url):
+    """take each section's audio out of the page and write it as a file, to be served from a bucket. The page then holds
+    only the addresses, and is a few hundred KB instead of 13 MB. A file's name carries a fingerprint of its contents, so
+    a re-recorded section gets a new address and no browser plays a stale copy. -> (files, bytes)"""
+    import urllib.parse
+    stem = pathlib.Path(page_name).stem
+    out = pathlib.Path(folder) / stem
+    out.mkdir(parents=True, exist_ok=True)
+    for old in out.glob(stem + '-*.mp3'):               # this page's files from an earlier build
+        old.unlink()
+    total = 0
+    for n, c in enumerate(data, 1):
+        raw = base64.b64decode(c['s'].split(',', 1)[1])
+        name = '%s-%d-%s.mp3' % (stem, n, hashlib.sha1(raw).hexdigest()[:8])
+        (out / name).write_bytes(raw)
+        c['s'] = '%s/%s/%s' % (base_url.rstrip('/'), urllib.parse.quote(stem), name)
+        total += len(raw)
+    return len(data), total
 
 
 def script_for(page_name):
@@ -599,16 +653,21 @@ def listen_read(s, levels=('h1', 'h2')):
     tags, data, gap, spoken = {}, [], np.zeros(int(0.15 * RATE), dtype=np.float32), 0
 
     def said(blocks):
-        cols, out = [], []
+        cols, out, last = [], [], 0
         for m in blocks:
             if WIDGET_PARTS.search(masked[m.start():masked.index('>', m.start())]):
                 continue
             tag, text = m.group(1) or m.group(3), plain(m.group(2) or m.group(4) or '')
             if tag == 'tr':
-                cells = [c.strip() for c in text.split('|')][:-1]
+                if '<table' in masked[last:m.start()]:
+                    cols = []                           # a new table: the last one's column names are not this one's
+                last = m.end()
+                cells = ['none' if re.fullmatch(r'[-–—]+', c.strip()) else c.strip() for c in text.split('|')][:-1]
                 if '<th' in (m.group(2) or ''):
                     cols = cells
                     text = 'This table has ' + ('the columns ' + ', '.join(c for c in cols if c) if len([c for c in cols if c]) > 1 else 'one column') + '.'
+                elif not cols and len(cells) == 2 and all(cells):
+                    text = '%s: %s' % tuple(cells)       # no header row, two columns: a name and its value
                 else:
                     text = '. '.join(('%s: %s' % (cols[i], c) if i < len(cols) and cols[i] and i else c) for i, c in enumerate(cells) if c)
             page = text if tag in ('p', 'li', 'h2', 'h3', 'h4') else None      # a block whose words can be followed in the page's own text
@@ -651,7 +710,7 @@ def listen_read(s, levels=('h1', 'h2')):
     return s, data
 
 
-def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2')):
+def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2'), audio=None):
     s = pathlib.Path(src).read_text(encoding='utf8')
     learn(s if read else json.dumps(script_for(pathlib.Path(src).name), ensure_ascii=False))
     written = None if read else script_for(pathlib.Path(src).name).get('sections')
@@ -660,11 +719,14 @@ def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2')):
         s, data, thin = listen_scripted(s, written, summary=script_for(pathlib.Path(src).name).get('mode') == 'summary')
     else:
         s, data = listen_read(s, levels)
+    hosted = host_audio(data, pathlib.Path(out).name, *audio) if audio else None
     extra = '<style>\n' + (HERE / 'listen.css').read_text() + '</style>\n<script>\n' + (HERE / 'listen.js').read_text() + '</script>\n'
     heads_attr = ' data-heads="%s"' % ', '.join(levels if not written else ('h1', 'h2'))
     pathlib.Path(out).write_text(inject(s, 'ls-audio', data, extra, heads_attr), encoding='utf8')
     print('listen  ', pathlib.Path(out).name, len(data), 'sections,', sum(len(c.get('seg', [])) for c in data), 'passages,',
           '%.1f min of audio' % (sum(c['d'] for c in data) / 60), '' if written else '(read as written)')
+    if hosted:
+        print('          audio: %d files, %.1f MB, in %s; the page expects them at %s' % (hosted[0], hosted[1] / 1e6, pathlib.Path(audio[0]) / pathlib.Path(out).stem, audio[1]))
     for t in thin:
         print('          thin passage, worth a read:', t)
     listening_check(pathlib.Path(out).name, report_dir)
@@ -685,4 +747,6 @@ if __name__ == '__main__':
         narrate_steps(sys.argv[2], rep)
     else:
         lv = tuple(sys.argv[sys.argv.index('--sections') + 1].split(',')) if '--sections' in sys.argv else ('h1', 'h2')
-        narrate_listen(sys.argv[2], sys.argv[3], rep, read='--read' in sys.argv, levels=lv)
+        # --audio-dir FOLDER --audio-url ADDRESS: write the audio as files for a bucket instead of inside the page
+        au = (sys.argv[sys.argv.index('--audio-dir') + 1], sys.argv[sys.argv.index('--audio-url') + 1]) if '--audio-dir' in sys.argv else None
+        narrate_listen(sys.argv[2], sys.argv[3], rep, read='--read' in sys.argv, levels=lv, audio=au)

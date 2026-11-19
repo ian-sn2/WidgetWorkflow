@@ -117,14 +117,19 @@
     prev.disabled = i === 0; next.disabled = i === clips.length - 1;
   }
   function load(j, go, at) {
-    i = j; cur = -2; aud.src = clips[i].s; aud.playbackRate = RATES[rate];
-    if (at) aud.currentTime = at;
+    i = j; cur = -2; aud.preload = 'metadata'; aud.src = clips[i].s; aud.defaultPlaybackRate = aud.playbackRate = RATES[rate];
+    if (at) {            /* audio fetched from a server is not there yet: ask now, and ask again once its length is known */
+      var want = at, again = function () { aud.removeEventListener('loadedmetadata', again); if (Math.abs(aud.currentTime - want) > 1) aud.currentTime = want; };
+      try { aud.currentTime = at; } catch (e) {}
+      aud.addEventListener('loadedmetadata', again);
+    }
     status(); if (!clips[i].seg) follow(heads()[clips[i].h]);
     try { localStorage.setItem('ls-at:' + location.pathname, i); } catch (e) {}
     if (go) { var p = aud.play(); if (p && p.catch) p.catch(function () {}); }
   }
   function label() { var on = !aud.paused; play.innerHTML = on ? '&#10074;&#10074;' : '&#9654;'; play.setAttribute('aria-label', on ? 'Pause' : 'Play'); }
   aud.addEventListener('play', function () { label(); if (fine && !raf) tick(); }); aud.addEventListener('pause', label);
+  aud.addEventListener('error', function () { title.textContent = 'The audio could not be loaded. Check the connection and press play again.'; });
   aud.addEventListener('timeupdate', function () { track.firstChild.style.width = (aud.currentTime / (aud.duration || clips[i].d) * 100) + '%'; status(); passage(false); });
   aud.addEventListener('ended', function () { if (i < clips.length - 1) load(i + 1, true); else { label(); light(null); unmark(); fine = null; } });
   play.onclick = function () { if (aud.paused) { var p = aud.play(); if (p && p.catch) p.catch(function () {}); } else aud.pause(); };
@@ -142,7 +147,7 @@
     });
     menu.hidden = false; opener.setAttribute('aria-expanded', 'true');
   }
-  function setRate(j) { rate = j; aud.playbackRate = RATES[rate]; speed.textContent = RATES[rate] + '×'; status(); try { localStorage.setItem('ls-rate', RATES[rate]); } catch (e) {} }
+  function setRate(j) { rate = j; aud.defaultPlaybackRate = aud.playbackRate = RATES[rate]; speed.textContent = RATES[rate] + '×'; status(); try { localStorage.setItem('ls-rate', RATES[rate]); } catch (e) {} }
   speed.onclick = function () {
     pop('speed', speed, RATES.map(function (r) { return '<b>' + r + '×</b><span>' + (r === 1 ? 'normal' : fmt(total / r) + ' in all') + '</span>'; }), rate, setRate);
   };
