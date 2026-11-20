@@ -918,7 +918,8 @@ html.ls-fine .ls-hi:not(tr):not(h1):not(h2):not(h3):not(h4) { background:#fff9e3
    A page with more than one recording carries {tracks: [{style, styleLabel, voice, note, clips}]} instead of one list of
    clips: a version (a summary, or the page read in full) in a voice. The bar then has a reader button beside the skip
    buttons, with the versions and the voices to choose from. Changing either keeps the listener's place: the same
-   sentence or passage in another voice, the same paragraph or section in another version. Both choices are remembered. */
+   sentence or passage in another voice, the same paragraph or section in another version. The voice is remembered from
+   visit to visit; the version only while the tab stays open, so a page always opens on its first version. */
 (function () {
   var src = document.getElementById('ls-audio'), clips, TRACKS = null, ti = 0;
   try { clips = JSON.parse(src.textContent); } catch (e) { return; }
@@ -929,7 +930,12 @@ html.ls-fine .ls-hi:not(tr):not(h1):not(h2):not(h3):not(h4) { background:#fff9e3
     TRACKS.forEach(function (t, j) { if (t.style === style) { if (any < 0) any = j; if (t.voice === voice) hit = j; } });
     return hit >= 0 ? hit : any;
   }
-  try { if (TRACKS) { var kept = trackOf(localStorage.getItem('ls-version') || TRACKS[0].style, localStorage.getItem('ls-reader') || TRACKS[0].voice); if (kept >= 0) { ti = kept; clips = TRACKS[ti].clips; } } } catch (e) {}
+  /* What is remembered. The voice, from visit to visit: it is a preference about who reads. The version, only while this tab
+     stays open: a page opens on its first version (the full read), and a Summary picked last week must not hide that
+     (it did, for Ian, 2026-11-20). */
+  var wantVoice = TRACKS ? TRACKS[0].voice : '', VKEY = 'ls-version:' + location.pathname;
+  try { wantVoice = (TRACKS && localStorage.getItem('ls-reader')) || wantVoice; } catch (e) {}
+  try { if (TRACKS) { var kept = trackOf(sessionStorage.getItem(VKEY) || TRACKS[0].style, wantVoice); if (kept >= 0) { ti = kept; clips = TRACKS[ti].clips; } } } catch (e) {}
   var HSEL = src.getAttribute('data-heads') || 'h1, h2';     /* which headings the audio is divided at */
   var RATES = [0.85, 1, 1.25, 1.5, 1.75, 2], rate = 1, i = 0, aud = new Audio(), open = false, lit = null, cur = -2, userAt = 0, where = {};
   function ids(s) { return [].concat(s[1]).filter(function (b) { return b >= 0; }); }   /* a passage speaks for no block, one, or several */
@@ -1114,13 +1120,14 @@ html.ls-fine .ls-hi:not(tr):not(h1):not(h2):not(h3):not(h4) { background:#fff9e3
       if (found) { ni = found[0]; at = found[1]; } else ni = Math.min(i, to.clips.length - 1);
     }
     ti = j; clips = to.clips; index(); total = clips.reduce(function (a, c) { return a + c.d; }, 0);
-    try { localStorage.setItem('ls-version', to.style); localStorage.setItem('ls-reader', to.voice); } catch (e) {}
+    if (to.style === old.style) { wantVoice = to.voice; try { localStorage.setItem('ls-reader', to.voice); } catch (e) {} }      /* a voice was chosen */
+    try { sessionStorage.setItem(VKEY, to.style); } catch (e) {}
     userAt = 0; load(ni, was, at); if (!was) passage(true);
   }
   if (voice) voice.onclick = function () {
     var st = styles(), now = TRACKS[ti], vs = voicesOf(now.style), groups = [];
     if (st.length > 1) groups.push(['Version', st.map(function (x) { var tr = TRACKS[trackOf(x, now.voice)]; return '<b>' + tr.styleLabel + '</b><span>' + minutes(tr) + '</span>'; }),
-      st.indexOf(now.style), function (n) { setTrack(trackOf(st[n], now.voice)); }]);
+      st.indexOf(now.style), function (n) { setTrack(trackOf(st[n], wantVoice)); }]);
     if (vs.length > 1) groups.push(['Voice', vs.map(function (v) { return '<b>' + v.voice + '</b><span>' + (v.note || '') + '</span>'; }),
       vs.indexOf(now), function (n) { setTrack(TRACKS.indexOf(vs[n])); }]);
     else if (st.length > 1) groups.push(['Voice', ['<b>' + now.voice + '</b><span>the only voice for this version</span>'], 0, function () {}]);

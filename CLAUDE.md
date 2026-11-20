@@ -1193,6 +1193,8 @@ Nothing here changes a widget engine. What Ian has settled:
 * **Two versions, chosen on the bar** (2026-11-20): the page read in full, which is what it opens on, and a
   summary written for the ear, which his boss prefers to a straight read. One reader button holds Version and
   Voice. A summary is a script per chapter in `narration/`, written from the Full edition.
+  The page opens on the full read every time: the voice a listener chose is remembered between visits, the
+  version only until the tab closes, because a remembered Summary hid the default from Ian himself.
 * **Sections are the `<h1>`s.** A heading's words are highlighted while it is read; its box is never restyled
   ("dont change the style of the h1").
 * **Every time on the bar says what it measures**, and "Whole Chapter" is capitalised: a bare "34:52 left"
