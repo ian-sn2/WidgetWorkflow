@@ -41,6 +41,7 @@
   function measure() { if (open) document.documentElement.style.setProperty('--ls-bar', bar.offsetHeight + 'px'); }      /* the page and the pop-up keep clear of the bar, however tall */
   window.addEventListener('resize', measure);
   var mid = el('div', 'ls-mid', null, bar), title = el('div', 'ls-title', '', mid), track = el('div', 'ls-track', '<i></i>', mid);
+  var name = el('span', 'ls-name', '', title), clock = el('span', 'ls-time', '', title);      /* which section, and how far through it and the chapter */
   var speed = btn('ls-speed', RATES[rate] + '×', 'Playback speed', bar), close = btn('', '&#10005;', 'Close the audio bar', bar);
   var menu = el('div', 'ls-menu', null, document.body); menu.hidden = true; menu.setAttribute('role', 'menu');
   var total = clips.reduce(function (a, c) { return a + c.d; }, 0);
@@ -132,7 +133,11 @@
   }
   function status() {
     var left = clips.slice(i).reduce(function (a, c) { return a + c.d; }, 0) - (aud.currentTime || 0);
-    title.textContent = (styles().length > 1 ? TRACKS[ti].styleLabel + ' · ' : '') + (i + 1) + '/' + clips.length + ' · ' + clips[i].t + ' · ' + fmt(Math.max(left, 0) / RATES[rate]) + ' left';
+    /* Two clocks, each saying what it measures. "34:52 left" alone, after a section's name, was read as the time left in
+       that section, which made a 35-minute chapter look like two hours (Ian, 2026-11-20). */
+    name.textContent = (styles().length > 1 ? TRACKS[ti].styleLabel + ' · ' : '') + 'Section ' + (i + 1) + ' of ' + clips.length + ' · ' + clips[i].t;
+    clock.innerHTML = fmt((aud.currentTime || 0) / RATES[rate]) + ' / ' + fmt((aud.duration || clips[i].d) / RATES[rate])
+      + '<span class="ls-all"> &middot; whole chapter: ' + fmt(Math.max(left, 0) / RATES[rate]) + ' left</span>';
     prev.disabled = i === 0; next.disabled = i === clips.length - 1;
   }
   function load(j, go, at) {
@@ -148,7 +153,7 @@
   }
   function label() { var on = !aud.paused; play.innerHTML = on ? '&#10074;&#10074;' : '&#9654;'; play.setAttribute('aria-label', on ? 'Pause' : 'Play'); }
   aud.addEventListener('play', function () { label(); if (fine && !raf) tick(); }); aud.addEventListener('pause', label);
-  aud.addEventListener('error', function () { title.textContent = 'The audio could not be loaded. Check the connection and press play again.'; });
+  aud.addEventListener('error', function () { name.textContent = 'The audio could not be loaded. Check the connection and press play again.'; clock.textContent = ''; });
   aud.addEventListener('timeupdate', function () { track.firstChild.style.width = (aud.currentTime / (aud.duration || clips[i].d) * 100) + '%'; status(); passage(false); });
   aud.addEventListener('ended', function () { if (i < clips.length - 1) load(i + 1, true); else { label(); light(null); unmark(); fine = null; } });
   play.onclick = function () { if (aud.paused) { var p = aud.play(); if (p && p.catch) p.catch(function () {}); } else aud.pause(); };
@@ -173,7 +178,7 @@
     pop('speed', speed, [['Speed', RATES.map(function (r) { return '<b>' + r + '×</b><span>' + (r === 1 ? 'normal' : fmt(total / r) + ' in all') + '</span>'; }), rate, setRate]]);
   };
   list.onclick = function () {
-    pop('sections', list, [['Sections', clips.map(function (c, j) { return '<b>' + (j + 1) + '. ' + c.t.replace(/</g, '&lt;') + '</b><span>' + fmt(c.d / RATES[rate]) + '</span>'; }), i,
+    pop('sections', list, [['Sections &middot; whole chapter ' + fmt(total / RATES[rate]), clips.map(function (c, j) { return '<b>' + (j + 1) + '. ' + c.t.replace(/</g, '&lt;') + '</b><span>' + fmt(c.d / RATES[rate]) + '</span>'; }), i,
       function (j) { userAt = 0; load(j, true); }]]);
   };
   /* another recording of the same page. Every recording has its own timings, so the place is carried over by what is
@@ -232,6 +237,6 @@
     userAt = 0; load(i, true);
   };
   close.onclick = function () { shut(); aud.pause(); open = false; bar.hidden = true; pill.hidden = false; document.body.classList.remove('ls-open'); light(null); unmark(); fine = null; };
-  pill.innerHTML = '&#127911; Listen &middot; ' + Math.max(1, Math.round(total / 60 / RATES[rate])) + ' min';     /* say how long before anyone presses it */
+  pill.innerHTML = '&#127911; Listen &middot; whole chapter ' + Math.max(1, Math.round(total / 60 / RATES[rate])) + ' min';     /* how long, and of what, before anyone presses it */
   window.__ls = { get clips() { return clips; }, tracks: TRACKS, track: function () { return ti; }, audio: aud, lit: function () { return lit && lit[0]; }, fine: function () { return fine; }, marks: function () { return HL ? [HL.sent.size, HL.word.size] : null; } };
 })();

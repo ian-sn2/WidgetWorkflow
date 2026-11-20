@@ -11,7 +11,10 @@
 .ls-bar button:disabled { opacity:.35; cursor:default; }
 .ls-bar button:focus-visible, .ls-pill:focus-visible { outline:3px solid #7fb2ff; outline-offset:2px; }
 .ls-mid { flex:1; min-width:0; }
-.ls-title { font-size:.8rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:5px; }
+.ls-title { display:flex; gap:10px; align-items:baseline; font-size:.8rem; font-weight:700; white-space:nowrap; margin-bottom:5px; }
+.ls-name { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; }             /* the section's name gives way; the clocks never do */
+.ls-time { flex:none; font-variant-numeric:tabular-nums; font-weight:600; color:#d5dcea; }
+@media (max-width:760px) { .ls-all { display:none; } }      /* on a phone the whole-chapter time is at the top of the section list */
 .ls-track { height:14px; padding:5px 0; cursor:pointer; background:linear-gradient(rgba(255,255,255,.25), rgba(255,255,255,.25)) center / 100% 4px no-repeat; }
 .ls-track i { display:block; height:4px; width:0; background:#fff; border-radius:2px; }
 body.ls-open { padding-bottom:calc(var(--ls-bar, 60px) + 16px); }      /* --ls-bar: the bar's height, measured when it opens */
@@ -35,11 +38,11 @@ body.ls-open tr[data-ls] > td { transition:background-color .25s; }
 .ls-menu button[aria-checked="true"] { background:#c8302a; } .ls-menu button[aria-checked="true"] span { color:#fff; }
 .ls-menu button:focus-visible { outline:3px solid #7fb2ff; outline-offset:-3px; }
 @media (max-width:600px) { .ls-bar button.ls-skip { display:none; } }     /* on a phone the section list replaces the two skip buttons */
-/* a bar with the reader button has five buttons on a phone, which leaves the title a sliver: give the title its own line above them */
+/* on a phone the title has a line of its own above the buttons: a section's name and its clock do not fit beside five buttons */
 @media (max-width:430px) {
-  .ls-bar.ls-many { flex-wrap:wrap; row-gap:4px; padding-top:6px; }
-  .ls-bar.ls-many .ls-mid { order:-1; flex:0 0 100%; }
-  .ls-bar.ls-many .ls-play { margin-right:auto; }
+  .ls-bar { flex-wrap:wrap; row-gap:4px; padding-top:6px; }
+  .ls-bar .ls-mid { order:-1; flex:0 0 100%; }
+  .ls-bar .ls-play { margin-right:auto; }
 }
 /* following the words: the sentence being spoken, and the word inside it. With these on, the paragraph tint is lighter. */
 /* Translucent on purpose: a highlight is painted piece by piece, and a solid one covers the part of an italic letter that leans
