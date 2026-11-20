@@ -12,7 +12,7 @@
   box, number and date kept.
 * Concise: in the layout of the API Concise editions Ian sends (Ian, 2026-11-20): definition tables,
   short fragment bullets, a Glossary table and Key Takeaways, about a fifth of the Full; the Full's
-  own h1/h2 headings, and one figure, the wall cross-section its exam tip asks students to know.
+  own h1/h2 headings, and no images (Ian, 2026-11-20: the wall-layers table covers the cross-section).
 
 Ian, 2026-11-20.
 """
@@ -651,10 +651,6 @@ def balanced(f):
 # --------------------------------------------------------------- Concise --
 # Laid out like the API Concise editions (Ian, 2026-11-20).
 
-IMG_WALL = ('<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/apk2100-253-exam4-chapter23-04-alimentary-canal-wall.png" '
-            'alt="Cross-sectional diagram of alimentary canal wall showing serosa with connective tissue and epithelium, muscularis with longitudinal and circular muscle, submucosa, mucosa with muscularis mucosae, connective tissue, and epithelium, plus artery, vein, nerve, and lumen" '
-            'class="image-wide-70 content-image" loading="lazy" width="auto" height="auto" />')
-
 CONCISE_BODY = """
 <h1>Introduction to the Digestive System</h1>
 
@@ -707,11 +703,9 @@ CONCISE_BODY = """
 
 <h2>Layers of the Alimentary Canal Wall</h2>
 
-""" + IMG_WALL + """
-
 <div class="exam-tip">
 <h4>EXAM TIP: Alimentary Canal Wall</h4>
-<p>Know the structures in this cross section well.</p>
+<p>Know the layers of the wall and the structures in each well.</p>
 </div>
 
 <table>
@@ -983,7 +977,7 @@ def concise(f):
     assert headings(t) == headings(f) + [("2", "Glossary"), ("2", "Key Takeaways")], headings(t)
     for h3 in re.findall(r"<h3>(.*?)</h3>", t):
         assert h3.endswith(":"), h3
-    assert "Ahlgren" not in t and t.count("<img") == 1 and t.count('class="exam-tip"') == 2
+    assert "Ahlgren" not in t and "<img" not in t and t.count('class="exam-tip"') == 2
     for n in ("1.5 liters", "four hours", "1 mm", "3×3", "2nd-4th", "lower 2/3", "VII", "IX", "(X)"):
         assert n in t, n
     share = len(words(t)) / len(words(f))
