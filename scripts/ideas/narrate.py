@@ -740,11 +740,12 @@ def tag_blocks(s, tags):
     return s
 
 
-def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2'), audio=None, group=None, voices=None, also_read=None):
+def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2'), audio=None, group=None, voices=None, also_read=None, first='full'):
     """One page, one or more recordings of it ("tracks"), each a version in a voice.
     voices: Google voice names to record in, the first being what a listener hears until they choose another.
     also_read: on a scripted (summary) page, voices to add a read-as-written track in, so the bar can offer both.
-    Each track is a whole recording and is billed as one. With more than one, the bar gains a button to choose."""
+    Each track is a whole recording and is billed as one. With more than one, the bar gains a button to choose.
+    first: the version a listener hears until they choose, 'full' or 'summary'."""
     global VOICE
     name_of = pathlib.Path(out).name
     page = pathlib.Path(src).read_text(encoding='utf8')
@@ -752,6 +753,8 @@ def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2'), a
     learn(page if read or also_read else json.dumps(script, ensure_ascii=False))
     written = None if read else script.get('sections')
     plan = [('full' if not written else 'summary', v) for v in voices or [VOICE]] + [('full', v) for v in (also_read or []) if written]
+    # the first recording is what a listener hears until they choose: the full read where there is one (Ian, 2026-11-20)
+    plan.sort(key=lambda p: p[0] != first)
     tags, thin, built = {}, [], []
     for style, voice in plan:
         VOICE, mark = voice, len(TAKES)
@@ -813,4 +816,5 @@ if __name__ == '__main__':
         vs = ['en-US-Chirp3-HD-' + v for v in sys.argv[sys.argv.index('--voices') + 1].split(',')] if '--voices' in sys.argv else None
         # --also-read Charon: on a summary page, add a read-as-written track in that voice, so the bar offers both versions
         ar = ['en-US-Chirp3-HD-' + v for v in sys.argv[sys.argv.index('--also-read') + 1].split(',')] if '--also-read' in sys.argv else None
-        narrate_listen(sys.argv[2], sys.argv[3], rep, read='--read' in sys.argv, levels=lv, audio=au, group=lv if '--sections' in sys.argv else None, voices=vs, also_read=ar)
+        narrate_listen(sys.argv[2], sys.argv[3], rep, read='--read' in sys.argv, levels=lv, audio=au, group=lv if '--sections' in sys.argv else None, voices=vs, also_read=ar,
+                       first=sys.argv[sys.argv.index('--default') + 1] if '--default' in sys.argv else 'full')      # --default summary opens on the summary

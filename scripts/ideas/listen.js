@@ -18,7 +18,7 @@
     TRACKS.forEach(function (t, j) { if (t.style === style) { if (any < 0) any = j; if (t.voice === voice) hit = j; } });
     return hit >= 0 ? hit : any;
   }
-  try { if (TRACKS) { var kept = trackOf(localStorage.getItem('ls-style') || TRACKS[0].style, localStorage.getItem('ls-voice') || TRACKS[0].voice); if (kept >= 0) { ti = kept; clips = TRACKS[ti].clips; } } } catch (e) {}
+  try { if (TRACKS) { var kept = trackOf(localStorage.getItem('ls-version') || TRACKS[0].style, localStorage.getItem('ls-reader') || TRACKS[0].voice); if (kept >= 0) { ti = kept; clips = TRACKS[ti].clips; } } } catch (e) {}
   var HSEL = src.getAttribute('data-heads') || 'h1, h2';     /* which headings the audio is divided at */
   var RATES = [0.85, 1, 1.25, 1.5, 1.75, 2], rate = 1, i = 0, aud = new Audio(), open = false, lit = null, cur = -2, userAt = 0, where = {};
   function ids(s) { return [].concat(s[1]).filter(function (b) { return b >= 0; }); }   /* a passage speaks for no block, one, or several */
@@ -198,7 +198,7 @@
       if (found) { ni = found[0]; at = found[1]; } else ni = Math.min(i, to.clips.length - 1);
     }
     ti = j; clips = to.clips; index(); total = clips.reduce(function (a, c) { return a + c.d; }, 0);
-    try { localStorage.setItem('ls-style', to.style); localStorage.setItem('ls-voice', to.voice); } catch (e) {}
+    try { localStorage.setItem('ls-version', to.style); localStorage.setItem('ls-reader', to.voice); } catch (e) {}
     userAt = 0; load(ni, was, at); if (!was) passage(true);
   }
   if (voice) voice.onclick = function () {
