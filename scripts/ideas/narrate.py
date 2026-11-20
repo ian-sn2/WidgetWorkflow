@@ -772,13 +772,12 @@ def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2'), a
             files, size = host_audio(data, name_of, *audio, tag=tag, clean=n == 0)
             hosted = [hosted[0] + files, hosted[1] + size]
     if len(built) > 1:
-        import voice_google
-        try:
-            kind = {n: {'female': "a woman's voice", 'male': "a man's voice"}.get(g.lower(), '') for n, g in voice_google.voices()}
-        except RuntimeError:
-            kind = {}
+        # the menu shows each voice by its name alone. A description beside it ("a woman's voice") was taken off at Ian's
+        # ask, 2026-11-20; narration/voices.json, {"Aoede": "words to show"}, puts one back for the voices it names.
+        named = HERE / 'narration' / 'voices.json'
+        kind = {k: v for k, v in json.loads(named.read_text(encoding='utf8')).items() if not k.startswith('_')} if named.exists() else {}
         payload = {'tracks': [dict(style=style, styleLabel={'summary': 'Summary', 'full': 'Full read'}[style], voice=voice.split('-')[-1],
-                                   note=kind.get(voice, ''), clips=data) for style, voice, data in built]}
+                                   note=kind.get(voice.split('-')[-1], ''), clips=data) for style, voice, data in built]}
     else:
         payload = built[0][2]
     data = built[0][2]

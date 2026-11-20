@@ -113,8 +113,12 @@ NARRATE_ENGINE=google python scripts/ideas/narrate.py listen <chapter>.html out/
 `--voices` records the page in each voice named (the first is what a listener hears until they choose another).
 `--also-read` adds, on a page that has a summary script, a read-as-written recording in the voices named. With
 more than one recording the bar gains a reader button beside the skip buttons, listing the versions and the
-voices; changing either keeps the listener's place, and both choices are remembered on the device. The page
-opens on the full read where it has one; `--default summary` opens it on the summary instead.
+voices; changing either keeps the listener's place. The page always opens on the full read where it has one
+(`--default summary` opens it on the summary instead): the voice a listener chose is remembered on the device,
+the version only until the tab is closed.
+
+The menu lists each voice by its name alone. To show a few words beside a name, add
+`scripts/ideas/narration/voices.json`, for example `{"Aoede": "warm and steady"}`, and rebuild.
 
 Every recording is billed in full: characters cannot be shared between voices. A summary is about a third of a
 full read, so three voices of a summary cost about what one voice of the full read does. With `--audio-dir`, each
