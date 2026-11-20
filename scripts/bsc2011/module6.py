@@ -91,7 +91,6 @@ CUTS = [
     ("""<p>Ideally, ecologists could find ways to promote dispersal of individuals from source populations to sink populations in order to keep those populations from dwindling and eventually disappearing.</p>
 
 """, ""),
-    (" For example, it is relatively easy to get people to donate money for cheetah conservation, but it is much harder to get people to donate money for the conservation of insects or forests.", ""),
     (" Some scientists refer to this as the sixth mass extinction.</li>", "</li>"),
     (" This explains why people spend so much time looking at Internet pictures of cute animals.", ""),
     (" Other threatened species include short-beaked dolphins, leatherback turtles, and forest elephants.", ""),
@@ -100,7 +99,6 @@ CUTS = [
     (" In a small population, even a minor change in the gene pool can have a large cumulative impact.", ""),
     (" Even if the total headcount seems fairly large, unequal reproductive success can make the population genetically fragile.", ""),
     (" Genetic diversity is a major issue for conservation biologists because when populations dwindle and genetic diversity falls, extinction is more likely.", ""),
-    (" Importantly, this depends only on breeding individuals and their relative proportions, not the total population size.", ""),
 ]
 
 
@@ -137,7 +135,7 @@ CONDENSE = [
     ("<strong>A species-specific approach</strong> – This approach attempts",
      "<strong>A species-specific approach</strong> – This approach tries to save individual species from extinction, such as the black rhino, the manatee, and the black-footed ferret. The Endangered Species Act (ESA) and the Convention on International Trade in Endangered Species (CITES) embrace it."),
     ("The species-specific approach to conservation is popular among donors",
-     "It is popular with donors, who feel connected to charismatic species such as cheetahs or koalas, but many of the species that need the most help are not charismatic."),
+     "It is popular with donors, who feel connected to charismatic species such as cheetahs or koalas, but many of the species that need the most help, such as insects, are not charismatic, and forests draw few donations either."),
     ("Genetic diversity comes down to <strong>alleles</strong>",
      "Genetic diversity comes down to <strong>alleles</strong>, the alternative versions of a gene. The more a population holds, the better its odds that some individuals can withstand a new disease, climate shift, or altered habitat, and a lost allele returns only through a new mutation or an immigrant. Our food supply shows the danger: roughly 95% of the U.S. apple varieties grown in 1900 no longer exist, and in 1970 a single fungus devastated the U.S. corn crop because most fields were genetically too similar to resist it."),
     ("Moving animals does not always rescue a population.",
