@@ -7,11 +7,12 @@
   script, the stylesheet ahead of the fonts, the pipeline's AUDIT notes out, and the two class dates
   that sat inside the muscularis-externa bullet moved out to the page beside the paragraphs they
   start (the wall-layers list then resumes at the serosa).
-* Balanced: about 75% of the Full (Ian, 2026-11-20): long paragraphs condensed; every image, exam
-  tip, box, number and date kept.
+* Balanced: about half the Full, the length and approach of the API Balanced (Ian, 2026-11-20):
+  each paragraph cut to what the exam needs, analogies and asides dropped; every heading, image, list,
+  box, number and date kept.
 * Concise: in the layout of the API Concise editions Ian sends (Ian, 2026-11-20): definition tables,
   short fragment bullets, a Glossary table and Key Takeaways, about a fifth of the Full; the Full's
-  own h1/h2 headings, and only the two figures the chapter tells students to know by sight.
+  own h1/h2 headings, and one figure, the wall cross-section its exam tip asks students to know.
 
 Ian, 2026-11-20.
 """
@@ -111,207 +112,545 @@ def full(src):
 
 
 # -------------------------------------------------------------- Balanced --
-# Each entry replaces one paragraph or list item, found by its opening words, with a tighter version
-# that keeps every fact and number.
+# About half the Full, the length and approach of the API Balanced editions Ian sends (Ian,
+# 2026-11-20): each paragraph cut to its definition and the facts the exam needs, the analogies and
+# asides dropped, every heading, image, list, box and class date kept. {IMG0}..{IMG9} are the Full's
+# own image tags, in order.
 
-CONDENSE = [
-    ("<strong>Propulsion</strong> – Material has to keep moving",
-     "<strong>Propulsion</strong> – Material keeps moving along the tube, voluntarily (as in swallowing) or involuntarily, by <strong>peristalsis</strong>. The upper (proximal) end of the esophagus is skeletal rather than smooth muscle, so it is also under voluntary control: that is why something just swallowed can sometimes be brought back up, while a pill that has traveled farther down cannot."),
-    ("<strong>Digestion</strong> – The digestive system breaks food down",
-     "<strong>Digestion</strong> – Food is broken down into smaller nutrients the body can absorb and use, starting in the mouth, by both mechanical and chemical processes."),
-    ("<strong>Mechanical digestion</strong> includes several types",
-     "<strong>Mechanical digestion</strong> is any physical breakdown, and it happens along the whole canal: chewing in the mouth, churning in the stomach (which presses the contents against its own walls), and <strong>segmentation</strong> in the intestines, a rhythmic back-and-forth squeezing that mixes food with digestive juices and enhances absorption. Dr. Ahlgren's analogy: knead mashed potatoes and gravy sealed in a plastic bag, and the two blend together."),
-    ("<strong>Chemical digestion</strong> breaks down food even further",
-     "<strong>Chemical digestion</strong> uses enzymes from the stomach, pancreas, and small intestine to split carbohydrates, proteins, and fats into units small enough to cross the intestinal wall."),
-    ("<strong>Absorption</strong> – The body absorbs small nutrients",
-     "<strong>Absorption</strong> – Small nutrients pass into the blood, which carries them where they are needed. Most absorption is in the small intestine, though the stomach and large intestine absorb certain substances. (Fats travel through lymphatic vessels, which will not be a focus.)"),
-    ("<strong>Elimination</strong> – Some of the things that we ingest",
-     "<strong>Elimination</strong> – What cannot be digested and absorbed leaves as waste through <strong>defecation</strong>, a job of the large intestine."),
-    ("Note that the contents of the alimentary canal are technically",
-     "Its contents are technically outside the body: nutrients become part of the body only once they cross the canal's epithelial lining and move into blood vessels."),
-    ("The <strong>accessory digestive organs</strong> include organs",
-     "The <strong>accessory digestive organs</strong> aid digestion but lie outside the canal: the teeth and tongue (physical breakdown and propulsion of food into the GI tract) and the organs of <em>chemical</em> breakdown (the salivary glands, gallbladder, liver, and pancreas)."),
-    ("Dr. Ahlgren emphasized that accessory organs are not part",
-     "They are not part of the continuous tube; they add materials to it. The pancreas releases digestive enzymes into the small intestine, the salivary glands add saliva to the mouth, and the liver, which is not tubular, makes bile and delivers it into the small intestine."),
-    ("This provides a useful starting point for an initial assessment",
-     "Quadrants are a starting point for assessing an injury: pain in the right lower quadrant probably does not involve the stomach or liver, which lie in other quadrants. (Extreme tenderness there might suggest appendicitis.)"),
-    ("The names make sense once you know the landmarks.",
-     "The names follow landmarks. <em>Hypo-</em> means below and <em>chondr-</em> refers to cartilage, so the hypochondriac regions sit beneath the costal cartilages; because the diaphragm domes upward, that space belongs to the abdominal cavity. The lumbar regions are level with the lumbar vertebrae at the navel, and straight below them lie the ilia, which name the iliac regions."),
-    ("Dr. Ahlgren emphasized that students should focus on understanding",
-     "Focus on deriving the nine regions visually: picture the 3×3 grid with the umbilicus at the center and the costal cartilages above, and each region's position follows."),
-    ("Remember that these regions include all of the organs",
-     "The regions include the organs within the body, not just its surface, and because many organs span more than one region, their locations are approximate: the gallbladder typically lies at the border of the epigastric and right hypochondriac regions, and the cecum (with its appendix) near the border of the lower right regions."),
-    ("Dr. Ahlgren said you do not need to memorize a region-by-region",
-     "You do not need a region-by-region list of organs, only a general sense of where each sits: the liver as far to the upper right as possible, the urinary bladder low and in the center. Practice locating the small intestine, colon, stomach, spleen, and liver."),
-    ("Clinicians use quadrants to diagnose pain or injury quickly.",
-     "Clinicians use quadrants to diagnose pain or injury quickly, by where symptoms appear; anatomists use the nine regions to map where organs actually lie. The urinary bladder, for example, normally sits only in the hypogastric (pubic) region, and if it extends higher it is pathologically overdistended, possibly a medical emergency."),
-    ("The innermost lining is made of epithelium that varies",
-     "The innermost lining is epithelium that varies along the tract: simple columnar from the stomach through the intestines, but nonkeratinized stratified squamous in the mouth and esophagus, which need a more protective lining for rough, unprocessed food pushed down a narrow tube. It is continuous with the ducts that empty into the lumen."),
-    ("The <strong>muscularis mucosae</strong> is a very thin layer",
-     "The <strong>muscularis mucosae</strong> is a very thin layer of smooth muscle forming the outermost part of the mucosa. It moves the mucosa to dislodge small, hard fragments lodged between epithelial cells, twitching rhythmically to protect the delicate surface, much as you work loose a popcorn kernel caught between your gum and tooth."),
-    ("The <strong>submucosa</strong> consists primarily of connective tissue",
-     "The <strong>submucosa</strong> is mainly connective tissue rich in elastic fibers, which let the wall distend as material fills it and recoil after it passes, without permanent deformation. It also holds larger glands (their secretory portions sit here and their ducts cross the mucosa to the luminal surface) and extensive blood vessels, lymphatic vessels, and nerves."),
-    ("The <strong>muscularis externa</strong> is the outermost layer of muscle",
-     "The <strong>muscularis externa</strong> is the outermost muscle layer: an inner circular layer of smooth muscle, nearest the lumen, and an outer longitudinal layer. Circular contraction narrows the lumen and longitudinal contraction shortens the tube; alternating, they create the \"squeeze, shrink, squeeze, shrink\" motion that pushes material forward and mixes it. Present from the esophagus onward, the two layers drive both peristalsis and segmentation. The stomach adds a third, oblique layer (discussed later), and its mixing action, churning, is essentially segmentation carried out by the stomach."),
-    ("Dr. Ahlgren noted that the mucosal epithelium of the GI tract",
-     "The mucosal epithelium of the GI tract is not ciliated: the thick muscular wall already provides strong propulsion, just as the heart, which also lacks cilia, moves blood by muscular contraction rather than surface movement."),
-    ("The <strong>serosa</strong> is the outermost layer",
-     "The <strong>serosa</strong>, the outermost layer, is the visceral peritoneum, a serous membrane like the pleura (around the lungs) and the pericardium (around the heart): simple squamous epithelium on a thin layer of connective tissue. Where the visceral peritoneum folds back to meet the parietal peritoneum, it forms the mesentery, a double layer that suspends digestive organs and carries blood vessels, lymphatics, and nerves. Retroperitoneal organs (discussed below) are not covered by peritoneum and have an <strong>adventitia</strong> in place of a serosa, a thicker connective tissue layer like the one seen in blood vessels."),
-    ("Dr. Ahlgren emphasized the difference between the two layers",
-     "The <strong>visceral peritoneum</strong> touches the organ surfaces; the <strong>parietal peritoneum</strong> does not, lining the inner body wall instead. They are one continuous membrane folding back on itself to form the mesenteries, and by Dr. Ahlgren's definition any peritoneum not touching an organ, including the layers of the mesenteries, counts as parietal."),
-    ("Several digestive organs are connected to the body wall",
-     "Several digestive organs are connected to the body wall by <strong>mesenteries</strong>, double layers of parietal peritoneum. Besides anchoring the organs, they suspend them within the abdominal cavity; without them, the organs would sag toward the lower abdomen and bulge the body wall like a \"spare tire.\""),
-    ("To picture how a mesentery forms",
-     "Picture the peritoneum wrapping a section of gut tube. Because vessels and nerves reach the tube from the back, the membrane cannot close behind it; its two sides meet around those vessels and nerves and run back to the body wall as a pair before spreading out along it. That paired sheet, with vessels, nerves, lymphatics, and fat between its layers, is the mesentery. Mesenteries are sheets, not tubes, and each is named for the organ it attaches to."),
-    ("Two types of mesenteries are <strong>dorsal</strong>",
-     "<strong>Dorsal</strong> and <strong>ventral mesenteries</strong> are named for the side of the abdominal cavity they reach. A <strong>dorsal mesentery</strong> (the most common type) runs from the organ to the posterior abdominal wall; a <strong>ventral mesentery</strong> runs from the organ to the anterior abdominal wall."),
-    ("Both ventral and dorsal mesenteries originate during embryonic",
-     "Both form during embryonic development: the peritoneum wraps the primitive gut from both sides, and where its layers meet in front of the tube they create the ventral mesentery, behind it the dorsal mesentery, which is why each region of the tract hangs from the anterior or posterior body wall. The developmental images need not be memorized, since development is not covered in this course; the takeaways are the ventral versus dorsal and the intraperitoneal versus retroperitoneal distinctions."),
-    ("The <strong>greater omentum</strong>, which connects",
-     "The <strong>greater omentum</strong>, which connects the greater curvature (the inferior aspect) of the stomach to the abdomen's posterior wall. Unusually, it is the most ventral structure in the abdominal cavity yet a dorsal mesentery: it hangs from the greater curvature, folds back on itself, and runs dorsally. By far the largest mesentery, it looks like a lacy sheet of fat draped over the other organs and is the first thing seen when the abdomen is opened."),
-    ("Note that not all digestive organs have a mesentery.",
-     "Not all digestive organs have a mesentery: <strong>intraperitoneal organs</strong> do and <strong>retroperitoneal organs</strong> do not. The <strong>peritoneal cavity</strong> is the space between the visceral and parietal layers. Intraperitoneal organs are completely surrounded by it, while retroperitoneal organs lie behind (dorsal to) the peritoneum, pressed against the dorsal body wall. The major intraperitoneal organs (and their mesenteries) are:"),
-    ("Dr. Ahlgren offered a trick for the digestive organs",
-     "A trick: from the stomach to the rectum, the organs alternate between intraperitoneal and retroperitoneal, counting the jejunum and ileum as one unit and the duodenum on its own."),
-    ("Retroperitoneal organs can be classified as either primarily",
-     "Retroperitoneal organs are either primarily or secondarily so. <strong>Primarily retroperitoneal organs</strong>, such as the kidneys, develop behind the peritoneal cavity and were never enclosed by it. <strong>Secondarily retroperitoneal organs</strong>, such as the pancreas, duodenum, and colon, begin inside it but are pressed against the dorsal body wall as the gut elongates and folds, losing their mesentery and fusing to the wall, which is why parts of the duodenum and colon are fixed in place rather than freely suspended."),
-    ("The <strong>tongue</strong> is composed primarily of skeletal muscle",
-     "The <strong>tongue</strong> is mostly skeletal muscle, so it moves voluntarily for speaking and handling food, yet many of its movements in chewing and swallowing are reflexive, which makes it highly coordinated. Nicknamed the \"Great Dodger,\" it is rarely bitten despite sitting between the teeth."),
-    ("The <strong>uvula</strong> functions much like the epiglottis",
-     "The <strong>uvula</strong> works much like the epiglottis, swinging back to close the opening between the oropharynx and the nasopharynx so liquids do not enter the nasal cavity; it also plays a role in the gag reflex. Its nonkeratinized stratified squamous epithelium protects it from acidic or abrasive foods and liquids."),
-    ("The <strong>fauces</strong> are the archways",
-     "The <strong>fauces</strong> are the archways forming a narrow passage from the mouth to the pharynx, between the base of the tongue and the soft palate, with the palatine tonsils on their sides; you do not need the names of the individual arches. Think of them as the oral counterpart of the internal nares: the passage from the oral cavity into the oropharynx."),
-    ("The <strong>lingual frenulum</strong> is a small fold",
-     "The <strong>lingual frenulum</strong> anchors the tongue to the floor of the mouth. If it extends too far toward the tip, it limits protrusion, a condition called <strong>ankyloglossia</strong> (\"tongue-tied\") that can interfere with nursing in newborns and is easily corrected by clipping the frenulum."),
-    ("At the base of the lingual frenulum are the",
-     "At the base of the lingual frenulum are the <strong>openings of the submandibular ducts</strong>, which secrete saliva, and lateral to them the <strong>openings of the sublingual ducts</strong>. The submandibular glands sit near the angle of the mandible and send their ducts forward to this spot; the sublingual glands lie beneath each side of the tongue and drain through many small ducts. With so many glands draining there, saliva pools under the tongue, which is why dental hygienists place suction there."),
-    ("Some people can voluntarily force saliva to spray",
-     "Some people can force a small stream of saliva from these ducts, called <strong>gleeking</strong>, when the floor-of-mouth muscles compress the submandibular ducts, usually triggered by something spicy or sour. It serves no purpose, and not everyone can do it."),
-    ("The <strong>parotid gland</strong> is the largest salivary gland.",
-     "The <strong>parotid gland</strong>, the largest salivary gland, is flat and broad and sits superficially just in front of the ear, for which it is named. The long <strong>parotid duct</strong> crosses the cheek, pierces the buccinator muscle, and opens on the inner cheek beside the upper teeth: next to the upper second molar in anatomy references, near the upper premolars in Dr. Ahlgren's description."),
-    ("The <strong>salivary glands</strong> are accessory digestive organs.",
-     "The <strong>salivary glands</strong> are accessory digestive organs. Saliva is water-based, carries enzymes that help us taste and digest food, and protects the teeth from sugar and other substances that stick to them. Healthy glands produce approximately 1.5 liters a day, most of it swallowed and reabsorbed."),
-    ("<strong>The posterior one-third of the tongue</strong> – The posterior",
-     "<strong>The posterior one-third of the tongue</strong> – This part lies outside the oral cavity, in the oropharynx, behind the V-shaped <strong>sulcus terminalis</strong> (terminal sulcus), the tongue's final groove and the boundary between the two. Its bumps are not taste buds or papillae but the <strong>lingual tonsil</strong>, a collection of lymphatic tissue. It is not normally visible, because it lies deep in the oropharynx and the tongue turns roughly 90 degrees behind the groove to run down the throat."),
-    ("<strong>The anterior two-thirds of the tongue</strong> – The anterior",
-     "<strong>The anterior two-thirds of the tongue</strong> – This part lies in the oral cavity proper and carries visible bumps called <strong>papillae</strong>, which are not taste buds: taste buds are microscopic. A taste bud is a modified epithelial cell wired to a sensory neuron, and where its papilla sits determines which cranial nerve carries the signal. Most sit on the sides of the papillae, in the creases between them, so food must be broken down and dissolved in saliva well enough to slip in and reach them."),
-    ("<strong>Filiform papillae</strong> are white papillae",
-     "<strong>Filiform papillae</strong> are white and have no taste buds. The most abundant papillae, they give the tongue its whitish look. Rather than tasting, these projection papillae form spikes pointing posteriorly, so that what you lick stays on the tongue."),
-    ("Cats have particularly large filiform papillae",
-     "Cats have particularly large filiform papillae, which make their tongues rough enough for constantly cleaning dead skin, hair, and debris from themselves."),
-    ("Taste information from the tongue is carried to the brain",
-     "Three cranial nerves carry taste to the brain: the facial nerve (cranial nerve VII) from the anterior two-thirds, the glossopharyngeal nerve (cranial nerve IX) from the posterior one-third, and the vagus nerve (cranial nerve X) from the epiglottis and nearby throat. Dr. Ahlgren drew the boundary at the terminal sulcus, which puts the vallate papillae in facial nerve territory; anatomy references assign them to the glossopharyngeal nerve."),
-    ("Dr. Ahlgren emphasized that the classic \"tongue map\"",
-     "The classic \"tongue map\" of separate sweet, salty, sour, and bitter regions is wrong: every area of the tongue, and even the epiglottis, has receptors for every basic taste. What differs is which compounds activate which receptors, not where the receptors are."),
-    ("One external muscle is the <strong>genioglossus muscle</strong>",
-     "One external muscle is the <strong>genioglossus muscle</strong>, which always has a bit of tone. Its front end is anchored to the mandible, making it external, and it fans back through the tongue toward the epiglottis; be ready to classify it from an image. Its steady tone holds the tongue forward and out of the airway. If it relaxes too much during sleep, the tongue slides back and occludes the airway, and the body rouses just enough to restore tone. These repeated partial arousals break up sleep without fully waking the person, who believes they slept through the night; people with sleep apnea commonly have this problem."),
-    ("Dr. Ahlgren pointed out that the stratified squamous epithelium",
-     "The stratified squamous epithelium of the oral cavity and esophagus protects them from rough foods, such as crunchy, triangle-shaped chips like Doritos that can scrape the mouth or throat."),
-    ("The muscles in the pharynx and neck contract",
-     "Swallowing is a sequence of muscle actions in the pharynx and neck: one group lifts the larynx beneath the epiglottis to close off the airway, a second squeezes the pharyngeal walls to push food into the esophagus, and a third lowers the larynx to reopen the airway once the bolus has passed. The first step, elevation of the pharynx, folds the epiglottis down over the airway. The epiglottis is elastic cartilage, but food does not simply bend it down: the airway is sealed mainly by lifting, as the epiglottis tips posteriorly while the structures beneath it are pulled up, and the pharyngeal constrictor muscles then squeeze the bolus past."),
-    ("At rest the esophagus is collapsed",
-     "At rest the esophagus is collapsed, its lumen flat and closed; it is distensible and opens only during swallowing. Its mucosa is folded into rugae, extra lining that lets the non-stretchy epithelium unfold rather than tear as the wall expands, like an elastic waistband's fabric, bunched when relaxed and flat when pulled."),
-    ("As you move down the esophagus, the muscular portion",
-     "Its muscle changes from skeletal to smooth along its length: the top one-third is mainly skeletal muscle under conscious control (used to swallow food and start its propulsion), the middle one-third a mixture of skeletal and smooth muscle, and the bottom one-third only smooth muscle, which we cannot voluntarily control."),
-    ("Because the upper portion of the esophagus contains skeletal",
-     "So food that has not traveled too far can sometimes be voluntarily moved back into the mouth, but not once it reaches the smooth muscle portion. The gag reflex is triggered in the pharynx (especially the oropharynx), not in the esophagus."),
-    ("In the mediastinum, the esophagus lies directly behind",
-     "In the mediastinum, the esophagus lies directly behind the trachea, against the trachealis muscle spanning the open backs of the tracheal cartilages; because muscle can stretch, the esophagus can bulge forward as a large bolus passes. The uncomfortable \"lump\" of swallowing something too big comes partly from pressure on the trachealis."),
-    ("The <strong>stomach</strong>, which is the widest portion",
-     "The <strong>stomach</strong>, the widest part of the alimentary canal, lies in the abdominal cavity and is the first site of protein breakdown. It stores food for about four hours (the figure varies with the person and the meal), churning it against the lining where stomach acid is secreted. Chemical digestion starts earlier, since saliva works on carbohydrates (and arguably some fats) from the mouth onward, but saliva cannot break down protein. Physical and chemical breakdown turn the food into <strong>chyme</strong>, a thick, sticky, partly digested paste."),
-    ("The stomach is an interesting organ to observe during dissections",
-     "In dissections, the stomach shows whether the animal or person had just eaten a large meal: if so, it is distended and puffy; if not, small and shriveled."),
-    ("The fundus has functional significance beyond its shape.",
-     "The fundus has a high density of enzyme-producing gastric glands, and because it lies above the rest of the stomach, its secretions \"rain down\" onto the food below and mix thoroughly with it, much as tears from the lacrimal glands wash down over the eye."),
-    ("As the stomach approaches the duodenum, it funnels down.",
-     "Toward the duodenum the stomach funnels down: the narrowing is the <strong>pyloric region</strong> and its final stretch the <strong>pyloric canal</strong>. The <strong>pyloric sphincter</strong> controls flow from the stomach into the duodenum. The pyloric and cardiac sphincters both close when the stomach churns, and both are rings of smooth muscle where the circular layer of the muscularis externa thickens. The pyloric sphincter is sometimes labeled a valve, but it is a sphincter, not a true valve."),
-    ("When the cardiac sphincter fails to close tightly",
-     "When the cardiac sphincter fails to close tightly, stomach acid flows back into the esophagus: <strong>gastroesophageal reflux disease (GERD)</strong>. Because the esophagus lies directly behind the heart, the burning pain is felt in the chest as \"heartburn\"; the stomach's simple columnar epithelium withstands the acid, but the esophageal lining cannot."),
-    ("<strong>Rugae</strong> are temporary (i.e., non-permanent) folds",
-     "<strong>Rugae</strong> are temporary (i.e., non-permanent) folds of mucosal lining that stretch out and disappear as the stomach fills. (The small intestine's plicae circulares, discussed later, are similar but permanent.) Rugae appear in any distensible part of the GI tract: because epithelium is not stretchy, they let organs such as the stomach, bladder, and parts of the intestines expand and recoil without tearing. In the stomach's body and most of the pyloric region they are irregular, but in the pyloric canal they straighten into parallel ridges that channel chyme toward the duodenum."),
-    ("The stomach's walls contain all four layers",
-     "The stomach wall has all four typical layers (mucosa, submucosa, muscularis externa, and serosa), but its muscularis externa has <strong>three</strong> layers of muscle rather than two: besides the longitudinal and circular layers, an <strong>oblique layer</strong> forms its deepest layer. The extra layer is added on the inside, so from the serosa toward the lumen the order is longitudinal, circular, oblique. It optimizes the stomach's mechanical churning (Dr. Ahlgren compared it to churning butter, a surprisingly accurate analogy)."),
-    ("The orientation of the stomach can vary from person to person.",
-     "Stomach orientation varies: it hangs more vertically in people with long torsos and lies more horizontally in those with shorter ones, with the lesser curvature above the greater. The difference has no functional impact."),
-    ("The surface epithelium of the stomach contains <strong>gastric pits</strong>",
-     "The stomach's surface epithelium contains <strong>gastric pits</strong>, ducts leading to <strong>gastric glands</strong> that produce <strong>gastric juices</strong> for chemical digestion. These exocrine glands secrete into ducts that empty into the stomach lumen, and they reach deep into the lamina propria. A <strong>gastric pore</strong> is the opening on the surface; the gastric pit is the wide duct beneath it, which carries secretions but makes none, and the secreting part of the gland lies below the pit. The glands are the surface's simple columnar epithelium dipping down into tubes, which is why the stomach's mucosa is so thick."),
-    ("The <strong>small intestine</strong> is the longest part",
-     "The <strong>small intestine</strong>, the longest part of the alimentary canal, is the site of most enzymatic digestion and nearly all nutrient absorption; its length maximizes the time available to pull nutrients from food. Most of its digestive enzymes are secreted by the pancreas. (The organ is the small intestine, not the small intestines; <em>intestines</em> means the small and large intestine together.)"),
-    ("Dr. Ahlgren mentioned that, interestingly, the small intestine",
-     "The small intestine appears longer after death, because the smooth muscle in its walls loses tone and relaxes."),
-    ("Recall that the contents of the lumen of the gastrointestinal",
-     "Its lumen is technically part of the external environment; nutrients join the internal environment only after crossing its epithelial lining into the bloodstream, which makes that epithelium a critical boundary for absorption."),
-    ("The <strong>duodenum</strong> is the first part",
-     "The <strong>duodenum</strong> is the first and shortest part, a C-shaped retroperitoneal organ. Diagrams make it look as though it swings out beside the stomach, but it runs back from the stomach and lies against the posterior body wall. (The jejunum and ileum are intraperitoneal and hang from the mesentery proper, sometimes simply called \"the mesentery.\")"),
-    ("<strong>Plicae circulares</strong> are permanent circular folds",
-     "<strong>Plicae circulares</strong> are permanent circular folds in the mucosa that greatly increase surface area for absorption. Their spiral arrangement helps direct chyme distally, but segmentation is performed by the muscularis, not caused by the folds. (In this course the term also appears as <em>plicae circularis</em>.)"),
-    ("The plicae circulares are kind of like the rugae",
-     "Unlike the stomach's rugae, they are permanent: no matter how much you stretch the small intestine, they will not go away."),
-    ("<strong>Villi</strong> are finger-like projections",
-     "<strong>Villi</strong> are finger-like projections of the mucosa, covered with simple columnar epithelium, that increase the surface area for absorption. About 1 mm tall, they can be seen without a microscope and give the lining a fuzzy, shag-carpet look. Capillary beds and lacteals (structures of the lymph vessel system) run up the middle of each villus, so nutrients that cross its epithelial wall diffuse into the capillary beds."),
-    ("Before moving on to the large intestine, we will look",
-     "Before the large intestine come three <strong>accessory digestive organs</strong>, which aid digestion but lie outside the alimentary canal: the liver, gallbladder, and pancreas."),
-    ("The <strong>liver</strong> is the largest gland in the body.",
-     "The <strong>liver</strong> is the largest gland in the body. It produces <strong>bile</strong>, a green liquid that aids digestion by emulsifying fats, stored in the <strong>gallbladder</strong>, a muscular sac on the underside of the liver's right lobe. The gallbladder's lining has rugae that let it expand as it fills, and it looks green because of the bile it stores."),
-    ("The common bile duct and the pancreatic duct join together",
-     "The common bile duct and pancreatic duct join before entering the duodenum at this shared opening, where a sphincter controls when bile and pancreatic secretions are released into the small intestine."),
-    ("The distal sphincters of the bile duct are closed",
-     "When the small intestine no longer needs bile, the distal sphincters of the bile duct close, and bile backs up the <strong>cystic duct</strong> into the <strong>gallbladder</strong> for storage. A small unidirectional valve keeps it from flowing back into the liver."),
-    ("People sometimes have to have their gallbladders removed",
-     "Gallbladders are sometimes removed because crystallized salts form gallstones that block the cystic duct, causing pain, especially as the gallbladder contracts against the obstruction during a fatty meal. This is very painful but not typically life-threatening. A gallstone obstructing the major duodenal papilla is far more dangerous, because it can block the release of pancreatic enzymes, which are essential for digestion and nutrient absorption. Without a gallbladder, people digest fat less efficiently, although surgeons usually leave part of the cystic duct, which can act as a small \"mini gallbladder\" with limited bile storage."),
-    ("Dr. Ahlgren mentioned that <strong>primary biliary cholangitis</strong>",
-     "<strong>Primary biliary cholangitis</strong> is an autoimmune condition in which the body slowly destroys the bile ducts within the liver over many years, so bile accumulates and causes liver damage and cirrhosis, showing how much digestion and liver function depend on intact bile ducts."),
-    ("The <strong>pancreatic duct</strong> runs through the middle",
-     "The <strong>pancreatic duct</strong> runs through the middle of the pancreas, collects secretions from smaller ducts throughout it, and carries them to the major duodenal papilla, the interface with the duodenum, which acts as a sphincter for both the pancreatic duct and the common bile duct."),
-    ("Note that there is also a smaller <strong>accessory duct</strong>",
-     "A smaller <strong>accessory duct</strong>, above or below the pancreatic duct, gives enzymes and other secretions an alternative route into the duodenum. This functional redundancy is a backup if the primary route through the major duodenal papilla becomes obstructed, for example by a gallstone."),
-    ("Pancreatic enzymes play a crucial role in digestion",
-     "Pancreatic enzymes are crucial: people with pancreatic cancer often become extremely emaciated very quickly, because their pancreases no longer make enough enzymes to digest food and they suffer from malnutrition."),
-    ("The <strong>large intestine</strong> (commonly called",
-     "The <strong>large intestine</strong> (commonly called the <strong>colon</strong>, though strictly the colon is only part of it; everyday speech uses the terms interchangeably) receives whatever the small intestine does not absorb, and its major function is reabsorbing water and electrolytes. Chyme entering the cecum through the <strong>ileocecal valve</strong> is relatively liquid; feces leaving the GI tract are much more solid. Without this reabsorption we would be in a constant state of diarrhea and dehydration."),
-    ("Chyme leaves the stomach thick and pasty.",
-     "Chyme leaves the stomach thick and pasty and thins in the small intestine, because enzymes and bile arrive suspended in water-based fluid, so what reaches the large intestine is essentially liquid. The large intestine must reabsorb that water and its dissolved electrolytes before waste is eliminated. When it cannot, as in diarrhea, the body loses fluid that would return to the bloodstream, reducing the water in the blood and impairing the delivery of nutrients and other substances."),
-    ("Peristalsis constantly moves materials along the stomach",
-     "Peristalsis constantly moves material through the stomach and small intestine, but not the large intestine, which instead uses infrequent <strong>mass peristaltic movement</strong> to purge material that has sat there for quite a while. (Constant peristalsis there would mean pooping all the time!)"),
-    ("Chyme from the ileum of the small intestine enters the cecum",
-     "Chyme from the ileum enters the cecum through the <strong>ileocecal valve</strong>, a stretch-dependent, \"sphincterish type valve\": as the cecum fills and distends, it compresses the opening until it closes, preventing more material from entering. The <strong>vermiform appendix</strong> is attached to the cecum and suspended by a little bit of mesentery."),
-    ("<strong>Epiploic appendages</strong> are pouches",
-     "<strong>Epiploic appendages</strong> are fat-filled pouches of visceral peritoneum that hang from the intestines of humans and animals and are found nowhere else in the body; although prominent, their function is largely unknown."),
-    ("The large intestine also has many <strong>goblet cells</strong>",
-     "The large intestine also has many <strong>goblet cells</strong>, whose mucus lubricates the passage of waste. They increase distally as material becomes more solid, reducing friction and protecting the wall from tearing, which matters most in the distal large intestine, where a rupture could expose blood vessels to fecal material."),
-    ("Intense endurance exercise can sometimes trigger",
-     "Intense endurance exercise can trigger an urgent need to defecate: prolonged running increases intestinal motility and shortens the time for water reabsorption, which can lead to the sudden passage of loose stool."),
-    ("The <strong>rectum</strong> is a retroperitoneal organ",
-     "The <strong>rectum</strong> is retroperitoneal, lacking the extra layer of mesentery. Distally it narrows into the <strong>anal canal</strong>, where ridges form at the last part and a very distinct line, the <strong>pectinate line</strong>, lies just below them. Inside the distal rectum, longitudinal mucosal ridges called <strong>anal columns</strong> channel material downward toward the anal canal."),
-    ("The <strong>rectal valves</strong> are internal folds",
-     "The <strong>rectal valves</strong> are transverse folds of mucosa and muscle inside the rectum that help regulate the passage of fecal matter and gas and maintain continence. By forming partial barriers, they let gas pass while holding back solid waste, which is how healthy people can pass gas without releasing stool."),
-    ("Normal adults can obviously control when and where",
-     "Normal adults control when and where they defecate. When the rectum fills, stretch (distention) receptors signal neurons in the spinal cord, triggering a spinal reflex that contracts the rectal walls and relaxes the internal anal sphincter; this is the urge to defecate. When the time is right, you voluntarily inhibit the motor neurons to the external anal sphincter, and feces pass out of the rectum (hopefully into the toilet)."),
-    ("Note that the color of blood in stool",
-     "The color of blood in stool hints at where bleeding is: bright red blood usually comes from the distal large intestine or rectum, such as from hemorrhoids, because it has not been digested, while black or tarry stool suggests bleeding higher in the GI tract, where the blood has been digested."),
-]
+BALANCED_BODY = """
+<h1>Introduction to the Digestive System</h1>
+
+<p>The <strong>digestive system</strong> consists of the alimentary canal and accessory digestive organs. It plays the following roles in the body:</p>
+
+<ul>
+    <li>
+        <p><strong>Ingestion</strong> – Food is taken in through the mouth.</p>
+    </li>
+    <li>
+        <p><strong>Propulsion</strong> – Material is moved along the tube, voluntarily (swallowing) or involuntarily (<strong>peristalsis</strong>). The upper esophagus is skeletal muscle, so it is also under voluntary control: a bite just swallowed can come back up, but a pill farther down cannot.</p>
+    </li>
+    <li>
+        <p><strong>Digestion</strong> – Food is broken down into nutrients the body can absorb, starting in the mouth, by mechanical and chemical processes.</p>
+        <ul>
+            <li>
+                <p><strong>Mechanical digestion</strong> is any physical breakdown, all along the canal: chewing, churning in the stomach, and <strong>segmentation</strong> in the intestines, a rhythmic back-and-forth squeezing that mixes food with digestive juices.</p>
+            </li>
+            <li>
+                <p><strong>Chemical digestion</strong> uses enzymes from the stomach, pancreas, and small intestine to split carbohydrates, proteins, and fats into absorbable units.</p>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Absorption</strong> – Nutrients pass into the blood, mostly in the small intestine, though the stomach and large intestine absorb some substances. (Fats travel through lymphatic vessels, not a focus here.)</p>
+    </li>
+    <li>
+        <p><strong>Elimination</strong> – What cannot be digested leaves as waste through <strong>defecation</strong>, a job of the large intestine.</p>
+    </li>
+</ul>
+
+<p>The two major functional divisions of the digestive system are:</p>
+
+<ul>
+    <li>
+        <p>The <strong>alimentary canal</strong> (also called the <strong>gastrointestinal tract</strong> or <strong>GI tract</strong>) is a muscular tube from the mouth to the anus: mouth, pharynx, esophagus, stomach, small intestine, large intestine, and anus. Its contents are technically outside the body until nutrients cross the epithelial lining into blood vessels.</p>
+    </li>
+    <li>
+        <p>The <strong>accessory digestive organs</strong> lie outside the canal and add materials to it: the teeth and tongue (physical breakdown and propulsion), and the salivary glands, gallbladder, liver, and pancreas (<em>chemical</em> breakdown). The pancreas adds enzymes and the liver adds bile to the small intestine; the salivary glands add saliva to the mouth.</p>
+    </li>
+</ul>
+
+<p>The following diagram shows an overview of the digestive organs:</p>
+
+{IMG0}
+
+<h2>Abdominal Quadrants and Regions</h2>
+
+<p>Clinicians divide the abdomen into <strong>four quadrants</strong>:</p>
+{IMG1}
+
+<ul>
+    <li>
+        <p>The <strong>right upper quadrant</strong> contains the liver, gallbladder, duodenum, and common bile duct.</p>
+    </li>
+    <li>
+        <p>The <strong>left upper quadrant</strong> contains the pancreas, stomach, and pancreatic duct.</p>
+    </li>
+    <li>
+        <p>The <strong>right lower quadrant</strong> contains the ascending colon, appendix, and small intestine.</p>
+    </li>
+    <li>
+        <p>The <strong>left lower quadrant</strong> contains part of the large and small intestine.</p>
+    </li>
+</ul>
+
+<p>Quadrants give a quick starting point for assessing pain: right lower quadrant pain probably does not involve the stomach or liver, and marked tenderness there suggests appendicitis.</p>
+
+<p>Anatomists divide the abdomen into <strong>nine regions</strong> on a 3×3 grid. The center is the <strong>umbilical region</strong>; above it is the <strong>epigastric region</strong> and below it the <strong>hypogastric region</strong> (also called the <strong>pubic region</strong>). Beside the epigastric region are the <strong>left and right hypochondriac regions</strong>, beside the umbilical region the <strong>left and right lumbar regions</strong>, and beside the hypogastric region the <strong>left and right iliac (inguinal) regions</strong>.</p>
+{IMG2}
+
+<p>The names come from landmarks: <em>hypo-</em> (below) + <em>chondr-</em> (cartilage) places the hypochondriac regions under the costal cartilages; the lumbar regions are level with the lumbar vertebrae; the iliac regions lie over the ilia.</p>
+
+<p>Learn to derive the grid rather than memorize organ lists. Organs often straddle borders (the gallbladder sits at the epigastric/right hypochondriac border, the cecum and appendix near the lower right borders). Know roughly where each organ lies: the liver far upper right, the urinary bladder low and central. A bladder extending above the hypogastric region is pathologically overdistended, possibly an emergency.</p>
+
+<p>Clinicians use quadrants to locate symptoms quickly; anatomists use the nine regions to map where organs actually lie.</p>
+
+<h2>Layers of the Alimentary Canal Wall</h2>
+
+<p>The image below shows the structures of the alimentary canal wall:</p>
+
+{IMG3}
+
+<div class="exam-tip">
+    <h4>EXAM TIP: Alimentary Canal Wall</h4>
+
+    <p>Be sure that you know the various structures in this image relatively well.</p>
+</div>
+<p>The wall has four layers. From deep to superficial:</p>
+
+<ul>
+    <li>
+        <p>The <strong>mucosa</strong> lines the lumen and has three layers (deep to superficial):</p>
+
+        <ul>
+            <li>
+                <p>The <strong>epithelium</strong>: simple columnar from the stomach through the intestines; nonkeratinized stratified squamous in the mouth and esophagus, which handle rough, unprocessed food. It is continuous with the ducts emptying into the lumen.</p>
+            </li>
+            <li>
+                <p>The <strong>lamina propria</strong>, areolar (loose) connective tissue that supplies the vessels for absorption.</p>
+            </li>
+            <li>
+                <p>The <strong>muscularis mucosae</strong>, a very thin layer of smooth muscle that twitches to dislodge particles stuck in the epithelium.</p>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <p>The <strong>submucosa</strong> is connective tissue rich in elastic fibers, so the wall distends and recoils. It holds larger glands, blood and lymphatic vessels, and nerves.</p>
+    </li>
+    <li>
+        <p>The <strong>muscularis externa</strong> has an inner circular layer of smooth muscle (narrows the lumen) and an outer longitudinal layer (shortens the tube). Together they produce peristalsis and segmentation from the esophagus onward. The stomach adds a third, oblique layer, and its churning is essentially segmentation.</p>
+    </li>
+</ul>
+
+<p class="date">Wednesday, 11/11/26</p>
+
+<p><em>There was no class on Wednesday, November 11th, due to the Veterans Day holiday.</em></p>
+
+<p class="date">Friday, 11/13/26</p>
+
+<p>The GI mucosa is not ciliated: the muscular wall provides all the propulsion needed, as in the heart.</p>
+
+<ul>
+    <li>
+        <p>The <strong>serosa</strong> is the visceral peritoneum, a serous membrane (simple squamous epithelium on thin connective tissue) like the pleura and pericardium. Where it folds back to meet the parietal peritoneum, it forms a mesentery. Retroperitoneal organs have an <strong>adventitia</strong>, a thicker connective tissue layer, instead of a serosa.</p>
+
+        <p>The <strong>visceral peritoneum</strong> touches the organs; the <strong>parietal peritoneum</strong> lines the body wall. They are one continuous membrane, and any peritoneum not touching an organ, including the mesenteries, counts as parietal.</p>
+    </li>
+</ul>
+
+<h2>Mesenteries</h2>
+
+<p><strong>Mesenteries</strong> are double layers of parietal peritoneum that connect digestive organs to the body wall and suspend them so they do not sag. Each is a sheet, not a tube, carrying vessels, nerves, lymphatics, and fat between its layers, and is named for the organ it attaches to.</p>
+
+<p>Mesenteries serve three important functions:</p>
+
+<ul>
+    <li>They anchor organs in place.</li>
+    <li>They store adipose.</li>
+    <li>They provide a route for vessels to extend to and from the digestive organs.</li>
+</ul>
+
+<p>A <strong>dorsal mesentery</strong> (the most common type) runs from the organ to the posterior abdominal wall; a <strong>ventral mesentery</strong> runs to the anterior wall. Both form as the peritoneum wraps the embryonic gut tube. Development is not covered; know the ventral/dorsal and intraperitoneal/retroperitoneal distinctions.</p>
+
+<p>The following are the major <strong>dorsal mesenteries</strong>:</p>
+
+<ul>
+    <li>The <strong>greater omentum</strong>, from the greater curvature of the stomach to the posterior abdominal wall. It is the most ventral structure in the abdominal cavity yet a dorsal mesentery, because it hangs down, folds back, and runs dorsally. It is the largest mesentery, a lacy sheet of fat over the other organs, and the first thing seen when the abdomen is opened.</li>
+    <li>The <strong>mesentery proper</strong>, for most of the small intestine, attached to the dorsal body wall.</li>
+    <li>The <strong>transverse mesocolon</strong>, for the transverse colon, attached to the dorsal body wall.</li>
+    <li>The <strong>sigmoid mesocolon</strong>, which connects the sigmoid colon to the body wall.</li>
+</ul>
+
+<p>The following are the two <strong>ventral mesenteries</strong>:</p>
+
+<ul>
+    <li>The <strong>falciform ligament</strong>, which connects the liver to the anterior abdominal wall and diaphragm (not a bone-to-bone ligament).</li>
+    <li>The <strong>lesser omentum</strong>, which connects the liver to the lesser curvature of the stomach and the first part of the duodenum.</li>
+</ul>
+
+<p>Together, these two mesenteries anchor the liver and stomach to the ventral body wall near the xiphoid process.</p>
+
+<p><strong>Intraperitoneal organs</strong> have mesenteries and are surrounded by the <strong>peritoneal cavity</strong> (the space between the visceral and parietal layers); <strong>retroperitoneal organs</strong> have none and lie behind the peritoneum against the dorsal body wall. The major intraperitoneal organs (and their mesenteries) are:</p>
+
+<ul>
+    <li>Liver – Lesser omentum and falciform ligament</li>
+    <li>Stomach – Greater and lesser omentum</li>
+    <li>Ileum and jejunum – Mesentery proper</li>
+    <li>Transverse colon – Transverse mesocolon</li>
+    <li>Sigmoid colon – Sigmoid mesocolon</li>
+</ul>
+
+<p>From stomach to rectum, the organs alternate between intraperitoneal and retroperitoneal, counting the jejunum and ileum as one unit:</p>
+
+<ul>
+    <li>Stomach – intraperitoneal</li>
+    <li>Duodenum – retroperitoneal</li>
+    <li>Jejunum and ileum – intraperitoneal</li>
+    <li>Ascending colon – retroperitoneal</li>
+    <li>Transverse colon – intraperitoneal</li>
+    <li>Descending colon – retroperitoneal</li>
+    <li>Sigmoid colon – intraperitoneal</li>
+    <li>Rectum – retroperitoneal</li>
+</ul>
+
+<p>The pancreas is also retroperitoneal. (The ileum is the last part of the small intestine, leading through the ileocecal valve into the cecum.)</p>
+
+<p>The mnemonic "SAD PUCKER" can help you remember the retroperitoneal organs:</p>
+
+<ul>
+    <li>Suprarenal glands</li>
+    <li>Aorta/IVC</li>
+    <li>Duodenum (2nd-4th parts)</li>
+    <li>Pancreas (except tail)</li>
+    <li>Ureters</li>
+    <li>Colon (ascending &amp; descending)</li>
+    <li>Kidneys</li>
+    <li>Esophagus (lower thoracic part)</li>
+    <li>Rectum (lower 2/3)</li>
+</ul>
+
+<p><strong>Primarily retroperitoneal organs</strong>, such as the kidneys, develop behind the peritoneal cavity. <strong>Secondarily retroperitoneal organs</strong>, such as the pancreas, duodenum, and colon, start inside it and are pressed against the dorsal wall as the gut folds, losing their mesentery; this is why parts of the duodenum and colon are fixed in place.</p>
+
+<h1>The Mouth, Pharynx, and Esophagus</h1>
+
+<p>The <strong>oral cavity</strong> (or <strong>mouth</strong>) is lined with thick, nonkeratinized stratified squamous epithelium and bounded by the labia (lips), cheeks, palate, and tongue.</p>
+
+<p>The <strong>tongue</strong> is mostly skeletal muscle: voluntary for speaking and moving food, reflexive during much of chewing and swallowing. It is nicknamed the "Great Dodger" because it is rarely bitten.</p>
+
+<p>The basic anatomy of the oral cavity is shown below, with these features to note:</p>
+{IMG4}
+
+<ul>
+    <li>
+        <p>The <strong>uvula</strong> swings back to close the opening between the oropharynx and nasopharynx, keeping liquids out of the nasal cavity, and plays a role in the gag reflex. It is covered by nonkeratinized stratified squamous epithelium.</p>
+    </li>
+    <li>
+        <p>The <strong>fauces</strong> are the archways from the mouth to the pharynx, between the base of the tongue and the soft palate, with the palatine tonsils on their sides. They are the oral counterpart of the internal nares. You do not need the names of the individual arches.</p>
+    </li>
+    <li>
+        <p>The <strong>hard palate</strong>, the anterior roof of the mouth, is four bones (the right and left maxillae and palatine bones), with the <strong>palatine raphe</strong> marking its midline fusion. Behind it the muscular <strong>soft palate</strong> ends as the uvula. Together they separate the oral and nasal cavities.</p>
+    </li>
+    <li>
+        <p>The <strong>labial frenulum</strong> connects the lips to the gums, the <strong>gingiva</strong> (singular) or <strong>gingivae</strong> (plural). The teeth sit in sockets called <strong>alveoli</strong> in the maxilla and mandible.</p>
+    </li>
+    <li>
+        <p>The <strong>lingual frenulum</strong> anchors the tongue to the floor of the mouth. If it reaches too far toward the tip, it limits protrusion: <strong>ankyloglossia</strong> ("tongue-tied"), which can interfere with nursing and is corrected by clipping the frenulum.</p>
+    </li>
+    <li>
+        <p>The <strong>oral vestibule</strong> is the space between the teeth and the cheeks or lips.</p>
+    </li>
+    <li>
+        <p>At the base of the lingual frenulum are the <strong>openings of the submandibular ducts</strong>, with the <strong>openings of the sublingual ducts</strong> lateral to them, so saliva pools under the tongue. The submandibular glands sit near the angle of the mandible; the sublingual glands lie beneath each side of the tongue and drain through many small ducts.</p>
+
+        <p>Forcing a stream of saliva from these ducts, by compressing the submandibular ducts with the floor-of-mouth muscles, is called <strong>gleeking</strong>.</p>
+    </li>
+    <li>
+        <p>The <strong>parotid gland</strong>, the largest salivary gland, sits superficially in front of the ear. The <strong>parotid duct</strong> crosses the cheek, pierces the buccinator, and opens on the inner cheek beside the upper teeth (the upper second molar in anatomy references; Dr. Ahlgren placed it near the upper premolars).</p>
+    </li>
+    <li>
+        <p>The <strong>salivary glands</strong> are accessory digestive organs. Saliva is water-based, with enzymes that aid taste and digestion, and it protects the teeth. They produce approximately 1.5 liters a day, most of it swallowed and reabsorbed.</p>
+    </li>
+</ul>
+
+<h2>The Tongue</h2>
+
+<p>The <strong>tongue</strong> is the first major muscular organ of mechanical digestion: two kinds of muscle covered by epithelium carrying taste buds. The epithelium regenerates well, for example after a burn.</p>
+
+<p>Its surface is divided into two parts:</p>
+
+<ul>
+    <li>
+        <p><strong>The posterior one-third of the tongue</strong> lies in the oropharynx, behind the V-shaped <strong>sulcus terminalis</strong> (terminal sulcus) that marks the boundary with the oral cavity. Its bumps are the <strong>lingual tonsil</strong>, a collection of lymphatic tissue, not papillae or taste buds. It is not normally visible, since the tongue turns roughly 90 degrees there to run down the throat.</p>
+    </li>
+    <li>
+        <p><strong>The anterior two-thirds of the tongue</strong> lie in the oral cavity proper and carry visible bumps called <strong>papillae</strong>. Taste buds are microscopic and sit mostly on the sides of the papillae, so food must dissolve in saliva to reach them; where a papilla sits determines which cranial nerve carries its signal.</p>
+
+        <div class="exam-tip">
+            <h4>EXAM TIP: Papillae vs. Taste Buds</h4>
+
+            <p>Remember that papillae are NOT taste buds.</p>
+        </div>
+
+        <p>Three different kinds of papillae are as follows:</p>
+
+        <ul>
+            <li>
+                <p><strong>Vallate papillae</strong> (also called circumvallate papillae) are a few very large papillae forming a V in front of the sulcus terminalis, with taste buds on their sides and some on top.</p>
+            </li>
+            <li>
+                <p><strong>Fungiform papillae</strong> are pinkish/reddish, mushroom-shaped papillae with taste buds.</p>
+            </li>
+            <li>
+                <p class="date">Monday, 11/16/26</p>
+
+                <p><strong>Filiform papillae</strong> are white and have no taste buds. The most abundant papillae, they give the tongue its whitish look and form posterior-pointing spikes that hold what you lick (they are especially large in cats).</p>
+{IMG5}
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<p>Three cranial nerves carry taste: the facial nerve (cranial nerve VII) from the anterior two-thirds, the glossopharyngeal nerve (cranial nerve IX) from the posterior one-third, and the vagus nerve (cranial nerve X) from the epiglottis and throat. (Dr. Ahlgren's boundary at the terminal sulcus gives the vallate papillae to the facial nerve; anatomy references give them to the glossopharyngeal.)</p>
+
+<p>The "tongue map" of separate taste regions is incorrect: every area of the tongue, and the epiglottis, detects every basic taste.</p>
+
+<p>The two kinds of muscles in the tongue are as follows:</p>
+
+<ul>
+    <li>
+        <p>The <strong>internal muscles of the tongue</strong> attach to the external muscles, not to bone or cartilage, and change its <strong>shape</strong> (curling).</p>
+    </li>
+    <li>
+        <p>The <strong>external muscles of the tongue</strong> attach to the hyoid bone and the skull and change its <strong>position</strong>.</p>
+
+        <p>The <strong>genioglossus muscle</strong> is external, anchored to the mandible and fanning back toward the epiglottis. Its constant tone holds the tongue out of the airway; if it relaxes too much in sleep, the tongue falls back and blocks the airway, causing repeated partial arousals, as in sleep apnea. Be ready to classify it from an image.</p>
+    </li>
+</ul>
+
+<h2>Pharynx</h2>
+
+<p>The pharynx moves food from the oral cavity to the esophagus. Of its three sections (nasopharynx, oropharynx, laryngopharynx), digestion uses only the oropharynx and the laryngopharynx. Their stratified squamous epithelium protects against rough food.</p>
+
+<p>Swallowing is a sequence: muscles lift the larynx beneath the epiglottis to close the airway, others squeeze the pharyngeal walls to push the bolus into the esophagus, and others lower the larynx to reopen the airway. The airway is sealed mainly by this lifting, which tips the epiglottis posteriorly, rather than by food bending the epiglottis down.</p>
+
+<h2>The Esophagus</h2>
+
+<p>The <strong>esophagus</strong> is a collapsible muscular tube from the laryngopharynx to the stomach, running through the thoracic cavity. Most of it is covered by an <strong>adventitia</strong>; only the short abdominal part has a serosa.</p>
+
+<p>At rest it is collapsed, and its mucosa is folded into rugae that unfold as it distends during swallowing.</p>
+
+<p>Its muscle changes along its length: the top one-third is mainly skeletal muscle (voluntary), the middle one-third mixed, and the bottom one-third only smooth muscle (involuntary).</p>
+
+<p>So food that has not gone far can be brought back up voluntarily, but not once it reaches the smooth muscle. The gag reflex is triggered in the pharynx, especially the oropharynx, not in the esophagus.</p>
+
+<p>The esophagus is lined with nonkeratinized stratified squamous epithelium. At the <strong>cardiac sphincter</strong>, where it enters the stomach, the lining changes abruptly to simple columnar epithelium.</p>
+
+<p>In the mediastinum it lies against the trachealis muscle at the back of the trachea, which stretches to let a large bolus bulge forward.</p>
+
+<p>The esophagus passes through the diaphragm at the <strong>esophageal hiatus</strong>. (The diaphragm also has the aortic hiatus and the vena caval hiatus.)</p>
+
+<h1>The Stomach</h1>
+
+<p>The <strong>stomach</strong>, the widest part of the alimentary canal, lies in the abdominal cavity and is the first site of protein breakdown (saliva starts on carbohydrates but cannot digest protein). It holds food for about four hours, churning it against the acid-secreting lining into <strong>chyme</strong>, a thick, partly digested paste.</p>
+
+<h2>Gross Anatomy</h2>
+
+<p>The stomach is J-shaped, with a concave <strong>lesser curvature</strong> and a convex <strong>greater curvature</strong>. The <strong>cardiac region</strong> surrounds the cardiac sphincter, which controls flow from the esophagus; the dome-shaped <strong>fundus</strong> rises above it.</p>
+{IMG6}
+
+<p>The fundus has a high density of enzyme-producing gastric glands, whose secretions run down over the food below.</p>
+
+<p>Toward the duodenum the stomach narrows into the <strong>pyloric region</strong>, ending in the <strong>pyloric canal</strong>. The <strong>pyloric sphincter</strong> controls flow into the duodenum. Both sphincters are thickened rings of the circular smooth muscle and close while the stomach churns. The pyloric sphincter is a sphincter, not a true valve.</p>
+
+<p>If the cardiac sphincter does not close tightly, acid flows back into the esophagus: <strong>gastroesophageal reflux disease (GERD)</strong>, felt as "heartburn" in the chest. The esophageal lining, unlike the stomach's, cannot withstand acid.</p>
+
+<p><strong>Rugae</strong> are temporary (i.e., non-permanent) mucosal folds that flatten as the stomach fills, letting non-stretchy epithelium expand without tearing; they appear in any distensible part of the GI tract. (The small intestine's plicae circulares are permanent.) They are irregular in the body but run in parallel ridges in the pyloric canal, channeling chyme to the duodenum.</p>
+
+<p>The stomach wall has the usual four layers, but its muscularis externa has <strong>three</strong> layers of muscle: an <strong>oblique layer</strong> is added inside the circular layer, so from the serosa inward the order is longitudinal, circular, oblique. The extra layer strengthens churning.</p>
+
+<p>The stomach hangs more vertically in people with long torsos and more horizontally in those with short ones, with no functional effect.</p>
+
+<h2>Tissue Transition at the Cardiac Sphincter</h2>
+
+<p>The epithelium changes sharply at the cardiac sphincter, from the esophagus's protective non-keratinized stratified squamous epithelium to the stomach's simple columnar epithelium, suited to secretion and absorption. Elsewhere in the tract such changes are gradual.</p>
+
+<h2>Production of Pepsin</h2>
+
+<p>The stomach's surface epithelium has <strong>gastric pits</strong>, ducts leading to <strong>gastric glands</strong> that make <strong>gastric juices</strong>. These exocrine glands reach deep into the lamina propria. A <strong>gastric pore</strong> is the surface opening; the gastric pit beneath it only carries secretions, and the secreting part of the gland lies below the pit.</p>
+
+<p><strong>Chief cells</strong> deep in the gland make an inactive precursor, <strong>pepsinogen</strong>. It meets hydrochloric acid (HCl) from <strong>parietal cells</strong>, which line the gland's side walls above the chief cells (<em>pariet-</em> means wall), and becomes <strong>pepsin</strong>, the active protein-digesting (proteolytic) enzyme.</p>
+
+<p>The esophagus and mouth cannot handle acid, so repeated reflux or vomiting, as in bulimia, damages them.</p>
+
+<h1>The Small Intestine</h1>
+
+<p>The <strong>small intestine</strong>, the longest part of the alimentary canal, is the site of most enzymatic digestion and nearly all nutrient absorption. Most of its digestive enzymes come from the pancreas. (It is the small intestine, singular; <em>intestines</em> means the small and large intestine together.)</p>
+
+<p>It looks longer after death, because its smooth muscle loses tone.</p>
+
+<p>Nutrients become part of the internal environment only when they cross its epithelial lining into the blood, which makes that lining a critical boundary.</p>
+
+<p>Chyme enters through the pyloric sphincter and moves through three segments:</p>
+
+<ul>
+    <li>
+        <p>The <strong>duodenum</strong>, the first and shortest part, is C-shaped and retroperitoneal, running back from the stomach against the posterior body wall. (The jejunum and ileum are intraperitoneal, hanging from the mesentery proper.)</p>
+    </li>
+    <li>
+        <p>The <strong>jejunum</strong> is the middle part of the small intestine, which is typically located in the upper-left portion.</p>
+    </li>
+    <li>
+        <p>The <strong>ileum</strong> is the final, longest part of the small intestine, which is typically located in the lower-right portion and leads into the large intestine. (The ileum is located close to the ilium bone in the pelvis, though the two are spelled differently.)</p>
+    </li>
+</ul>
+
+<p>Contents move through the small intestine via two mechanisms:</p>
+
+<ul>
+    <li>
+        <p><strong>Segmentation</strong> – Rhythmic, segmented contractions that mix chyme and move it along.</p>
+    </li>
+    <li>
+        <p><strong>Peristalsis</strong> – Waves of contraction and relaxation that propel material down the tube.</p>
+    </li>
+</ul>
+
+<p>As the primary site of absorption, the small intestine increases its surface area with:</p>
+
+<ul>
+    <li>
+        <p><strong>Plicae circulares</strong>, permanent circular mucosal folds whose spiral helps direct chyme (segmentation itself is done by the muscularis). (The term also appears as <em>plicae circularis</em>.)</p>
+
+        <p>Unlike rugae, they do not flatten when the intestine stretches.</p>
+    </li>
+    <li>
+        <p><strong>Villi</strong>, finger-like projections about 1 mm tall, visible to the eye and covered with simple columnar epithelium, giving the lining a shag-carpet look. Capillary beds and lacteals (lymphatic vessels) run up their middle to take up absorbed nutrients.</p>
+    </li>
+    <li>
+        <p><strong>Microvilli</strong>, microscopic projections on the apical side of each epithelial cell on the villi, which increase the surface further.</p>
+    </li>
+</ul>
+
+<h1>Accessory Organs: The Liver, Gallbladder, and Pancreas</h1>
+
+<p>The <strong>accessory digestive organs</strong> covered here, the liver, gallbladder, and pancreas, aid digestion but lie outside the alimentary canal.</p>
+
+<h2>The Liver and Gallbladder</h2>
+
+<p>The <strong>liver</strong> is the largest gland in the body. It makes <strong>bile</strong>, a green liquid that emulsifies fats. Bile is stored in the <strong>gallbladder</strong>, a green, muscular sac on the underside of the liver's right lobe whose rugae let it expand as it fills.</p>
+{IMG7}
+
+<p>The liver is made mostly of <strong>hepatocytes</strong> (epithelial-derived cells) that regenerate rapidly, so it heals exceptionally well.</p>
+
+<p>The liver has <strong>four lobes</strong>: the large left and right lobes and the smaller quadrate and caudate lobes. The <strong>ligamentum teres hepatis</strong> divides the left part into medial and lateral sections, and the <strong>falciform ligament</strong> attaches the liver to the anterior body wall.</p>
+
+<p>Bile leaves the left and right lobes through the left and right <strong>hepatic ducts</strong>, which join as the <strong>common hepatic duct</strong>. That joins the <strong>cystic duct</strong> to form the <strong>common bile duct</strong>, which meets the pancreatic duct and empties into the duodenum at the <strong>major duodenal papilla</strong>, a small bump on the duodenal wall. A sphincter there controls the release of bile and pancreatic secretions.</p>
+
+<p>When the small intestine does not need bile, the sphincter closes and bile backs up the <strong>cystic duct</strong> into the <strong>gallbladder</strong>; a one-way valve keeps it from returning to the liver. Smooth muscle in the bile duct walls moves bile the right way when the gallbladder contracts, releasing it into the duodenum when chyme arrives.</p>
+
+<p>Gallstones (crystallized salts) blocking the cystic duct cause pain, especially as the gallbladder contracts after a fatty meal, but are not usually life-threatening. A stone blocking the major duodenal papilla is far more dangerous, because it also blocks the pancreatic enzymes. Without a gallbladder, fat digestion is less efficient, although the part of the cystic duct left behind stores a little bile.</p>
+
+<p><strong>Primary biliary cholangitis</strong> is an autoimmune disease that slowly destroys the bile ducts within the liver, so bile builds up, leading to liver damage and cirrhosis.</p>
+
+<h2>The Pancreas</h2>
+
+<p>The <strong>pancreas</strong> is a <strong>gland</strong> with an <strong>exocrine function</strong> (producing most of the enzymes for chemical digestion) and an <strong>endocrine function</strong> (secreting the blood-glucose hormones insulin and glucagon).</p>
+{IMG8}
+
+<p>It has a large <strong>head</strong> in the curve of the duodenum, an elongated <strong>body</strong>, and a pointed <strong>tail</strong> against the spleen.</p>
+
+<p>The <strong>pancreatic duct</strong> runs through its middle, collecting secretions from smaller ducts and carrying them to the major duodenal papilla, which regulates secretions from both the pancreatic and common bile ducts.</p>
+
+<p>A smaller <strong>accessory duct</strong> gives enzymes a backup route into the duodenum if the main route is blocked, for example by a gallstone.</p>
+
+<p>Without enough pancreatic enzymes, as in pancreatic cancer, food cannot be digested and patients quickly become emaciated.</p>
+
+<h1>The Large Intestine</h1>
+
+<p>The <strong>large intestine</strong> (commonly called the <strong>colon</strong>, though strictly the colon is only part of it) receives what the small intestine did not absorb and reabsorbs water and electrolytes. Material entering the cecum through the <strong>ileocecal valve</strong> is liquid; feces leave far more solid. Without this, we would have constant diarrhea and dehydration.</p>
+
+<p>Chyme thins in the small intestine because enzymes and bile arrive in watery fluid, and the large intestine must recover that water. When it cannot, as in diarrhea, the body loses fluid that would have returned to the blood.</p>
+
+<p class="date">Wednesday, 11/18/26</p>
+
+<p>The large intestine has no constant peristalsis. Instead, an infrequent <strong>mass peristaltic movement</strong> purges material that has collected there.</p>
+
+<p>Mass peristaltic movement starts when the cecum is distended: the stretch triggers the nervous system to send a coordinated wave toward the rectum.</p>
+
+<h2>Gross Anatomy of the Large Intestine</h2>
+
+<p>The diagram below labels the major portions of the gross anatomy of the colon:</p>
+
+{IMG9}
+
+<p>Chyme from the ileum enters the cecum through the <strong>ileocecal valve</strong>, which is stretch-dependent: as the cecum fills, its distension squeezes the valve shut. The <strong>vermiform appendix</strong> is attached to the cecum by a little mesentery.</p>
+
+<p>From the cecum, contents travel up the <strong>ascending colon</strong>, around the <strong>right colic flexure</strong> (or <strong>right hepatic flexure</strong>, beside the liver), across the <strong>transverse colon</strong>, around the <strong>left colic flexure</strong> (or <strong>left splenic flexure</strong>, beside the spleen), down the <strong>descending colon</strong>, and through the S-shaped <strong>sigmoid colon</strong> into the <strong>rectum</strong>. The rectum funnels into the <strong>anal canal</strong>, which ends at the <strong>anus</strong>, controlled by the <strong>anal sphincters</strong>.</p>
+
+<p>The large intestine has several specialized features:</p>
+
+<ul>
+    <li>
+        <p><strong>Teniae coli</strong> are three stripes of thickened longitudinal muscle along the outside of the colon. Their contraction shortens it and forms haustra.</p>
+    </li>
+    <li>
+        <p>A <strong>haustrum</strong> (plural <em>haustra</em>) is a bulge formed by the taut teniae coli, giving the colon its bumpy look.</p>
+    </li>
+    <li>
+        <p><strong>Epiploic appendages</strong> are fat-filled pouches of visceral peritoneum found only on the intestines; their function is not well understood.</p>
+    </li>
+</ul>
+
+<p><strong>Goblet cells</strong> make mucus that lubricates waste. They become more numerous distally as material solidifies, protecting the wall from tearing.</p>
+
+<p>Intense endurance exercise speeds intestinal motility and cuts water reabsorption, which can cause a sudden urge and loose stool.</p>
+
+<h2>The Rectum, Anus, and Anal Sphincters</h2>
+
+<p>The <strong>rectum</strong> is retroperitoneal (it has no mesentery). It narrows into the <strong>anal canal</strong>, where a distinct line, the <strong>pectinate line</strong>, lies just below the last ridges. Inside the distal rectum, longitudinal ridges called <strong>anal columns</strong> guide waste toward the exit.</p>
+
+<p>The <strong>rectal valves</strong> are transverse folds of mucosa and muscle inside the rectum that let gas pass while holding back solid waste, which helps maintain continence.</p>
+
+<p>The <strong>anus</strong> is the transition from mucous membrane to skin (cutaneous membrane): simple columnar epithelium becomes keratinized stratified squamous epithelium.</p>
+
+<p>A set of two sphincters control the movement of materials out of the anal canal:</p>
+
+<ul>
+    <li>The <strong>internal anal sphincter</strong> is a thickening of the circularly arranged portion of the muscularis externa. It consists of smooth muscle, so we have no volitional control over it.</li>
+    <li>The <strong>external anal sphincter</strong> consists of skeletal muscle that we can control.</li>
+</ul>
+
+<p>The <strong>levator ani muscle</strong> lifts the anus during defecation, so it occurs more smoothly.</p>
+
+<p>When the rectum fills, stretch receptors trigger a spinal reflex that contracts the rectal walls and relaxes the internal anal sphincter, creating the urge. Defecation happens when you voluntarily inhibit the motor neurons to the external anal sphincter.</p>
+
+<div class="other-box">
+    <h4>Clinical Correlation: Hemorrhoids</h4>
+
+    <p>A <strong>hemorrhoid</strong> is a swollen varicose vein (weakened walls and valves) in the mucosal lining or submucosa of the anus. Two types of hemorrhoid are as follows:</p>
+
+    <ul>
+        <li><strong>External hemorrhoids</strong> are inferior to the pectinate line: very painful, little bleeding.</li>
+        <li><strong>Internal hemorrhoids</strong> are superior to the pectinate line: less pain, heavy bleeding.</li>
+    </ul>
+
+    <p>Symptomatic internal hemorrhoids are often treated by rubber-band ligation, which cuts off the vein's blood supply so it shrivels and falls off.</p>
+
+    <p>Bright red blood in stool points to bleeding in the distal large intestine or rectum (undigested blood); black, tarry stool points to bleeding higher in the GI tract (digested blood).</p>
+</div>
+"""
 
 
 def balanced(f):
-    t = f
-    for start, new in CONDENSE:
-        t = para(t, start, new)
-    for tag in ("<img", 'class="exam-tip"', 'class="other-box"'):
+    imgs = re.findall(r"<img\b.*?/>", f, re.S)
+    assert len(imgs) == 10, len(imgs)
+    body = BALANCED_BODY
+    for k, tag in enumerate(imgs):
+        body = rep(body, "{IMG%d}" % k, tag)
+    t = f[:f.index("<body>") + len("<body>")] + "\n" + body + "\n</body>\n</html>\n"
+    assert re.findall(r"<img\b.*?/>", t, re.S) == imgs
+    for tag in ('class="exam-tip"', 'class="other-box"'):
         assert t.count(tag) == f.count(tag), tag
     assert headings(t, "1234") == headings(f, "1234") and dates(t) == dates(f)
     for n in re.findall(r"\d[\d,.%×/-]*", re.sub(r"<[^>]+>", " ", f[f.index("<body"):])):
         assert n.rstrip(".,") in t, ("number lost", n)
     share = len(words(t)) / len(words(f))
-    assert 0.70 <= share <= 0.80, share   # about 75% (Ian, 2026-11-20)
+    assert 0.40 <= share <= 0.55, share   # the API Balanced's length, about half (Ian, 2026-11-20)
     return t
 
 
 # --------------------------------------------------------------- Concise --
 # Laid out like the API Concise editions (Ian, 2026-11-20).
 
-IMG_REGIONS = ('<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/apk2100-253-exam4-chapter23-03-nine-abdominal-regions.png" '
-               'alt="Diagram showing the nine abdominal regions including right hypochondriac, epigastric, left hypochondriac, right lumbar, umbilical, left lumbar, right iliac, hypogastric, and left iliac regions with associated organs listed" '
-               'class="image-wide-70 content-image" loading="lazy" width="auto" height="auto" />')
 IMG_WALL = ('<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/apk2100-253-exam4-chapter23-04-alimentary-canal-wall.png" '
             'alt="Cross-sectional diagram of alimentary canal wall showing serosa with connective tissue and epithelium, muscularis with longitudinal and circular muscle, submucosa, mucosa with muscularis mucosae, connective tissue, and epithelium, plus artery, vein, nerve, and lumen" '
             'class="image-wide-70 content-image" loading="lazy" width="auto" height="auto" />')
@@ -327,8 +666,8 @@ CONCISE_BODY = """
   </thead>
   <tbody>
     <tr><td><b>Ingestion</b></td><td>Food taken in through the mouth.</td></tr>
-    <tr><td><b>Propulsion</b></td><td>Voluntary (swallowing) or involuntary (<b>peristalsis</b>). The upper esophagus is skeletal muscle, so a just-swallowed bite can come back up; a pill farther down cannot.</td></tr>
-    <tr><td><b>Mechanical digestion</b></td><td>Any physical breakdown, along the whole canal: chewing, stomach churning, intestinal <b>segmentation</b> (rhythmic back-and-forth squeezing that mixes food with juices).</td></tr>
+    <tr><td><b>Propulsion</b></td><td>Voluntary (swallowing) or involuntary (<b>peristalsis</b>); upper esophagus is skeletal muscle (voluntary).</td></tr>
+    <tr><td><b>Mechanical digestion</b></td><td>Chewing, churning, intestinal <b>segmentation</b> (rhythmic mixing), along the whole canal.</td></tr>
     <tr><td><b>Chemical digestion</b></td><td>Enzymes (stomach, pancreas, small intestine) split carbohydrates, proteins, fats into absorbable units.</td></tr>
     <tr><td><b>Absorption</b></td><td>Nutrients → blood; mostly in the small intestine (fats go via lymphatics, not a focus).</td></tr>
     <tr><td><b>Elimination</b></td><td>Undigested waste leaves by <b>defecation</b> (large intestine).</td></tr>
@@ -359,14 +698,11 @@ CONCISE_BODY = """
   <li><b>Nine regions</b> = anatomical: where organs actually lie, on a 3×3 grid.</li>
 </ul>
 
-""" + IMG_REGIONS + """
-
 <ul>
   <li>Center: <b>umbilical</b>; above it <b>epigastric</b>; below it <b>hypogastric (pubic)</b>.</li>
   <li>Beside epigastric: <b>hypochondriac</b> (<em>hypo-</em> below + <em>chondr-</em> cartilage → under the costal cartilages).</li>
   <li>Beside umbilical: <b>lumbar</b> (level with the lumbar vertebrae). Beside hypogastric: <b>iliac (inguinal)</b> (over the ilia).</li>
-  <li>Locations are approximate: the gallbladder sits at the epigastric/right hypochondriac border; the cecum and appendix near the lower right borders.</li>
-  <li>No region-by-region organ list needed: know the liver far upper right, the bladder low and central (a bladder rising above the hypogastric region = overdistension, possibly an emergency).</li>
+  <li>Know rough positions, not organ lists: liver far upper right; bladder low and central (above the hypogastric region = overdistension).</li>
 </ul>
 
 <h2>Layers of the Alimentary Canal Wall</h2>
@@ -399,7 +735,7 @@ CONCISE_BODY = """
 <ul>
   <li><b>Mesentery</b>: double sheet of parietal peritoneum carrying vessels, nerves, lymphatics, and fat between its layers; named for the organ it attaches to.</li>
   <li>Functions: <b>anchor</b> organs (and suspend them so they do not sag), <b>store adipose</b>, <b>route vessels</b> to and from the organs.</li>
-  <li><b>Dorsal</b> → posterior wall (most common); <b>ventral</b> → anterior wall. (Development is not covered.)</li>
+  <li><b>Dorsal</b> → posterior wall (most common); <b>ventral</b> → anterior wall.</li>
 </ul>
 
 <table>
@@ -407,7 +743,7 @@ CONCISE_BODY = """
     <tr><th>Type</th><th>Mesentery</th><th>Connects</th></tr>
   </thead>
   <tbody>
-    <tr><td rowspan="4"><b>Dorsal</b></td><td><b>Greater omentum</b></td><td>Greater curvature of stomach → posterior wall. Largest; the most ventral structure yet dorsal; lacy fat drape seen first on opening the abdomen.</td></tr>
+    <tr><td rowspan="4"><b>Dorsal</b></td><td><b>Greater omentum</b></td><td>Greater curvature of stomach → posterior wall; largest; most ventral structure, yet dorsal.</td></tr>
     <tr><td><b>Mesentery proper</b></td><td>Most of the small intestine → dorsal wall</td></tr>
     <tr><td><b>Transverse mesocolon</b></td><td>Transverse colon → dorsal wall</td></tr>
     <tr><td><b>Sigmoid mesocolon</b></td><td>Sigmoid colon → body wall</td></tr>
@@ -441,16 +777,15 @@ CONCISE_BODY = """
     <tr><td><b>Labial frenulum</b></td><td>Lips → gums (<b>gingivae</b>); teeth sit in <b>alveoli</b>.</td></tr>
     <tr><td><b>Lingual frenulum</b></td><td>Tongue → floor of mouth; too long → <b>ankyloglossia</b> ("tongue-tied"), fixed by clipping.</td></tr>
     <tr><td><b>Oral vestibule</b></td><td>Space between teeth and cheeks or lips.</td></tr>
-    <tr><td><b>Salivary ducts</b></td><td>Submandibular duct openings at the frenulum base; sublingual openings lateral to them (saliva pools under the tongue). <b>Gleeking</b> = forced spray from submandibular ducts.</td></tr>
-    <tr><td><b>Parotid gland</b></td><td>Largest salivary gland, in front of the ear; duct pierces the buccinator, opens beside the upper teeth (second molar in references, premolars in this course).</td></tr>
-    <tr><td><b>Saliva</b></td><td>Water-based, with enzymes; protects teeth; about 1.5 liters a day, mostly reabsorbed.</td></tr>
+    <tr><td><b>Salivary ducts</b></td><td>Submandibular openings at the frenulum base; sublingual openings lateral to them.</td></tr>
+    <tr><td><b>Parotid gland</b></td><td>Largest salivary gland, in front of the ear; duct pierces the buccinator, opens beside the upper teeth.</td></tr>
+    <tr><td><b>Saliva</b></td><td>Water-based, with enzymes; about 1.5 liters a day, mostly reabsorbed.</td></tr>
   </tbody>
 </table>
 
 <h2>The Tongue</h2>
 
 <ul>
-  <li>Mostly skeletal muscle, voluntary and reflexive; the "Great Dodger" (rarely bitten). Epithelium regenerates well.</li>
   <li><b>Posterior one-third</b>: in the oropharynx, behind the V-shaped <b>sulcus terminalis</b>; its bumps are the <b>lingual tonsil</b> (lymphatic tissue), not papillae.</li>
   <li><b>Anterior two-thirds</b>: in the oral cavity; visible <b>papillae</b>. Taste buds are microscopic and sit mostly on the sides of papillae, so food must dissolve in saliva to reach them.</li>
 </ul>
@@ -472,7 +807,7 @@ CONCISE_BODY = """
 </table>
 
 <ul>
-  <li>Taste nerves: <b>facial (VII)</b> anterior two-thirds; <b>glossopharyngeal (IX)</b> posterior one-third; <b>vagus (X)</b> epiglottis and throat. (Vallate papillae: facial by the sulcus boundary used here; glossopharyngeal in references.)</li>
+  <li>Taste nerves: <b>facial (VII)</b> anterior two-thirds; <b>glossopharyngeal (IX)</b> posterior one-third; <b>vagus (X)</b> epiglottis and throat.</li>
   <li>The "tongue map" is wrong: every area detects every basic taste.</li>
   <li><b>Internal muscles</b>: not attached to bone; change <b>shape</b> (curling). <b>External muscles</b>: attached to hyoid and skull; change <b>position</b>.</li>
   <li><b>Genioglossus</b> (external, anchored to the mandible): constant tone holds the tongue out of the airway; relaxed in sleep → airway occluded → partial arousals (sleep apnea).</li>
@@ -482,7 +817,7 @@ CONCISE_BODY = """
 
 <ul>
   <li>Digestion uses the <b>oropharynx</b> and <b>laryngopharynx</b> (not the nasopharynx). Stratified squamous lining resists rough food.</li>
-  <li>Swallowing: muscles lift the larynx under the epiglottis (airway sealed mainly by <b>lifting</b>, epiglottis tips back) → constrictors squeeze the bolus into the esophagus → larynx lowers to reopen the airway.</li>
+  <li>Swallowing: larynx lifts (epiglottis tips back, sealing the airway) → constrictors push the bolus into the esophagus → larynx lowers.</li>
 </ul>
 
 <h2>The Esophagus</h2>
@@ -491,7 +826,6 @@ CONCISE_BODY = """
   <li>Collapsible muscular tube, laryngopharynx → stomach; mostly covered by <b>adventitia</b> (serosa only on the short abdominal part).</li>
   <li>Collapsed at rest; mucosa folded into rugae so it can unfold, not tear.</li>
   <li>Muscle: top one-third skeletal (voluntary), middle one-third mixed, bottom one-third smooth (involuntary). The gag reflex is in the pharynx, not the esophagus.</li>
-  <li>Lies behind the trachea against the stretchy trachealis (a big bolus presses on it).</li>
   <li>Enters the stomach through the <b>cardiac sphincter</b>; passes the diaphragm at the <b>esophageal hiatus</b> (also the aortic and vena caval hiatuses).</li>
 </ul>
 
@@ -505,7 +839,7 @@ CONCISE_BODY = """
 <h2>Gross Anatomy</h2>
 
 <ul>
-  <li>J-shaped: <b>lesser curvature</b> (concave) and <b>greater curvature</b> (convex). Orientation varies with torso length.</li>
+  <li>J-shaped: <b>lesser curvature</b> (concave) and <b>greater curvature</b> (convex).</li>
   <li><b>Cardiac region</b> (near the cardiac sphincter) → <b>fundus</b> (dome above it; dense gastric glands whose secretions "rain down") → body → <b>pyloric region</b> → <b>pyloric canal</b> → <b>pyloric sphincter</b> → duodenum.</li>
   <li>Both sphincters are thickened circular smooth muscle and close during churning; the pyloric sphincter is not a true valve.</li>
   <li><b>GERD</b>: a loose cardiac sphincter lets acid into the esophagus → "heartburn."</li>
@@ -524,13 +858,12 @@ CONCISE_BODY = """
 <ul>
   <li><b>Gastric pore</b> (surface opening) → <b>gastric pit</b> (duct; secretes nothing) → <b>gastric gland</b> (exocrine; in the lamina propria) → <b>gastric juices</b>.</li>
   <li><b>Chief cells</b> (deep) make <b>pepsinogen</b> + <b>parietal cells</b> (side walls) make <b>HCl</b> → <b>pepsin</b>, the active protein-digesting enzyme.</li>
-  <li>The esophagus and mouth cannot handle acid (damaged by reflux or bulimia).</li>
 </ul>
 
 <h1>The Small Intestine</h1>
 
 <ul>
-  <li>Longest part of the canal; most enzymatic digestion and nearly all absorption; most enzymes come from the pancreas. Looks longer after death (muscle relaxes).</li>
+  <li>Longest part of the canal; most enzymatic digestion and nearly all absorption; most enzymes come from the pancreas.</li>
   <li>Segments: <b>duodenum</b> (first, shortest, C-shaped, retroperitoneal) → <b>jejunum</b> (middle, upper left) → <b>ileum</b> (last, longest, lower right; joins the large intestine).</li>
   <li>Movement: <b>segmentation</b> (mixing, some propulsion) and <b>peristalsis</b>.</li>
 </ul>
@@ -566,7 +899,6 @@ CONCISE_BODY = """
   <li>Gland with <b>exocrine</b> (most digestive enzymes) and <b>endocrine</b> (insulin, glucagon) functions.</li>
   <li><b>Head</b> in the curve of the duodenum, <b>body</b>, <b>tail</b> against the spleen.</li>
   <li><b>Pancreatic duct</b> → major duodenal papilla; <b>accessory duct</b> = backup route if the main one is blocked.</li>
-  <li>Pancreatic cancer → too few enzymes → rapid emaciation.</li>
 </ul>
 
 <h1>The Large Intestine</h1>
@@ -582,7 +914,7 @@ CONCISE_BODY = """
   <li>Route: ileum → <b>ileocecal valve</b> (stretch-dependent; closes as the cecum fills) → <b>cecum</b> (with the <b>vermiform appendix</b>) → <b>ascending colon</b> → <b>right colic (hepatic) flexure</b> → <b>transverse colon</b> → <b>left colic (splenic) flexure</b> → <b>descending colon</b> → <b>sigmoid colon</b> (S-curve) → <b>rectum</b> → <b>anal canal</b> → <b>anus</b>.</li>
   <li><b>Teniae coli</b>: three stripes of thickened longitudinal muscle; shorten the colon and form <b>haustra</b> (bulges).</li>
   <li><b>Epiploic appendages</b>: fat-filled pouches of visceral peritoneum; function unknown.</li>
-  <li><b>Goblet cells</b> increase distally as waste solidifies (mucus prevents tearing). Endurance running → faster motility → loose stool.</li>
+  <li><b>Goblet cells</b> increase distally as waste solidifies (mucus prevents tearing).</li>
 </ul>
 
 <h2>The Rectum, Anus, and Anal Sphincters</h2>
@@ -608,16 +940,11 @@ CONCISE_BODY = """
   </thead>
   <tbody>
     <tr><td><b>Alimentary canal</b></td><td>The muscular tube from mouth to anus (GI tract).</td></tr>
-    <tr><td><b>Accessory digestive organs</b></td><td>Organs outside the canal that add materials to it.</td></tr>
     <tr><td><b>Peristalsis</b></td><td>Involuntary waves of contraction that propel material.</td></tr>
     <tr><td><b>Segmentation</b></td><td>Rhythmic back-and-forth squeezing that mixes intestinal contents.</td></tr>
-    <tr><td><b>Lamina propria</b></td><td>Areolar connective tissue of the mucosa, carrying vessels for absorption.</td></tr>
-    <tr><td><b>Muscularis mucosae</b></td><td>Thin smooth muscle of the mucosa that dislodges trapped particles.</td></tr>
     <tr><td><b>Adventitia</b></td><td>Connective tissue covering in place of a serosa.</td></tr>
     <tr><td><b>Mesentery</b></td><td>Double sheet of peritoneum that anchors organs and carries vessels.</td></tr>
-    <tr><td><b>Retroperitoneal</b></td><td>Behind the peritoneum, with no mesentery.</td></tr>
     <tr><td><b>Ankyloglossia</b></td><td>A lingual frenulum that limits tongue protrusion ("tongue-tied").</td></tr>
-    <tr><td><b>Papillae</b></td><td>Visible bumps on the tongue; not taste buds.</td></tr>
     <tr><td><b>Chyme</b></td><td>The thick, partly digested paste the stomach produces.</td></tr>
     <tr><td><b>Rugae</b></td><td>Temporary mucosal folds that let a distensible organ expand.</td></tr>
     <tr><td><b>Pepsinogen</b></td><td>Inactive precursor from chief cells, activated by HCl to pepsin.</td></tr>
@@ -633,17 +960,13 @@ CONCISE_BODY = """
 <h2>Key Takeaways</h2>
 
 <ul>
-  <li>Six functions: ingestion, propulsion, mechanical and chemical digestion, absorption, elimination.</li>
   <li>Quadrants are clinical; the nine regions (3×3 grid) are anatomical. Derive the regions from the landmarks.</li>
   <li>Wall layers, deep → superficial: mucosa, submucosa, muscularis externa, serosa (or adventitia).</li>
   <li>Greater omentum: the most ventral structure, yet a dorsal mesentery. Ventral mesenteries: falciform ligament and lesser omentum.</li>
   <li>Stomach to rectum alternates intraperitoneal / retroperitoneal; SAD PUCKER lists the retroperitoneal organs.</li>
   <li>Papillae are not taste buds; filiform papillae have none. The tongue map is a myth.</li>
-  <li>Esophagus: skeletal → mixed → smooth muscle by thirds; abrupt epithelial change at the cardiac sphincter.</li>
   <li>Stomach muscle adds an innermost oblique layer; chief cells + parietal cells → pepsin.</li>
-  <li>Small intestine: plicae circulares, villi, microvilli maximize absorption.</li>
   <li>A gallstone at the major duodenal papilla is more dangerous than one in the cystic duct.</li>
-  <li>The large intestine reabsorbs water; mass peristalsis, not constant peristalsis.</li>
   <li>Internal anal sphincter involuntary, external voluntary; hemorrhoids are named by the pectinate line.</li>
 </ul>
 """
@@ -660,7 +983,7 @@ def concise(f):
     assert headings(t) == headings(f) + [("2", "Glossary"), ("2", "Key Takeaways")], headings(t)
     for h3 in re.findall(r"<h3>(.*?)</h3>", t):
         assert h3.endswith(":"), h3
-    assert "Ahlgren" not in t and t.count("<img") == 2 and t.count('class="exam-tip"') == 2
+    assert "Ahlgren" not in t and t.count("<img") == 1 and t.count('class="exam-tip"') == 2
     for n in ("1.5 liters", "four hours", "1 mm", "3×3", "2nd-4th", "lower 2/3", "VII", "IX", "(X)"):
         assert n in t, n
     share = len(words(t)) / len(words(f))

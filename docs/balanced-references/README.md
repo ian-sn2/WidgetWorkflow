@@ -1,9 +1,9 @@
 # Balanced style references
 
 Ian sends Balanced editions made by his API pipeline so the hand-built ones can match their feel
-(2026-11-20). They are references for **tone**: short paragraphs and plain restatement, with
-no side remarks. They are not references for **length**: they run 45–65% of the Full, and
-Ian's target is about 75% ("i like 75"). Do not copy their generalizations either. The
+(2026-11-20). They are references for **tone and length**: short paragraphs, plain restatement, no side
+remarks, and about half the Full (Ian first set 75%, then asked to match the API; see the update
+below). Do not copy their generalizations. The
 Chapter 24 one turns a single polycystic-kidney case into a general rule.
 
 | File | Full words | API words | Ours |
@@ -24,3 +24,7 @@ It uses definition tables, fragment bullets with → and "e.g.", `<b>` labels, i
 two-column Glossary table and Key Takeaways bullets. It runs to 955 words against a 4,202-word Full
 (23%). Ian has said to drop images that aren't needed, so keep only the figures the chapter tells
 students to know by sight.
+
+**Update, later on 2026-11-20:** Ian now wants the Balanced to match the API's length as well as its
+approach, so the target is about half the Full. Chapter 23: API 4,475 words, ours 4,558 (46%);
+Concise API 2,114, ours 2,131 (22%).

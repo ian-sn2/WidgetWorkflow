@@ -8,7 +8,7 @@ description: Make the Balanced and Concise editions of a chapter from its Full e
 | Edition | What it is | Widgets |
 |---|---|---|
 | **Full** | The chapter as converted | All |
-| **Balanced** | The Full at **about 75% of its words** (Ian, 2026-11-20): repetition and side remarks cut, then long paragraphs condensed; every figure, table, box, exam tip, date and number kept | All |
+| **Balanced** | **The length of the API Balanced Ian sends, about half the Full** (Ian, 2026-11-20, replacing the 75% target he set the same morning): each paragraph cut to its definition and the facts the exam needs, analogies, asides and repetition dropped; every heading, figure, list, box, exam tip, date and number kept | All |
 | **Concise** | Rewritten as bullets and tables (**about a fifth to a quarter** of the Full), in the layout of the API Concise editions Ian sends (Ian, 2026-11-20): definition tables, fragment bullets with → and "e.g.", `<b>` labels, exam tips kept, a two-column Glossary table, then Key Takeaways bullets. Copy `scripts/apk2100/chapter23.py` | Only where the text is hard to grasp without it |
 
 ## Rules
@@ -19,7 +19,7 @@ description: Make the Balanced and Concise editions of a chapter from its Full e
 - Paraphrase in original wording. Don't name the professor in rewritten Concise text.
 - Every number in a Concise comes from the Full. Recompute and assert the totals in the build.
 - A Balanced is produced by checked `rep()` cuts on the Full, each asserting it matched once, so the edition rebuilds whenever the Full changes.
-- **Reach 75% by condensing, not only cutting.** Whole-sentence cuts stall near 90%. After the cuts, rewrite the longest paragraphs tighter with `para(t, opening, new)` (it replaces from a unique opening through the next `</p>`/`</li>`). Keep every fact and number, and never generalize a specific case into a rule. Assert `0.70 <= share <= 0.80` and that every number of the Full survives. Ian sends the Balanced files his API pipeline makes as a style reference (`docs/balanced-references/`). Those run nearer 45%, so take their tone, not their length. Copy `scripts/apk2100/chapter24.py` or `scripts/bsc2011/module6.py`.
+- **Write the Balanced as its own body, the way the API does.** Cuts and per-paragraph condensing stall near 75%. `scripts/apk2100/chapter23.py` holds the Balanced as one `BALANCED_BODY`, with the Full's own image tags dropped in as `{IMG0}`…, and asserts the images (in order), boxes, headings to h4, dates and every number of the Full, and a share of 0.40–0.55. Keep the specifics (don't generalize a case into a rule). The API's Balanced and Concise for each chapter are in `docs/balanced-references/` to compare against.
 
 ## Existing builds to copy
 `scripts/man4504/project_mgmt_editions.py`, `scripts/man4504/transport_editions.py`, `scripts/ree3043/chapter17_editions.py`, `scripts/mar3023/concise2.py`, `scripts/mar3023/balanced2.py`, and `scripts/mar3023/chapter22_concise_headings.py` (fixes an existing Concise's headings).
