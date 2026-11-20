@@ -88,15 +88,17 @@ Leave Hierarchical namespace and Rapid Cache off. Drive is not a substitute: it 
 Building a page for the bucket:
 
 ```bash
-NARRATE_ENGINE=google NARRATE_VOICE=en-US-Chirp3-HD-Charon python scripts/ideas/narrate.py listen <chapter>.html out/<chapter>.html --read --sections h1 --audio-dir out/audio --audio-url https://storage.googleapis.com/sntext2speech/audio
+NARRATE_ENGINE=google NARRATE_VOICE=en-US-Chirp3-HD-Charon python scripts/ideas/narrate.py listen <chapter>.html out/<chapter>.html --read --sections h1 --audio-dir out/listen-audio --audio-url https://storage.googleapis.com/sntext2speech/listen-audio
 ```
 
-That writes `out/audio/<chapter>/` with one MP3 per section. Drag the `audio` folder into the bucket (the
-console's bucket page accepts a dropped folder) and the page plays. Each file's name ends in a fingerprint of its
+That writes `out/listen-audio/<chapter>/` with one MP3 per section. Drag the `listen-audio` folder onto the bucket's
+**top level** and the page plays. The console uploads into whichever folder is open, and can stay inside a path after
+a delete, which is how the first upload ended up at `audio/audio/`: click the bucket's name in the breadcrumb first,
+so it reads only `Buckets > sntext2speech`. The folder's name in the bucket has to match the end of `--audio-url`. Each file's name ends in a fingerprint of its
 contents, so a re-recorded section gets a new address; old files can be deleted from the bucket at leisure.
 
 The speech key cannot write to a bucket, so the upload is by hand for now. From a computer signed in with
-`gcloud auth login`, `gcloud storage cp -r out/audio gs://sntext2speech/` does the same.
+`gcloud auth login`, `gcloud storage cp -r out/listen-audio gs://sntext2speech/` does the same.
 
 Free each month (Google's free-tier page, read 2026-11-18): 5 GB stored in a US region and 100 GB downloaded
 from North America, which is about 500 chapters stored and 10,000 complete listens. Past that, about $0.02 per
