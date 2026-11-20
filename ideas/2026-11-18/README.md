@@ -20,6 +20,7 @@ What the page does:
 | Folder | What it is |
 |---|---|
 | `google-voice-samples/` | The same passage in six Chirp voices, to choose from. |
+| `female-voice-samples/` | The same passage in all 14 female Chirp voices (2026-11-20), as separate files and one combined clip in which each voice says its number first. |
 | `test-passages/` | Ian's five test passages (Roman numerals, Greek letters, a formula, table rows, a long paragraph) recorded in Charon, with what the voice was given and what the automatic listener heard. |
 | `bucket-version/` | The same pages with the audio taken out: each page is under 100 KB and plays from the `sntext2speech` bucket once its `listen-audio` folder (built beside it, not committed) has been dragged onto the bucket's top level. See `scripts/ideas/GOOGLE-VOICE-SETUP.md`. |
 | `narration-check/` | The automatic listener's report, a clip of only the sentences it wants a person to hear, and a clip of each looked-up hard word said on its own. |
