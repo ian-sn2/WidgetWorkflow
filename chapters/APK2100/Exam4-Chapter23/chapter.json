@@ -1,0 +1,11 @@
+{
+  "note": "APK2100 Exam 4, Chapter 23 (digestive system). The source is Ian's Full; the build reformats it (wording unchanged) and writes the Balanced and Concise.",
+  "steps": [
+    ["scripts/apk2100/chapter23.py", "{source}/APK2100-263-Exam4-Chapter23-Full.html", "{out}"]
+  ],
+  "outputs": [
+    "APK2100-263-Exam4-Chapter23-Full.html",
+    "APK2100-263-Exam4-Chapter23-Balanced.html",
+    "APK2100-263-Exam4-Chapter23-Concise.html"
+  ]
+}

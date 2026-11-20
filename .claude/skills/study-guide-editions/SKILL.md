@@ -9,7 +9,7 @@ description: Make the Balanced and Concise editions of a chapter from its Full e
 |---|---|---|
 | **Full** | The chapter as converted | All |
 | **Balanced** | The Full at **about 75% of its words** (Ian, 2026-11-20): repetition and side remarks cut, then long paragraphs condensed; every figure, table, box, exam tip, date and number kept | All |
-| **Concise** | Rewritten as bullets and tables (~20–30%), ending with `<h2>Glossary</h2>` and `<h2>Key Takeaways</h2>` | Only where the text is hard to grasp without it |
+| **Concise** | Rewritten as bullets and tables (**about a fifth to a quarter** of the Full), in the layout of the API Concise editions Ian sends (Ian, 2026-11-20): definition tables, fragment bullets with → and "e.g.", `<b>` labels, exam tips kept, a two-column Glossary table, then Key Takeaways bullets. Copy `scripts/apk2100/chapter23.py` | Only where the text is hard to grasp without it |
 
 ## Rules
 - **The Concise keeps the Full's `<h1>`/`<h2>` headings exactly**: same wording, same order, none merged or dropped. Add Glossary and Key Takeaways at the end, and `<h3>` subheads where they help; **every `<h3>` ends in a colon** ("Prezygotic Barriers:"; Ian, 2026-11-16). **Assert it in the build**: `headings(concise) == headings(full) + ["Glossary", "Key Takeaways"]`.

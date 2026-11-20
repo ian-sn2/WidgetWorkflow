@@ -16,3 +16,11 @@ tempted to drop ("depends only on breeding individuals"), and it merges a side e
 list item it illustrates. What not to copy: it turns the dodo into a rule about island species,
 says the condor recovery succeeded *because* triage was not applied (the Full says no one would
 have tried it under triage), and still carries its pipeline's AUDIT comments and no doctype.
+
+## Concise
+
+`BSC2010-Macroevolution-Concise-API.html` is the layout to follow for a Concise (Ian, 2026-11-20).
+It uses definition tables, fragment bullets with → and "e.g.", `<b>` labels, its exam tip, a
+two-column Glossary table and Key Takeaways bullets. It runs to 955 words against a 4,202-word Full
+(23%). Ian has said to drop images that aren't needed, so keep only the figures the chapter tells
+students to know by sight.
