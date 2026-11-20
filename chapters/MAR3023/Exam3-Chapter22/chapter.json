@@ -1,0 +1,14 @@
+{
+ "about": "Implementation and control: the PERT chart as an interactive path chart (PERT version) in all three editions; the Concise with the Full's headings.",
+ "source_note": "The three PERT-version files as Ian last sent them (2026-11-11); the build patches the chart up to the current code and gives the Concise the Full's headings.",
+ "steps": [
+  ["copy", "{source}/MAR3023-Fall26-Exam3-Chapter22-Full.html", "{out}/MAR3023-Fall26-Exam3-Chapter22-Full.html"],
+  ["copy", "{source}/MAR3023-Fall26-Exam3-Chapter22-Balanced.html", "{out}/MAR3023-Fall26-Exam3-Chapter22-Balanced.html"],
+  ["copy", "{source}/MAR3023-Fall26-Exam3-Chapter22-Concise.html", "{out}/concise-before-headings.html"],
+  ["scripts/mar3023/chapter22_pert.py", "--patch", "{out}/MAR3023-Fall26-Exam3-Chapter22-Full.html", "{out}/MAR3023-Fall26-Exam3-Chapter22-Balanced.html", "{out}/concise-before-headings.html"],
+  ["scripts/mar3023/chapter22_concise_headings.py", "{out}/MAR3023-Fall26-Exam3-Chapter22-Full.html", "{out}/concise-before-headings.html", "{out}/MAR3023-Fall26-Exam3-Chapter22-Concise.html"]
+ ],
+ "outputs": ["MAR3023-Fall26-Exam3-Chapter22-Full.html",
+             "MAR3023-Fall26-Exam3-Chapter22-Balanced.html",
+             "MAR3023-Fall26-Exam3-Chapter22-Concise.html"]
+}

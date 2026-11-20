@@ -54,6 +54,7 @@ examples/
   ECO2013-263-TradeoffsComparativeAdvantageTheMarketSystem.html ← FINISHED OUTPUT (Exam 1 ch. 1, 7 widgets)
   ECO2013-Widgets-All.html    ← the 9/11/26 prototype: 20 widgets, the JSON shape reference
 reference-images/             ← the source PNGs (empty — see open issues)
+chapters/<COURSE>/<chapter>/  ← the files Ian sent (source/) + chapter.json, the build that makes the editions
 scripts/
   embed_engine.py             ← inline engine/ into a notes file's <head> (prompt step 7)
   check_file.py               ← mechanical step-8 checks (JSON, </script>, head, engine identity…)
@@ -65,6 +66,9 @@ scripts/
   transcript_diff.py          ← does a new term's transcript change this file? Run it BEFORE swapping.
   test_check_file.py          ← tests for check_file.py. Run after changing it.
   ci_check.py                 ← what every pull request runs (.github/workflows/checks.yml)
+  build_chapters.py           ← rebuild every chapter in chapters/ from its sources (CI runs it)
+  check_arithmetic.py         ← recompute every calculation a page writes out (CI runs it)
+  test_check_arithmetic.py    ← tests for it, including planted errors. Run after changing it.
   ci_baseline.json            ← the examples' known failures, so CI blocks only new ones
   ci_phone_baseline.json      ← the same for the phone check (mobile_check.py), per screen size
   render_widgets.py           ← Playwright: screenshot every widget × scenario × step for collision review
@@ -86,9 +90,14 @@ scripts/
 
 The skills restate rules this file holds in full. When a rule here changes, update
 the skill that carries it in the same commit.
-For Ian's claude.ai Skills tab, `python scripts/package_skills.py skills-upload` zips
-each skill with the files it uses (same relative paths, plus this file); re-run and resend
-after changing a skill.
+**The skills reach claude.ai as a plugin, not as uploads** (Ian, 2026-11-12). The repo is a
+plugin marketplace (`.claude-plugin/marketplace.json`) whose one plugin, `plugin/`, holds all
+seven skills and one copy of the files they use; Ian added it once in claude.ai (Customize >
+Plugins > Add marketplace, `ian-sn2/WidgetWorkflow`, Sync automatically) and it updates when the
+default branch does. **After changing a skill, or any file in `plugin/`, or this file: run
+`python scripts/package_skills.py --plugin` and commit the result**; it bumps the plugin's
+version only when the content changed, and CI fails a pull request whose `plugin/` is stale.
+`python scripts/package_skills.py OUTDIR` still writes one zip per skill for a manual upload.
 
 ## The workflow in one paragraph
 
@@ -147,6 +156,11 @@ itself still forbids questions outright.
    "the professor", "the instructor", "in class" or "the class"; it still
    fails "the transcript", "the lecture", "the recording", "on the board",
    "the slides" and "his slide".
+
+   **"In this lecture" is fine too** (Ian, 2026-11-16, on the BSC2010
+   macroevolution notes: "in this lecture is fine"). It is how the notes open a
+   topic, not a citation. `check_file.py` passes "this lecture" and "today's
+   lecture" and still fails "the lecture" and "a lecture recording".
 5. **No label touches a curve, an axis line, or a curve's own name.**
    The axis lines were the last thing on a panel that nothing tested against,
    and a curve that runs down to the axis parks its label right on it — which
@@ -203,8 +217,8 @@ itself still forbids questions outright.
    uses 📘 BLUE BOOK and inserts before the first `<h1>`, so the date keeps its
    corner. Neither sets `open`; both say so in a comment, so a TOC that looks
    "open" is the emoji, not the `<details>`. Both list `h1`, `h2` *and* `h3`. `<p class="date">` per class date, `<h1>`/`<h2>`, with
-   `<h3>` only on Concise pages, where headings are changed by hand and often
-   end in a colon (Ian, 2026-10-12; check_file.py warns on one elsewhere), `.exam-tip` with an `<h4>`, plain tables; `<strong>` for
+   `<h3>` only on Concise pages, where headings are changed by hand and
+   **every one ends in a colon** (Ian, 2026-10-12, made a rule 2026-11-16; check_file.py warns on one elsewhere), `.exam-tip` with an `<h4>`, plain tables; `<strong>` for
    vocabulary terms only, `<b>` for emphasis and labels, never `<u>` -- except
    that **a centred equation the source sets in `<strong>` keeps it** (Ian,
    2026-10-07, and he asked for it as a rule: where the source has a
@@ -235,6 +249,20 @@ itself still forbids questions outright.
    source has it. The Exam 3 fiscal chapter is **not** to be redone for this;
    it applies from the next conversion onward.); keep every
    `<!-- IMAGE POSITION: … -->` comment where the image was.
+
+   **An intro before the first heading is an `intro-note`, under the table of
+   contents** (Ian, 2026-11-16). `studyguide/sn25-v2.js` inserts the contents
+   box immediately before the first `<h1>`, so a plain paragraph above that
+   heading reads above the contents. Keep the intro where it is, first under
+   `<body>` (after the date pill) and before the first `<h1>`, written as
+   `<p id="intro-note"><i>…</i></p>`, and put this line in the head directly
+   after the `sn25-v2.js` script tag; it moves the contents box above the
+   intro, so the page reads date, contents, intro, first heading:
+
+   `<script>document.addEventListener('DOMContentLoaded', function () { var b = document.getElementById('intro-note'), t = document.querySelector('details.toc-box'); if (b && t) b.parentNode.insertBefore(t, b); });</script>`
+
+   Do not move the intro under the heading instead. `check_file.py` fails a
+   plain paragraph above the first `<h1>`, or an `intro-note` without the line.
 
    **Glossary and Key Takeaways are `<h2>`s, on purpose.** They are not
    promoted sections and not a heading the source lacks: the house format
@@ -1174,6 +1202,29 @@ Ian changed this rule on 2026-09-17, and the change applies **here only**:
   `project_mgmt_editions.py` (project management). A Concise keeps the Full's
   h1/h2 headings exactly, plus Glossary and Key Takeaways; the edition
   scripts assert it.
+* **Hand-built widgets span about 75–80% of the page** (`width: 78%`, full
+  width under 600px), and their figures scale with the box instead of a fixed
+  pixel size (Ian, 2026-11-12). A leader line points *at* the thing it names,
+  ending a few pixels short of it, not at the shape's edge.
+
+### Chapter sources and the arithmetic check (2026-11-12)
+
+* **Every chapter Ian sends is filed in the repo**, so a container reset never
+  loses it and he never uploads it twice: `chapters/<COURSE>/<chapter>/source/`
+  holds his files unchanged, and `chapter.json` lists the build steps (script
+  and arguments, with `{source}` and `{out}`) and the files they must produce.
+  `python scripts/build_chapters.py [filter]` rebuilds them into `build/chapters/`
+  (git-ignored: only sources are committed). File a new chapter's sources the
+  moment they arrive, before building. When Ian sends a file back with his own
+  edits, it replaces the source, and the build patches widgets into it
+  (`--patch`) rather than rebuilding from an older original.
+* **`python scripts/check_arithmetic.py PAGE...` recomputes every calculation a
+  page writes out** in its prose or LaTeX ("2 + 2 + 4 + 5 + 2 = 15",
+  "(2.33)(1.76) + 15 = 19.10", chains, fractions, roots, percentages, totals
+  set out over several lines). A result must be right to the places it is
+  written with. It cannot see a wrong count in words ("seven tasks" for
+  eight), so reading is still needed. Run it on any chapter before delivery;
+  CI runs it on every page and every chapter build.
 
 ### Reviewing Ian's work
 
@@ -1189,7 +1240,7 @@ this order, most costly first:
 5. Housekeeping.
 
 Three editions of a chapter exist. **Full** is the source as converted.
-**Balanced** is close to Full. **Concise** is produced by a pipeline that
+**Balanced** is about half the Full's words, the length of the API Balanced Ian sends (Ian, 2026-11-20), with every heading, figure, box and number kept. **Concise** is produced by a pipeline that
 rewrites the prose: it usually carries no images, may use tables or widgets
 where Full has a figure, and is the one edition where `<h3>` is expected.
 Review each against what its edition is meant to be, not against Full.

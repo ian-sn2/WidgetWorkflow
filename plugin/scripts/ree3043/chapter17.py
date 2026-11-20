@@ -1,0 +1,511 @@
+"""REE3043 Fall '26, Chapter 17 (Sources of Commercial Debt and Equity Capital), 2026-11-09.
+
+Two versions, per the readme Ian sent with the chapter:
+  normal  - the chapter as written, with the house head and the markup fixed
+  charts  - the same, plus interactive charts and diagrams drawn from the lecture deck's exhibits
+
+Every number in the charts is printed in the deck (Exhibits 17-1 to 17-4) and agrees with the chapter's prose
+(17.8T total, 54/30/8/8, 38% debt, 29%/71%, 78%/22%, banks 57% of private and 45% of all debt).
+
+    python scripts/ree3043/chapter17.py SRC.html OUTDIR
+"""
+import sys, os, json, html as H
+
+def sub1(t, old, new, what):
+    assert t.count(old) == 1, (what, t.count(old)); return t.replace(old, new)
+
+HEAD_OLD_CSS = '<link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v5.css">'
+HEAD_NEW_CSS = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+                '    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
+                '    <link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v6.css">')
+
+def normal(t):
+    """The house head, a MathJax config that parses, and the markup fixes. No wording changes."""
+    t = sub1(t, HEAD_OLD_CSS, HEAD_NEW_CSS, "css")
+    t = sub1(t, '<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v5.js"></script>',
+             '<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>', "js")
+    # inlineMath: [['\','\']] is a JavaScript syntax error, so the whole config script failed to run
+    t = sub1(t, "inlineMath: [['\\','\\']]", "inlineMath: [['\\\\(','\\\\)']]", "mathjax")
+    # the LLC exam tip sat between </li> and </ul>, inside the list; it goes after the list
+    tip = t[t.index('<div class="exam-tip">\n    <h4>EXAM TIP: Preferred Ownership Form</h4>'):]
+    tip = tip[:tip.index("</div>") + 6]
+    t = sub1(t, "    </li>\n\n\n" + tip + "\n\n</ul>\n", "    </li>\n</ul>\n\n" + tip + "\n", "llc tip")
+    # the two aside boxes carried bare text under their headings
+    for h4 in ("How Liquidity Actually Works in Open-End Funds", "Life-Cycle of a Closed-End Fund"):
+        i = t.index(f"<h4>{h4}</h4>") + len(f"<h4>{h4}</h4>"); j = t.index("</div>", i)
+        body = t[i:j].strip(); t = t[:i] + "\n        <p>" + body + "</p>\n        " + t[j:]
+    t = t.replace("’", "'")  # one curly apostrophe in an otherwise straight-quoted file ("today's market")
+    assert "sn25-v5" not in t and "<u>" not in t
+    return t
+
+# ---------------------------------------------------------------- the charts version
+CSS = r"""<style>
+.crev { --ink:#1c2a44; --muted:#5b6474; --rule:#dfe3ea; --soft:#f1f4f9; max-width:760px; margin:20px auto; padding:16px 18px 14px; background:#fff; border:1px solid var(--rule); border-radius:10px; box-sizing:border-box; font-family:"Red Hat Display", system-ui, sans-serif; color:var(--ink); clear:both; }
+.crev * { box-sizing:border-box; }
+.crev .cv-title { font-weight:800; font-size:1.02rem; margin:0 0 2px; text-align:center; }
+.crev .cv-lede { font-size:.86rem; color:var(--muted); margin:0 0 12px; text-align:center; }
+.crev .cv-tabs { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin:0 0 12px; }
+.crev .cv-tabs button { font:inherit; font-size:.85rem; font-weight:600; padding:6px 14px; min-height:36px; border:1px solid var(--rule); border-radius:999px; background:#fff; color:var(--ink); cursor:pointer; }
+.crev .cv-tabs button[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); color:#fff; }
+.crev .cv-read { min-height:2.9em; margin:12px 0 0; padding:6px 10px; border-left:4px solid var(--rule); font-size:.92rem; line-height:1.35; }
+.crev .cv-read b { font-weight:800; }
+.crev .cv-read:empty { border-left-color:transparent; min-height:0; margin:0; padding:0; }
+.aside-box .crev { margin:14px 0 4px; max-width:none; }
+.crev .cv-src { font-size:.76rem; color:var(--muted); text-align:right; margin:10px 0 0; }
+.crev svg, .crev svg * { outline:none; }
+/* pie */
+.crev .cv-body { display:flex; gap:22px; align-items:flex-start; }
+.crev .cv-pie { flex:0 0 44%; width:44%; height:auto; display:block; overflow:visible; }
+.crev .cv-s path { stroke:#fff; stroke-width:2; cursor:pointer; transition:opacity .15s, transform .15s; }
+.crev .cv-s.on path { transform:translate(var(--dx), var(--dy)); }
+.crev.has-on .cv-s:not(.on) { opacity:.3; }
+.crev .cv-pie text { pointer-events:none; }
+.crev .cv-side { flex:1 1 auto; min-width:0; }
+.crev .cv-row { display:grid; grid-template-columns:14px 1fr auto 3.4em; gap:8px; align-items:center; padding:5px 6px; border-radius:6px; font-size:.9rem; cursor:pointer; outline:none; }
+.crev .cv-row:hover, .crev .cv-row.on { background:var(--soft); }
+.crev .cv-row:focus-visible { box-shadow:0 0 0 2px #2a78d6 inset; }
+.crev .cv-sw { width:12px; height:12px; border-radius:3px; }
+.crev .cv-v, .crev .cv-p { text-align:right; font-variant-numeric:tabular-nums; }
+.crev .cv-p { color:var(--muted); }
+/* bars */
+.crev .cv-bar { display:grid; grid-template-columns:minmax(0, 13em) 1fr minmax(5.2em, auto); gap:10px; align-items:center; padding:4px 6px; border-radius:6px; font-size:.88rem; cursor:pointer; outline:none; }
+.crev .cv-bar:hover, .crev .cv-bar.on { background:var(--soft); }
+.crev .cv-bar:focus-visible { box-shadow:0 0 0 2px #2a78d6 inset; }
+.crev .cv-bar .cv-l { line-height:1.25; }
+.crev .cv-bar .cv-track { height:16px; }
+.crev .cv-bar .cv-fill { height:100%; border-radius:0 4px 4px 0; min-width:3px; transition:opacity .15s; }
+.crev.has-on .cv-bar:not(.on) .cv-fill { opacity:.3; }
+.crev .cv-bar.hide { display:none; }
+.crev .cv-sh { display:inline-block; min-width:2.6em; margin-left:6px; padding:1px 6px; border-radius:999px; background:var(--soft); color:var(--ink); font-weight:700; font-size:.8rem; text-align:center; }
+.crev .cv-key { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; font-size:.82rem; color:var(--muted); margin:8px 0 0; }
+.crev .cv-key span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; background:var(--c); vertical-align:-1px; }
+/* split bar */
+.crev .cv-split { display:flex; gap:2px; height:56px; border-radius:6px; overflow:hidden; }
+.crev .cv-seg { display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:.95rem; cursor:pointer; outline:none; transition:opacity .15s; text-align:center; line-height:1.2; padding:0 6px; }
+.crev.has-on .cv-seg:not(.on) { opacity:.35; }
+/* timeline */
+.crev .cv-tl { position:relative; margin:4px 4px 0; font-size:.82rem; }
+.crev .cv-tl-row { position:relative; height:1.5em; }
+.crev .cv-tl-lab { position:absolute; top:0; white-space:nowrap; color:var(--muted); }
+.crev .cv-tl-lab b { color:var(--ink); font-weight:800; margin-right:4px; }
+.crev .cv-tl-lab.cv-r { left:auto; }
+.crev .cv-tl-bar { position:relative; height:26px; margin:4px 0; }
+.crev .cv-tl-seg { position:absolute; top:0; bottom:0; border-radius:4px; border-right:2px solid #fff; }
+.crev .cv-tl-ext { background:repeating-linear-gradient(135deg, #c9d6e8 0 6px, #eef3fa 6px 12px); border:1px dashed #9fb6d6; }
+.crev .cv-tl-end { position:absolute; top:-6px; bottom:-6px; border-left:2px dashed #b8400f; border-right:2px dashed #b8400f; background:rgba(184,64,15,.07); pointer-events:none; }
+.crev .cv-tl-ticks { position:relative; height:1.3em; border-top:1px solid var(--rule); margin-top:6px; }
+.crev .cv-tl-tick { position:absolute; top:3px; transform:translateX(-50%); font-size:.74rem; color:var(--muted); font-variant-numeric:tabular-nums; }
+.crev .cv-tl-tick:first-child { transform:none; }
+.crev .cv-tl-tick:last-child { transform:translateX(-100%); }
+.crev .cv-tl-axis { text-align:center; font-size:.74rem; color:var(--muted); margin-top:2px; }
+/* risk ladder */
+.crev .cv-ladder { display:flex; gap:14px; align-items:stretch; }
+.crev .cv-axis { flex:0 0 30px; position:relative; }
+.crev .cv-axis::after { content:""; position:absolute; left:50%; top:8px; bottom:0; width:4px; transform:translateX(-50%); border-radius:2px; background:linear-gradient(to top, #e3edfb, #9ec0ee); }
+.crev .cv-axis::before { content:""; position:absolute; top:0; left:50%; transform:translateX(-50%); border:7px solid transparent; border-bottom:10px solid #9ec0ee; border-top:0; }
+.crev .cv-axis span { position:absolute; left:50%; top:50%; transform:translate(-50%, -50%) rotate(-90deg); white-space:nowrap; font-size:.74rem; font-weight:700; color:var(--muted); text-align:center; line-height:1.15; background:#fff; padding:2px 6px; z-index:1; }
+.crev .cv-rungs { flex:1 1 auto; display:flex; flex-direction:column; gap:8px; }
+.crev .cv-rung { display:grid; grid-template-columns:14px 1fr; gap:10px; align-items:start; margin-left:calc(var(--k) * 6%); padding:8px 12px; border-radius:8px; background:var(--soft); border-left:4px solid var(--c); font-size:.88rem; line-height:1.35; }
+.crev .cv-dot { width:12px; height:12px; border-radius:50%; background:var(--c); margin-top:4px; }
+.crev .cv-tag { font-size:.74rem; font-weight:700; color:#fff; background:#5b6474; border-radius:999px; padding:1px 8px; margin-left:4px; white-space:nowrap; }
+.crev .cv-desc { color:var(--muted); }
+/* static figures */
+.crev .cv-fig { width:100%; height:auto; display:block; }
+.crev .cv-classes { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:0 0 12px; font-size:.84rem; color:var(--muted); }
+.crev .cv-classes .cv-node { font-size:.78rem; padding:2px 8px; }
+.crev .cv-classes .cv-node.cv-plain { font-weight:700; color:var(--ink); background:transparent; border-color:transparent; }
+.crev #cre-tree .cv-node[data-k] { cursor:pointer; outline:none; transition:opacity .15s, box-shadow .15s; }
+.crev .cv-tree.dim .cv-node:not(.lit) { opacity:.3; }
+.crev .cv-node.lit { box-shadow:0 0 0 2px #2a78d6; }
+.crev #cre-tree .cv-node[data-k]:focus-visible { box-shadow:0 0 0 3px #2a78d6; }
+.crev .cv-tree { font-size:.84rem; }
+.crev .cv-tree ul { list-style:none; margin:0; padding:0; position:relative; }
+.crev .cv-tree li { position:relative; }
+.crev .cv-node { line-height:1.2; }
+@media (min-width:800px) {   /* left to right: each level a column, joined by a spine */
+  .crev .cv-tree { padding:4px 4px 4px 3px; }   /* room for a lit node's ring; no overflow clipping */
+  .crev .cv-tree ul { display:flex; flex-direction:column; justify-content:center; gap:6px; padding-left:24px; }
+  .crev .cv-tree li { display:flex; align-items:center; padding-left:14px; }
+  .crev .cv-tree > ul > li { padding-left:0; }
+  .crev .cv-tree .cv-node { white-space:nowrap; padding:4px 9px; font-size:.8rem; }
+  .crev .cv-tree > ul { padding-left:0; }
+  .crev .cv-tree ul ul::before { content:""; position:absolute; left:0; top:50%; width:24px; border-top:2px solid var(--rule); }   /* parent to spine: the full column gap */
+  .crev .cv-tree ul ul > li::before { content:""; position:absolute; left:0; top:-3px; bottom:-3px; border-left:2px solid var(--rule); }
+  .crev .cv-tree ul ul > li:first-child::before { top:50%; }
+  .crev .cv-tree ul ul > li:last-child::before { bottom:50%; }
+  .crev .cv-tree ul ul > li:only-child::before { display:none; }
+  .crev .cv-tree ul ul > li::after { content:""; position:absolute; left:0; top:50%; width:14px; border-top:2px solid var(--rule); }
+}
+@media (max-width:799px) {   /* stacked: indented, joined on the left */
+  .crev .cv-tree { padding:3px; }
+  .crev .cv-tree ul ul { padding-left:22px; }
+  .crev .cv-tree li { padding:4px 0; }
+  .crev .cv-tree ul ul li::before { content:""; position:absolute; left:-14px; top:0; bottom:0; border-left:2px solid var(--rule); }
+  .crev .cv-tree ul ul li:last-child::before { bottom:auto; height:18px; }
+  .crev .cv-tree ul ul li::after { content:""; position:absolute; left:-14px; top:18px; width:14px; border-top:2px solid var(--rule); }
+}
+.crev .cv-node { display:inline-block; padding:4px 10px; border-radius:6px; background:var(--soft); border:1px solid var(--rule); font-weight:600; }
+.crev .cv-node.hot { background:#1d4f94; border-color:#1d4f94; color:#fff; }
+.crev .cv-node.warm { background:#e3edfb; border-color:#9ec0ee; }
+.crev .cv-node small { font-weight:500; color:var(--muted); }
+.crev .cv-node.hot small { color:#dbe7f8; }
+.crev .cv-steps { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+.crev .cv-step { border:1px solid var(--rule); border-radius:8px; padding:10px 12px; background:var(--soft); font-size:.86rem; line-height:1.35; }
+.crev .cv-step b { display:block; font-size:.92rem; margin-bottom:4px; }
+.crev .cv-step .cv-n { display:inline-flex; width:24px; height:24px; border-radius:50%; background:#1d4f94; color:#fff; font-weight:800; font-size:.8rem; align-items:center; justify-content:center; margin-bottom:6px; }
+.crev .cv-step .cv-split { height:30px; margin-top:8px; }
+.crev .cv-step .cv-seg { font-size:.78rem; cursor:default; }
+@media (max-width:600px) {
+  .crev { padding:14px 12px 12px; }
+  .crev .cv-body { flex-direction:column; gap:10px; }
+  .crev .cv-pie { width:76%; flex-basis:auto; }
+  .crev .cv-side { width:100%; }
+  .crev .cv-bar { grid-template-columns:minmax(0, 8.5em) 1fr minmax(4.6em, auto); font-size:.82rem; }
+  .crev .cv-steps { grid-template-columns:1fr; }
+  .crev .cv-rung { margin-left:0; }
+  .crev .cv-axis span { font-size:.68rem; }
+  .crev .cv-tl-lab { font-size:.74rem; }
+  .crev .cv-tl-lab b { display:block; margin:0; }
+  .crev .cv-tl-lab .cv-x { display:none; }
+  .crev .cv-tl-lab.cv-harv { left:auto !important; right:0; text-align:right; }
+  .crev .cv-tl-lab.cv-r { text-align:right; }
+  .crev .cv-tl-row { height:2.7em; }
+  .crev .cv-row, .crev .cv-bar { min-height:36px; }
+}
+@media (prefers-reduced-motion: reduce) { .crev * { transition:none !important; } }
+</style>"""
+
+RUNTIME = r"""<script>
+(function () {
+  function fmtB(v) { return '$' + v.toLocaleString('en-US') + (v >= 1000 ? ' billion' : ' billion'); }
+  function fmtT(v) { return '$' + v.toFixed(1) + ' trillion'; }
+  function pct(v, t) { return Math.round(100 * v / t) + '%'; }
+  function wire(root, items, show) {
+    var pinned = null;
+    items.forEach(function (el) {
+      var i = +el.dataset.i;
+      el.addEventListener('mouseenter', function () { if (pinned === null) show(i); });
+      el.addEventListener('mouseleave', function () { if (pinned === null) show(null); });
+      el.addEventListener('click', function () { pinned = (pinned === i) ? null : i; show(pinned); });
+      el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pinned = (pinned === i) ? null : i; show(pinned); } });
+      el.addEventListener('focus', function () { if (pinned === null) show(i); });
+      el.addEventListener('blur', function () { if (pinned === null) show(null); });
+    });
+    return function () { pinned = null; };
+  }
+  function mark(root, i) {
+    root.classList.toggle('has-on', i !== null);
+    root.querySelectorAll('[data-i]').forEach(function (el) { el.classList.toggle('on', i !== null && +el.dataset.i === i); });
+  }
+  var NS = 'http://www.w3.org/2000/svg';
+  function pie(root, D) {
+    var tabs = root.querySelector('.cv-tabs'), svg = root.querySelector('.cv-pie'), side = root.querySelector('.cv-rows'), read = root.querySelector('.cv-read');
+    function draw(v) {
+      var V = D.views[v], tot = V.slices.reduce(function (s, x) { return s + x.v; }, 0), a = -Math.PI / 2, cx = 150, cy = 150, r = 140, r0 = 78;
+      svg.innerHTML = ''; side.innerHTML = '';
+      V.slices.forEach(function (s, i) {
+        var sw = 2 * Math.PI * s.v / tot, a1 = a + sw, big = sw > Math.PI ? 1 : 0, m = a + sw / 2;
+        var p = function (rr, ang) { return (cx + rr * Math.cos(ang)).toFixed(2) + ' ' + (cy + rr * Math.sin(ang)).toFixed(2); };
+        var g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'cv-s'); g.dataset.i = i;
+        g.style.setProperty('--dx', (6 * Math.cos(m)).toFixed(2) + 'px'); g.style.setProperty('--dy', (6 * Math.sin(m)).toFixed(2) + 'px');
+        var path = document.createElementNS(NS, 'path');
+        path.setAttribute('d', 'M' + p(r, a) + ' A' + r + ' ' + r + ' 0 ' + big + ' 1 ' + p(r, a1) + ' L' + p(r0, a1) + ' A' + r0 + ' ' + r0 + ' 0 ' + big + ' 0 ' + p(r0, a) + ' Z');
+        path.setAttribute('fill', s.c); g.appendChild(path);
+        if (s.v / tot >= 0.12) {
+          var t = document.createElementNS(NS, 'text'), rr = (r + r0) / 2;
+          t.setAttribute('x', (cx + rr * Math.cos(m)).toFixed(1)); t.setAttribute('y', (cy + rr * Math.sin(m) + 5).toFixed(1));
+          t.setAttribute('text-anchor', 'middle'); t.setAttribute('fill', '#fff'); t.setAttribute('font-size', '15'); t.setAttribute('font-weight', '800');
+          t.textContent = pct(s.v, tot); g.appendChild(t);
+        }
+        svg.appendChild(g); a = a1;
+        var row = document.createElement('div'); row.className = 'cv-row'; row.dataset.i = i; row.tabIndex = 0; row.setAttribute('role', 'button');
+        row.setAttribute('aria-label', s.l + ': ' + fmtB(s.v) + ', ' + pct(s.v, tot));
+        row.innerHTML = '<span class="cv-sw" style="background:' + s.c + '"></span><span>' + s.l + '</span><span class="cv-v">' + fmtB(s.v).replace(' billion', 'B') + '</span><span class="cv-p">' + pct(s.v, tot) + '</span>';
+        side.appendChild(row);
+      });
+      var c1 = document.createElementNS(NS, 'text'), c2 = document.createElementNS(NS, 'text');
+      [[c1, 142, 22, 800], [c2, 166, 12, 500]].forEach(function (q) { q[0].setAttribute('x', 150); q[0].setAttribute('y', q[1]); q[0].setAttribute('text-anchor', 'middle'); q[0].setAttribute('font-size', q[2]); q[0].setAttribute('font-weight', q[3]); q[0].setAttribute('fill', '#1c2a44'); svg.appendChild(q[0]); });
+      function show(i) {
+        mark(root, i);
+        if (i === null) { c1.textContent = fmtT(tot / 1000); c2.textContent = 'total U.S. CRE'; read.innerHTML = V.rest; read.style.borderLeftColor = ''; return; }
+        var s = V.slices[i]; c1.textContent = pct(s.v, tot); c2.textContent = s.l.toLowerCase();
+        read.innerHTML = '<b>' + s.l + '</b>: ' + fmtB(s.v) + ', ' + pct(s.v, tot) + ' of the total. ' + (s.n || ''); read.style.borderLeftColor = s.c;
+      }
+      wire(root, Array.prototype.slice.call(root.querySelectorAll('[data-i]')), show); show(null);
+    }
+    D.views.forEach(function (V, v) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = V.name; b.setAttribute('aria-pressed', v === 0 ? 'true' : 'false');
+      b.addEventListener('click', function () { tabs.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); draw(v); });
+      tabs.appendChild(b);
+    });
+    if (D.views.length < 2) tabs.remove();
+    draw(0);
+  }
+  function bars(root, D) {
+    var box = root.querySelector('.cv-rows'), read = root.querySelector('.cv-read'), tabs = root.querySelector('.cv-tabs');
+    var tot = D.total || D.items.reduce(function (s, x) { return s + x.v; }, 0), rest = D.rest, grp = null;   // grp: the filter showing, if any
+    function share(v, t) { var s = 100 * v / t; return s >= 1 ? Math.round(s) + '%' : '<1%'; }
+    D.items.forEach(function (x, i) {
+      var row = document.createElement('div'); row.className = 'cv-bar'; row.dataset.i = i; row.dataset.g = x.g || ''; row.tabIndex = 0; row.setAttribute('role', 'button');
+      var val = D.unit === 'T' ? '$' + x.v.toFixed(1) + 'T' : '$' + x.v.toLocaleString('en-US') + 'B';
+      row.setAttribute('aria-label', x.l + ': ' + val);
+      row.innerHTML = '<span class="cv-l">' + x.l + '</span><span class="cv-track"><span class="cv-fill" style="display:block;background:' + x.c + '"></span></span><span class="cv-v" data-val="' + val + '">' + val + '</span>';
+      box.appendChild(row);
+    });
+    function show(i) {
+      mark(root, i);
+      if (i === null) { read.innerHTML = rest; read.style.borderLeftColor = ''; return; }
+      var x = D.items[i], of = grp ? share(x.v, grp.t) + ' of ' + grp.of : (D.share ? pct(x.v, tot) + ' of ' + D.share : '');
+      read.innerHTML = '<b>' + x.l + '</b>: ' + (D.unit === 'T' ? fmtT(x.v) : fmtB(x.v)) + (of ? ', ' + of : '') + '. ' + (x.n || ''); read.style.borderLeftColor = x.c;
+    }
+    function scale() {   // each bar against the longest one showing, so a filtered view uses the full width
+      var rows = Array.prototype.slice.call(box.querySelectorAll('.cv-bar:not(.hide)')), max = Math.max.apply(null, rows.map(function (r) { return D.items[+r.dataset.i].v; }));
+      rows.forEach(function (r) {
+        var v = D.items[+r.dataset.i].v, cell = r.querySelector('.cv-v');
+        r.querySelector('.cv-fill').style.width = (100 * v / max).toFixed(1) + '%';
+        cell.innerHTML = cell.dataset.val + (grp ? ' <span class="cv-sh">' + share(v, grp.t) + '</span>' : '');   // in a filtered view, the share of that group
+      });
+    }
+    scale();
+    var reset = wire(root, Array.prototype.slice.call(box.children), show); show(null);
+    if (D.filters) {
+      D.filters.forEach(function (f, k) {
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = f.name; b.setAttribute('aria-pressed', k === 0 ? 'true' : 'false');
+        b.addEventListener('click', function () {
+          tabs.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+          box.querySelectorAll('.cv-bar').forEach(function (r) { r.classList.toggle('hide', !!f.g && r.dataset.g !== f.g); });
+          rest = f.rest || D.rest;
+          grp = f.g ? { of: f.of, t: D.items.filter(function (x) { return x.g === f.g; }).reduce(function (s, x) { return s + x.v; }, 0) } : null;
+          scale(); reset(); show(null);
+        });
+        tabs.appendChild(b);
+      });
+    } else if (tabs) tabs.remove();
+  }
+  function split(root, D) {
+    var read = root.querySelector('.cv-read'), segs = Array.prototype.slice.call(root.querySelectorAll('.cv-seg'));
+    function show(i) {
+      mark(root, i);
+      if (i === null) { read.innerHTML = D.rest; read.style.borderLeftColor = ''; return; }
+      var x = D.items[i]; read.innerHTML = '<b>' + x.l + '</b>: ' + fmtB(x.v) + ', ' + pct(x.v, D.total) + ' of private CRE equity. ' + x.n; read.style.borderLeftColor = x.c;
+    }
+    wire(root, segs, show); show(null);
+  }
+  function tree(root, D) {
+    var read = root.querySelector('.cv-read'), nodes = Array.prototype.slice.call(root.querySelectorAll('.cv-node[data-k]')), pinned = null;
+    var diagram = root.querySelector('.cv-tree');
+    function light(el) {
+      nodes.forEach(function (n) { n.classList.remove('lit'); });
+      diagram.classList.toggle('dim', !!el);
+      if (!el) { read.innerHTML = D.rest; return; }
+      var k = el.dataset.k; el.classList.add('lit');
+      {   // a box in the diagram: its path back to the root and everything that branches from it
+        var li = el.closest('li');
+        li.querySelectorAll('.cv-node').forEach(function (n) { n.classList.add('lit'); });
+        for (var p = li.parentElement.closest('li'); p; p = p.parentElement.closest('li')) p.querySelector(':scope > .cv-node').classList.add('lit');
+      }
+      var name = el.cloneNode(true); name.querySelectorAll('small').forEach(function (s) { s.remove(); }); name.querySelectorAll('br').forEach(function (b) { b.replaceWith(' '); });
+      read.innerHTML = '<b>' + name.textContent.replace(/\s+/g, ' ').trim() + ':</b> ' + D.notes[k];
+    }
+    nodes.forEach(function (el) {
+      el.addEventListener('mouseenter', function () { if (pinned === null) light(el); });
+      el.addEventListener('mouseleave', function () { if (pinned === null) light(null); });
+      el.addEventListener('click', function () { pinned = (pinned === el) ? null : el; light(pinned); });
+      el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pinned = (pinned === el) ? null : el; light(pinned); } });
+      el.addEventListener('focus', function () { if (pinned === null) light(el); });
+      el.addEventListener('blur', function () { if (pinned === null) light(null); });
+    });
+    light(null);
+  }
+  document.querySelectorAll('.crev[data-kind]').forEach(function (root) {
+    try {
+      var D = JSON.parse(root.querySelector('script[type="application/json"]').textContent);
+      ({ pie: pie, bars: bars, split: split, tree: tree })[root.dataset.kind](root, D);
+    } catch (e) { if (window.console) console.error('chart', root.id, e); }
+  });
+})();
+</script>"""
+
+def box(id_, kind, title, lede, data, inner, src="Exhibit data: Federal Reserve Flow of Funds and NAREIT, year-end 2024"):
+    js = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    return (f'<div class="crev" id="{id_}" data-kind="{kind}">\n<p class="cv-title">{title}</p>\n<p class="cv-lede">{lede}</p>\n'
+            f'{inner}\n<p class="cv-src">{src}</p>\n<script type="application/json">{js}</script>\n</div>')
+
+BLUE, BLUE_D, ORANGE, ORANGE_D, GREY = "#4f92e3", "#1d4f94", "#ef8550", "#b8400f", "#9aa6b5"
+
+def asset_classes():
+    items = [("Corporate equities and mutual funds", 70.3), ("Owner-occupied housing", 48.1), ("U.S. Treasury securities", 28.1),
+             ("Commercial real estate", 17.8), ("Corporate and foreign bonds", 16.1), ("Municipal securities", 4.2)]
+    D = {"unit": "T", "items": [{"l": l, "v": v, "c": ORANGE_D if l.startswith("Commercial") else GREY,
+                                 "n": "Investible CRE only: it leaves out property owned by governments and by companies outside real estate." if l.startswith("Commercial") else ""} for l, v in items],
+         "rest": "<b>Commercial real estate</b> is a large market, about a quarter the size of the stock market."}
+    return box("cre-assets", "bars", "U.S. Asset Classes by Market Value", "Year-end 2024, in trillions of dollars (Exhibit 17-1).", D,
+               '<div class="cv-rows"></div>\n<div class="cv-read" aria-live="polite"></div>')
+
+def quadrants():
+    PE, PD, UE, UD = 9654, 5278, 1461, 1454
+    D = {"views": [
+        {"name": "Four quadrants", "rest": "<b>Private equity</b> is the largest quadrant by far; the two public quadrants are about 8% each.",
+         "slices": [{"l": "Public equity", "v": UE, "c": BLUE, "n": "Mostly listed REITs."},
+                    {"l": "Private equity", "v": PE, "c": BLUE_D, "n": "The largest category of CRE ownership."},
+                    {"l": "Public debt", "v": UD, "c": ORANGE, "n": "CMBS and REIT unsecured debt."},
+                    {"l": "Private debt", "v": PD, "c": ORANGE_D, "n": "Mortgages held by banks, life insurers and other lenders."}]},
+        {"name": "Debt vs. equity", "rest": "About <b>38% debt and 62% equity</b>: on average, $0.38 of every dollar of CRE value is borrowed.",
+         "slices": [{"l": "Equity", "v": PE + UE, "c": BLUE_D, "n": "Many owners, such as pension funds, hold properties free and clear."},
+                    {"l": "Debt", "v": PD + UD, "c": ORANGE_D, "n": "The average loan-to-value ratio is about 38%."}]},
+        {"name": "Private vs. public", "rest": "Most CRE capital, debt and equity alike, is held <b>privately</b> rather than traded on an exchange.",
+         "slices": [{"l": "Private", "v": PE + PD, "c": "#34495e", "n": "Private equity plus private debt."},
+                    {"l": "Public", "v": UE + UD, "c": "#9fb3c8", "n": "Public equity plus public debt."}]}]}
+    assert PE + PD + UE + UD == 17847
+    return box("cre-quadrants", "pie", "Who Finances U.S. Commercial Real Estate?", "$17.8 trillion of investible CRE, split three ways (Exhibit 17-2).", D,
+               '<div class="cv-tabs" role="group" aria-label="View"></div>\n<div class="cv-body">\n<svg class="cv-pie" viewBox="-10 -10 320 320" role="img" aria-label="Pie chart of U.S. commercial real estate value: private equity $9,654 billion (54%), private debt $5,278 billion (30%), public equity $1,461 billion (8%), public debt $1,454 billion (8%)"></svg>\n<div class="cv-side"><div class="cv-rows"></div><div class="cv-read" aria-live="polite"></div></div>\n</div>')
+
+def private_split():
+    I, N = 2783, 6871; T = I + N; assert T == 9654
+    D = {"total": T, "items": [{"l": "Institutional-quality properties", "v": I, "c": BLUE_D, "n": "Pension funds, foreign investors, life insurers, PERE funds, endowments and other large investors."},
+                               {"l": "Non-institutional properties", "v": N, "c": BLUE, "n": "Owned mostly by the \"great investor masses\" through local LLC syndications."}],
+         "rest": "Of <b>$9.65 trillion</b> in private CRE equity, less than a third is in institutional-quality property."}
+    segs = (f'<div class="cv-split"><div class="cv-seg" data-i="0" tabindex="0" role="button" style="flex:{I};background:{BLUE_D}">29%</div>'
+            f'<div class="cv-seg" data-i="1" tabindex="0" role="button" style="flex:{N};background:{BLUE}">71%</div></div>'
+            f'<div class="cv-key"><span style="--c:{BLUE_D}">Institutional quality ($2.78T)</span><span style="--c:{BLUE}">Non-institutional ($6.87T)</span></div>')
+    return box("cre-private", "split", "Private CRE Equity by Property Quality", "Year-end 2024, in billions of dollars (Exhibit 17-3).", D,
+               segs + '\n<div class="cv-read" aria-live="polite"></div>')
+
+def debt_holders():
+    items = [("Banks and savings associations", 3014, "pri", "The largest single holder: 57% of private and about 45% of all CRE debt."),
+             ("Life insurance companies", 780, "pri", "Very active lenders; about 12% of all CRE debt."),
+             ("GSEs (Fannie Mae and Freddie Mac)", 591, "pri", "Active multifamily lenders."),
+             ("Non-government-backed CMBS", 514, "pub", "\"Private-label\" CMBS, typically issued by large banks."),
+             ("Agency and GSE-backed CMBS", 473, "pub", "All multifamily."),
+             ("Equity REIT unsecured debt", 467, "pub", "About one-third of public CRE debt."),
+             ("Other", 371, "pri", ""),
+             ("Federal, state and local governments", 210, "pri", ""),
+             ("Mortgage REITs", 186, "pri", ""),
+             ("Private debt funds", 112, "pri", "A fast-growing source of bridge loans for transitional properties."),
+             ("Pension funds", 14, "pri", "")]
+    assert sum(v for _, v, g, _ in items if g == "pri") == 5278 and sum(v for _, v, g, _ in items if g == "pub") == 1454
+    D = {"unit": "B", "total": 6732, "share": "all CRE debt",
+         "items": [{"l": l, "v": v, "g": g, "c": ORANGE_D if g == "pri" else ORANGE, "n": n} for l, v, g, n in items],
+         "rest": "<b>$6.73 trillion</b> of CRE debt: 78% is held privately, 22% trades publicly.",
+         "filters": [{"name": "All holders", "g": ""},
+                     {"name": "Private (78%)", "g": "pri", "of": "private CRE debt", "rest": "<b>Private CRE debt: $5.28 trillion.</b> Banks and savings associations hold 57% of it. Each bar shows its share of private debt."},
+                     {"name": "Public (22%)", "g": "pub", "of": "public CRE debt", "rest": "<b>Public CRE debt: $1.45 trillion,</b> split almost evenly three ways. Each bar shows its share of public debt."}]}
+    key = f'<div class="cv-key"><span style="--c:{ORANGE_D}">Privately held</span><span style="--c:{ORANGE}">Publicly traded</span></div>'
+    return box("cre-debt", "bars", "Who Holds U.S. Commercial Real Estate Debt?", "Investment holdings, not loan originations; year-end 2024, in billions of dollars (Exhibit 17-4).", D,
+               '<div class="cv-tabs" role="group" aria-label="Filter"></div>\n<div class="cv-rows"></div>\n' + key + '\n<div class="cv-read" aria-live="polite"></div>')
+
+TREE_NOTES = {   # one line per node, paraphrased from the chapter
+    "cre": "An alternative asset class. Investors can own it through private markets or public markets.",
+    "private": "Vehicles that do not trade on a stock exchange. They hold about 85% to 90% of the ownership interests in U.S. CRE.",
+    "direct": "The investor holds title itself: complete control, but it must supply the expertise. Most common for large institutions and high-net-worth investors.",
+    "inter": "Entities that invest in real estate and sell partial claims to it. They supply expertise, diversification and shared risk, in exchange for fees.",
+    "jv": "Syndications that pool equity capital, usually organized as LLCs or limited partnerships.",
+    "pere": "Private equity real estate funds, which pool capital from institutions and high-net-worth investors.",
+    "open": "No fixed end date; investors can buy in or redeem quarterly; mostly core properties. The manager usually invests none of its own equity.",
+    "closed": "A finite life of 7 to 10 years and very illiquid. The manager co-invests 1% to 5% and earns carried interest.",
+    "public": "Shares that trade on a stock exchange, with more liquidity and lower transaction costs than private markets.",
+    "reits": "Corporations that avoid entity-level tax by meeting requirements such as paying out at least 90% of taxable income. About $1.5 trillion of CRE equity.",
+}
+
+def tree():
+    """The other asset classes as one line; commercial real estate's routes as a tree that reads left to right.
+    The strip is plain; hovering a node in the diagram lights its path and its branches."""
+    def N(s, k, c=""):
+        return f'<span class="cv-node {c}" data-k="{k}" tabindex="0" role="button">{s}</span>'
+    P = lambda s, c="": f'<span class="cv-node {c}">{s}</span>'   # the strip is plain: only CRE is traced below it
+    strip = P("Cash") + P("Bonds") + P("Stocks") + P("Alternatives:", "cv-plain") + P("Commercial real estate", "hot") + P("Hedge funds") + P("Infrastructure")
+    D = {"notes": TREE_NOTES, "rest": ""}
+    return ('<div class="crev" id="cre-tree" data-kind="tree">\n<p class="cv-title">Where CRE Equity Fits in the Capital Markets</p>\n'
+            '<p class="cv-lede">Commercial real estate is an alternative asset class, owned through private or public markets.</p>\n'
+            '<div class="cv-classes">Asset classes: ' + strip + '</div>\n'
+            '<div class="cv-tree"><ul><li>' + N("Commercial<br>real estate", "cre", "hot wrap") + '<ul>'
+            '<li>' + N("Private market<br><small>85% to 90% of CRE equity</small>", "private", "warm wrap") + '<ul>'
+            '<li>' + N("Direct investment", "direct") + '</li>'
+            '<li>' + N("Through<br>intermediaries", "inter", "wrap") + '<ul>'
+            '<li>' + N("JVs, LLCs, etc.", "jv") + '</li>'
+            '<li>' + N("PERE funds", "pere") + '<ul><li>' + N("Open-end funds", "open") + '</li><li>' + N("Closed-end funds", "closed") + '</li></ul></li>'
+            '</ul></li></ul></li>'
+            '<li>' + N("Public market", "public", "warm") + '<ul><li>' + N("Listed REITs", "reits") + '</li></ul></li>'
+            '</ul></li></ul></div>\n<div class="cv-read" aria-live="polite"></div>\n'
+            f'<script type="application/json">{json.dumps(D, ensure_ascii=False)}</script>\n</div>')
+
+def risk_return():
+    """A ladder in HTML rather than a scaled drawing: on a phone a drawing's captions shrink to about 8px."""
+    rungs = [("Opportunistic", "Development projects and distressed situations; required returns of 20% or more are possible.", "Closed-end", BLUE_D, 3),
+             ("Value-added", "Properties that need renovation or re-leasing; intermediate risk and return.", "Closed-end", "#2f6fbf", 2),
+             ("Core-plus", "Otherwise core properties with some added risk, such as higher vacancy or weaker tenants.", "", BLUE, 1),
+             ("Core", "Stabilized, high-quality properties with strong leases in large metros; required returns of about 8% to 9%.", "Open-end", "#9fc3ef", 0)]
+    rows = "".join(f'<div class="cv-rung" style="--k:{k};--c:{c}"><span class="cv-dot"></span><div><b>{n}</b>'
+                   + (f' <span class="cv-tag">{tag} funds</span>' if tag else "") + f'<br><span class="cv-desc">{d}</span></div></div>' for n, d, tag, c, k in rungs)
+    return ('<div class="crev" id="cre-risk">\n<p class="cv-title">Private Equity Real Estate Fund Strategies</p>\n<p class="cv-lede">Each step up the ladder takes on more risk for a higher expected return.</p>\n'
+            f'<div class="cv-ladder"><div class="cv-axis"><span>More risk,<br>higher expected return</span></div><div class="cv-rungs">{rows}</div></div>\n</div>')
+
+def lifecycle():
+    """The box above it already says what each phase is; the figure shows what the text cannot, the phases to
+    scale against the fund's life. Years 0 to 12: fundraising 0-1, investment 1-3.5 (often 2 to 3 years), harvesting
+    to the end of a 7- to 10-year life, then a possible 1- to 2-year extension."""
+    Y = 12; at = lambda y: f"{100 * y / Y:.2f}%"
+    segs = (f'<div class="cv-tl-seg" style="left:0;width:{at(1)};background:#5b6474"></div>'
+            f'<div class="cv-tl-seg" style="left:{at(1)};width:{at(2.5)};background:#2f6fbf"></div>'
+            f'<div class="cv-tl-seg" style="left:{at(3.5)};width:{at(6.5)};background:linear-gradient(to right, {BLUE_D} 55%, #9fb6d6)"></div>'
+            f'<div class="cv-tl-seg cv-tl-ext" style="left:{at(10)};width:{at(2)}"></div>'
+            f'<div class="cv-tl-end" style="left:{at(7)};width:{at(3)}"></div>')
+    above = (f'<span class="cv-tl-lab" style="left:0"><b>Fundraising</b> 1 yr</span>'
+             f'<span class="cv-tl-lab cv-harv" style="left:{at(3.5)}"><b>Harvesting</b> <span class="cv-x">operate, improve, </span>sell</span>')
+    below = (f'<span class="cv-tl-lab" style="left:{at(1)}"><b>Investment</b> 2 to 3 yrs<span class="cv-x">, capital calls</span></span>'
+             f'<span class="cv-tl-lab cv-r" style="right:0">+1 to 2 yr<span class="cv-x"> extension</span></span>')
+    ticks = "".join(f'<span class="cv-tl-tick" style="left:{at(y)}">{y}</span>' for y in range(0, Y + 1, 2))
+    return ('<div class="crev" id="cre-life">\n<p class="cv-title">Life Cycle of a Closed-End PERE Fund, to Scale</p>\n'
+            '<p class="cv-lede">The fund must wind down within 7 to 10 years (shaded); the manager may extend it by a year or two.</p>\n'
+            f'<div class="cv-tl"><div class="cv-tl-row cv-tl-above">{above}</div><div class="cv-tl-bar">{segs}</div>'
+            f'<div class="cv-tl-row cv-tl-below">{below}</div><div class="cv-tl-ticks">{ticks}</div><div class="cv-tl-axis">Years from launch (approximate)</div></div>\n</div>')
+
+def waterfall():
+    steps = [("1", "Return of capital", "100% of distributable cash goes to the limited partners until their contributed equity is returned.", [("LPs 100%", 1, BLUE_D)]),
+             ("2", "Preferred return", "Still 100% to the limited partners, until their cumulative IRR reaches the preferred return (commonly 7% to 8%).", [("LPs 100%", 1, BLUE_D)]),
+             ("3", "Carried interest", "Remaining cash is split, often 80% to the limited partners and 20% to the general partner.", [("LPs 80%", 80, BLUE_D), ("GP 20%", 20, ORANGE_D)])]
+    cells = ""
+    for n, h, t, segs in steps:
+        bar = "".join(f'<div class="cv-seg" style="flex:{w};background:{c}">{l}</div>' for l, w, c in segs)
+        cells += f'<div class="cv-step"><span class="cv-n">{n}</span><b>{h}</b>{t}<div class="cv-split">{bar}</div></div>'
+    return ('<div class="crev" id="cre-waterfall">\n<p class="cv-title">A Standard Distribution Waterfall</p>\n<p class="cv-lede">Each tier is paid in full before cash flows to the next.</p>\n'
+            f'<div class="cv-steps">{cells}</div>\n</div>')
+
+def split_after(t, sentence, html):
+    """End the paragraph after `sentence`, put `html` there, and carry on the paragraph after it."""
+    assert t.count(sentence) == 1, sentence
+    i = t.index(sentence) + len(sentence); rest = t[i:].lstrip(" ")
+    return t[:i] + "</p>\n\n" + html + "\n\n<p>" + rest
+
+def charts(t):
+    t = normal(t)
+    first = True
+    def put(t, anchor, html, what, after=True):
+        nonlocal first
+        block = (CSS + "\n" if first else "") + html; first = False
+        i = t.index(anchor) if t.count(anchor) == 1 else None
+        assert i is not None, (what, t.count(anchor))
+        j = i + len(anchor) if after else i
+        return t[:j] + "\n\n" + block + "\n\n" + t[j:]
+    t = split_after(t, "you do need to know the relative size of each asset class.", CSS + "\n" + asset_classes()); first = False
+    t = put(t, "<li>8% in publicly traded mortgage debt</li>\n</ul>", quadrants(), "quadrants")
+    t = put(t, "are held by vehicles that do not trade on a stock exchange.</p>", tree(), "tree")
+    t = put(t, "<h4>Life-Cycle of a Closed-End Fund</h4>", "", "noop") if False else t
+    i = t.index("<h4>Life-Cycle of a Closed-End Fund</h4>"); j = t.index("</div>", i)   # inside the box: the figure draws its phases, which only the box describes
+    t = t[:j] + "\n" + lifecycle() + "\n        " + t[j:]
+    t = put(t, "The general partner's share is disproportionate to its small equity co-investment by design—tying general partner pay to performance.</p>", waterfall(), "waterfall")
+    t = put(t, "Their investments include development projects and distressed situations.</li>\n        </ul>", risk_return(), "risk")
+    t = put(t, "or non-institutional quality properties:</p>", private_split(), "private")
+    i = t.index("<h4>EXAM TIP: Commercial Debt Structure</h4>"); j = t.index("</div>", i) + 6
+    t = t[:j] + "\n\n" + debt_holders() + "\n" + t[j:]
+    t = sub1(t, "</body>", RUNTIME + "\n</body>", "runtime")
+    return t
+
+def build(src, outdir):
+    t = open(src, encoding="utf-8").read()
+    for sub, fn in (("Normal", normal), ("Charts", charts)):
+        d = os.path.join(outdir, f"REE3043-Ch17-{sub}"); os.makedirs(d, exist_ok=True)
+        p = os.path.join(d, "REE3043-Fall26-Chapter17-Full.html"); open(p, "w", encoding="utf-8").write(fn(t)); print("wrote", p)
+
+if __name__ == "__main__":
+    build(*sys.argv[1:3])

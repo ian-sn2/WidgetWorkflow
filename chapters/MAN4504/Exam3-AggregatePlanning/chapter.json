@@ -1,0 +1,11 @@
+{
+ "about": "Aggregate planning: the transportation-method table as a stepper (Option A, the chosen design) and an explorer (Option B), with Balanced and Concise editions of each.",
+ "source_note": "The Full as Ian sent it, before any widget.",
+ "steps": [
+  ["scripts/man4504/transport.py", "{source}/MAN4504-263-Exam3-AggregatePlanning-FULL.html", "{out}"],
+  ["scripts/man4504/transport_editions.py", "{source}/MAN4504-263-Exam3-AggregatePlanning-FULL.html", "{out}"]
+ ],
+ "outputs": ["MAN4504-263-Exam3-AggregatePlanning-FULL-OptionA-Stepper.html",
+             "MAN4504-263-Exam3-AggregatePlanning-BALANCED-OptionA-Stepper.html",
+             "MAN4504-263-Exam3-AggregatePlanning-CONCISE-OptionA-Stepper.html"]
+}

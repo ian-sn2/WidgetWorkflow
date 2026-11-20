@@ -1,0 +1,436 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 22: Implementation and Control</title>
+    <link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v6.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        MathJax = {
+            tex: {
+                displayMath: [['\\[','\\]']],
+                inlineMath: [['\\(','\\)']]
+            }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function () { var b = document.getElementById('intro-note'), t = document.querySelector('details.toc-box'); if (b && t) b.parentNode.insertBefore(t, b); });</script>
+<style>
+.video-section {
+    width: 100%;
+    margin: 10px auto;
+    border: 0px solid #810000;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+.video-section-header {
+    background-color: #810000;
+    color: white;
+    padding: 5px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: background-color 0.3s ease;
+    user-select: none;
+}
+.video-section-header:hover { background-color: #9b0b0b; }
+.video-section-header::-webkit-details-marker { display: none; }
+.expand-icon {
+    position: absolute;
+    right: 20px;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+.video-section[open] .expand-icon { transform: rotate(180deg); }
+.video-content {
+    padding: 20px;
+    text-align: center;
+    background-color: #fff3f3;
+}
+.video-embed-wrapper {
+    width: 60%;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.video-embed-wrapper iframe { border-radius: 8px; }
+.download-section { margin-top: 20px; }
+.download-btn {
+    display: inline-block;
+    background-color: #810000;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.download-btn:hover {
+    background-color: #9b0b0b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    color: white;
+    text-decoration: none;
+}
+</style>
+<style>
+.pertw { --ink:#1c2a44; --muted:#5b6474; --rule:#cfd6e2; --soft:#f1f4f9; --crit:#0e6f73; --node:#d9f5f5; --node-rule:#8fcfd1; --sel:#2a78d6;
+  max-width:760px; margin:20px auto; padding:14px 16px 12px; background:#fff; border:1px solid #dfe3ea; border-radius:10px;
+  box-sizing:border-box; font-family:"Red Hat Display", system-ui, sans-serif; color:var(--ink); clear:both; }
+.pertw * { box-sizing:border-box; }
+.pertw .pt-title { font-weight:800; font-size:1.02rem; margin:0 0 8px; text-align:center; }
+.pertw .pt-bar { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin:0 0 8px; }
+.pertw button { font:inherit; font-size:.85rem; font-weight:700; min-height:40px; padding:6px 14px; border:1px solid var(--rule);
+  border-radius:999px; background:#fff; color:var(--ink); cursor:pointer; }
+.pertw button.crit { border-color:var(--crit); color:var(--crit); }
+.pertw button[aria-pressed="true"] { background:var(--sel); border-color:var(--sel); color:#fff; }
+.pertw button.crit[aria-pressed="true"] { background:var(--crit); border-color:var(--crit); }
+.pertw button:focus-visible { outline:3px solid #2a78d6; outline-offset:2px; }
+.pertw .pt-caps { display:grid; margin:0 0 6px; }
+.pertw .pt-cap { grid-area:1 / 1; visibility:hidden; padding:7px 12px; border-left:4px solid var(--sel); background:var(--soft);
+  border-radius:0 6px 6px 0; font-size:.92rem; text-align:left; }
+.pertw .pt-cap.crit { border-left-color:var(--crit); }
+.pertw .pt-cap.on { visibility:visible; }
+.pertw svg { display:block; width:100%; height:auto; margin:0 auto; }
+.pertw svg text { font-family:"Red Hat Display", system-ui, sans-serif; }
+.pertw .nd circle { fill:var(--node); stroke:var(--node-rule); stroke-width:1.5; }
+.pertw .nd.on circle { stroke:var(--sel); stroke-width:3; } .pertw .nd.on.crit circle { stroke:var(--crit); }
+.pertw .nd .id { font-size:19px; font-weight:800; fill:var(--ink); text-anchor:middle; dominant-baseline:central; }
+.pertw .nd .nm { font-size:13px; font-weight:800; fill:var(--ink); }
+.pertw .ed line { stroke:#5fa9ad; stroke-width:1.6; } .pertw .ed polygon { fill:#5fa9ad; }
+.pertw .ed .du { font-size:16px; font-weight:700; fill:#3f9ca1; text-anchor:middle; dominant-baseline:central; }
+.pertw .ed.cp line { stroke:var(--crit); stroke-width:5; } .pertw .ed.cp polygon { fill:var(--crit); } .pertw .ed.cp .du { fill:var(--crit); }
+.pertw .ed.on line { stroke:var(--sel); stroke-width:5; } .pertw .ed.on polygon { fill:var(--sel); } .pertw .ed.on .du { fill:var(--sel); font-weight:800; }
+.pertw .ed.on.cp line { stroke:var(--crit); } .pertw .ed.on.cp polygon { fill:var(--crit); } .pertw .ed.on.cp .du { fill:var(--crit); }
+.pertw .ed.off { opacity:.35; } .pertw .nd.off { opacity:.45; }
+.pertw .time line { stroke:#6b7f78; stroke-width:1.5; } .pertw .time polygon { fill:#6b7f78; } .pertw .time text { font-size:12px; font-weight:700; fill:#6b7f78; }
+.pertw .pt-key { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin:6px 0 0; font-size:.78rem; color:var(--muted); }
+.pertw .pt-key i { display:inline-block; width:22px; border-top:5px solid; vertical-align:middle; margin-right:6px; border-radius:3px; }
+@media (max-width:600px) { .pertw { padding:12px 8px; } .pertw button { padding:6px 10px; font-size:.8rem; } }
+@media (max-width:600px) { table { display:block; overflow-x:auto !important; -webkit-overflow-scrolling:touch; }
+  mjx-container { display:inline-block !important; max-width:100%; overflow-x:auto; overflow-y:hidden; vertical-align:middle; }
+  li, p { overflow-wrap:break-word; } }
+</style>
+</head>
+<body>
+
+<h1>The Implementation Phase</h1>
+
+<h2>Establishing the Marketing Organization</h2>
+
+<table>
+    <thead>
+        <tr><th>Role / Concept</th><th>Key Facts</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><b>Brand manager</b></td><td>Responsible for overall marketing effort for a specific brand; recruits and motivates employees to support organizational goals</td></tr>
+        <tr><td><b>CMO</b></td><td>Voice of consumer internally; oversees budgets often &gt;10% of revenue; reports to CEO/COO; avg. tenure ~4 years</td></tr>
+        <tr><td><b>Line positions</b></td><td>Authority to issue direct orders to subordinates</td></tr>
+        <tr><td><b>Staff positions</b></td><td>Advisory authority only; cannot issue direct orders</td></tr>
+        <tr><td><b>Category manager</b></td><td>Manages an entire product line</td></tr>
+    </tbody>
+</table>
+
+<h3>Divisional Groupings:</h3>
+<table>
+    <thead>
+        <tr><th>Grouping Type</th><th>Basis</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><b>Product line</b></td><td>Specific product offerings</td></tr>
+        <tr><td><b>Functional</b></td><td>Department or business activity</td></tr>
+        <tr><td><b>Geographical</b></td><td>Sales territory location</td></tr>
+        <tr><td><b>Market-based</b></td><td>Customer segments; combined with product line = <b>matrix organization</b></td></tr>
+    </tbody>
+</table>
+
+ 
+<h2>Developing Timetables</h2>
+
+<ul>
+    <li><b>PERT chart</b> (Program Evaluation and Review Technique): Best tool for scheduling complex processes; nodes = milestones, lines = tasks, numbers = duration in months</li>
+    <li><b>Critical path</b>: The <em>longest</em> path from start to finish; determines minimum launch time; focus speed-up efforts here (bottleneck)</li>
+    <li><b>Gantt chart</b>: Specifies task, responsible person, deadline, and deliverable</li>
+</ul>
+
+<div class="exam-tip">
+<h4>EXAM TIP: Interpreting PERT Charts</h4>
+<p>Expect an exam question requiring PERT chart interpretation. The critical path is the <em>longest</em> path. Speeding up a non-critical path only adds slack — it does not reduce total launch time.</p>
+</div>
+
+<h3>PERT Chart Example:</h3>
+
+<div class="pertw">
+<p class="pt-title">PERT Chart: New Product Launch</p>
+<div class="pt-body"></div>
+<noscript><img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/mar3023-253-exam3-chapter22-01-pert-chart-diagram.png" alt="PERT chart: prototype (A) to launch (F), critical path A to C to E to F" class="image-wide-70 content-image"></noscript>
+<script type="application/json">{"nodes": {"A": "Prototype", "B": "Market\nResearch", "C": "Build\nProduction\nFacility", "D": "Develop Ad\nCampaign", "E": "Redesign\nProduct", "F": "Launch"}, "edges": [["A", "B", 5, false], ["A", "C", 7, true], ["B", "D", 5, false], ["B", "E", 2, false], ["C", "E", 4, true], ["D", "F", 2, false], ["E", "F", 4, true]], "layout": {"h": {"w": 660, "h": 326, "R": 25, "n": {"A": [62, 165, "below"], "B": [240, 82, "above"], "C": [240, 228, "below"], "D": [440, 82, "above"], "E": [440, 228, "below"], "F": [600, 165, "below"]}, "e": {"AB": -1, "AC": 1, "BD": -1, "BE": -1, "CE": -1, "DF": -1, "EF": -1}}, "v": {"w": 392, "h": 590, "R": 25, "n": {"A": [196, 46, "right"], "B": [116, 196, "left"], "C": [276, 196, "right"], "D": [116, 380, "left"], "E": [276, 380, "right"], "F": [196, 530, "right"]}, "e": {"AB": 1, "AC": -1, "BD": 1, "BE": -1, "CE": -1, "DF": 1, "EF": -1}}}, "views": [{"label": "A → B → D → F", "path": ["A", "B", "D", "F"], "crit": false, "cap": "<b>A → B → D → F:<\/b> 5 + 5 + 2 = <b>12 months<\/b>"}, {"label": "A → B → E → F", "path": ["A", "B", "E", "F"], "crit": false, "cap": "<b>A → B → E → F:<\/b> 5 + 2 + 4 = <b>11 months<\/b>"}, {"label": "A → C → E → F", "path": ["A", "C", "E", "F"], "crit": true, "cap": "<b>A → C → E → F:<\/b> 7 + 4 + 4 = <b>15 months<\/b> (the critical path)"}], "start": 2}</script>
+</div>
+
+ 
+<ul>
+    <li>\(A \to B \to D \to F = 12\) months</li>
+    <li>\(A \to B \to E \to F = 11\) months</li>
+    <li>\(A \to C \to E \to F = 15\) months* ← <b>Critical Path</b></li>
+</ul>
+<p>Total launch time: <b>15 months</b>. To shorten, reduce time on A, C, E, or F only.</p>
+
+<details class="video-section">
+    <summary class="video-section-header">
+        Quantitative Review Video - PERT Charts
+        <span class="expand-icon">▼</span>
+    </summary>
+    <div class="video-content">
+        <div class="video-embed-wrapper">
+            <div style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;"><iframe id="42dada65e1071b2d149089e1cb3992e2-vod-276e6b99-8a27-412b-ba08-b30cc3b34b78" src="https://iframe.dacast.com/vod/42dada65e1071b2d149089e1cb3992e2/276e6b99-8a27-412b-ba08-b30cc3b34b78" width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay;encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen style="position:absolute;top:0;left:0;"></iframe></div>
+        </div>
+        <div class="download-section">
+            <a href="https://smokinnotes.s3.us-east-1.amazonaws.com/public/mar3023-exam3-review-pertcharts.pdf" target="_blank" class="download-btn">Download Video Sheet (PW is "stockturn")</a>
+        </div>
+    </div>
+</details>
+
+<h2>Resource Allocation — Share Point Analysis</h2>
+
+<ul>
+    <li><b>Share point</b>: 1% of total industry sales</li>
+    <li><b>Gross margin</b>: Sales revenue − Cost of goods sold (contribution to fixed costs and profit)</li>
+    <li><b>1.5 rule</b>: Increasing market share by 1% requires a 1.5% increase in share of voice</li>
+</ul>
+
+<h3>Share Point Analysis Steps</h3>
+<ol>
+    <li>Estimate industry sales (syndicated research or trade publications)</li>
+    <li>Compute firm market share: \[\text{Market share} = \frac{\text{Firm sales}}{\text{Industry sales}}\]</li>
+    <li>Compute gross margin per share point: \[\text{Gross margin per share point} = \frac{\text{Gross margin}}{\text{Share points}}\]</li>
+    <li>Apply 1.5 rule to find required voice point increase</li>
+    <li>Compute added marketing expense; compare to added gross margin</li>
+</ol>
+
+<div class="example-box">
+<h4>Share Point Analysis — Worked Example</h4>
+<ul>
+    <li>Industry sales: $100B; Firm sales: $15B; Gross margin: $5B</li>
+    <li>Market share: \(\frac{\$15B}{\$100B} = 15\%\) → 15 share points</li>
+    <li>Gross margin per share point: \(\frac{\$5B}{15} = \$333.3M\)</li>
+    <li>Goal: reach 18% → gain 3 share points → +$1B gross margin</li>
+    <li>1.5 rule: 3 share points × 1.5 = 4.5 voice points needed</li>
+    <li>Industry marketing spend: $10B → $100M per voice point</li>
+    <li>Added expense: 4.5 × $100M = $450M</li>
+    <li><b>Net gain: $1B − $450M = $550M</b></li>
+</ul>
+</div>
+
+<details class="video-section">
+    <summary class="video-section-header">
+        Quantitative Review Video - Share Point Analysis
+        <span class="expand-icon">▼</span>
+    </summary>
+    <div class="video-content">
+        <div class="video-embed-wrapper">
+            <div style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;"><iframe id="42dada65e1071b2d149089e1cb3992e2-vod-b5d4400e-6687-4253-a084-a6d28dc25dbb" src="https://iframe.dacast.com/vod/42dada65e1071b2d149089e1cb3992e2/b5d4400e-6687-4253-a084-a6d28dc25dbb" width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay;encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen style="position:absolute;top:0;left:0;"></iframe></div>
+        </div>
+        <div class="download-section">
+            <a href="https://smokinnotes.s3.us-east-1.amazonaws.com/public/mar3023-exam3-review-sharepoint.pdf" target="_blank" class="download-btn">Download Video Sheet (PW is "stockturn")</a>
+        </div>
+    </div>
+</details>
+
+<h2>Planning vs. Implementation</h2>
+
+<table>
+    <thead>
+        <tr><th>Plan Quality</th><th>Implementation Quality</th><th>Outcome</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Good</td><td>Good</td><td>Success</td></tr>
+        <tr><td>Good</td><td>Poor</td><td>Fixable (focus on execution)</td></tr>
+        <tr><td>Poor</td><td>Good</td><td>Fixable (go back to plan)</td></tr>
+        <tr><td>Poor</td><td>Poor</td><td>Failure</td></tr>
+    </tbody>
+</table>
+
+<ul>
+    <li><b>Planning &gt; implementation</b> in importance: plan defines product benefits, goals, metrics, and contingency responses</li>
+    <li>Good plan + poor execution is easier to fix than poor plan + good execution</li>
+    <li><b>Marketing strategy</b>: how to achieve a goal (target market + marketing program)</li>
+    <li><b>Marketing tactics</b>: day-to-day operational decisions executing the strategy</li>
+</ul>
+
+<h2>Improving Implementation</h2>
+
+ 
+<table>
+    <thead>
+        <tr><th>Tactic</th><th>Key Point</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><b>Communicate</b></td><td>Explain the plan clearly; enable two-way feedback; create psychologically safe environment</td></tr>
+        <tr><td><b>Program champion</b></td><td>Person who cuts red tape and drives the program forward; exists at all levels; pushes both strong and weak ideas</td></tr>
+        <tr><td><b>Reward performance</b></td><td>Incentivize good execution; treat failures as lessons</td></tr>
+        <tr><td><b>Schedule tasks</b></td><td>Use PERT or Gantt charts for timing and priority</td></tr>
+        <tr><td><b>Just do it</b></td><td>Avoid <b>paralysis by analysis</b>; act proactively</td></tr>
+        <tr><td><b>Seek feedback</b></td><td>Internal (employees) and external (customers, channel partners)</td></tr>
+    </tbody>
+</table>
+
+<h1>The Control Phase</h1>
+
+<ul>
+    <li><b>Control (evaluation) phase</b>: measure results, identify deviations, take corrective action</li>
+    <li><b>Management by exception</b>: focus attention on significant deviations from the plan</li>
+    <li>If results fall short → corrective action; if results exceed goals → double down</li>
+</ul>
+
+<h2>Measuring Results</h2>
+
+<table>
+    <thead>
+        <tr><th>Method</th><th>Focus</th><th>Use</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><b>Sales analysis</b></td><td>Actual sales vs. goals</td><td>Identify regional/segment strengths and weaknesses; shift resources</td></tr>
+        <tr><td><b>Profitability analysis</b></td><td>Profit by product, segment, territory, channel, order size</td><td>Decide to expand, maintain, reduce, or eliminate offerings</td></tr>
+    </tbody>
+</table>
+
+<h2>Marketing Audit and ROI Tools</h2>
+
+<ul>
+    <li><b>Marketing audit</b>: comprehensive, unbiased, periodic review of the strategic marketing process; determines marketing ROI; often conducted by outside consultants for objectivity</li>
+    <li><b>Marketing ROI</b>: measures what marketing spending accomplishes and quantifies it</li>
+    <li><b>Marketing metrics</b>: pre-identified quantified benchmarks (e.g., sales goals, retention rates, sales per sq. ft.)</li>
+    <li><b>Marketing dashboards</b>: real-time displays of key metrics for rapid trend/problem detection</li>
+</ul>
+
+<h2>Corrective Action and Contingency Plans</h2>
+
+<ul>
+    <li><b>Corrective action</b>: taken when actual performance deviates from goals</li>
+    <li><b>Contingency plans</b>: pre-established responses to scenarios when programs underperform; written into the annual plan</li>
+</ul>
+
+<h2>Glossary</h2>
+<table>
+    <thead>
+        <tr><th>Term</th><th>Definition</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><b>Implementation phase</b></td><td>Stage of strategic marketing that establishes organization, timetables, budgets, and executes the program</td></tr>
+        <tr><td><b>Brand manager</b></td><td>Person responsible for the overall marketing effort for a specific brand</td></tr>
+        <tr><td><b>Line position</b></td><td>Organizational role with authority to issue direct orders to subordinates</td></tr>
+        <tr><td><b>Staff position</b></td><td>Organizational role with advisory authority only; cannot issue direct orders</td></tr>
+        <tr><td><b>Matrix organization</b></td><td>Structure combining market-based and product line groupings</td></tr>
+        <tr><td><b>PERT chart</b></td><td>Program Evaluation and Review Technique; maps tasks and durations for complex scheduling</td></tr>
+        <tr><td><b>Critical path</b></td><td>Longest path in a PERT chart; determines minimum time to completion</td></tr>
+        <tr><td><b>Share point</b></td><td>One percent of total industry sales; used as a basis for resource allocation</td></tr>
+        <tr><td><b>Gross margin</b></td><td>Sales revenue minus cost of goods sold; contribution to fixed costs and profit</td></tr>
+        <tr><td><b>1.5 rule</b></td><td>Increasing market share by 1% requires a 1.5% increase in share of voice</td></tr>
+        <tr><td><b>Marketing strategy</b></td><td>Plan specifying target market and marketing program to achieve a goal</td></tr>
+        <tr><td><b>Marketing tactics</b></td><td>Day-to-day operational decisions that execute the strategy</td></tr>
+        <tr><td><b>Program champion</b></td><td>Person who cuts red tape and drives a program forward despite resistance</td></tr>
+        <tr><td><b>Paralysis by analysis</b></td><td>Failure to act due to excessive deliberation and planning</td></tr>
+        <tr><td><b>Control phase</b></td><td>Stage where managers measure results, detect deviations, and take corrective action</td></tr>
+        <tr><td><b>Management by exception</b></td><td>Focusing managerial attention on significant deviations from the plan</td></tr>
+        <tr><td><b>Marketing audit</b></td><td>Comprehensive, unbiased, periodic review of a firm's strategic marketing process</td></tr>
+        <tr><td><b>Marketing metrics</b></td><td>Pre-identified quantified benchmarks used to judge performance</td></tr>
+        <tr><td><b>Marketing dashboard</b></td><td>Real-time display of key marketing metrics for rapid decision-making</td></tr>
+        <tr><td><b>Contingency plan</b></td><td>Pre-established response plan activated when marketing programs underperform</td></tr>
+    </tbody>
+</table>
+
+<h2>Key Takeaways</h2>
+<ul>
+    <li>Expect an exam question requiring PERT chart interpretation — always identify the longest path as the critical path.</li>
+    <li>The critical path is the bottleneck: only reducing time on critical-path activities shortens total launch time.</li>
+    <li>Steps on non-critical paths can run in parallel; speeding them up only adds slack.</li>
+    <li>Share point analysis compares gross margin gained per share point against marketing expense required (via the 1.5 rule).</li>
+    <li>The 1.5 rule: every 1% increase in market share requires a 1.5% increase in share of voice.</li>
+    <li>Gross margin = Sales revenue − Cost of goods sold.</li>
+    <li>If added marketing expense exceeds added gross margin, the investment is not worthwhile.</li>
+    <li>Planning carries more weight than implementation: the plan defines goals, metrics, and contingency responses.</li>
+    <li>Good plan + poor implementation is easier to fix than poor plan + good implementation.</li>
+    <li>Program champions exist at all levels, push both strong and weak ideas, and are defined by determination, not guaranteed success.</li>
+    <li>Avoid paralysis by analysis — at some point additional planning adds no value and delays action.</li>
+    <li>Management by exception directs attention to significant deviations from the plan during the control phase.</li>
+    <li>Marketing audits are most objective when conducted by outside consultants.</li>
+    <li>Marketing dashboards provide real-time metric displays; marketing metrics are pre-set benchmarks for performance judgment.</li>
+    <li>Corrective action and contingency plans should be pre-written into the annual plan to avoid reactive scrambling.</li>
+    <li>Profitability analysis guides expand/maintain/reduce/eliminate decisions across products, segments, and channels.</li>
+    <li>Category manager role: manages an entire product line (broader than a single brand manager).</li>
+    <li>Matrix organization combines market-based and product line groupings.</li>
+</ul>
+
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  function E(t, a, p) { var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function r1(n) { return Math.round(n * 10) / 10; }
+  function draw(fig, M, v) {
+    var L = M.layout[fig.clientWidth < 540 ? 'v' : 'h'], R = L.R, P = L.n, on = {}, onN = {};
+    for (var i = 0; i < v.path.length; i++) { onN[v.path[i]] = 1; if (i) on[v.path[i - 1] + v.path[i]] = 1; }
+    fig.innerHTML = '';
+    var svg = E('svg', { viewBox: '0 0 ' + L.w + ' ' + L.h, role: 'img', 'aria-label': 'PERT chart, path ' + v.label + ' highlighted' }, fig);
+    svg.style.maxWidth = L.w + 'px';
+    if (L === M.layout.h) {   /* the source's time arrow along the bottom */
+      var tg = E('g', { 'class': 'time' }, svg), ty = L.h - 12;
+      E('line', { x1: 30, y1: ty, x2: L.w - 30, y2: ty }, tg);
+      E('polygon', { points: (L.w - 22) + ',' + ty + ' ' + (L.w - 34) + ',' + (ty - 5) + ' ' + (L.w - 34) + ',' + (ty + 5) }, tg);
+      var tt = E('text', { x: L.w - 40, y: ty - 7, 'text-anchor': 'end' }, tg); tt.textContent = 'Time';
+    }
+    M.edges.forEach(function (e) {
+      var a = P[e[0]], b = P[e[1]], k = e[0] + e[1], dx = b[0] - a[0], dy = b[1] - a[1], d = Math.sqrt(dx * dx + dy * dy), ux = dx / d, uy = dy / d;
+      var cls = 'ed' + (e[3] ? ' cp' : '') + (on[k] ? ' on' : ' off'), g = E('g', { 'class': cls }, svg), thick = on[k] || e[3];
+      var hl = thick ? 13 : 9, hw = thick ? 7 : 4.5, sx = a[0] + ux * (R + 2), sy = a[1] + uy * (R + 2), tx = b[0] - ux * (R + 3), ty2 = b[1] - uy * (R + 3), bx = tx - ux * hl, by = ty2 - uy * hl;
+      E('line', { x1: r1(sx), y1: r1(sy), x2: r1(bx + ux), y2: r1(by + uy) }, g);
+      E('polygon', { points: [r1(tx) + ',' + r1(ty2), r1(bx - uy * hw) + ',' + r1(by + ux * hw), r1(bx + uy * hw) + ',' + r1(by - ux * hw)].join(' ') }, g);
+      var s = L.e[k], mx = (sx + tx) / 2 - uy * 14 * s, my = (sy + ty2) / 2 + ux * 14 * s;
+      var t = E('text', { x: r1(mx), y: r1(my), 'class': 'du' }, g); t.textContent = e[2];
+    });
+    Object.keys(P).forEach(function (id) {
+      var p = P[id], g = E('g', { 'class': 'nd' + (onN[id] ? ' on' : ' off') + (v.crit ? ' crit' : ''), transform: 'translate(' + p[0] + ',' + p[1] + ')' }, svg);
+      E('circle', { r: R }, g); var t = E('text', { x: 0, y: 0, 'class': 'id' }, g); t.textContent = id;
+      var lines = M.nodes[id].split('\n'), lh = 15, side = p[2], x = 0, y, anc = 'middle';
+      if (side === 'below') y = R + 15;
+      else if (side === 'above') y = -R - 9 - (lines.length - 1) * lh;
+      else { x = side === 'left' ? -R - 8 : R + 8; anc = side === 'left' ? 'end' : 'start'; y = -(lines.length - 1) * lh / 2 + 4; }
+      var nm = E('text', { x: x, y: y, 'class': 'nm', 'text-anchor': anc }, g);
+      lines.forEach(function (ln, i) { var s = E('tspan', { x: x, dy: i ? lh : 0 }, nm); s.textContent = ln; });
+    });
+  }
+  function boot(w) {
+    if (w.dataset.ready) return; w.dataset.ready = '1';
+    var M = JSON.parse(w.querySelector('script[type="application/json"]').textContent), body = w.querySelector('.pt-body');
+    var bar = document.createElement('div'); bar.className = 'pt-bar'; bar.setAttribute('role', 'group'); body.appendChild(bar);
+    var caps = document.createElement('div'); caps.className = 'pt-caps'; caps.setAttribute('aria-live', 'polite'); body.appendChild(caps);
+    var fig = document.createElement('div'); body.appendChild(fig);
+    var key = document.createElement('div'); key.className = 'pt-key'; key.innerHTML = '<span><i style="color:var(--crit)"></i>Critical path</span><span><i style="color:var(--sel)"></i>Selected path</span>'; body.appendChild(key);
+    var cur = M.start, btns = [], cs = [];
+    M.views.forEach(function (v, i) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = v.label; if (v.crit) b.className = 'crit';
+      b.onclick = function () { set(i); }; bar.appendChild(b); btns.push(b);
+      var c = document.createElement('div'); c.className = 'pt-cap' + (v.crit ? ' crit' : ''); c.innerHTML = v.cap; caps.appendChild(c); cs.push(c);
+    });
+    function set(i) { cur = i; btns.forEach(function (b, j) { b.setAttribute('aria-pressed', i === j ? 'true' : 'false'); }); cs.forEach(function (c, j) { c.classList.toggle('on', i === j); }); draw(fig, M, M.views[i]); }
+    set(cur);
+    var lastW = fig.clientWidth;
+    if (window.ResizeObserver) new ResizeObserver(function () { if (Math.abs(fig.clientWidth - lastW) > 4) { lastW = fig.clientWidth; draw(fig, M, M.views[cur]); } }).observe(fig);
+  }
+  function all() { Array.prototype.forEach.call(document.querySelectorAll('.pertw'), function (w) { try { boot(w); } catch (e) { if (window.console) console.error(e); } }); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', all); else all();
+})();
+</script>
+</body>
+</html>

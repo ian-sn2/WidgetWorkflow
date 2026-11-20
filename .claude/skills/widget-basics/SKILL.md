@@ -22,7 +22,7 @@ A widget is a `<div class="sdg">` holding a JSON config; `engine/sd-graph.js` (v
 ## Words
 - Title and panel headings in **Title Case**; ledes, captions and steps in sentence case.
 - Captions: 1–3 complete sentences, **≤ 200 characters** (260 when showing three or more numbers of working), saying something the surrounding prose does not. No "Before –/After –", no fragments.
-- Never mention the source ("the slides", "in class") or instruct the reader ("hover over…").
+- Never mention the source ("the slides", "the transcript", "the lecture") or instruct the reader ("hover over…"). "In this lecture", "in class" and the professor are fine.
 
 ## Placement
 The widget replaces the `<img>` where it stood; keep any `<!-- IMAGE POSITION -->` comment. Map-driven placement for whole chapters: `scripts/apply_widgets.py` (`chapter-conversion`).

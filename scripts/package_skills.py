@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
-"""Zip each project skill in .claude/skills/ for upload to claude.ai (Settings > Capabilities > Skills).
+"""Package the project skills in .claude/skills/ for claude.ai.
 
-    python scripts/package_skills.py OUTDIR
+    python scripts/package_skills.py --plugin          # write plugin/ (claude.ai syncs it from GitHub)
+    python scripts/package_skills.py --check-plugin    # exit 1 if plugin/ is out of date (CI runs this)
+    python scripts/package_skills.py OUTDIR            # one zip per skill, for a manual upload
+
+The plugin is how the skills reach claude.ai without uploads (Ian, 2026-11-12): the repo is a plugin
+marketplace (.claude-plugin/marketplace.json) with one plugin, plugin/, holding all seven skills and one
+shared copy of the files they use. Added once in claude.ai (Customize > Plugins > Add marketplace,
+ian-sn2/WidgetWorkflow, Sync automatically), it updates itself when the default branch changes. Its
+version is bumped whenever its content changes, so a sync that waits for a new version sees one.
 
 In the repo a skill points at files by repo path (scripts/check_file.py, docs/engine-reference.md).
 A claude.ai chat has no repo, so each zip carries the files its skill uses at those same relative
@@ -33,10 +41,12 @@ BUNDLES = {
     "chapter-conversion": ENGINE + HP + REF + CHECK + ["docs/conversion-prompt-v7.md", "scripts/embed_engine.py",
                                                        "scripts/apply_widgets.py", "scripts/doc_headings.py",
                                                        "scripts/doc_formulas.py", "scripts/transcript_diff.py",
-                                                       "scripts/widget_text.py", "scripts/test_widget_text.py"],
-    "widget-qa": ENGINE + CHECK + ["scripts/test_check_file.py", "scripts/place_labels.py", "scripts/embed_engine.py", "scripts/render_widgets.py",
+                                                       "scripts/widget_text.py", "scripts/test_widget_text.py",
+                                                       "scripts/build_chapters.py"],
+    "widget-qa": ENGINE + CHECK + ["scripts/check_arithmetic.py", "scripts/test_check_arithmetic.py",
+                                   "scripts/build_chapters.py", "scripts/test_check_file.py", "scripts/place_labels.py", "scripts/embed_engine.py", "scripts/render_widgets.py",
                                    "scripts/mobile_check.py", "scripts/check_calc_widgets.py", "scripts/measure_em.py"],
-    "review-notes": CHECK + ["scripts/mobile_check.py"],
+    "review-notes": CHECK + ["scripts/mobile_check.py", "scripts/check_arithmetic.py"],
 }
 
 # claude.ai's skill upload rejects an .html file (widget-basics failed on the example page, 2026-11-11),
@@ -85,5 +95,84 @@ def main(out):
         print(f"{z.name}: {len(set(files)) + 2} files, {z.stat().st_size // 1024} KB")
 
 
+PLUGIN = ROOT / "plugin"
+PLUGIN_NAME = "smokin-notes-widgets"
+PLUGIN_DESC = ("Smokin' Notes study-guide widgets: creating widgets, drawing curves and placing labels, other chart "
+               "types, Full/Balanced/Concise editions, chapter conversion, checks before delivery, and reviews.")
+PLUGIN_NOTE = ("\n> **Files:** every path below (`scripts/…`, `docs/…`, `engine/…`, `examples/…`, `CLAUDE.md`) is in "
+               "this plugin's root folder, two levels up from this skill (`../../scripts/…`), at the same place it "
+               "sits in the WidgetWorkflow repo.\n")
+
+
+def plugin_files():
+    """every file the plugin holds, path -> bytes, apart from the version stamp"""
+    out = {}
+    for name, files in BUNDLES.items():
+        text = (ROOT / ".claude/skills" / name / "SKILL.md").read_text(encoding="utf-8")
+        head, sep, body = text.partition("\n---\n")
+        assert sep and head.startswith("---\n"), name
+        gen = GENERATED.get(name, {})
+        for path in gen:
+            body = body.replace(EXAMPLE, path)
+        out[f"skills/{name}/SKILL.md"] = (head + sep + PLUGIN_NOTE + body).encode()
+        for path, fn in gen.items():
+            out[path] = globals()[fn]().encode()
+        for f in files + ["CLAUDE.md"]:
+            assert (ROOT / f).exists() and not f.endswith(".html"), f
+            out[f] = (ROOT / f).read_bytes()
+    return out
+
+
+def plugin_tree():
+    import hashlib
+    files = plugin_files()
+    digest = hashlib.sha256(b"".join(k.encode() + b"\0" + v for k, v in sorted(files.items()))).hexdigest()[:16]
+    stamp = PLUGIN / ".content-hash"
+    old = json.loads((PLUGIN / ".claude-plugin/plugin.json").read_text())["version"] if stamp.exists() else "1.0.0"
+    major, minor, patch = (int(x) for x in old.split("."))
+    same = stamp.exists() and stamp.read_text().strip() == digest
+    version = old if same else f"{major}.{minor}.{patch + 1}"
+    meta = {"name": PLUGIN_NAME, "version": version, "description": PLUGIN_DESC, "author": {"name": "Smokin' Notes"}}
+    files[".claude-plugin/plugin.json"] = (json.dumps(meta, indent=2) + "\n").encode()
+    files[".content-hash"] = (digest + "\n").encode()
+    market = {"name": "smokin-notes", "owner": {"name": "Smokin' Notes"},
+              "plugins": [{"name": PLUGIN_NAME, "source": "./plugin", "description": PLUGIN_DESC, "version": version}]}
+    return files, (json.dumps(market, indent=2) + "\n").encode()
+
+
+def write_plugin():
+    import shutil
+    files, market = plugin_tree()
+    if PLUGIN.exists():
+        shutil.rmtree(PLUGIN)
+    for rel, data in files.items():
+        (PLUGIN / rel).parent.mkdir(parents=True, exist_ok=True)
+        (PLUGIN / rel).write_bytes(data)
+    (ROOT / ".claude-plugin").mkdir(exist_ok=True)
+    (ROOT / ".claude-plugin/marketplace.json").write_bytes(market)
+    print(f"plugin/: {len(files)} files, version {json.loads(files['.claude-plugin/plugin.json'])['version']}")
+
+
+def check_plugin():
+    files, market = plugin_tree()
+    have = {p.relative_to(PLUGIN).as_posix(): p.read_bytes() for p in PLUGIN.rglob("*")
+            if p.is_file() and "__pycache__" not in p.parts} if PLUGIN.exists() else {}   # caches from running its tests
+    mk = ROOT / ".claude-plugin/marketplace.json"
+    stale = sorted(set(files) ^ set(have)) + sorted(k for k in files if k in have and files[k] != have[k])
+    if not mk.exists() or mk.read_bytes() != market:
+        stale.append(".claude-plugin/marketplace.json")
+    if stale:
+        print("plugin/ is out of date with .claude/skills/ or the files it bundles: run "
+              "python scripts/package_skills.py --plugin and commit. Differs: " + ", ".join(stale[:8]))
+        return 1
+    print("plugin/ is up to date")
+    return 0
+
+
 if __name__ == "__main__":
-    main(sys.argv[1])
+    if sys.argv[1] == "--plugin":
+        write_plugin()
+    elif sys.argv[1] == "--check-plugin":
+        sys.exit(check_plugin())
+    else:
+        main(sys.argv[1])

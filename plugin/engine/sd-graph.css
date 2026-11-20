@@ -1,0 +1,364 @@
+.sdg { --navy:#002060; --ink:#1c2a44; --red:#d62828; --teal:#1a8a8a; --orange:#d8641c; --grey:#8a94a6; --gold:#c9a633; --rule:#c9d2e3; --paper:#f6f8fc; --plot:#eef3fd; --fig:580px;
+  font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; color:var(--ink);
+  border:1px solid var(--navy); background:var(--paper); padding:18px 20px 16px; width:80%; margin:24px auto;
+  container:sdg / inline-size; }
+@media (max-width:640px){ .sdg { width:100%; } }
+.sdg, .sdg *, .sdg *::before, .sdg *::after { box-sizing:border-box; }
+.sdg h4 { margin:0 0 4px; color:var(--navy); font-size:1.05rem; font-weight:700; }
+.sdg .sdg-lede { margin:0 0 12px; font-size:.92rem; line-height:1.45; }
+.sdg .sdg-scen { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.sdg .sdg-scen button { flex:1 1 200px; border:1px solid var(--navy); background:#fff; color:var(--navy); padding:8px 12px; font:inherit; font-size:.9rem; cursor:pointer; text-align:left; line-height:1.3; }
+.sdg .sdg-scen button[aria-pressed="true"] { background:var(--navy); color:#fff; }
+.sdg .sdg-body { display:grid; grid-template-columns:1fr; gap:14px; align-items:start; }
+.sdg .sdg-body:not(.has-table):not(.two) figure { max-width:var(--fig); margin:0 auto; width:100%; }
+.sdg .sdg-body.has-table figure { max-width:var(--fig); width:100%; }
+.sdg .sdg-body.has-table { grid-template-columns:minmax(150px,1fr) 2.2fr; }
+.sdg .sdg-body.two { grid-template-columns:1fr 34px 1fr; gap:8px; align-items:center; }
+.sdg .sdg-body.two:not(:has(.sdg-between)) { grid-template-columns:1fr 1fr; gap:14px; }
+.sdg .sdg-between svg { width:34px; height:34px; display:block; }
+.sdg .sdg-between path { fill:none; stroke:var(--ink); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; }
+@media (max-width:640px){
+  /* The :not(:has(.sdg-between)) rule above is more specific than a plain
+     .sdg-body.two, so without repeating it here a two-panel widget with
+     link:false never stacked on a phone -- it stayed side by side and shrank
+     each panel to about a third of the screen. */
+  .sdg .sdg-body.has-table, .sdg .sdg-body.has-table.table-right, .sdg .sdg-body.two,
+  .sdg .sdg-body.two:not(:has(.sdg-between)) { grid-template-columns:1fr; }
+  .sdg .sdg-between svg { transform:rotate(90deg); margin:0 auto; }
+  .sdg .sdg-ctrl button, .sdg .sdg-scen button { min-height:44px; }
+}
+/* The panel heading is HTML at a fixed size while everything inside the plot is
+   SVG text that scales with the panel's width, so on a wide screen the axis
+   titles overtook the heading. Sizing the heading in container-width units keeps
+   the order fixed at every width: heading, then axis title (14 SVG units =
+   3.76cqw), then point label (12 units = 3.23cqw). */
+.sdg figure { margin:0; background:#fff; border:1px solid var(--rule); padding:8px 8px 2px; container-type:inline-size; }
+.sdg figcaption { font-size:max(1.05rem, 5cqw); font-weight:700; color:var(--navy); text-align:center; margin:0 0 6px; line-height:1.2; }
+.sdg svg { width:100%; height:auto; display:block; }
+/* The page's own stylesheet styles every `table:not(.financial)` on it --
+   full width, 16px padding, a blue header, a tinted first column, zebra
+   striping, rounded corners and a shadow -- and one of those rules,
+   `tr:nth-child(odd) td:not(:first-child)`, carries three elements and three
+   pseudo-classes, which outweighs any plain class selector here. It painted
+   white over a schedule row's highlight in every column but the first, and
+   white over the navy behind a `given` label's white lettering, so the label
+   simply vanished. Both had been shipping for weeks: the screenshots here
+   never loaded that stylesheet at all (v2.47).
+
+   A widget's tables opt out of the lot. `!important` is the only thing that
+   reaches those rules, and the sheet is not ours to change; everything the
+   engine wants back is re-declared below, also `!important`, where ordinary
+   specificity decides between the two again. */
+.sdg table { width:auto !important; margin:0 auto !important; border:0 !important;
+  border-radius:0 !important; box-shadow:none !important; overflow:visible !important; }
+.sdg table th, .sdg table td { background:transparent !important;
+  border-bottom:0 !important; border-radius:0 !important;
+  font-weight:inherit !important; }
+.sdg .sdg-table { border-collapse:collapse; width:100% !important; font-size:.9rem; background:#fff; border:1px solid var(--rule) !important; }
+.sdg .sdg-table th { background:var(--navy) !important; color:#fff; font-weight:700 !important; padding:6px 8px; text-align:center; font-size:.82rem; }
+.sdg .sdg-table td { padding:6px 8px; text-align:center; border-top:1px solid var(--rule); }
+.sdg .sdg-table tr.hi td { background:#fdeadb !important; font-weight:700 !important; }
+.sdg .plotbg { fill:var(--plot); }
+.sdg .grid { stroke:#b9c2d3; stroke-width:1; stroke-dasharray:4 4; }
+.sdg .ax { fill:none; stroke:var(--ink); stroke-width:1.6; }
+.sdg .tk { font-size:10.5px; fill:var(--navy); }
+.sdg .tk.strong { font-weight:700; }
+.sdg .axlbl { font-size:14px; font-weight:800; fill:var(--navy); }
+.sdg .curve { fill:none; stroke-width:3; stroke-linecap:round; }
+/* A shaded region reads as a wash behind the graph, never as a block: the
+   curves, guides and points all have to stay legible through it. */
+.sdg .area { stroke:none; opacity:.18; }
+.sdg .arlbl { font-size:10px; font-weight:700; dominant-baseline:central; }
+.sdg .curve.thin { stroke-width:2; }
+/* The hairline from a boxed label to the curve it names. Thinner than `thin`,
+   which is the weight of a line that is part of the drawing; a leader is
+   pointing at the drawing, and at `thin` it reads as another curve. */
+.sdg .curve.leader { stroke-width:1; }
+/* and it stays a hairline on the step it arrives, where a curve thickens to
+   mark what that step revealed. A leader is not what the step revealed. */
+.sdg .curve-g.new .curve.leader { stroke-width:1; }
+.sdg .clbl { font-size:13px; font-weight:800; }
+/* a word subscript: smaller, and lighter than the name it hangs off */
+.sdg .clbl .sub, .sdg .tag .sub, .sdg .tk .sub { font-size:.72em; font-weight:600; }
+.sdg .guide { fill:none; stroke-width:1.1; stroke-dasharray:4 3; }
+.sdg .pt { fill:#fff; stroke-width:2; }
+.sdg .pt.hi { stroke:var(--orange); stroke-width:3; r:6; }
+/* What this step just revealed, and what an earlier one did. */
+.sdg .ptg, .sdg .ptg .pt, .sdg .ptg .tag { transition:opacity .35s ease, stroke-width .25s ease; }
+.sdg .ptg.new .pt { stroke-width:3.4; }
+.sdg .ptg.new .pt.mk { stroke-width:2.4; }
+.sdg .ptg.new .halo { opacity:1; }
+.sdg .halo { fill:none; stroke:var(--orange); stroke-width:2; opacity:0; transition:opacity .35s ease; }
+.sdg .ptg.prior { opacity:.6; }
+.sdg .ptg.hi { opacity:1; }
+.sdg .ptg.hi .pt { stroke:var(--orange); stroke-width:3.4; }
+.sdg .ptg.hi .tag { fill:var(--orange); }
+.sdg .ptg { cursor:default; }
+.sdg .curve-g.new .curve { stroke-width:3.6; }
+.sdg .arrow.new { stroke-width:3.4; }
+.sdg g.new > .brace, .sdg .brace.new { stroke-width:3; }
+.sdg .pt.mk { stroke-width:1.4; }
+.sdg .mktxt { font-size:7.5px; font-weight:800; fill:var(--ink); }
+.sdg .tag { font-size:12px; font-weight:700; }
+.sdg .arrow { fill:none; stroke-width:2; stroke-linejoin:round; }
+.sdg .arrow.shift { stroke-width:2.4; }
+.sdg .arrow.mv { stroke-width:1.9; stroke:var(--red); }
+.sdg .arrow.row { stroke-width:2.4; stroke:var(--red); }
+.sdg .hline { stroke-width:3; }
+.sdg .brace { fill:none; stroke-width:1.8; }
+/* A host page can style the same short class names the plot uses -- the
+   FIN3403 risk chapter's own <style> sets `.brace { position:absolute;
+   transform:scaleX(.65) }` for a CSS diagram, and every upright brace in the
+   widget was squeezed into the margin by it (v2.57). The plot's elements
+   take no layout from the page: nothing here is positioned or transformed by
+   a stylesheet, except the rotated left-brace label, whose rotation is an
+   attribute and is excluded. */
+.sdg svg .brace, .sdg svg .grid, .sdg svg .arrow, .sdg svg .area, .sdg svg .guide,
+.sdg svg .pt, .sdg svg .curve, .sdg svg .tk, .sdg svg .ax, .sdg svg .halo, .sdg svg .hline,
+.sdg svg .plotbg { transform:none; }
+.sdg svg .brace, .sdg svg .tag, .sdg svg .grid, .sdg svg .arrow, .sdg svg .area, .sdg svg .guide,
+.sdg svg .pt, .sdg svg .curve, .sdg svg .tk, .sdg svg .ax, .sdg svg .sub, .sdg svg .halo, .sdg svg .hline,
+.sdg svg .plotbg { position:static; margin:0; padding:0; border:0; visibility:visible; }
+.sdg .curve-g.dim .curve { stroke-width:2; opacity:.8; }
+/* `dimAt` fades a curve from a given step so a label can be read over it.
+   Fainter than `dim`, which only marks a curve a shift has moved on from. */
+.sdg .curve-g.faint .curve { stroke-width:2; opacity:.26; }
+.sdg .curve-g.faint .clbl { opacity:.5; }
+.sdg .clbl-g.faint .clbl { opacity:.5; }
+/* v2.69: a halo in the plot's own colour round every name inside the plot,
+   so a curve or a line passing under the letters is knocked out of them. */
+.sdg .knk { paint-order:stroke fill; stroke:var(--plot); stroke-width:3px; stroke-linejoin:round; }
+/* A measure named inside the plot is usually two or three words on as
+   many lines, and it has to share the space with the curves it spans. */
+.sdg .tag.vin { font-size:11px; }
+/* A boxed label carries its own background, so it can be read over a curve.
+   Three Lorenz curves have no gap between them wide enough for a label. */
+.sdg .lblbox { fill:#fff; stroke-width:1; }
+/* Small: a boxed name sits on the curve it names, and a big box hides it. */
+.sdg .tag.boxed { font-size:9.5px; }
+/* The amortization explorer (v2.50). Interest orange, principal teal -- the
+   two colours this set already uses for what the other side gets and what you
+   keep -- and the split the printed figure shades. */
+/* pan-y, not none: the drag that reads the figure is horizontal, so the page
+   can still be scrolled by a finger that happens to land on the chart. */
+.sdg .am-plot svg { width:100%; height:auto; display:block; cursor:crosshair;
+  touch-action:pan-y; }
+.sdg .am-plot svg:focus-visible { outline:2px solid var(--navy); outline-offset:3px; }
+.sdg .am-area { stroke:none; }
+.sdg .am-prin { fill:var(--teal); fill-opacity:.30; }
+.sdg .am-int { fill:var(--orange); fill-opacity:.26; }
+.sdg .am-grid { stroke:#fff; stroke-opacity:.8; stroke-width:1; stroke-dasharray:3 4; }
+.sdg .am-line { fill:none; stroke:var(--ink); stroke-width:2.6; stroke-linejoin:round; }
+.sdg .am-cmp { fill:none; stroke:var(--ink); stroke-opacity:.5; stroke-width:1.4;
+  stroke-dasharray:5 4; }
+.sdg .am-cmplbl { font-size:10.5px; font-weight:800; fill:var(--ink);
+  paint-order:stroke; stroke:#fff; stroke-width:3; }
+.sdg .am-areatext { font-size:13px; font-weight:800; paint-order:stroke;
+  stroke:#fff; stroke-width:3; }
+.sdg .am-t-prin { fill:var(--teal); }
+.sdg .am-t-int { fill:var(--orange); }
+.sdg .am-cline { stroke:var(--navy); stroke-width:1.4; stroke-dasharray:4 3; }
+.sdg .am-cdot { fill:#fff; stroke:var(--navy); stroke-width:2.6; }
+.sdg .am-chip { fill:var(--navy); }
+.sdg .am-chiptxt { font-size:11px; font-weight:700; fill:#fff; }
+.sdg .am-ctl { display:grid; gap:4px 12px; margin:10px 0 12px; }
+.sdg .am-row { display:grid; grid-template-columns:8.5em 1fr 7.5em; align-items:center;
+  gap:10px; min-height:44px; }
+.sdg .am-lab { color:var(--navy); font-weight:700; font-size:.9rem; }
+.sdg .am-range { width:100%; margin:0; accent-color:var(--navy); height:28px;
+  cursor:pointer; }
+.sdg .am-out { font-weight:800; color:var(--navy); font-variant-numeric:tabular-nums;
+  font-size:.92rem; }
+.sdg .am-seg { display:inline-flex; border:1px solid var(--navy); border-radius:4px;
+  overflow:hidden; justify-self:start; }
+.sdg .am-seg button { font:inherit; font-size:.88rem; padding:7px 14px; border:0;
+  background:#fff; color:var(--navy); cursor:pointer; }
+.sdg .am-seg button + button { border-left:1px solid var(--navy); }
+.sdg .am-seg button[aria-pressed="true"] { background:var(--navy); color:#fff;
+  font-weight:700; }
+.sdg .am-cards { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0 0 10px; }
+.sdg .am-card { border:1px solid var(--rule); border-radius:5px; padding:7px 10px 8px;
+  background:#fff; font-size:.78rem; color:var(--ink); }
+.sdg .am-card b { display:block; font-size:1.02rem; font-weight:800; color:var(--navy);
+  font-variant-numeric:tabular-nums; margin-top:2px; }
+.sdg .am-card.c-orange { background:#fdf1e7; border-color:#f0b46b; }
+.sdg .am-card.c-orange b { color:var(--orange); }
+.sdg .am-card.c-teal { background:#e8f6f6; border-color:#8fc9c9; }
+.sdg .am-card.c-teal b { color:var(--teal); }
+.sdg .am-card.wide { grid-column:1 / -1; }
+.sdg .am-balpct { display:block; font-size:.76rem; color:var(--ink); }
+.sdg .am-bar { margin-top:5px; height:9px; border-radius:5px; background:#eef3fd;
+  border:1px solid var(--rule); overflow:hidden; }
+.sdg .am-bar i { display:block; height:100%; background:var(--navy); }
+.sdg .am-note { margin:0 0 8px; font-size:.9rem; line-height:1.45; color:var(--ink); }
+.sdg .am-check { display:inline-flex; align-items:center; gap:8px; font-size:.86rem;
+  color:var(--ink); cursor:pointer; min-height:44px; }
+.sdg .am-check input { accent-color:var(--navy); width:18px; height:18px; margin:0; }
+@media (max-width:640px){
+  .sdg .am-row { grid-template-columns:1fr; gap:2px; min-height:0; margin-bottom:6px; }
+  .sdg .am-row .am-out { justify-self:end; margin-top:-26px; }
+  .sdg .am-cards { grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .sdg .am-bar i { transition:none; } }
+.sdg .fade { transition:opacity .45s ease; }
+.sdg .move { transition:transform .6s ease, opacity .45s ease; }
+.sdg .off { opacity:0; pointer-events:none; }
+.sdg .hide { display:none; }
+/* The working sits under the plot until the widget itself is wide enough to
+   hold both without shrinking the graph -- measured on the widget, not the
+   window, so a widget in a narrow column behaves the same everywhere. Where
+   it does go beside, the plot stops being capped at --fig and grows into the
+   width the working is no longer using. */
+@container sdg (min-width:920px) {
+  .sdg-main.has-calc { display:flex; align-items:center; justify-content:center;
+    gap:0 26px; }
+  .sdg-main.has-calc > .sdg-body { flex:1 1 460px; min-width:0; max-width:780px; }
+  .sdg-main.has-calc > .sdg-calc { flex:0 0 auto; width:max-content; margin:0; }
+  .sdg-main.has-calc .sdg-body:not(.has-table):not(.two) figure { max-width:none; }
+}
+/* The block scrolls, not each line. overflow-x on its own computes overflow-y
+   to auto as well, so every line was a scroll container in both axes -- and
+   the result's red underline sits a pixel or two below the line box, which a
+   browser with classic scrollbars drew as up/down arrows beside every sum.
+   The padding gives that underline its room; only a formula genuinely wider
+   than the widget can scroll now, and it scrolls as a block. */
+.sdg .sdg-calc { margin:10px auto 0; width:fit-content; max-width:100%;
+  overflow-x:auto; overflow-y:hidden; padding-bottom:4px;
+  font-size:13px; font-weight:600; color:var(--navy); line-height:1.65; }
+.sdg .sdg-calcline { white-space:nowrap; }
+.sdg .sdg-calc .res { color:var(--red); font-weight:800;
+  border-bottom:2px solid var(--red); padding-bottom:1px; }
+@media (prefers-reduced-motion:reduce){ .sdg .fade, .sdg .move { transition:none; } }
+.sdg .sdg-ctrl { display:flex; align-items:center; gap:10px; margin-top:12px; flex-wrap:wrap; }
+.sdg .sdg-ctrl button { border:1px solid var(--navy); background:#fff; color:var(--navy); padding:7px 14px; font:inherit; font-size:.9rem; cursor:pointer; }
+.sdg .sdg-ctrl button:disabled { opacity:.4; cursor:default; }
+.sdg .sdg-step { font-size:.85rem; color:var(--navy); font-weight:700; margin-left:auto; }
+.sdg .sdg-cap { margin:10px 0 0; padding:10px 12px; background:#fff; border-left:4px solid var(--red); font-size:.92rem; line-height:1.45; min-height:3.2em; }
+
+/* ---- payoff matrix (v2.39) ----------------------------------------------
+   The chapter works through this grid one comparison at a time -- "if B
+   complies, A does better cheating" -- which is exactly what a picture of
+   the finished grid cannot show. `on` is the pair being compared, `pick` the
+   one the comparison lands on, in the same orange a step's new point uses. */
+.sdg .sdg-mxwrap { overflow-x:auto; margin:0 0 4px; }
+.sdg .sdg-mx { border-collapse:collapse; margin:0 auto; background:#fff; }
+.sdg .sdg-mx td { padding:0; text-align:center; }
+.sdg .mx-player { font-weight:800 !important; color:var(--navy); text-align:center;
+  font-size:1rem; letter-spacing:.02em; padding:4px 10px; }
+/* The row player's name reads across, as the printed matrix sets it, with
+   room between it and the strategy labels it sits outside of. */
+.sdg .mx-rowp { padding-right:16px; white-space:nowrap; }
+/* Every box in the grid is one size: a strategy label is the same box
+   whether it heads a column or a row, so the fill that marks the move being
+   held fixed reads as the same mark in both places. (Ian, 2026-09-30.) */
+.sdg .mx-head { font-weight:700 !important; color:var(--navy); text-align:center; padding:6px 14px;
+  width:118px; white-space:nowrap; transition:background .25s ease, color .25s ease; }
+.sdg .mx-cell { border:1.5px solid var(--ink) !important; padding:10px 18px; width:118px; min-width:118px; text-align:center; }
+.sdg .mx-cell .ln { font-size:1rem; color:var(--ink); padding:2px 4px; border-radius:3px;
+  transition:background .25s ease, color .25s ease; }
+.sdg .mx-cell.on { background:#eef3fd !important; }
+.sdg .mx-cell .ln.on { background:#d8e4fa; font-weight:700; color:var(--navy); }
+/* The move being held fixed -- the "if B complies" half of the argument.
+   Without it on the drawing, the two lit payoffs read as arbitrary cells. */
+.sdg .mx-head.given { background:var(--navy) !important; color:#fff; border-radius:3px !important; }
+.sdg .mx-cell .ln.pick { background:#fdeadb; color:var(--orange); font-weight:800;
+  box-shadow:0 0 0 1.5px var(--orange) inset; }
+.sdg .mx-cell.pick { background:#fdeadb !important; box-shadow:0 0 0 3px var(--orange) inset; }
+@media (max-width:640px){
+  .sdg .mx-head, .sdg .mx-cell { width:auto; }
+  .sdg .mx-cell { padding:6px 8px; min-width:0; }
+  .sdg .mx-cell .ln { font-size:.85rem; }
+}
+
+/* The same game played year after year (v2.48). One row a year, a running
+   total underneath, and a red arrow carrying one year's move into the next
+   year's answer -- drawn over the table, because each one runs from inside
+   one cell to inside another a row down and there is no cell to put it in.
+   A year arrives at a time, so the reader sees the cheating year pay and the
+   answer come back the year after, which the printed table has to state all
+   at once. */
+.sdg .sdg-playswrap { position:relative; overflow-x:auto; margin:0 0 4px; }
+.sdg .sdg-plays { border-collapse:collapse; margin:0 auto; background:#fff;
+  font-size:.95rem; }
+.sdg .sdg-plays th, .sdg .sdg-plays td { border:1px solid var(--rule); }
+/* One navy band across the top, so the corner is part of the header rather
+   than a block beside it: the pale rule the other cells carry drew a line
+   down the middle of it and set the corner a pixel out of line with the two
+   names. (Ian, 2026-09-30.) */
+.sdg .pl-col, .sdg .pl-corner { background:var(--navy) !important;
+  color:#fff !important; border-color:var(--navy) !important; }
+.sdg .pl-col, .sdg .pl-corner { font-weight:800 !important; padding:6px 18px;
+  text-align:center; }
+.sdg .pl-year { color:var(--navy); font-weight:800 !important; padding:6px 14px;
+  text-align:center; white-space:nowrap; }
+/* The arrows run in the channel the side padding leaves between the two
+   columns, so it is wider here than a table needs. */
+.sdg .pl-cell { padding:6px 24px; text-align:left; white-space:nowrap;
+  min-width:150px; }
+.sdg .pl-move { color:var(--navy); font-style:italic; }
+.sdg .pl-amt { color:var(--navy); margin-left:8px; }
+.sdg .pl-totalrow td { background:#e8f6fb !important; }
+.sdg .pl-total { color:var(--navy); font-weight:800 !important; padding:6px 18px;
+  text-align:center; }
+/* A row or an arrow that this step has not reached keeps its space, so the
+   table does not jump as the years arrive. */
+.sdg .pl-row, .sdg .pl-arrow { opacity:0; transition:opacity .45s ease; }
+.sdg .pl-row.shown, .sdg .pl-arrow.shown { opacity:1; }
+.sdg .pl-arrows { position:absolute; inset:0; pointer-events:none; overflow:visible; }
+.sdg .pl-arrow { fill:none; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+@media (max-width:640px){
+  .sdg .sdg-plays { font-size:.82rem; }
+  .sdg .pl-cell { padding:5px 8px; min-width:0; }
+  .sdg .pl-col, .sdg .pl-total { padding:5px 8px; }
+}
+
+/* A flow chart (v2.57): boxes joined by chain links, a thick arrow for a
+   change in one box, a thin red arrow for the multiplier between two. A part
+   a step has not reached keeps its place, as a years-table row does. */
+.sdg .sdg-flowfig { margin:0 auto; max-width:var(--fig); width:100%; }
+.sdg .sdg-flow { display:block; width:100%; height:auto; font-family:inherit; }
+.sdg .fl-node rect { fill:#fbf1c7; stroke:#9a8a4a; stroke-width:1.4; }
+.sdg .fl-nodelabel { font-size:12.5px; font-weight:800; fill:var(--navy, #1f2a3a); }
+.sdg .fl-link line { stroke:#8d8d8d; stroke-width:2.2; }
+.sdg .fl-link rect { fill:#fff; stroke:#6f6f6f; stroke-width:1.6; }
+.sdg .fl-linklabel { font-size:9.5px; font-style:italic; font-weight:700; fill:#333; }
+.sdg .fl-change path { fill:#111; }
+.sdg .fl-changelabel { font-size:12px; font-weight:800; fill:#111; }
+.sdg .fl-span path { fill:none; stroke:#c0392b; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.sdg .fl-spanlabel { font-size:11px; font-weight:800; fill:#c0392b; }
+.sdg .fl-step { opacity:0; transition:opacity .45s ease; }
+.sdg .fl-step.shown { opacity:1; }
+.sdg .sdg-flow .sub { font-size:70%; font-weight:600; }
+.sdg .fl-arrow { fill:none; stroke:#111; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.sdg .fl-twlabel { font-size:11px; font-weight:800; fill:var(--navy, #1f2a3a); }
+.sdg .fl-plainlabel { font-size:11.5px; font-weight:800; fill:var(--navy, #1f2a3a); }
+.sdg .sdg-cyclefig { max-width:440px; }
+.sdg .sdg-cycle .fl-node rect { fill:#e3f7e0; stroke:#2b2b2b; stroke-width:1.6; }
+.sdg .sdg-cycle .fl-bottom rect { fill:#dff6fb; }
+.sdg .sdg-cycle .fl-actor rect { fill:#111; stroke:#111; }
+.sdg .sdg-cycle .fl-actor .fl-nodelabel { fill:#fff; font-size:13px; }
+.sdg .fl-cycline { fill:none; stroke:#111; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+.sdg .fl-cychead { fill:none; stroke:#111; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+.sdg .fl-cyclabel { font-size:10.5px; font-weight:800; fill:var(--navy, #1f2a3a); }
+.sdg .sdg-body.has-table.table-right { grid-template-columns:2.2fr minmax(150px,1fr); }
+.sdg .fl-brace { fill:none; stroke:#333; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.sdg .fl-bracelabel { font-size:12px; font-weight:800; fill:var(--navy, #1f2a3a); }
+.sdg .sdg-vflow .fl-linklabel { font-size:10.5px; font-style:normal; font-weight:700; fill:#444; }
+.sdg .fl-pipe rect { fill:#fff; stroke:#111; stroke-width:3; }
+.sdg .fl-pipe .fl-pipeend { fill:#111; stroke:none; }
+.sdg .fl-pipe .fl-nodelabel { fill:#111; }
+.sdg .fl-chainhead { fill:#6f6f6f; stroke:#6f6f6f; stroke-width:1; stroke-linejoin:round; }
+/* project network (v2.66) */
+.sdg .sdg-network .nw-node circle, .sdg .sdg-network .nw-node ellipse { fill:#fff; stroke:var(--ink); stroke-width:2.2; }
+.sdg .sdg-network .nw-comp { fill:none; stroke:var(--ink); stroke-width:1.2; }
+.sdg .sdg-network .nw-label { font-size:17px; font-weight:800; fill:var(--navy); }
+.sdg .sdg-network .nw-dur { font-size:11px; font-weight:700; fill:var(--navy); }
+.sdg .sdg-network .nw-time { font-size:11px; font-weight:700; fill:var(--navy); }
+.sdg .sdg-network .nw-edgelabel { font-size:13px; font-weight:800; fill:var(--ink); }
+.sdg .sdg-network .nw-arrow { fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.sdg .sdg-network .nw-dummy .nw-arrow { stroke-dasharray:5 4; }
+.sdg .sdg-network .nw-critpath .nw-arrow { stroke:var(--gold); stroke-width:3; }
+.sdg .sdg-network .nw-legend rect { fill:#fff; stroke:var(--ink); stroke-width:1.2; }
+.sdg .sdg-network .nw-legend circle { fill:#fff; stroke:var(--ink); stroke-width:1.8; }
+.sdg .sdg-network .nw-legendtitle { font-size:12px; font-weight:800; fill:var(--navy); }
+.sdg .sdg-body.two .sdg-flowfig { max-width:none; }

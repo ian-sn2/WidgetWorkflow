@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAN4504 Exam 3 - Aggregate Planning</title>
+<link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v6.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<script>
+MathJax = {
+tex: {
+displayMath: [['\\[','\\]']],
+inlineMath: [['\\(','\\)']]
+}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>
+</head>
+<body>
+
+<h1>The Nature of Aggregate Planning</h1>
+
+<p><strong>Aggregate planning</strong> (more commonly referred to as <em>sales and production planning</em>) refers to planning intermediate-term production requirements in <em>aggregate</em> terms. In the intermediate run, we plan in <em>aggregate</em> terms because the demand for individual items is uncertain, whereas overall aggregate forecasts tend to be more accurate. Most companies produce a number of products with a common input. Once aggregate planning prescribes aggregate requirements, those resources can be allocated to individual items and products in the short term. For example, aggregate planning would determine how many cars to produce this year, not how many blue sedans to produce.</p>
+
+<p>Snapper, a maker of lawn and garden equipment, illustrates why aggregate forecasts are more dependable. The company sells roughly 180 different models, ranging from backyard mowers to golf course equipment, and it cannot say with confidence which model will be the hot seller. It is, however, quite good at forecasting totals: for example, about 150,000 units in January, which is roughly 25% more than February, with March sales slipping a little under 10% from February's level.</p>
+
+<p>In industry, this activity is usually called S&amp;P planning rather than aggregate planning. The name describes what it does: it brings the sales side (how many units marketing expects customers to buy) together with the production side (how many units the firm can make). Neither side alone sets the plan, because a firm can sell only the lower of what customers want and what it is able to produce. The aim is to line the two up, and to do so at a low cost.</p>
+
+<p>At its core, the goal of aggregate planning is to meet forecasted demand at a minimum cost over the planning period. This requires operations managers to determine the aggregate quantity and timing of production in the intermediate future and to minimize cost over the planning period by adjusting controllable variables, which include production rates, labor levels, inventory levels, overtime work, and subcontracting rates. The following are the requirements for aggregate planning:</p>
+
+<ul>
+<li><em>A logical aggregate unit for measuring sales and output.</em> For example, this could be pounds of product or number of units. An aggregate plan for an automobile manufacturer might specify how many automobiles to make overall. Likewise, a candy manufacturer might plan in pounds of candy and a potato chip maker in total chips, without regard to flavors or package sizes. An automaker with separate plants might go only as far as splitting SUVs from sedans.</li>
+<li><em>A demand forecast for the intermediate planning period.</em> This demand forecast must be in aggregate terms, in the units selected above.</li>
+<li><em>A method for determining costs.</em> These include the cost of labor, holding inventory, overtime, subcontracting, and production.</li>
+<li><em>A model that combines forecasts and costs.</em> This allows you to make scheduling decisions for the planning period to minimize costs. We will discuss some crude models for combining forecasts and costs.</li>
+</ul>
+
+<p>Information about demand forecasts, inventory on hand, the workforce, supply chain support, and external capacity (subcontractors) goes into producing an aggregate plan, which is then an input into later planning with the master production schedule and MRP systems. These disaggregate the aggregate plan into individual plans for each of the products the organization produces.</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-01-aggregate-planning-flowchart.png" alt="Flowchart showing inputs to aggregate planning including demand forecasts, workforce, inventory on hand, supply chain support, and subcontractors feeding into aggregate planning, which then flows to master production schedule and MRP systems, then to detailed work schedules" class="image-wide-95 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>We discussed many of the inputs to aggregate planning earlier in the course, when we discussed product decision, process and capacity planning, and demand forecasting. We will not get to cover master production schedules and MRP systems in this course.</p>
+
+<p>These inputs build on one another. What customers want and what the firm is capable of producing determine which products it offers. The process chosen to make those products (e.g., an automated line versus manual labor) determines capacity, such as 20 skateboard decks or 96 sandwiches per hour at each facility. Marketing then forecasts how much customers will want. When the two do not line up (say customers want 5,000 units in the first quarter and the firm can make only 2,000), planners look for other sources of supply, such as subcontracting or producing early and stockpiling. Apple, for example, often has new phones packaged a couple of weeks before a launch to absorb the initial spike in demand. Planners must also confirm that raw materials and a large enough workforce will be in place, because any one of these inputs could become the bottleneck.</p>
+
+<p>The resulting aggregate plan works like a budget authorization. It tells plant and line managers how much to produce in the period and which resources they are approved to use, such as regular-time production with no overtime, roughly 20% overtime paid at time and a half, or hiring ahead of a need expected in a later period.</p>
+
+<p>The master production schedule then disaggregates the plan. If the aggregate plan calls for 1,000 units this month, the master production schedule might specify 250 units per week and state which flavors or colors to make, so that the right materials can be delivered. Detailed work schedules, which assign individuals to specific activities, come after that.</p>
+
+<p>The 3 major planning horizons are as follows:</p>
+
+<ul>
+<li><em>Top executives</em> make <strong>long-range plans</strong> (over a year). Examples include research and development, new product plans, capital investments, and facility location or expansion decisions.</li>
+<li><em>Operations managers</em> make <strong>intermediate-range plans</strong> (3 to 18 months). Examples include sales planning; production planning and budgeting; setting employment, inventory, and subcontracting levels; and analyzing operating plans.</li>
+<li><em>Operations managers, supervisors, and foremen</em> make <strong>short-range plans</strong> (less than 3 months). Examples include job assignments, ordering, job scheduling, dispatching, and deciding how much overtime and part-time help to use.</li>
+</ul>
+
+<p>Aggregate planning involves intermediate-range plans. Most other topics in this course sit at one of two extremes: either strategic decisions (e.g., approving a budget to expand a plant's capacity by 20% and leaving the details to engineers) or short-term operational details (e.g., how many seconds it takes to drill a skateboard deck). Aggregate planning is the course's main example of planning in the middle, where directors and a vice president of operations plan several months to a year ahead.</p>
+
+<h1>Aggregate Planning Strategies</h1>
+
+<p>There are generally two categories of aggregate planning strategies: capacity options and demand options. <em>Capacity options</em> involve planning around capacity (i.e., the supply side), whereas <em>demand options</em> involve changing prices or other factors to influence demand.</p>
+
+<h2>Capacity Options</h2>
+
+<p>Several capacity options for matching supply with demand, are as follows:</p>
+
+<ul>
+<li><em>Change inventory levels to absorb changes in demand</em> – Absorb changes in demand by increasing inventory in low-demand periods to meet high demand in the future. This option is not available to services (a surgery cannot be stored), and it is most practical when holding costs are low. For example, a maker of vitamins or powdered supplements might produce a full year's supply in a two-week run and use the freed-up time to make other products. Building inventory has multiple problems:
+<ul>
+<li>It means that you have to keep inventory, which means that there will be increased costs due to storage, insurance, handling, obsolescence, and capital investment. These are all non-value-added steps.</li>
+<li>Demand may still be too high at the end of the period. If you do not have enough inventory stored up to meet the high demand, there is nothing that you can do. Shortages can cause lost sales due to long lead times and poor customer service, and it may create resentment.</li>
+</ul>
+</li>
+<li><em>Change workforce size through hiring or layoffs</em> – Adjust the workforce levels from month to month, based on demand. This helps to match the production rate to demand. Reducing the workforce does not have to mean layoffs. A large employer that loses about 1% of its people each month to resignations and retirements can trim its workforce by around 4% simply by freezing hiring and not replacing those who leave. Varying the workforce decreases inventory and thus decreases holding costs, but it also has some disadvantages:
+<ul>
+<li>Training and separation costs for hiring and laying off workers are high.</li>
+<li>New workers may have lower productivity due to lack of training and experience.</li>
+<li>Laying off workers may lower the morale and productivity of existing workers.</li>
+<li>Laying off workers might result in bad press or a negative backlash from the local community. Layoffs are more common (and acceptable) in some industries than others. For example, layoffs and "flexing" the labor force are common in the construction industry, but they are far less common in the manufacturing industry.</li>
+</ul>
+</li>
+<li><em>Use overtime or idle time to vary the production rate</em> – Use a constant workforce, but adjust the hours of those workers such that their labor combined matches demand. That is, workers work overtime when demand is high, and they work less than full-time (idle time) when demand is low. This works for small adjustments (e.g., asking one person to take on a little extra work), but once the change needed becomes large, the firm needs a different workforce size. Some disadvantages of this strategy are as follows:
+<ul>
+<li>It may be difficult to meet large increases in demand with overtime because of issues such as governmental regulations or union rules.</li>
+<li>Overtime is costly and can drive down productivity.</li>
+<li>It may be difficult to absorb idle time. Companies can keep workers productive and busy during idle time by engaging them in other productive activities.</li>
+</ul>
+</li>
+<li><em>Use subcontracting to meet demand requirements and even out capacity</em> – Temporarily use subcontracting. When demand exceeds capacity, the firm might allow another manufacturer to fulfill demand requirements. When demand is less than capacity, however, the firm might bring in work from other firms so that utilization remains high. Subcontracting is common in industries where the product's value lies in its design or brand and not in the specifics of manufacturing. Many clothing brands have their designs sewn to specification by outside shops, and Apple subcontracts the manufacturing of its phones. The brand still stands behind the quality, which requires close relationships with the suppliers. Some disadvantages of this strategy are as follows:
+<ul>
+<li>It may be costly. If it isn't costly, you may want to consider sending <em>all</em> of your work to the subcontractor and letting them fulfill your customers' needs.</li>
+<li>It may be difficult to assure quality and timely delivery if you are relying on a third-party subcontractor.</li>
+<li>It exposes your customers to a potential competitor. They may decide to get their requirements fulfilled directly from the subcontractor, at a cost savings.</li>
+</ul>
+</li>
+<li><em>Use part-time workers to meet demand</em> – Part-time workers are particularly useful in the service industry. This strategy is best used with low-skilled labor. However, it is <em>not</em> a good strategy when the labor is highly skilled. (It is hard to find part-time cardiac surgeons or part-time lawyers with the right experience.) Retail stores commonly hire part-time workers around the holidays when demand is high.</li>
+</ul>
+
+<p>In general, adjusting capacity by flexing the workforce through overtime, idle time, subcontracting or part-time workers is less useful when dealing with high-skilled labor.</p>
+
+<h2>Demand Options</h2>
+
+<p>Capacity options deal with adjusting production capacity to match demand or to fulfill customer requirements. Demand options, on the other hand, involve influencing factors that are traditionally thought to be under the control of the customer. The following are some demand options for aggregate planning strategies:</p>
+
+<ul>
+<li><em>Influencing demand</em> – Shift demand to slow periods by using advertising or promotions (e.g., discount pricing). For example, airlines offer discounts for less popular flights that leave early in the morning or late at night. Likewise, Subway used to offer discounts for people who bought sandwiches early in the day. At lunchtime, Subway cannot make sandwiches fast enough, and customers with a short lunch break leave when the line is long. A discount of about a dollar for buying before 10 a.m. moves some of those customers to a slow period, so the store sells more sandwiches overall. Similarly, Disney sells discounted passes to Florida residents with blackout dates on its most popular days.
+<p>The downside of this approach is that it may be insufficient to balance demand and capacity. Firms must constantly engage in advertising and promotions.</p>
+</li>
+<li><em>Back-ordering during high-demand periods</em> – When faced with high-demand, the firm can take backorders and expedite shipping to customers who have to wait for the product to arrive. The downside of this tactic is that customers still wait, which can result in a loss of goodwill and a loss of sales.
+<p>Backorders are more common with big-ticket items that people would only buy every few years than for small-ticket items that people buy regularly. Because the largest problem is that customers may not want to wait for the item, this strategy is most effective when there are few or no substitutes for the product or services that the firm offers. Toothpaste shows the opposite case. If a shopper's usual brand is out of stock, the shopper buys another brand that day. For the company, the best outcome is one lost sale, and the worst is that the shopper prefers the competitor's product and never returns. Because holding costs for such items are low and the penalty for running out is high, firms deliberately overstock them. Back-ordering makes sense only when customers do not penalize the firm for making them wait.</p>
+</li>
+<li><em>Mixing products and service counter-seasonally</em> – The firm could develop a product mix of counter-seasonal items. For example, a firm might produce jet-ski engines during the summer and snowmobile engines during the winter. The technology involved in producing these two products is similar, but the demand for these products is seasonal. The downside is that it may cause the company to venture outside of its area of expertise to fight seasonal trends in demand.</li>
+</ul>
+
+<p>Note that, with each of these strategies, options are "opposite sides of the same coin." For example, you could hire workers to increase capacity or fire them to decrease capacity. Inventory buildup is done in periods of low demand, whereas back-ordering is done in times of high demand. We can compare the advantages and disadvantages of these different options in a table:</p>
+
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Advantages</th>
+<th>Disadvantages</th>
+<th>Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Part-time Workers</strong></td>
+<td>Cheaper and more flexible than full-time workers.</td>
+<td>High training costs and turnover; quality suffers; scheduling is difficult.</td>
+<td>Best for unskilled jobs with large, temporary labor pools.</td>
+</tr>
+<tr>
+<td><strong>Influencing Demand</strong></td>
+<td>Uses excess capacity; attracts new customers.</td>
+<td>Creates uncertain demand; hard to exactly match supply and demand.</td>
+<td>Generates marketing ideas.</td>
+</tr>
+<tr>
+<td><strong>Back-Ordering</strong></td>
+<td>Avoids overtime and keeps constant capacity.</td>
+<td>Customer has to wait, and goodwill may be lost.</td>
+<td>Allows for flexibility within the aggregate plan. Many companies back-order.</td>
+</tr>
+<tr>
+<td><strong>Counter-Seasonal Product and Service Mixing</strong></td>
+<td>Allows for full utilization of resources and a stable workforce.</td>
+<td>May have to bring in skills and equipment from outside of firm's area of expertise.</td>
+<td>It is hard and risky to find products with opposite demand patterns.</td>
+</tr>
+<tr>
+<td><strong>Changing Inventory Levels</strong></td>
+<td>There are no abrupt production changes, and changes in personnel are gradual or nonexistent.</td>
+<td>High inventory holding costs; shortages cause lost sales.</td>
+<td>Best used for production operations (not service operations).</td>
+</tr>
+<tr>
+<td><strong>Hiring / Layoffs</strong></td>
+<td>Avoids the costs of other alternatives.</td>
+<td>High layoff, hiring, and training costs.</td>
+<td>Best used when there is a large labor pool.</td>
+</tr>
+<tr>
+<td><strong>Overtime / Idle Time</strong></td>
+<td>No hiring or training costs.</td>
+<td>Workers must be paid premiums for overtime. They may become tired, and they may not meet demand.</td>
+<td>Allows for flexibility within the aggregate plan.</td>
+</tr>
+<tr>
+<td><strong>Subcontracting</strong></td>
+<td>Flexibility and smoothing of output.</td>
+<td>Potential loss of quality, profits, and future business.</td>
+<td>Best applied to production settings.</td>
+</tr>
+</tbody>
+</table>
+
+<h1>Methods of Aggregate Planning</h1>
+
+<p>No single option above is likely to be optimal by itself, in part because company policies limit how far each one can be pushed. For example, the stockroom may hold only 200 units, the firm may be unwilling to lay anyone off and so can shrink only through attrition, and hiring and firing are both expensive. Planners therefore piece several options together, looking for a plan that complies with all company policies and produces at a low cost.</p>
+
+<div class="exam-tip">
+<h4>EXAM TIP: Work Many Practice Problems</h4>
+<p>These problems are routine but have small rules that are easy to miss (e.g., how to handle inventory carried in from a previous period, or whether to charge for a workforce change at the start of the plan). Dr. Munson said the exam will have no such wrinkle that is not also in the practice questions.</p>
+
+</div>
+
+<p class="date">Thursday, 11/12/26</p>
+
+<p>At a very basic level, there are two major categories of strategies for aggregate planning:</p>
+
+<ul>
+<li><em>Chase strategy</em> – A <strong>chase strategy</strong> involves attempting to match output rates to the demand forecast for each period. Therefore, the firm would vary workforce levels and production rates to match demand. This requires the firm to either have a very flexible workforce or put up with a lot of idle time. This is a popular strategy in many types of service organizations. In fact, it is often the <em>only</em> choice for a service organization, because it cannot store inventory.</li>
+<li><em>Level strategy</em> – A <strong>level strategy</strong> involves uniform, daily production and using inventory or idle time as a buffer. A stable production over time leads to better quality and consistency, and it is usually only possible for manufacturing or for service industries with constant demand.</li>
+</ul>
+
+<p>In most cases, a <strong>mixed strategy</strong> that utilizes a combination of the options listed above is usually best. There are many possible mixed strategies, and determining which achieves the lowest costs requires trial-and-error. Finding the optimal plan is not always possible.</p>
+
+<h2>Graphical Approaches (Trial and Error)</h2>
+
+<p>One approach to finding the plan that involves the minimum cost is to use graphical and charting methods. <strong>Graphical methods</strong> are aggregate planning techniques that work with a few variables at a time to allow planners to compare projected demand with existing capacity. However, these are trial-and-error approaches that do not guarantee an optimal solution. The steps involved in graphical and charting methods are generally as follows:</p>
+
+<ol>
+<li>Determine the demand for each period.</li>
+<li>Determine capacity for regular time, overtime, and subcontracting for each period.</li>
+<li>Determine labor, hiring, layoff, and inventory holding costs.</li>
+<li>Consider company policy on workers and stock levels (i.e., policies on maximum overtime and maximum allowable inventory levels).</li>
+<li>Develop alternative plans and compare total costs.</li>
+</ol>
+
+<h2>Example: Applying Aggregate Planning Strategies</h2>
+
+<p><strong>A company faces the following expected demand for roofing shingles in the first half of the year. It has calculated the number of production days in each month, and it has divided its monthly expected demand by the number of production days to get the demand per day.</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Expected Demand</th>
+<th>Production Days</th>
+<th>Demand per Day</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td>900</td>
+<td>22</td>
+<td>41</td>
+</tr>
+<tr>
+<td>February</td>
+<td>700</td>
+<td>18</td>
+<td>39</td>
+</tr>
+<tr>
+<td>March</td>
+<td>800</td>
+<td>21</td>
+<td>38</td>
+</tr>
+<tr>
+<td>April</td>
+<td>1,200</td>
+<td>21</td>
+<td>57</td>
+</tr>
+<tr>
+<td>May</td>
+<td>1,500</td>
+<td>22</td>
+<td>68</td>
+</tr>
+<tr>
+<td>June</td>
+<td>1,100</td>
+<td>20</td>
+<td>55</td>
+</tr>
+<tr>
+<td><em>Total</em></td>
+<td><strong>6,200</strong></td>
+<td><strong>124</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>The company has found the following relevant costs:</strong></p>
+
+<table>
+<tbody>
+<tr>
+<td><strong>Inventory Carrying Cost</strong></td>
+<td>$5 per unit per month</td>
+</tr>
+<tr>
+<td><strong>Subcontracting Cost Per Unit</strong></td>
+<td>$20 per unit</td>
+</tr>
+<tr>
+<td><strong>Average Pay Rate</strong></td>
+<td>$10 per hour ($80 per day)</td>
+</tr>
+<tr>
+<td><strong>Overtime Pay Rate</strong></td>
+<td>$17 per hour (above 8 hours per day)</td>
+</tr>
+<tr>
+<td><strong>Labor-Hours to Produce One Unit</strong></td>
+<td>1.6 hours per unit</td>
+</tr>
+<tr>
+<td><strong>Cost of Increasing Daily Production Rate (Hiring and Training)</strong></td>
+<td>$300 per unit</td>
+</tr>
+<tr>
+<td><strong>Cost of Decreasing Daily Production Rate (Layoffs)</strong></td>
+<td>$600 per unit</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>The company has to choose among three options for its production strategy, so it will calculate the cost of each strategy and then compare them.</strong></p>
+
+<ul>
+<li><strong>A "pure" level strategy, with production level at the average requirement.</strong></li>
+<li><strong>A level strategy, with production level at the minimum requirement.</strong></li>
+<li><strong>A chase strategy, with production at the expected demand in each period.</strong></li>
+</ul>
+
+<h2>Method 1: Pure Level Strategy</h2>
+
+<p>The average requirement over the six periods is the expected demand divided by the number of production days, or 6,200 ÷ 124 =  <u><strong>50 units per day</strong></u>. This is the level of production, or quantity of units, that must be produced each day under a pure level strategy. If the company produces 50 units per day, it will have some inventory carrying costs, and it will have regular-time labor costs. To calculate carrying costs, we must determine the monthly inventory change and the ending inventory, given demand predictions:</p>
+
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Production Days</th>
+<th>Production at 50 Units per Day</th>
+<th>Demand Forecast</th>
+<th>Monthly Inventory Change</th>
+<th>Ending Inventory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td>22</td>
+<td>1,100</td>
+<td>900</td>
+<td>+200</td>
+<td>200</td>
+</tr>
+<tr>
+<td>February</td>
+<td>18</td>
+<td>900</td>
+<td>700</td>
+<td>+200</td>
+<td>400</td>
+</tr>
+<tr>
+<td>March</td>
+<td>21</td>
+<td>1,050</td>
+<td>800</td>
+<td>+250</td>
+<td>650</td>
+</tr>
+<tr>
+<td>April</td>
+<td>21</td>
+<td>1,050</td>
+<td>1,200</td>
+<td>−150</td>
+<td>500</td>
+</tr>
+<tr>
+<td>May</td>
+<td>22</td>
+<td>1,100</td>
+<td>1,500</td>
+<td>−400</td>
+<td>100</td>
+</tr>
+<tr>
+<td>June</td>
+<td>20</td>
+<td>1,000</td>
+<td>1,100</td>
+<td>−100</td>
+<td>0</td>
+</tr>
+<tr>
+<td><em>Total</em></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>1,850</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p>By adding up ending inventory levels at the end of each month, we get a total of 1,850 units in ending inventory. (Note that some units are carried over the course of multiple months and are thus counted multiple times.) At a cost of $5 per unit per month, this results in an inventory carrying cost of $9,250. We can calculate how many workers it takes to produce 50 units per day as follows:</p>
+
+<p>\[
+\text{# of Workers} = \frac{50 \text{ units per day} \times 1.6 \text{ hours per unit}}{8 \text{ hours per day, per worker}} = \text{10 workers}
+\]</p>
+
+<p>Hiring 10 workers at $80 per day for 124 days would cost $99,200.</p>
+
+<p>The total cost of this method would be the inventory carrying costs ($9,250) plus the labor cost ($99,200), or <strong><u>$108,450</u></strong>.</p>
+
+<h2>Method 2: Level Strategy (Production at the Minimum Requirement and Use of Subcontracting)</h2>
+
+<p>Suppose your boss wanted you to meet demand every month with a level workforce, no overtime, and no end-of-month inventory. We could look at the demand forecast and identify the fact that the minimum daily demand occurs in March, at 38 units.</p>
+
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Expected Demand</th>
+<th>Production Days</th>
+<th>Demand per Day</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td>900</td>
+<td>22</td>
+<td>41</td>
+</tr>
+<tr>
+<td>February</td>
+<td>700</td>
+<td>18</td>
+<td>39</td>
+</tr>
+<tr>
+<td>March</td>
+<td>800</td>
+<td>21</td>
+<td><strong>38</strong></td>
+</tr>
+<tr>
+<td>April</td>
+<td>1,200</td>
+<td>21</td>
+<td>57</td>
+</tr>
+<tr>
+<td>May</td>
+<td>1,500</td>
+<td>22</td>
+<td>68</td>
+</tr>
+<tr>
+<td>June</td>
+<td>1,100</td>
+<td>20</td>
+<td>55</td>
+</tr>
+<tr>
+<td><em>Total</em></td>
+<td><strong>6,200</strong></td>
+<td><strong>124</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>Using the lowest monthly forecast, we will never have any inventory to carry over to the next month, so there are no holding costs. However, we will have to subcontract some units out to a third-party subcontractor. Therefore, our costs will be divided between regular-time labor (used for in-house production) and subcontracting.</p>
+
+<p>In-house production will account for 38 units per day over the 124 production days, or 4,712 units. Total demand over the six-month period is 6,200 units, so the remaining 1,488 units will have to be subcontracted out. We can calculate how many workers it takes to produce 38 units per day as follows:</p>
+
+<p>\[
+\text{# of Workers} = \frac{38 \text{ units per day} \times 1.6 \text{ hours per unit}}{8 \text{ hours per day, per worker}} = \text{7.6 workers}
+\]</p>
+
+<p>We obviously cannot hire 7.6 workers, but we can hire 7 workers and then hire another worker to work 60% of the time. Hiring 7.6 workers at $80 per day for 124 days would cost us $75,392. The cost of subcontracting is $20 per unit, so it would cost $29,760 to subcontract out 1,488 units.</p>
+
+<p>The total cost of this method would be the subcontracting costs ($29,760) plus the in-house labor cost ($75,392), or <strong><u>$105,152</u></strong>. While this strategy is cheaper, there may be other considerations. For example, the subcontractor might turn out to be a competitor later or lead to brand image problems.</p>
+
+<h2>Method 3: Pure Chase Strategy (Using Hiring and Layoffs)</h2>
+
+<p>Finally, we could try to chase demand by ramping up production to meet forecasted demand in each period. This obviously eliminates inventory carrying costs and subcontracting costs, but it involves the cost of hiring, training, and layoffs.</p>
+
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Forecast</th>
+<th>Daily Production Rate</th>
+<th>Basic Production Cost</th>
+<th>Hiring Cost</th>
+<th>Layoff Cost</th>
+<th>Total Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td>900</td>
+<td>41</td>
+<td>$14,400</td>
+<td>---</td>
+<td>---</td>
+<td>$14,400</td>
+</tr>
+<tr>
+<td>February</td>
+<td>700</td>
+<td>39</td>
+<td>$11,200</td>
+<td>---</td>
+<td>$1,200</td>
+<td>$12,400</td>
+</tr>
+<tr>
+<td>March</td>
+<td>800</td>
+<td>38</td>
+<td>$12,800</td>
+<td>---</td>
+<td>$ 600</td>
+<td>$13,400</td>
+</tr>
+<tr>
+<td>April</td>
+<td>1,200</td>
+<td>57</td>
+<td>$19,200</td>
+<td>$5,700</td>
+<td>---</td>
+<td>$24,900</td>
+</tr>
+<tr>
+<td>May</td>
+<td>1,500</td>
+<td>68</td>
+<td>$24,000</td>
+<td>$3,300</td>
+<td>---</td>
+<td>$27,300</td>
+</tr>
+<tr>
+<td>June</td>
+<td>1,100</td>
+<td>55</td>
+<td>$17,600</td>
+<td>---</td>
+<td>$7,800</td>
+<td>$25,400</td>
+</tr>
+<tr>
+<td><em>Total</em></td>
+<td></td>
+<td></td>
+<td><strong>$99,200</strong></td>
+<td><strong>$9,000</strong></td>
+<td><strong>$9,600</strong></td>
+<td><strong>$117,800</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p>The total cost of this option would be <strong><u>$117,800</u></strong>.</p>
+
+<p>Among the 3 options, Method 2 (a level strategy with production at the minimum demand) is the most cost-effective. That is, it is the lowest-cost method. Therefore, the company should choose that method, assuming that it has to choose among these 3 plans.</p>
+
+<p>Note that there are many other alternative plans that we did not consider. Additionally, deciding on a plan depends on many other, often industry-specific factors, such as how accurate we believe a company's demand forecasts are. (For example, none of these plans involved the use of overtime labor.) Moreover, firms should think about the nonmonetary costs of certain plans. For example, laying workers off takes a psychological toll on the remaining workers.</p>
+
+<h2>Transportation Method of Linear Programming</h2>
+
+<p>The methods discussed above are trial-and-error methods that do not generate optimal solutions. For optimal solutions, you must resort to mathematical approaches. One such approach involves setting up a problem as a transportation problem and using either the transportation model or linear programming software to solve it.</p>
+
+<p>Another approach is the <em>management coefficients model</em>, which is built around managers' experience and performance. We will discuss the transportation method of linear programming, but we will not talk in detail about the management coefficients model method. Consider the following example, which illustrates how to frame a problem as a transportation problem, and solve it with the transportation method:</p>
+
+<h2>Example: Transportation Method</h2>
+
+<p><strong>A tire company can produce tires using regular labor, overtime labor, or subcontracted labor. The costs with various kinds of labor are as follows:</strong></p>
+
+<ul>
+<li><strong>Regular time = $40 per tire</strong></li>
+<li><strong>Overtime = $50 per tire</strong></li>
+<li><strong>Subcontractor time = $70 per tire</strong></li>
+</ul>
+
+<p><strong>The tire company begins with 100 tires in inventory, and its carrying cost is $2 per tire per month. The estimated demand and capacity in March, April, and May are as follows:</strong></p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>March</th>
+<th>April</th>
+<th>May</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Demand</strong></td>
+<td>800</td>
+<td>1,000</td>
+<td>750</td>
+</tr>
+<tr>
+<td><strong>Capacity</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Regular Hours</strong></td>
+<td>700</td>
+<td>700</td>
+<td>700</td>
+</tr>
+<tr>
+<td><strong>Overtime</strong></td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td><strong>Subcontracting</strong></td>
+<td>150</td>
+<td>150</td>
+<td>130</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Use the transportation method of linear programming to develop an optimal aggregate plan that minimizes total costs. Assume that there is no back-ordering.</strong></p>
+
+<h2>Step 1: Set Up the Table</h2>
+
+<p>We can begin by constructing a decision table with demand in the columns and supply in the rows. We can satisfy demand with production from any of the periods (because we can hold inventory from one period to the next). However, there is no back-ordering, so we cannot satisfy demand in one period with production in a later period.</p>
+
+<p>Also note that our total demand is:</p>
+
+<p>\[800 + 1,000 + 750 = 2,550\]</p>
+
+<p>Using the table, we can calculate that our total capacity is:</p>
+
+<p>\[(700 + 50 + 150) + (700 + 50 + 150) + (700 + 50 + 130) = 2,680\]</p>
+
+<p>Moreover, we have 100 units in inventory at the beginning of March. This means that we have to add in a dummy column for unused capacity, so that our capacity (supply) equals our demand.</p>
+
+<p>The total number of units in the dummy category is 230—the amount by which capacity and starting inventory exceed demand.</p>
+
+<p>Therefore, our initial basic setup would be as follows:</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-02-transportation-table-setup.png" alt="Transportation table showing supply rows for beginning inventory, March regular/overtime/subcontract, April regular/overtime/subcontract, May regular/overtime/subcontract, with demand columns for March, April, May, and unused capacity dummy column, with black cells indicating inapplicable back-order scenarios" class="image-wide-80 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>Recall that the question specified that the company starts with 100 units in beginning inventory.</p>
+
+<p>Next, we have to calculate the various costs associated with each square:</p>
+
+<ul>
+<li>If we meet March demand with beginning inventory, the unit cost is $0.</li>
+<li>If we meet March demand with regular labor, the unit cost is $40.</li>
+<li>If we meet March demand with overtime labor, the unit cost is $50.</li>
+<li>If we meet March demand by subcontracting, the unit cost is $70.</li>
+</ul>
+
+<p>We can fill in these costs on the table:</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-03-transportation-march-costs.png" alt="Transportation table with costs filled in for March column: beginning inventory 0, regular 40, overtime 50, subcontract 70" class="image-wide-70 content-image" loading="lazy" width="auto" height="auto" />
+
+<ul>
+<li>If we meet April demand with April production, there are no carrying costs and the unit costs are just like the March costs.</li>
+<li>However, if we meet April demand with March production or beginning inventory, we have to add in a $2 per unit carrying cost.</li>
+</ul>
+
+<p>The updated table looks like this:</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-04-transportation-april-costs.png" alt="Transportation table with costs filled in for March and April columns, showing carrying costs of 2 added when March production meets April demand" class="image-wide-70 content-image" loading="lazy" width="auto" height="auto" />
+
+<ul>
+<li>If we meet May demand with May production, the costs are just the basic costs.</li>
+<li>However, if we meet May demand with April production, we have to add a $2 per unit carrying cost.</li>
+<li>If we meet May demand with March production or beginning inventory, we have to add a $4 per unit carrying cost.</li>
+</ul>
+
+<p>The updated table is as follows:</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-05-transportation-may-costs.png" alt="Transportation table with all costs filled in for March, April, and May columns, showing accumulating carrying costs across periods" class="image-wide-70 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>There are no costs associated with the dummy column, because this column represents unused capacity.</p>
+
+<p>Therefore, our final table with all of the relevant costs are as follows:</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-06-transportation-complete-costs.png" alt="Complete transportation table with all costs filled in including zero costs in the unused capacity dummy column" class="image-wide-75 content-image" loading="lazy" width="auto" height="auto" />
+
+<h2>Step 2: Analyze the Table</h2>
+
+<p>We begin in the leftmost column, allocating the lowest-cost supply to the period's demand.</p>
+
+<p>In March, total demand is 800.</p>
+
+<ul>
+<li>The lowest-cost way to satisfy this demand is through beginning inventory, which can provide 100 units. Because this does not totally satisfy demand, we must go to the next-lowest-cost source: regular labor.</li>
+<li>We can generate the remainder of the demand in March—700 units—from regular labor.</li>
+</ul>
+
+<p>Because March's demand is satisfied, we allocate zero units to overtime and subcontracting in March.</p>
+
+<p>March's filled-in cells are as follows:</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-07-transportation-march-allocation.png" alt="Transportation table with March demand allocation showing 100 units from beginning inventory and 700 units from March regular labor" class="image-wide-75 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>Now we move on to April. In April, total demand is 1,000 units.</p>
+
+<ul>
+<li>The lowest-cost supply source is regular April labor, which can produce 700 units.</li>
+<li>The next-lowest-cost supply source is April overtime labor, which can produce 50 units.</li>
+<li>The next-lowest-cost supply source is March overtime, which can produce 50 units.</li>
+<li>The next-lowest-cost supply source is April subcontracting, which can produce 150 units.</li>
+</ul>
+
+<p>We are still left with a demand for 50 units, so we must satisfy it by pulling from the highest-cost source: subcontracting in March.</p>
+
+<p>The filled-in table for April is as follows:</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-08-transportation-april-allocation.png" alt="Transportation table with March and April demand allocations complete, showing 50 units from March subcontracting to April and updated capacity of 100 remaining" class="image-wide-75 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>Note that we only used 50 of the 150 units available from March subcontracting, so we cross off the total capacity of 150 and replace it with 100.</p>
+
+<p>Next, we move to May, where total demand is 750.</p>
+
+<ul>
+<li>We can allocate 700 units from the lowest-cost source: regular labor in May.</li>
+<li>We can allocate 50 units from the next-lowest-cost source: overtime in May.</li>
+</ul>
+
+<p>The filled-in table after making allocations for May is as follows:</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-09-transportation-may-allocation.png" alt="Transportation table with all demand allocations complete for March, April, and May" class="image-wide-75 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>Now that we have allocated all of our units for March, April, and May, we are left with 230 units of excess capacity:</p>
+
+<ul>
+<li>100 units from subcontracting in March</li>
+<li>130 units from subcontracting in May</li>
+</ul>
+
+<p>Luckily, we have already added in a dummy column for unused capacity. We simply fill these values in here, and the problem is completely balanced.</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-10-transportation-final-solution.png" alt="Complete transportation table with all allocations including 100 units in unused capacity from March subcontracting and 130 units from May subcontracting" class="image-wide-75 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>This table depicts a possible aggregate production plan. In words, it says the following:</p>
+
+<ul>
+<li>Satisfy March's demand by supplying 100 units of inventory and 700 units of regular labor.</li>
+<li>Satisfy April's demand by supplying 50 units of overtime labor and 50 units of subcontracted labor in March. Hold that inventory until April. Then, in April, produce 700 units with regular labor, 50 units with overtime, and 150 units through subcontracting.</li>
+<li>Satisfy May's demand by supplying 700 units of regular labor and 50 units of overtime labor in May.</li>
+</ul>
+
+<p>We could calculate the total cost of this plan as follows:</p>
+
+<p style="text-align: center;"><b>Total Cost</b> \(= 100(0)+700(40)+50(52)+50(72)+700(40)+50(50)+150(70)+700(40)+50(50)\)</p>
+
+<p style="text-align: center;"><b>Total Cost</b> \(= \$0+\$28,000+\$2,600+\$3,600+\$28,000+\$2,500+\$10,500+\$28,000+\$2,500\)</p>
+
+<p style="text-align: center;"><b>Total Cost</b> \(= \) <strong><u>$105,700</u></strong></p>
+
+<p>Note that this plan may or may not be optimal, meaning there may be other plans that yield a lower cost. We would have to apply the stepping-stone method to identify ways to improve this plan. Another option is to set this problem up as a linear programming problem as we have done before and to use a software program (such as Excel's Solver) to find the optimal solution.</p>
+<p>Understanding how to read the aggregate production plan is important because these questions are commonly missed on exams. Remember that if an exam question asks only about the period of production (i.e., when units are produced, made, delivered, ordered, etc.), you should look at the relevant <em>row</em>. Alternatively, if an exam question asks only about the period of demand (i.e., when units are used to satisfy demand, used for meeting demand, sold, etc.), you should look at the relevant <em>column</em>.</p>
+<div class="exam-tip">
+<h4>EXAM TIP: Reading Aggregate Production Plans</h4>
+<p>If a question asks only about the <em>period of production</em>, look at the relevant <b>row</b>. If a question asks only about the <em>period of demand</em>, look at the relevant <b>column</b>. </p>
+
+</div>
+<p>For example, if you're asked how many units of subcontracting were used to satisfy April demand, you'd get 50 + 150 = 200 from the April column. Another way an exam question could ask this is, "How many units of April demand are met with subcontracting?" Alternatively, you might be asked a question like, "How much overtime does the company pay for in March?" To answer this, you sum the March overtime row, which totals 50 units. Another way an exam question could ask this is, "How many units of overtime do we order for March delivery?"</p>
+<h2>Management Coefficients Model</h2>
+
+<p>The <strong>management coefficients model</strong> is a formal planning model built around a manager's experience and performance. When there is historical data, a regression analysis can be used on managements' best practices to project into the future. This model offers objectivity and consistency in decision making, but it relies on the assumption that trends in past data will extend into the future. It also assumes that managers in the past have made good decisions.</p>
+
+<h2>Summary of Aggregate Planning Methods</h2>
+
+<p>As a summary, we have talked about three methods for aggregate planning:</p>
+
+<ul>
+<li><em>Graphical methods</em> – These are trial-and-error approaches that are easy to use, and you can easily incorporate constraints and company policies, but they usually don't produce optimal solutions.</li>
+<li><em>Transportation method (linear programming)</em> – This is an optimization method that can be used to find the optimal solution. However, this method can only be used when relationships are linear. Software programs make this method much easier than solving problems by hand.</li>
+<li><em>Management coefficients model</em> – This is a heuristic model that relies on a regression of past data. This is an easy-to-use model that imposes objectivity on the decision-making process, but the quality of the model is only as good as the quality of the data used to build it.</li>
+</ul>
+
+<p>In aggregate planning in the services sector, controlling the cost of labor is critical. In service-based industries, it is important to accurately schedule labor-hours to ensure quick response to customer demand. Unlike manufacturing, services often need an on-call labor resource to cover unexpected demand. Moreover, aggregate planning in services is different in that there is flexibility in individual workers' skills, in rate of output, and in hours of work.</p>
+
+</body>
+</html>

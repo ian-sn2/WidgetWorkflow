@@ -7,13 +7,17 @@ description: Convert a chapter (notes HTML, PDF, Word file or lecture transcript
 
 The procedure is `docs/conversion-prompt-v7.md` (steps 0, 0T, 0C, 1–8); `/convert` starts it. In this repo you may **ask when a wrong guess is costly** (a number, which graphs to convert, which reading of a figure), batched. Decide everything else and flag it in the changelog.
 
+## First: file the sources
+Put the files Ian sent, unchanged, in `chapters/<COURSE>/<chapter>/source/`, and write `chapter.json` (build steps with `{source}`/`{out}`, and the outputs). `python scripts/build_chapters.py <filter>` builds into `build/chapters/`. Only sources are committed.
+
 ## Inputs
 - **Word file**: `python scripts/doc_headings.py FILE` for the heading levels; use exactly that list. `python scripts/doc_formulas.py FILE` for MathType equations (`--check NOTES.html` audits the output). A `.doc` needs both `antiword` and `catdoc`, since antiword drops floating text boxes (exam tips, worked examples).
-- **Transcript**: paraphrase, and never name the source ("the lecture", "in class", "the slides").
+- **Transcript**: paraphrase, and never name the source ("the lecture", "the slides"). "In this lecture", "in class" and the professor are fine (CLAUDE.md rule 4).
 
 ## House format (CLAUDE.md hard rule 7)
 - Head: Red Hat Display font, `content/sn25-v6.css`, `studyguide/sn25-v2.js` (builds the TOC, so no written-in TOC), then `<!--SDG-ENGINE-->`. **Leave the `<title>` exactly as given.**
 - `<p class="date">` per class date; `<h1>`/`<h2>` only (`<h3>` on Concise pages); `.exam-tip` with `<h4>`; Glossary and Key Takeaways are `<h2>`s.
+- **Intro text before the first `<h1>` is `<p id="intro-note"><i>…</i></p>`**, first under `<body>` after the date pill, plus the one-line intro-note script in the head after `sn25-v2.js` (CLAUDE.md rule 7 has it). The script moves the TOC above the intro: date, TOC, intro, heading. `check_file.py` fails anything else above the first `<h1>`.
 - `<strong>` for vocabulary terms in text you write; **the source's own `<strong>` stays**. A displayed definition is a centred `<strong>\( … \)</strong>`.
 - **Names**: keep a named professor and list it in the changelog. Whether it publishes is Ian's call.
 

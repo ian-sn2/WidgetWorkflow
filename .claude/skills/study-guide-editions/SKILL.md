@@ -8,17 +8,18 @@ description: Make the Balanced and Concise editions of a chapter from its Full e
 | Edition | What it is | Widgets |
 |---|---|---|
 | **Full** | The chapter as converted | All |
-| **Balanced** | The Full trimmed (~75–90% of its words): repetition, side remarks and duplicated tables cut; every figure, table and number kept | All |
-| **Concise** | Rewritten as bullets and tables (~20–30%), ending with `<h2>Glossary</h2>` and `<h2>Key Takeaways</h2>` | Only where the text is hard to grasp without it |
+| **Balanced** | **The length of the API Balanced Ian sends, about half the Full** (Ian, 2026-11-20, replacing the 75% target he set the same morning): each paragraph cut to its definition and the facts the exam needs, analogies, asides and repetition dropped; every heading, figure, list, box, exam tip, date and number kept | All |
+| **Concise** | Rewritten as bullets and tables (**about a fifth to a quarter** of the Full), in the layout of the API Concise editions Ian sends (Ian, 2026-11-20): definition tables, fragment bullets with → and "e.g.", `<b>` labels, exam tips kept, a two-column Glossary table, then Key Takeaways bullets. Copy `scripts/apk2100/chapter23.py` | Only where the text is hard to grasp without it |
 
 ## Rules
-- **The Concise keeps the Full's `<h1>`/`<h2>` headings exactly**: same wording, same order, none merged or dropped. Add Glossary and Key Takeaways at the end, and `<h3>` subheads (often ending in a colon) where they help. **Assert it in the build**: `headings(concise) == headings(full) + ["Glossary", "Key Takeaways"]`.
+- **The Concise keeps the Full's `<h1>`/`<h2>` headings exactly**: same wording, same order, none merged or dropped. Add Glossary and Key Takeaways at the end, and `<h3>` subheads where they help; **every `<h3>` ends in a colon** ("Prezygotic Barriers:"; Ian, 2026-11-16). **Assert it in the build**: `headings(concise) == headings(full) + ["Glossary", "Key Takeaways"]`.
 - **Concise widget test** (Ian, 2026-10-26): keep a widget only if the concept is complex and the text cannot carry it (a CPM pass with its four times, a stepper filling a table, a financial calculator). A simple diagram goes; a figure with data becomes a table.
 - **Never two widgets back to back** with no text between them.
 - **Class dates**: Full and Balanced keep every `<p class="date">` (`check_file.py --source` fails a lost one). Concise pages may leave them out (Ian's call).
 - Paraphrase in original wording. Don't name the professor in rewritten Concise text.
 - Every number in a Concise comes from the Full. Recompute and assert the totals in the build.
 - A Balanced is produced by checked `rep()` cuts on the Full, each asserting it matched once, so the edition rebuilds whenever the Full changes.
+- **Write the Balanced as its own body, the way the API does.** Cuts and per-paragraph condensing stall near 75%. `scripts/apk2100/chapter23.py` holds the Balanced as one `BALANCED_BODY`, with the Full's own image tags dropped in as `{IMG0}`…, and asserts the images (in order), boxes, headings to h4, dates and every number of the Full, and a share of 0.40–0.55. Keep the specifics (don't generalize a case into a rule). The API's Balanced and Concise for each chapter are in `docs/balanced-references/` to compare against.
 
 ## Existing builds to copy
 `scripts/man4504/project_mgmt_editions.py`, `scripts/man4504/transport_editions.py`, `scripts/ree3043/chapter17_editions.py`, `scripts/mar3023/concise2.py`, `scripts/mar3023/balanced2.py`, and `scripts/mar3023/chapter22_concise_headings.py` (fixes an existing Concise's headings).
