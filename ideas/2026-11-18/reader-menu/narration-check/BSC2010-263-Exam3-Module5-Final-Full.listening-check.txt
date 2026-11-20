@@ -1,0 +1,204 @@
+Automatic listening check: BSC2010-263-Exam3-Module5-Final-Full.html
+
+404 takes recorded (84.9 minutes). 298 were heard exactly as written.
+28 have a word or number that may be wrong. 24 names or technical terms were spelled differently by the listener.
+To listen to: 5.2 minutes, in BSC2010-263-Exam3-Module5-Final-Full.listen-to-these.mp3 (one sentence for each item below, in this order).
+
+WORDS OR NUMBERS THAT MAY BE WRONG
+
+1. The Tempo of Speciation [summary, Aoede]
+   written: The Tempo of Speciation.
+   heard:   the tempo of a speciation.
+   differs: "(nothing)" heard as "a"
+
+2. Exaptation [summary, Aoede]
+   written: Exaptation.
+   heard:   Acceptation.
+   differs: "exaptation" heard as "acceptation"
+
+3. Exaptation [summary, Aoede]
+   written: Natural selection can only work with structures that already exist. An exaptation is a structure that evolved for one purpose and came to be used for another.
+   heard:   Natural selection can only work with structures that already exist. An acceptation is a structure that evolved for one purpose and came to be used for another.
+   differs: "exaptation" heard as "acceptation"
+
+4. Causes of Rapid Speciation [summary, Aoede]
+   written: Allometric heterochrony is a change in the rate of growth or development. Most domesticated dogs reach maturity, and their full size, earlier than wolves do, which is why adult dogs are smaller.
+   heard:   Allometric heterochrony is a change in the rate of growth or development. Most domesticated dogs reach maturity and they're full size earlier than wolves do, which is why adult dogs are smaller.
+   differs: "their" heard as "theyre"
+
+5. The Tempo of Extinction [summary, Aoede]
+   written: The Tempo of Extinction.
+   heard:   The Temple of Extinction
+   differs: "tempo" heard as "temple"
+
+6. Allopatric Speciation [summary, Kore]
+   written: Allopatric speciation happens when a geographic barrier divides a population, or when part of a population crosses a barrier and founds a new one. The word means other country, and it is the most common form of speciation, especially in animals.
+   heard:   Ellipatric speciation happens when a geographic barrier divides a population or when part of a population crosses a barrier and founds a new one. The word means "other country," and it is the most common form of speciation, especially in animals.
+   differs: "allopatric" heard as "ellipatric"
+
+7. The Tempo of Speciation [summary, Kore]
+   written: The Tempo of Speciation.
+   heard:   The Temple of Speciation
+   differs: "tempo" heard as "temple"
+
+8. Exaptation [summary, Kore]
+   written: Exaptation.
+   heard:   Acceptation
+   differs: "exaptation" heard as "acceptation"
+
+9. Causes of Rapid Speciation [summary, Kore]
+   written: Allometric heterochrony is a change in the rate of growth or development. Most domesticated dogs reach maturity, and their full size, earlier than wolves do, which is why adult dogs are smaller.
+   heard:   Allometric heterochrony is a change in the rate of growth or development. Most domesticated dogs reach maturity and they're full size earlier than wolves do, which is why adult dogs are smaller.
+   differs: "their" heard as "theyre"
+
+10. The Definition of a Species [summary, Charon]
+   written: The Definition of a Species.
+   heard:   The definition of species
+   differs: "a" heard as "(nothing)"
+
+11. Allopatric Speciation [summary, Charon]
+   written: Allopatric speciation happens when a geographic barrier divides a population, or when part of a population crosses a barrier and founds a new one. The word means other country, and it is the most common form of speciation, especially in animals.
+   heard:   Allopatric speciation happens when a geographic barrier divides a population, or when part of a population crosses a barrier and finds a new one. The word means "other country," and it is the most common form of speciation, especially in animals.
+   differs: "found" heard as "find"
+
+12. The Tempo of Speciation [summary, Charon]
+   written: The Tempo of Speciation.
+   heard:   The Temple of Speciation.
+   differs: "tempo" heard as "temple"
+
+13. Exaptation [summary, Charon]
+   written: Natural selection can only work with structures that already exist. An exaptation is a structure that evolved for one purpose and came to be used for another.
+   heard:   Natural selection can only work with structures that already exist. An acceptation is a structure that evolved for one purpose and came to be used for another.
+   differs: "exaptation" heard as "acceptation"
+
+14. Causes of Rapid Speciation [summary, Charon]
+   written: Allometric heterochrony is a change in the rate of growth or development. Most domesticated dogs reach maturity, and their full size, earlier than wolves do, which is why adult dogs are smaller.
+   heard:   Allometric heterochrony is a change in the rate of growth or development. Most domesticated dogs reach maturity and they're full size earlier than wolves do, which is why adult dogs are smaller.
+   differs: "their" heard as "theyre"
+
+15. The Tempo of Extinction [summary, Charon]
+   written: The Tempo of Extinction.
+   heard:   The Temple of Extinction
+   differs: "tempo" heard as "temple"
+
+16. An Introduction to Species [full, Charon]
+   written: The Definition of a Species.
+   heard:   The definition of species
+   differs: "a" heard as "(nothing)"
+
+17. An Introduction to Species [full, Charon]
+   written: Often, two animals can technically reproduce, but the viability of the offspring is so low that the two animals are nevertheless considered different species. For example, consider polar bears and grizzly bears, two animals that we can readily identify as different species. Hybrids of these two animals have been found in the wild, where the bears' natural environments are beginning to overlap as those environments are disrupted, indicating that they can, in fact, interbreed.
+   heard:   Often, two animals can technically reproduce, but the viability of the offspring is so low that the two animals are nevertheless considered different species. For example, consider polar bears and grizzly bears, two animals that we can readily identify as different species. Hybrids of these two animals have been found in the wild, where the bears' natural environments are beginning to overlap as those environments are disrupted, indicating that they can, in fact, end or breed.
+   differs: "interbreed" heard as "end or breed"
+
+18. The Formation of New Species [full, Charon]
+   written: Allopatric speciation occurs when a geographic barrier divides a population, or when part of a population crosses a geographic barrier and founds a new population that is separate and distinct from the original population. This is the most common form of speciation, especially in animals. The word allopatric literally means other country.
+   heard:   Allopatric speciation occurs when a geographic barrier divides a population, or when part of a population crosses a geographic barrier and finds a new population that is separate and distinct from the original population. This is the most common form of speciation, especially in animals. The word allopatric literally means "other country."
+   differs: "found" heard as "find"
+
+19. The Formation of New Species [full, Charon]
+   written: Let's illustrate the Dobzhansky-Muller model with a diagram:
+   heard:   Let's illustrate the Dubziansky-Muller model with a
+   differs: "diagram" heard as "(nothing)"
+
+20. The Formation of New Species [full, Charon]
+   written: Sympatric speciation by behavioral change (in animals) occurs when two parents make a mistake and accidentally go to a new breeding location. Their offspring are able to remember the place where they were born, and they return there to mate. This results in the formation of a new population in this place, and thus the propagation of a new species.
+   heard:   Sympatric speciation by a behavioral change in animals occurs when two parents make a mistake and accidentally go to a new breeding location. Their offspring are able to remember the place where they were born and they return there to mate. This results in the formation of a new population in this place and thus the propagation of a new species.
+   differs: "(nothing)" heard as "a"
+
+21. The Formation of New Species [full, Charon]
+   written: Sockeye salmon: Recall that sockeye salmon are anadromous, meaning they are born in freshwater, migrate to salt water, and then return to freshwater to reproduce. A sockeye is born in a small creek or river in a place like Alaska, spends about a year there, and then spends three or four years traveling around the Pacific basin before returning to the very same creek to reproduce and die.
+   heard:   Sakai Salmon Recall that Sakai Salmon are inadromous, meaning they are born in freshwater, migrate to saltwater, and then return to freshwater to reproduce. A Sakai is born in a small creek or river in a place like Alaska, spends about a year there, and then spends three or four years traveling around the Pacific Basin before returning to the very same creek to reproduce and die.
+   differs: "anadromou" heard as "inadromou"
+
+22. The Formation of New Species [full, Charon]
+   written: Dr. Gillooly also shared a brief story about the history of the Red Queen Hypothesis. The scientist who proposed it, Leigh Van Valen, was a distinguished professor at the University of Chicago, but his manuscript was rejected by every journal he submitted it to. Frustrated, he photocopied the rejected paper, gathered rejected manuscripts from colleagues, stapled them all together, and started his own journal to publish them.
+   heard:   Dr. Golouly also shared a brief story about the history of the Red Queen hypothesis. The scientist who proposed it, Lee Van Vailen, was a distinguished professor at the University of Chicago, but his manuscript was rejected by every journal he submitted it to. Frustrated, he photocopied the rejected paper, gathered rejected manuscripts from colleagues, stapled them all together, and started his own journal to publish them.
+   differs: "leigh" heard as "lee"; "valen" heard as "vailen"
+
+23. The Tempo of Speciation [full, Charon]
+   written: The Tempo of Speciation.
+   heard:   The Temple of Speciation.
+   differs: "tempo" heard as "temple"
+
+24. The Tempo of Speciation [full, Charon]
+   written: (Interestingly, horseshoe crabs are medically important because their blue blood clots in the presence of bacterial contamination, making it invaluable for testing vaccines and other medical products for safety. Large ships harvest the crabs, their blood is extracted, and the crabs are then put back. Dr. Gillooly noted that it is the most expensive liquid on Earth, about sixty thousand dollars per gallon.).
+   heard:   Interestingly, horseshoe crabs are medically important because they're blue blood clots in the presence of bacterial contamination, making it invaluable for testing vaccines and other medical products for safety. Large ships harvest the crabs, their blood is extracted, and the crabs are then put back. Dr. Galouly noted that it is the most expensive liquid on Earth, about $60,000 per gallon.
+   differs: "their" heard as "theyre"
+
+25. The Tempo of Speciation [full, Charon]
+   written: An exaptation occurs when a structure evolves for one purpose and comes to be used for another. Once an evolutionary change occurs, it may serve a different function when introduced to a new context. Moreover, it can be further modified to serve a different function. This can lead to an evolutionary novelty.
+   heard:   An acceptation occurs when a structure evolves for one purpose and comes to be used for another. Once an evolutionary change occurs, it may serve a different function when introduced to a new context. Moreover, it can be further modified to serve a different function. This can lead to an evolutionary novelty.
+   differs: "exaptation" heard as "acceptation"
+
+26. The Tempo of Speciation [full, Charon]
+   written: Two examples of exaptations are as follows:
+   heard:   Two examples of acceptations are as follows.
+   differs: "exaptation" heard as "acceptation"
+
+27. The Tempo of Speciation [full, Charon]
+   written: Moray eel jaws: Moray eels have an extra set of jaws that they use to pull prey down their throats. These jaws did not evolve from scratch; instead, they originated from modified gill arches that were repurposed over evolutionary time. This illustrates the broader principle that new traits must arise from pre-existing structures and cannot appear fully formed.
+   heard:   Murray Eel jaws Murray eels have an extra set of jaws that they use to pull prey down their throats These jaws did not evolve from scratch Instead, they originated from modified gill arches that were repurposed over evolutionary time This illustrates the broader principle that new traits must arise from pre-existing structures and cannot appear fully formed
+   differs: "moray" heard as "murray"; "moray" heard as "murray"
+
+28. The Tempo of Extinction [full, Charon]
+   written: The Tempo of Extinction.
+   heard:   The Temple of Extinction
+   differs: "tempo" heard as "temple"
+
+NAMES AND TECHNICAL TERMS (the listener cannot spell these; hear each once and judge the pronunciation)
+
+29. meadowlark: heard as "metal arc", "metallark" (5 times)
+30. dobzhansky: heard as "debzhonsky", "dubjonsky", "dubziansky", "dabzhonsky" (6 times)
+31. rhogeessa: heard as "rogiesa", "rhogesa", "rhogsa" (4 times)
+32. mistake in: heard as "mistaken" (3 times)
+33. autopolyploidy: heard as "autopollipolloidy"
+34. allopolyploidy: heard as "allopollipolloidy", "allopolypyl oidy" (2 times)
+35. hyla versicolor: heard as "hylovercicolor", "hyloverso color", "hyloversocolor" (4 times)
+36. sockeye: heard as "sakai" (5 times)
+37. divided: heard as "divide it" (3 times)
+38. eldredge: heard as "eldridge" (4 times)
+39. gillooly: heard as "galuli", "ghululi", "galloulli", "galouli" (31 times)
+40. postzygotic: heard as "post psychotic", "post sygotic", "postygotic" (5 times)
+41. sympatric: heard as "sympatrix"
+42. prezygotic: heard as "presygotic" (3 times)
+43. gametic: heard as "gumatic", "gometic" (3 times)
+44. cichlid: heard as "cyclia", "cycla" (2 times)
+45. defined: heard as "define"
+46. adaptive: heard as "adapt of"
+47. anagenesi: heard as "anogenesi" (3 times)
+48. evolve: heard as "evolved"
+49. allometric heterochrony: heard as "alimentary catarachrony"
+50. heterochrony: heard as "heterokony" (2 times)
+51. neoteny: heard as "nyatni"
+52. proto mammal: heard as "protomamal"
+
+HARD WORDS: LOOKED UP AND TAUGHT TO THE VOICE
+
+Every rare word was looked up before recording and the voice was told how to say it.
+73 came from the built-in dictionary. 16 came from Wiktionary, were built from a prefix and a known word, or were entered by hand:
+hear those once in BSC2010-263-Exam3-Module5-Final-Full.hard-words.mp3 (each word said alone, in this order). A wrong one is corrected in
+scripts/ideas/narration/pronounce.json and is then right in every chapter.
+
+   allometric         a-luh-MEH-trihk            /ˌæləmˈɛtɹɪk/   allo- + metric (dictionary)
+   allopolyploidy     a-luh-PAH-lee-ploy-dee     /ˌæləpˈɑliplˌɔɪdi/   allo- + polyploidy (dictionary)
+   autopolyploidy     aw-toh-PAH-lee-ploy-dee    /ˌɔtoʊpˈɑliplˌɔɪdi/   auto- + polyploidy (dictionary)
+   dobzhansky         duhb-ZHAHN-skee            /dəbˈʒɑnski/   surname; entered by hand, 2026-11-18: confirm by ear
+   eldredge           EHL-drehj                  /ˈɛldɹɛdʒ/   surname; entered by hand, 2026-11-18: confirm by ear
+   exaptation         ehk-sap-TAY-shuhn          /ˌɛksæpˈteɪʃən/   Wiktionary
+   gillooly           gih-LOO-lee                /ɡɪˈluli/   surname; entered by hand, 2026-11-18: confirm by ear against how it is said in class
+   hasler             HA-sler                    /ˈhæslɚ/   surname; entered by hand, 2026-11-18: confirm by ear
+   heterochrony       heh-tuh-RAH-kruh-nee       /ˌhɛtəˈɹɑkɹəni/   Wiktionary lists no pronunciation; entered by hand, 2026-11-18: confirm by ear
+   hyla versicolor    HY-luh VER-sih-kuh-ler     /ˈhaɪlə ˈvɝsɪˌkʌlɚ/   species name; entered by hand, 2026-11-18: confirm by ear
+   lystrosaurus       lih-stroh-SAW-ruhs         /ˌlɪstɹoʊˈsɔɹəs/   genus name; entered by hand, 2026-11-18: confirm by ear
+   pizzly             PIHZ-lee                   /ˈpɪzli/   Wiktionary
+   postzygotic        pohst-zy-GAH-tihk          /ˌpoʊstzaɪɡˈɑtɪk/   post- + zygotic (dictionary)
+   prezygotic         pree-zy-GAH-tihk           /ˌpɹizaɪɡˈɑtɪk/   pre- + zygotic (dictionary)
+   rhogeessa          roh-jee-EH-suh             /ˌɹoʊdʒiˈɛsə/   genus name, uncertain; entered by hand, 2026-11-18: confirm by ear
+   van valen          van VAY-luhn               /væn ˈveɪlən/   surname; entered by hand, 2026-11-18: confirm by ear
+
+   from the dictionary: allopatric (a-luh-PA-trihk), anadromous (uh-NA-druh-muhs), anagenesis (a-nuh-JEH-nuh-sihs), anthropocene (AN-thruh-puh-seen), archaeopteryx (ahr-kee-AHP-ter-ihks), asexually (ay-SEHK-shuh-wuh-lee), axolotl (AK-suh-lah-tuhl), centromere (SEHN-truh-mihr), chytrid (KIH-truhd), cichlid (SIH-kluhd), clade (KLAYD), cladogenesis (kla-duh-JEH-nuh-sihs), coevolution (koh-eh-vuh-LOO-shuhn), coevolve (koh-uh-VAHLV), correlational (kaw-ruh-LAY-shuh-nuhl), diploid (DIH-ployd), ectotherm (EHK-tuh-therm), extinction (ihk-STIHNGK-shuhn), fertilize (FER-tuh-lyz), finch (FIHNCH), found (FOWND), fusion (FYOO-zhuhn), gamete (GA-meet), gametic (guh-MEH-tihk), genotype (JEE-nuh-typ), genotypic (jee-nuh-TIH-pihk), gradualism (GRA-juh-wuh-lih-zuhm), haploid (HA-ployd), hardwire (HAHR-dwy-er), hawthorn (HAW-thawrn), herbivore (HER-buh-vawr), homeotic (hoh-mee-AH-tihk), hybridize (HY-bruh-dyz), hypothesize (hy-PAH-thuh-syz), interbreed (ihn-ter-BREED), internalize (ihn-TER-nuh-lyz), latitudinal (la-tuh-TOO-duh-nuhl), macroevolution (ma-kroh-eh-vuh-LOO-shuhn), meadowlark (MEH-doh-lahrk), meiosis (my-OH-sihs), microevolution (my-kroh-eh-vuh-LOO-shuhn), morphology (mawr-FAH-luh-jee), mutate (MYOO-tayt), nectary (NEHK-ter-ee), neoteny (nee-AH-tuh-nee), newt (NOOT), paleontologist (pay-lee-ahn-TAH-luh-juhst), phenotypic (fee-nuh-TIH-pihk), photocopy (FOH-tuh-kah-pee), pollinate (PAH-luh-nayt), polyploid (PAH-lee-ployd), polyploidy (PAH-lee-ploy-dee), rearrangement (ree-er-AYNJ-muhnt), reproductively (ree-pruh-DUHK-tihv-lee), ribosomal (ry-BAH-suh-muhl), salamander (SA-luh-man-der), silversword (SIHL-ver-sawrd), sockeye (SAH-ky), speciate (SPEE-shee-ayt), speciation (spee-shee-AY-shuhn), stapled (STAY-puhld), stepwise (STEHP-wyz), subdivide (suhb-duh-VYD), subpopulation (suhb-pah-pyuh-LAY-shuhn), survivorship (ser-VY-ver-shihp), sycamore (SIH-kuh-mawr), sympatric (sihm-PA-trihk), tetraploid (TEH-truh-ployd), tetrapod (TEH-truh-pahd), triple (TRIH-puhl), triploid (TRIH-ployd), underlie (uhn-der-LY), zygote (ZY-goht)
+
+NO PRONUNCIATION FOUND: the voice guessed these. They are at the end of the same clip. Add the ones it gets wrong to pronounce.json.
+
+   behaviorally, yucatan

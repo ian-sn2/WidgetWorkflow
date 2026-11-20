@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAN4504 Exam 3 - Project Management Study Guide</title>
+<link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v6.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<script>
+MathJax = {
+tex: {
+displayMath: [['\\[','\\]']],
+inlineMath: [['\\(','\\)']]
+}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>
+<style>
+.pmw { --ink:#1c2a44; --muted:#5b6474; --rule:#cfd6e2; --soft:#f1f4f9;
+  --fwd:#1f62b8; --fwd-bg:#dcebfb; --bwd:#0d7a4f; --bwd-bg:#d8f2e6; --crit:#c8302a; --crit-bg:#fde8e6;
+  --slack:#7a5600; --slack-bg:#fff1c7; --slack-rule:#e3b23c; --use:#ffd95a; --path:#6a4bc4; --path-bg:#efeafc;
+  width:78%; max-width:none; margin:20px auto; padding:14px 16px 12px; background:#fff; border:1px solid #dfe3ea; border-radius:10px;
+  box-sizing:border-box; font-family:"Red Hat Display", system-ui, sans-serif; color:var(--ink); clear:both; }
+.pmw * { box-sizing:border-box; }
+.pmw .pm-title { font-weight:800; font-size:1.02rem; margin:0 0 8px; text-align:center; }
+.pmw .pm-bar { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px; margin:0 0 8px; }
+.pmw button { font:inherit; font-size:.85rem; font-weight:700; min-height:40px; padding:6px 14px; border:1px solid var(--rule);
+  border-radius:999px; background:#fff; color:var(--ink); cursor:pointer; line-height:1.2; }
+.pmw button[aria-pressed="true"], .pmw button.pm-next { background:var(--ink); border-color:var(--ink); color:#fff; }
+.pmw button:disabled { opacity:.4; cursor:default; }
+.pmw button:focus-visible, .pmw input:focus-visible { outline:3px solid #2a78d6; outline-offset:2px; }
+.pmw .pm-views button { padding:6px 12px; }
+.pmw .pm-count { font-size:.8rem; color:var(--muted); min-width:6.5em; text-align:center; }
+.pmw .pm-caps { display:grid; margin:0 0 8px; }
+.pmw .pm-cap { grid-area:1 / 1; visibility:hidden; padding:8px 12px; border-left:4px solid var(--ink); background:var(--soft);
+  border-radius:0 6px 6px 0; font-size:.9rem; line-height:1.45; }
+.pmw .pm-cap.on { visibility:visible; }
+.pmw .pm-cap b.pm-h { display:block; font-size:.92rem; margin-bottom:2px; }
+.pmw .pm-calc { margin-top:6px; padding-top:6px; border-top:1px dashed var(--rule); font-variant-numeric:tabular-nums; font-weight:600; }
+.pmw .f { color:var(--fwd); font-weight:800; } .pmw .b { color:var(--bwd); font-weight:800; }
+.pmw .pm-fig { display:block; width:100%; height:auto; overflow:visible; }
+.pmw .pm-figwrap { width:100%; }
+.pmw svg text { font-family:"Red Hat Display", system-ui, sans-serif; }
+.pmw .pm-dots { display:flex; justify-content:center; gap:4px; margin:8px 0 0; flex-wrap:wrap; }
+.pmw .pm-dots span { width:7px; height:7px; border-radius:50%; background:#d5dbe5; }
+.pmw .pm-dots span.on { background:var(--ink); }
+.pmw .pm-key { display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; margin:6px 0 0; font-size:.78rem; color:var(--muted); }
+.pmw .pm-key i { display:inline-block; width:18px; height:0; border-top:3px solid; vertical-align:middle; margin-right:5px; }
+.pmw .pm-key .sw { display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:-1px; margin-right:5px; }
+
+/* network */
+.pmw .n .n-c { fill:none; stroke:var(--ink); stroke-width:1.6; }
+.pmw .n .n-bg { fill:#fff; }
+.pmw .n .n-div { stroke:var(--ink); stroke-width:1.1; }
+.pmw .n .cf { fill:var(--fwd-bg); } .pmw .n .cb { fill:var(--bwd-bg); } .pmw .n .cu { fill:var(--use); }
+.pmw .n .n-l { font-size:17px; font-weight:800; fill:var(--ink); text-anchor:middle; dominant-baseline:central; }
+.pmw .n .n-l.n-ls { font-size:8.5px; }
+.pmw .n .n-d { font-size:12px; font-weight:700; fill:var(--muted); text-anchor:middle; dominant-baseline:central; }
+.pmw .n .n-d.n-x { fill:var(--crit); }
+.pmw .n .n-v { font-size:12.5px; font-weight:800; text-anchor:middle; dominant-baseline:central; font-variant-numeric:tabular-nums; }
+.pmw .n .n-v.vf { fill:var(--fwd); } .pmw .n .n-v.vb { fill:var(--bwd); }
+.pmw .n .n-halo { fill:none; stroke-width:7; opacity:.28; }
+.pmw .n.cur-f .n-c { stroke:var(--fwd); stroke-width:3.4; } .pmw .n.cur-f .n-halo { stroke:var(--fwd); }
+.pmw .n.cur-b .n-c { stroke:var(--bwd); stroke-width:3.4; } .pmw .n.cur-b .n-halo { stroke:var(--bwd); }
+.pmw .n.crit .n-c { stroke:var(--crit); stroke-width:3.2; }
+.pmw .n.path .n-c { stroke:var(--path); stroke-width:3.2; } .pmw .n.path .n-bg { fill:var(--path-bg); }
+/* off the selected path: lighter lines and cells, but solid text, so the numbers stay sharp (Ian, 2026-11-12) */
+.pmw .n.dim .n-c, .pmw .n.dim .n-div { stroke:#c5ccd8; } .pmw .n.dim .n-bg { fill:#fff; }
+.pmw .n.dim .cf { fill:#f1f6fc; } .pmw .n.dim .cb { fill:#f0f8f4; }
+.pmw .n.dim .n-l, .pmw .n.dim .n-d, .pmw .n.dim .n-v.vf, .pmw .n.dim .n-v.vb { fill:#8f99aa; }
+.pmw .n.new .n-c { stroke:var(--fwd); stroke-width:3; } .pmw .n.new .n-bg { fill:var(--fwd-bg); }
+.pmw .n.plain .n-bg { fill:#c9f2e0; } .pmw .n.plain.new .n-bg { fill:var(--fwd-bg); }
+.pmw .n.plain .n-l { font-size:15px; } .pmw .n.plain .n-l.n-ls { font-size:10px; }
+.pmw .n.aoa .n-bg { fill:#d5dbe5; } .pmw .n.aoa .n-c { stroke:#4b5870; stroke-width:1.5; }
+.pmw .e .e-l { stroke:#3b4656; stroke-width:1.5; fill:none; } .pmw .e .e-h { fill:#3b4656; }
+.pmw .e .e-l.dash { stroke-dasharray:5 4; }
+.pmw .e.f .e-l { stroke:var(--fwd); stroke-width:2.6; } .pmw .e.f .e-h { fill:var(--fwd); }
+.pmw .e.b .e-l { stroke:var(--bwd); stroke-width:2.6; } .pmw .e.b .e-h { fill:var(--bwd); }
+.pmw .e.crit .e-l { stroke:var(--crit); stroke-width:3.6; } .pmw .e.crit .e-h { fill:var(--crit); }
+.pmw .e.path .e-l { stroke:var(--path); stroke-width:3.4; } .pmw .e.path .e-h { fill:var(--path); }
+.pmw .e.new .e-l { stroke:var(--fwd); stroke-width:2.6; } .pmw .e.new .e-h { fill:var(--fwd); }
+.pmw .e.dim .e-l { stroke:#d3d9e2; } .pmw .e.dim .e-h { fill:#d3d9e2; }
+.pmw .e .e-t { font-size:14px; font-weight:800; fill:#3b4656; text-anchor:middle; dominant-baseline:central; }
+.pmw .e .e-t.dm { font-size:11px; font-weight:600; font-style:italic; }
+.pmw .sl rect { fill:var(--slack-bg); stroke:var(--slack-rule); stroke-width:1; }
+.pmw .sl text { font-size:11px; font-weight:800; fill:var(--slack); dominant-baseline:central; text-anchor:middle; }
+.pmw .sl.z rect { fill:var(--crit-bg); stroke:var(--crit); } .pmw .sl.z text { fill:var(--crit); }
+.pmw .pm-conv { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.pmw .pm-conv > div { min-width:0; }
+.pmw .pm-conv .pm-sub { font-size:.82rem; font-weight:800; text-align:center; margin:0 0 2px; }
+.pmw .pm-conv .pm-sub.aoa { color:#4b5870; }
+.pmw .pm-rule { font-weight:600; }
+
+/* gantt */
+.pmw .pg-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.pmw .pg-grid { min-width:520px; }
+.pmw .pg-row { display:grid; grid-template-columns:96px 1fr; align-items:center; min-height:34px; }
+.pmw .pg-lab { font-size:.82rem; font-weight:800; padding-right:8px; white-space:nowrap; }
+.pmw .pg-track { position:relative; height:34px; border-left:1px solid var(--rule); border-right:1px solid var(--rule);
+  background-image:repeating-linear-gradient(to right, transparent 0, transparent calc(100% / 12 - 1px), #e3e7ee calc(100% / 12 - 1px), #e3e7ee calc(100% / 12)); }
+.pmw .pg-bar { position:absolute; top:7px; height:20px; border-radius:4px; }
+.pmw .pg-head .pg-track { display:grid; grid-template-columns:repeat(12, 1fr); height:auto; background:none; border:0; }
+.pmw .pg-head .pg-track span { font-size:.72rem; font-weight:800; color:var(--muted); text-align:center; text-transform:uppercase; }
+.pmw .pg-rows .pg-track { background-image:repeating-linear-gradient(to right, transparent 0, transparent calc(100% / 15 - 1px), #eceff4 calc(100% / 15 - 1px), #eceff4 calc(100% / 15)); }
+.pmw .pg-rows .pg-lab small { font-weight:600; color:var(--muted); }
+.pmw .pg-b { position:absolute; top:6px; height:22px; border-radius:4px; background:var(--fwd); color:#fff; font-size:.72rem; font-weight:800;
+  display:flex; align-items:center; justify-content:center; white-space:nowrap; transition:left .35s ease; }
+.pmw .pg-b.crit { background:var(--crit); }
+.pmw .pg-s { position:absolute; top:6px; height:22px; border:2px dashed var(--slack-rule); background:var(--slack-bg); border-radius:4px;
+  font-size:.66rem; font-weight:800; color:var(--slack); display:flex; align-items:center; justify-content:center; transition:left .35s ease; }
+.pmw .pg-axis .pg-track { height:20px; background:none; border:0; }
+.pmw .pg-axis .pg-track span:last-child { transform:translateX(-100%); }
+.pmw .pg-axis .pg-track span { position:absolute; top:2px; transform:translateX(-50%); font-size:.7rem; font-weight:700; color:var(--muted); }
+.pmw .pg-axis .pg-lab { font-size:.7rem; color:var(--muted); font-weight:700; }
+
+/* curves */
+.pmw .crv { fill:none; stroke:var(--ink); stroke-width:2.6; }
+.pmw .crv-fill { fill:#cfe1f7; }
+.pmw .crv-fill.bands { fill:#cfe1f7; }
+.pmw .ax { stroke:var(--ink); stroke-width:1.2; }
+.pmw .tk { stroke:var(--ink); stroke-width:1; }
+.pmw .tl { font-size:13px; font-weight:700; fill:var(--ink); text-anchor:middle; }
+.pmw .tl.sm { font-size:11.5px; font-weight:600; fill:var(--muted); }
+.pmw .gd { stroke:var(--ink); stroke-width:1.1; stroke-dasharray:4 4; }
+.pmw .gd.t { stroke:var(--fwd); stroke-width:2.2; stroke-dasharray:none; }
+.pmw .gd.q { stroke:#b8400f; stroke-width:2; stroke-dasharray:5 4; }
+.pmw .gd.b { stroke:var(--ink); stroke-width:2.2; stroke-dasharray:none; }
+.pmw .crv-tail { fill:#ef8550; }
+.pmw .lead.tail { stroke:#b8400f; }
+.pmw .mk.tailtxt { fill:#b8400f; font-size:18px; }
+.pmw .dimline { stroke:#16365f; stroke-width:1.6; } .pmw .dimhead { fill:#16365f; }   /* not .dim: that is the faded-node class */
+.pmw .mk.dimtxt { fill:#16365f; font-size:13.5px; } .pmw .mk.dimtxt.big2 { font-size:16px; }
+.pmw .mk.halo, .pmw .big.halo { paint-order:stroke; stroke:#cfe1f7; stroke-width:6px; stroke-linejoin:round; }
+.pmw .big { font-size:22px; font-weight:800; fill:#16365f; text-anchor:middle; }
+.pmw .big.halo { paint-order:stroke; stroke:#cfe1f7; stroke-width:6px; stroke-linejoin:round; }
+.pmw .lead { stroke:#16365f; stroke-width:1.2; }
+.pmw .mk { font-size:14px; font-weight:800; text-anchor:middle; }
+.pmw .mk.t { fill:var(--fwd); }
+.pmw .pm-slider { display:flex; align-items:center; gap:10px; margin:0 0 6px; font-size:.88rem; font-weight:700; }
+.pmw .pm-slider input { flex:1; min-width:0; accent-color:#1c2a44; min-height:32px; }
+.pmw .pm-slider output { min-width:6.2em; text-align:right; font-variant-numeric:tabular-nums; }
+.pmw .pm-crit-tag { display:inline-block; margin-left:6px; padding:0 6px; border-radius:4px; font-size:.72rem; font-weight:800; color:var(--crit); background:var(--crit-bg); vertical-align:1px; }
+.pmw .pm-acts button { min-width:44px; padding:6px 0; }
+.pmw .pm-acts button.crit { border-color:var(--crit); color:var(--crit); }
+.pmw .pm-acts button.crit[aria-pressed="true"] { background:var(--crit); color:#fff; }
+
+/* static figures */
+.pm-legend { max-width:480px; }
+.pm-legend-svg { display:block; width:100%; height:auto; }
+.pm-legend-svg .cf { fill:var(--fwd-bg); } .pm-legend-svg .cb { fill:var(--bwd-bg); }
+.pm-legend-svg .ring { fill:none; stroke:var(--ink); stroke-width:2; } .pm-legend-svg .div { stroke:var(--ink); stroke-width:1.5; }
+.pm-legend-svg .vf, .pm-legend-svg .vb, .pm-legend-svg .lab, .pm-legend-svg .dur { text-anchor:middle; font-weight:800; dominant-baseline:central; }
+.pm-legend-svg .vf { fill:var(--fwd); font-size:20px; } .pm-legend-svg .vb { fill:var(--bwd); font-size:20px; }
+.pm-legend-svg .dot.f { fill:var(--fwd); } .pm-legend-svg .dot.b { fill:var(--bwd); } .pm-legend-svg .dot.k { fill:var(--ink); }
+.pm-legend-svg .lab { font-size:30px; fill:var(--ink); } .pm-legend-svg .dur { font-size:19px; fill:var(--muted); }
+.pm-legend-svg .call { font-size:15px; font-weight:800; dominant-baseline:central; }
+.pm-legend-svg .call.f { fill:var(--fwd); } .pm-legend-svg .call.b { fill:var(--bwd); } .pm-legend-svg .call.k { fill:var(--ink); }
+.pm-legend-svg .lead { stroke-width:1.2; } .pm-legend-svg .lead.f { stroke:var(--fwd); } .pm-legend-svg .lead.b { stroke:var(--bwd); } .pm-legend-svg .lead.k { stroke:var(--ink); }
+.pmw p.pm-key { display:block; text-align:center; }
+.pmw .pm-key .kf { color:var(--fwd); font-weight:800; } .pmw .pm-key .kb { color:var(--bwd); font-weight:800; }
+.pm-beta-svg { display:block; width:100%; height:auto; }
+.pm-beta-svg .curve { fill:none; stroke:var(--ink); stroke-width:3; }
+.pm-beta-svg .tail { fill:#ef8550; stroke:none; }
+.pm-beta-svg .leaddot { fill:#b8400f; }
+.pm-beta-svg .band { stroke:#ef8550; stroke-width:5; stroke-linecap:round; }
+.pm-beta-svg .axis { stroke:var(--ink); stroke-width:1.3; }
+.pm-beta-svg .mline { stroke:var(--ink); stroke-width:1.2; stroke-dasharray:5 4; }
+.pm-beta-svg .tick { stroke:#b8400f; stroke-width:1.6; }
+.pm-beta-svg .xl { font-size:14px; font-weight:800; fill:var(--ink); text-anchor:middle; }
+.pm-beta-svg .note { font-size:12.5px; font-weight:700; fill:#b8400f; }
+.pm-beta-svg .lead { stroke:#b8400f; stroke-width:1.1; }
+
+@media (max-width:600px) { .pmw { width:100%; padding:12px 8px; } .pmw .pm-cap { font-size:.86rem; } .pmw .pm-conv { grid-template-columns:1fr; gap:4px; }
+  .pmw .pg-row { grid-template-columns:62px 1fr; } .pmw .pg-grid { min-width:0; } .pmw .pg-lab { font-size:.74rem; padding-right:4px; }
+  .pmw .pg-head .pg-track span { font-size:.56rem; letter-spacing:-.02em; } .pmw .pg-rows .pg-lab small { display:none; }
+  .pmw .pg-axis .pg-track span:nth-child(even) { display:none; } .pmw .pg-b { font-size:.64rem; } .pmw .pg-s { font-size:.56rem; overflow:hidden; } }
+@media (prefers-reduced-motion: reduce) { .pmw * { transition:none !important; } }
+</style>
+<style>@media (max-width:600px){table{display:block;overflow-x:auto !important;-webkit-overflow-scrolling:touch} mjx-container{display:inline-block !important;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:middle}}</style>
+</head>
+<body>
+
+<h1>Introduction to Projects</h1>
+
+<ul>
+<li><b>Project</b>: a series of related tasks aimed at a major output, with a distinct start, a distinct end, and a defined budget. Research (a vaccine, software) counts as well as construction.</li>
+<li>Project management has three steps:</li>
+</ul>
+
+<table>
+<thead><tr><th>Step</th><th>Manager's tasks</th><th>Useful tools</th></tr></thead>
+<tbody>
+<tr><td><b>Planning</b></td><td>Set time, cost, and performance objectives; organize the team; build the <b>work breakdown structure</b> (tasks → subtasks → activities, small enough to estimate)</td><td>Time/cost estimates, budgets, engineering diagrams, cash flow charts</td></tr>
+<tr><td><b>Scheduling</b></td><td>Sequence activities; assign people; schedule resources and deliverables</td><td>CPM, PERT, Gantt charts, milestone charts</td></tr>
+<tr><td><b>Controlling</b></td><td>Monitor cost, resources, and quality; revise plans; shift resources</td><td>Budgets, delayed-activity and slack-activity reports</td></tr>
+</tbody>
+</table>
+
+<ul>
+<li><b>Project management triangle</b>: time, cost, and performance scope trade off against each other.</li>
+</ul>
+
+<h2>Project Organization</h2>
+
+<ul>
+<li>A temporary, cross-functional team. Works best for a specific goal and deadline; unfamiliar, complex, interrelated work; many functions involved; and important but temporary projects.</li>
+</ul>
+
+<h2>Project Managers</h2>
+
+<ul>
+<li><b>Project manager</b>: coordinates and monitors the project; responsible for quality, schedule, budget, and the people on it.</li>
+</ul>
+
+<div class="exam-tip">
+<h4>EXAM TIP: Client Satisfaction</h4>
+<p><b>Client satisfaction</b> is the most important measure of a project's success, ahead of schedule and budget.</p>
+</div>
+
+<h2>Project Management Software</h2>
+
+<ul>
+<li>Microsoft Project, Primavera, Agile tools (smaller projects), or internal software tied to accounting.</li>
+<li>Ethics questions (PMI code): gifts from contractors, false expense or status reports, pressure to cut quality to stay on schedule.</li>
+</ul>
+
+<h1>Project Scheduling Techniques (Overview)</h1>
+
+<ul>
+<li>Gantt charts, CPM, and PERT show where each activity fits, set precedence (what must come first), force realistic time and cost estimates, and expose bottlenecks.</li>
+</ul>
+
+<h1>Gantt Charts</h1>
+
+<ul>
+<li><b>Gantt chart</b>: one bar per activity, from its start to its finish; overlapping bars are activities running at the same time.</li>
+</ul>
+
+<h1>PERT and CPM</h1>
+
+<ul>
+<li><b>CPM</b> (Critical Path Method): activity times are known with fair certainty.</li>
+<li><b>PERT</b> (Program Evaluation and Review Technique): activity times vary, so it can give the probability of finishing by a date.</li>
+<li>Six steps: define the activities; set precedence; draw the network; estimate times; compute the critical path; use the network to schedule and control.</li>
+</ul>
+
+<h2>Activity Network Conventions</h2>
+
+<ul>
+<li><b>Activity-on-node (AON)</b>: nodes are activities. <b>Activity-on-arrow (AOA)</b>: arrows are activities, and may need dashed <em>dummy</em> activities.</li>
+</ul>
+
+<div class="exam-tip">
+<h4>EXAM TIP: Activity-on-Node Method</h4>
+<p>The exam uses activity-on-node networks only.</p>
+</div>
+
+<h1>CPM Example: Milwaukee Paper Manufacturing</h1>
+
+<p>The EPA gives Milwaukee Paper 16 weeks to install pollution control equipment.</p>
+
+<h2>Step 1: Define the project and break it down into specific activities.</h2>
+
+<ul>
+<li>Eight activities, A through H (named in the table under Step 4).</li>
+</ul>
+
+<h2>Step 2: Determine the precedence relationships among the different activities.</h2>
+
+<ul>
+<li>A and B start the project; C follows A; D follows A and B; E and F follow C; G follows D and E; H follows F and G.</li>
+</ul>
+
+<h2>Step 3: Draw the network that connects all of the activities.</h2>
+
+<ul>
+<li>Begin with a Start node, then draw an arrow from each activity to every activity it immediately precedes.</li>
+</ul>
+
+<h2>Step 4: Assign estimates of time and/or cost to each activity.</h2>
+
+<table>
+<thead><tr><th>Activity</th><th>Description</th><th>Immediate predecessors</th><th>Duration (weeks)</th></tr></thead>
+<tbody>
+<tr><td>A</td><td>Build internal components</td><td>—</td><td>2</td></tr>
+<tr><td>B</td><td>Modify roof and floor</td><td>—</td><td>3</td></tr>
+<tr><td>C</td><td>Construct collection stack</td><td>A</td><td>2</td></tr>
+<tr><td>D</td><td>Pour concrete and install frame</td><td>A, B</td><td>4</td></tr>
+<tr><td>E</td><td>Build high-temperature burner</td><td>C</td><td>4</td></tr>
+<tr><td>F</td><td>Install pollution control system</td><td>C</td><td>3</td></tr>
+<tr><td>G</td><td>Install air pollution device</td><td>D, E</td><td>5</td></tr>
+<tr><td>H</td><td>Inspect and test</td><td>F, G</td><td>2</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Time</th><th>Meaning</th><th>Rule</th></tr></thead>
+<tbody>
+<tr><td><b>ES</b> (early start)</td><td>Earliest an activity can begin</td><td>= EF of its predecessor; with several, the <b>largest</b> EF</td></tr>
+<tr><td><b>EF</b> (early finish)</td><td>Earliest it can end</td><td>= ES + duration</td></tr>
+<tr><td><b>LF</b> (late finish)</td><td>Latest it can end without delaying the project</td><td>= LS of its follower; with several, the <b>smallest</b> LS; the last activity's LF = its EF</td></tr>
+<tr><td><b>LS</b> (late start)</td><td>Latest it can begin</td><td>= LF − duration</td></tr>
+</tbody>
+</table>
+
+<p>Each node shows ES top-left, EF top-right, LS bottom-left, and LF bottom-right.</p>
+
+<h2>Forward Pass</h2>
+
+<p>Left to right, for ES and EF:</p>
+
+<div class="pmw " data-pm="net">
+<p class="pm-title">The Forward Pass</p>
+<div class="pm-body"></div>
+<noscript><img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter3-14-forward-pass-complete.png" alt="" class="image-wide-60 content-image"></noscript>
+<script type="application/json">{"net": {"nodes": {"Start": {"pos": [0, 1], "d": 0}, "A": {"pos": [1, 0], "d": 2}, "B": {"pos": [1, 2], "d": 3}, "C": {"pos": [2, 0], "d": 2}, "D": {"pos": [2, 2], "d": 4}, "E": {"pos": [2.75, 1], "d": 4}, "F": {"pos": [3.5, 0], "d": 3}, "G": {"pos": [3.5, 2], "d": 5}, "H": {"pos": [4.5, 1], "d": 2}}, "edges": [["Start", "A"], ["Start", "B"], ["A", "C"], ["A", "D"], ["B", "D"], ["C", "E"], ["C", "F"], ["D", "G"], ["E", "G"], ["F", "H"], ["G", "H"]], "vals": {"Start": [0, 0, 0, 0], "A": [0, 2, 0, 2], "B": [0, 3, 1, 4], "C": [2, 4, 2, 4], "D": [3, 7, 4, 8], "E": [4, 8, 4, 8], "F": [4, 7, 10, 13], "G": [8, 13, 8, 13], "H": [13, 15, 13, 15]}}, "style": "full", "steps": [{"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": [], "cls": "", "use": []}, "B": {"v": [], "cls": "", "use": []}, "C": {"v": [], "cls": "", "use": []}, "D": {"v": [], "cls": "", "use": []}, "E": {"v": [], "cls": "", "use": []}, "F": {"v": [], "cls": "", "use": []}, "G": {"v": [], "cls": "", "use": []}, "H": {"v": [], "cls": "", "use": []}}, "e": {}, "cap": "<b class='pm-h'>Start the forward pass<\/b>The Start node has an early start, early finish, late start and late finish of 0 by definition, and a duration of 0. Each activity's duration goes at the bottom of its node, since we already have those estimates."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ef"]}, "A": {"v": ["es", "ef"], "cls": "cur-f", "use": []}, "B": {"v": [], "cls": "", "use": []}, "C": {"v": [], "cls": "", "use": []}, "D": {"v": [], "cls": "", "use": []}, "E": {"v": [], "cls": "", "use": []}, "F": {"v": [], "cls": "", "use": []}, "G": {"v": [], "cls": "", "use": []}, "H": {"v": [], "cls": "", "use": []}}, "e": {"Start>A": "f"}, "calc": "<span class=\"f\">ES<\/span> = <span class=\"f\">EF<\/span> of Start = 0<br><span class=\"f\">EF<\/span> = <span class=\"f\">ES<\/span> + duration = 0 + 2 = 2", "cap": "<b class='pm-h'>Activity A<\/b>A's only predecessor is Start, so A's early start is Start's early finish, 0. Its early finish is its early start plus its duration."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ef"]}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "cur-f", "use": []}, "C": {"v": [], "cls": "", "use": []}, "D": {"v": [], "cls": "", "use": []}, "E": {"v": [], "cls": "", "use": []}, "F": {"v": [], "cls": "", "use": []}, "G": {"v": [], "cls": "", "use": []}, "H": {"v": [], "cls": "", "use": []}}, "e": {"Start>B": "f"}, "calc": "<span class=\"f\">ES<\/span> = <span class=\"f\">EF<\/span> of Start = 0<br><span class=\"f\">EF<\/span> = <span class=\"f\">ES<\/span> + duration = 0 + 3 = 3", "cap": "<b class='pm-h'>Activity B<\/b>B's only predecessor is also Start, so B's early start is 0 as well."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": ["ef"]}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef"], "cls": "cur-f", "use": []}, "D": {"v": [], "cls": "", "use": []}, "E": {"v": [], "cls": "", "use": []}, "F": {"v": [], "cls": "", "use": []}, "G": {"v": [], "cls": "", "use": []}, "H": {"v": [], "cls": "", "use": []}}, "e": {"A>C": "f"}, "calc": "<span class=\"f\">ES<\/span> = <span class=\"f\">EF<\/span> of A = 2<br><span class=\"f\">EF<\/span> = <span class=\"f\">ES<\/span> + duration = 2 + 2 = 4", "cap": "<b class='pm-h'>Activity C<\/b>C has one immediate predecessor, A, so C can start as soon as A finishes, at week 2."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": ["ef"]}, "B": {"v": ["es", "ef"], "cls": "", "use": ["ef"]}, "C": {"v": ["es", "ef"], "cls": "", "use": []}, "D": {"v": ["es", "ef"], "cls": "cur-f", "use": []}, "E": {"v": [], "cls": "", "use": []}, "F": {"v": [], "cls": "", "use": []}, "G": {"v": [], "cls": "", "use": []}, "H": {"v": [], "cls": "", "use": []}}, "e": {"A>D": "f", "B>D": "f"}, "calc": "<span class=\"f\">ES<\/span> = max(<span class=\"f\">EF<\/span> of A, <span class=\"f\">EF<\/span> of B) = max(2, 3) = 3<br><span class=\"f\">EF<\/span> = <span class=\"f\">ES<\/span> + duration = 3 + 4 = 7", "cap": "<b class='pm-h'>Activity D: two predecessors<\/b>D cannot start until both A and B are finished. A finishes at 2 and B at 3, so the larger of the two early finishes, 3, is D's early start."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef"], "cls": "", "use": ["ef"]}, "D": {"v": ["es", "ef"], "cls": "", "use": []}, "E": {"v": ["es", "ef"], "cls": "cur-f", "use": []}, "F": {"v": [], "cls": "", "use": []}, "G": {"v": [], "cls": "", "use": []}, "H": {"v": [], "cls": "", "use": []}}, "e": {"C>E": "f"}, "calc": "<span class=\"f\">ES<\/span> = <span class=\"f\">EF<\/span> of C = 4<br><span class=\"f\">EF<\/span> = <span class=\"f\">ES<\/span> + duration = 4 + 4 = 8", "cap": "<b class='pm-h'>Activity E<\/b>E's only predecessor is C, which finishes at week 4."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef"], "cls": "", "use": ["ef"]}, "D": {"v": ["es", "ef"], "cls": "", "use": []}, "E": {"v": ["es", "ef"], "cls": "", "use": []}, "F": {"v": ["es", "ef"], "cls": "cur-f", "use": []}, "G": {"v": [], "cls": "", "use": []}, "H": {"v": [], "cls": "", "use": []}}, "e": {"C>F": "f"}, "calc": "<span class=\"f\">ES<\/span> = <span class=\"f\">EF<\/span> of C = 4<br><span class=\"f\">EF<\/span> = <span class=\"f\">ES<\/span> + duration = 4 + 3 = 7", "cap": "<b class='pm-h'>Activity F<\/b>F's only predecessor is also C, so F can start at week 4 too."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef"], "cls": "", "use": []}, "D": {"v": ["es", "ef"], "cls": "", "use": ["ef"]}, "E": {"v": ["es", "ef"], "cls": "", "use": ["ef"]}, "F": {"v": ["es", "ef"], "cls": "", "use": []}, "G": {"v": ["es", "ef"], "cls": "cur-f", "use": []}, "H": {"v": [], "cls": "", "use": []}}, "e": {"D>G": "f", "E>G": "f"}, "calc": "<span class=\"f\">ES<\/span> = max(<span class=\"f\">EF<\/span> of D, <span class=\"f\">EF<\/span> of E) = max(7, 8) = 8<br><span class=\"f\">EF<\/span> = <span class=\"f\">ES<\/span> + duration = 8 + 5 = 13", "cap": "<b class='pm-h'>Activity G: two predecessors<\/b>G needs both D and E. D finishes at 7 and E at 8, so G waits for the later one."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef"], "cls": "", "use": []}, "D": {"v": ["es", "ef"], "cls": "", "use": []}, "E": {"v": ["es", "ef"], "cls": "", "use": []}, "F": {"v": ["es", "ef"], "cls": "", "use": ["ef"]}, "G": {"v": ["es", "ef"], "cls": "", "use": ["ef"]}, "H": {"v": ["es", "ef"], "cls": "cur-f", "use": []}}, "e": {"F>H": "f", "G>H": "f"}, "calc": "<span class=\"f\">ES<\/span> = max(<span class=\"f\">EF<\/span> of F, <span class=\"f\">EF<\/span> of G) = max(7, 13) = 13<br><span class=\"f\">EF<\/span> = <span class=\"f\">ES<\/span> + duration = 13 + 2 = 15", "cap": "<b class='pm-h'>Activity H: the end of the project<\/b>H needs both F and G. F finishes at 7 and G at 13, so H starts at 13 and finishes at 15. The project's earliest completion time is 15 weeks."}], "phase": "f"}</script>
+</div>
+
+<h2>Backward Pass</h2>
+
+<p>Right to left, for LF and LS, always computing LF first. With several final activities, start each from the largest EF (an End node of duration 0 helps):</p>
+
+<div class="pmw " data-pm="net">
+<p class="pm-title">The Backward Pass</p>
+<div class="pm-body"></div>
+<noscript><img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter3-20-backward-pass-complete.png" alt="" class="image-wide-60 content-image"></noscript>
+<script type="application/json">{"net": {"nodes": {"Start": {"pos": [0, 1], "d": 0}, "A": {"pos": [1, 0], "d": 2}, "B": {"pos": [1, 2], "d": 3}, "C": {"pos": [2, 0], "d": 2}, "D": {"pos": [2, 2], "d": 4}, "E": {"pos": [2.75, 1], "d": 4}, "F": {"pos": [3.5, 0], "d": 3}, "G": {"pos": [3.5, 2], "d": 5}, "H": {"pos": [4.5, 1], "d": 2}}, "edges": [["Start", "A"], ["Start", "B"], ["A", "C"], ["A", "D"], ["B", "D"], ["C", "E"], ["C", "F"], ["D", "G"], ["E", "G"], ["F", "H"], ["G", "H"]], "vals": {"Start": [0, 0, 0, 0], "A": [0, 2, 0, 2], "B": [0, 3, 1, 4], "C": [2, 4, 2, 4], "D": [3, 7, 4, 8], "E": [4, 8, 4, 8], "F": [4, 7, 10, 13], "G": [8, 13, 8, 13], "H": [13, 15, 13, 15]}}, "style": "full", "steps": [{"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef"], "cls": "", "use": []}, "D": {"v": ["es", "ef"], "cls": "", "use": []}, "E": {"v": ["es", "ef"], "cls": "", "use": []}, "F": {"v": ["es", "ef"], "cls": "", "use": []}, "G": {"v": ["es", "ef"], "cls": "", "use": []}, "H": {"v": ["es", "ef", "ls", "lf"], "cls": "cur-b", "use": ["ef"]}}, "e": {}, "calc": "<span class=\"b\">LF<\/span> = <span class=\"f\">EF<\/span> = 15<br><span class=\"b\">LS<\/span> = <span class=\"b\">LF<\/span> − duration = 15 − 2 = 13", "cap": "<b class='pm-h'>Activity H: the last activity<\/b>To finish the project by its early finish, the last activity's late finish must equal its early finish, 15 weeks. Subtract the duration for the late start."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef"], "cls": "", "use": []}, "D": {"v": ["es", "ef"], "cls": "", "use": []}, "E": {"v": ["es", "ef"], "cls": "", "use": []}, "F": {"v": ["es", "ef", "ls", "lf"], "cls": "cur-b", "use": []}, "G": {"v": ["es", "ef"], "cls": "", "use": []}, "H": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ls"]}}, "e": {"F>H": "b"}, "calc": "<span class=\"b\">LF<\/span> = <span class=\"b\">LS<\/span> of H = 13<br><span class=\"b\">LS<\/span> = <span class=\"b\">LF<\/span> − duration = 13 − 3 = 10", "cap": "<b class='pm-h'>Activity F<\/b>F comes immediately before just one activity, H, so F's late finish is H's late start."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef"], "cls": "", "use": []}, "D": {"v": ["es", "ef"], "cls": "", "use": []}, "E": {"v": ["es", "ef"], "cls": "", "use": []}, "F": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "G": {"v": ["es", "ef", "ls", "lf"], "cls": "cur-b", "use": []}, "H": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ls"]}}, "e": {"G>H": "b"}, "calc": "<span class=\"b\">LF<\/span> = <span class=\"b\">LS<\/span> of H = 13<br><span class=\"b\">LS<\/span> = <span class=\"b\">LF<\/span> − duration = 13 − 5 = 8", "cap": "<b class='pm-h'>Activity G<\/b>G also comes immediately before only H."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef"], "cls": "", "use": []}, "D": {"v": ["es", "ef"], "cls": "", "use": []}, "E": {"v": ["es", "ef", "ls", "lf"], "cls": "cur-b", "use": []}, "F": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "G": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ls"]}, "H": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}}, "e": {"E>G": "b"}, "calc": "<span class=\"b\">LF<\/span> = <span class=\"b\">LS<\/span> of G = 8<br><span class=\"b\">LS<\/span> = <span class=\"b\">LF<\/span> − duration = 8 − 4 = 4", "cap": "<b class='pm-h'>Activity E<\/b>E comes immediately before only G, so E must finish by G's late start."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef", "ls", "lf"], "cls": "cur-b", "use": []}, "D": {"v": ["es", "ef"], "cls": "", "use": []}, "E": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ls"]}, "F": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ls"]}, "G": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "H": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}}, "e": {"C>E": "b", "C>F": "b"}, "calc": "<span class=\"b\">LF<\/span> = min(<span class=\"b\">LS<\/span> of E, <span class=\"b\">LS<\/span> of F) = min(4, 10) = 4<br><span class=\"b\">LS<\/span> = <span class=\"b\">LF<\/span> − duration = 4 − 2 = 2", "cap": "<b class='pm-h'>Activity C: two followers<\/b>C comes before both E and F, so it must finish in time for the earlier of their late starts. E's is 4 and F's is 10, so C's late finish is 4."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef"], "cls": "", "use": []}, "C": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "D": {"v": ["es", "ef", "ls", "lf"], "cls": "cur-b", "use": []}, "E": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "F": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "G": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ls"]}, "H": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}}, "e": {"D>G": "b"}, "calc": "<span class=\"b\">LF<\/span> = <span class=\"b\">LS<\/span> of G = 8<br><span class=\"b\">LS<\/span> = <span class=\"b\">LF<\/span> − duration = 8 − 4 = 4", "cap": "<b class='pm-h'>Activity D<\/b>D comes immediately before only G."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef"], "cls": "", "use": []}, "B": {"v": ["es", "ef", "ls", "lf"], "cls": "cur-b", "use": []}, "C": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "D": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ls"]}, "E": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "F": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "G": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "H": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}}, "e": {"B>D": "b"}, "calc": "<span class=\"b\">LF<\/span> = <span class=\"b\">LS<\/span> of D = 4<br><span class=\"b\">LS<\/span> = <span class=\"b\">LF<\/span> − duration = 4 − 3 = 1", "cap": "<b class='pm-h'>Activity B<\/b>B comes immediately before only D."}, {"n": {"Start": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "A": {"v": ["es", "ef", "ls", "lf"], "cls": "cur-b", "use": []}, "B": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "C": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ls"]}, "D": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": ["ls"]}, "E": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "F": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "G": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}, "H": {"v": ["es", "ef", "ls", "lf"], "cls": "", "use": []}}, "e": {"A>C": "b", "A>D": "b"}, "calc": "<span class=\"b\">LF<\/span> = min(<span class=\"b\">LS<\/span> of C, <span class=\"b\">LS<\/span> of D) = min(2, 4) = 2<br><span class=\"b\">LS<\/span> = <span class=\"b\">LF<\/span> − duration = 2 − 2 = 0", "cap": "<b class='pm-h'>Activity A: two followers<\/b>A comes before both C and D. C's late start is 2 and D's is 4, so A must finish by week 2. That completes the backward pass."}], "phase": "b"}</script>
+</div>
+
+<h2>Step 5: Compute the critical path.</h2>
+
+<ul>
+<li><b>Slack</b> = LS − ES = LF − EF: how long an activity can slip without delaying the project.</li>
+<li><b>Critical path</b>: the longest path, made of the zero-slack activities; its length is the shortest possible project time.</li>
+</ul>
+
+<table>
+<thead><tr><th>Activity</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th></tr></thead>
+<tbody>
+<tr><td>ES</td><td>0</td><td>0</td><td>2</td><td>3</td><td>4</td><td>4</td><td>8</td><td>13</td></tr>
+<tr><td>EF</td><td>2</td><td>3</td><td>4</td><td>7</td><td>8</td><td>7</td><td>13</td><td>15</td></tr>
+<tr><td>LS</td><td>0</td><td>1</td><td>2</td><td>4</td><td>4</td><td>10</td><td>8</td><td>13</td></tr>
+<tr><td>LF</td><td>2</td><td>4</td><td>4</td><td>8</td><td>8</td><td>13</td><td>13</td><td>15</td></tr>
+<tr><td><b>Slack</b></td><td><b>0</b></td><td><b>1</b></td><td><b>0</b></td><td><b>1</b></td><td><b>0</b></td><td><b>6</b></td><td><b>0</b></td><td><b>0</b></td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Path</th><th>Weeks</th></tr></thead>
+<tbody>
+<tr><td>A → C → E → G → H</td><td><b>15</b> (critical)</td></tr>
+<tr><td>B → D → G → H</td><td>14</td></tr>
+<tr><td>A → D → G → H</td><td>13</td></tr>
+<tr><td>A → C → F → H</td><td>9</td></tr>
+</tbody>
+</table>
+
+<h2>Step 6: Use the network to schedule, plan, monitor, and control the project.</h2>
+
+<ul>
+<li>B and D share 1 week of slack on B → D → G → H: <em>either</em> can slip a week, not both.</li>
+<li>Early-start and late-start Gantt charts show the earliest and latest each activity can run.</li>
+</ul>
+
+<div class="exam-tip">
+<h4>EXAM TIP: CPM Questions</h4>
+<p>Expect a diagram or just a table (draw the network yourself), and questions on the project's length (the critical path) or one activity's slack.</p>
+</div>
+
+<h1>PERT and Variability in Activity Times</h1>
+
+<ul>
+<li>Each activity's time follows a right-skewed <b>beta distribution</b> with three estimates: <b>optimistic (a)</b>, <b>most likely (m)</b>, <b>pessimistic (b)</b>.</li>
+<li>Project completion time follows a <b>normal distribution</b>; activity times are assumed independent.</li>
+</ul>
+
+<p style="text-align: center;"><b>\( t = \frac{a + 4m + b}{6} \qquad v = \left(\frac{b - a}{6}\right)^2 \qquad \mu = \Sigma\, t_{\text{critical}} \qquad \sigma_p^2 = \Sigma\, v_{\text{critical}} \)</b></p>
+
+<div class="exam-tip">
+<h4>EXAM TIP: Critical Path Calculations</h4>
+<p>Add expected times and variances along the <b>critical path only</b>. You cannot add standard deviations: square each to a variance, add, then take the square root.</p>
+</div>
+
+<h2>Review of Normal Distribution</h2>
+
+<ul>
+<li>Symmetric: 50% on each side of the mean; about 68%, 95%, and 99.7% fall within ±1, ±2, and ±3 standard deviations.</li>
+</ul>
+
+<p style="text-align: center;"><b>\( z = \frac{x - \mu}{\sigma} = \frac{\text{Due date} - \text{Expected date}}{\sigma_p} \)</b></p>
+
+<h2>PERT Example: Milwaukee Paper Company</h2>
+
+<table>
+<thead><tr><th>Activity</th><th>a</th><th>m</th><th>b</th><th>t</th><th>v</th></tr></thead>
+<tbody>
+<tr><td>A</td><td>1</td><td>2</td><td>3</td><td>2</td><td>0.11</td></tr>
+<tr><td>B</td><td>2</td><td>3</td><td>4</td><td>3</td><td>0.11</td></tr>
+<tr><td>C</td><td>1</td><td>2</td><td>3</td><td>2</td><td>0.11</td></tr>
+<tr><td>D</td><td>2</td><td>4</td><td>6</td><td>4</td><td>0.44</td></tr>
+<tr><td>E</td><td>1</td><td>4</td><td>7</td><td>4</td><td>1.00</td></tr>
+<tr><td>F</td><td>1</td><td>2</td><td>9</td><td>3</td><td>1.78</td></tr>
+<tr><td>G</td><td>3</td><td>4</td><td>11</td><td>5</td><td>1.78</td></tr>
+<tr><td>H</td><td>1</td><td>2</td><td>3</td><td>2</td><td>0.11</td></tr>
+</tbody>
+</table>
+
+<ul>
+<li>Critical path A → C → E → G → H: μ = 2 + 2 + 4 + 5 + 2 = <b>15 weeks</b>; σ² = 0.11 + 0.11 + 1.00 + 1.78 + 0.11 = <b>3.11</b>; σ = √3.11 = <b>1.76 weeks</b>.</li>
+<li>By the 16-week deadline: z = (16 − 15) ÷ 1.76 = 0.57 → P = <b>0.71566</b> (Excel: =NORM.S.DIST(0.57, TRUE)).</li>
+<li>For a 99% chance: z = 2.33 (P = 0.9901), so x = zσ + μ = (2.33)(1.76) + 15 = <b>19.10 weeks</b>.</li>
+</ul>
+
+<h2>Variability of Completion Time for Non-Critical Paths</h2>
+
+<ul>
+<li>A non-critical activity can still delay the project if its variability is large next to its slack.</li>
+</ul>
+
+<h2>Conclusion</h2>
+
+<ul>
+<li>Expected completion 15 weeks; a 71.57% chance of meeting the 16-week deadline.</li>
+<li>A, C, E, G, and H are critical; B, D, and F have slack.</li>
+</ul>
+
+<h1>Project Crashing</h1>
+
+<ul>
+<li><b>Crashing</b>: shortening the project by spending more on some activities, because it is behind schedule, the deadline moved up, or finishing early saves fixed costs.</li>
+<li>Crash only critical-path activities that can actually be shortened, at the lowest cost.</li>
+</ul>
+
+<p style="text-align: center;"><b>\( \text{Crash cost per period} = \frac{\text{Crash cost} - \text{Normal cost}}{\text{Normal time} - \text{Crash time}} \)</b></p>
+
+<ol>
+<li>Find each activity's crash cost per period.</li>
+<li>Find the critical path(s) with current times.</li>
+<li>One critical path: crash its cheapest crashable activity. Several: crash an activity common to all of them, or one on each.</li>
+<li>Update the times; stop at the due date, otherwise return to step 2.</li>
+</ol>
+
+<h2>Project Crashing Example: Milwaukee Paper Company</h2>
+
+<table>
+<thead><tr><th>Activity</th><th>Normal weeks</th><th>Crash weeks</th><th>Crash cost per week</th><th>Critical?</th></tr></thead>
+<tbody>
+<tr><td>A</td><td>2</td><td>1</td><td>$750</td><td>Yes</td></tr>
+<tr><td>B</td><td>3</td><td>1</td><td>$2,000</td><td>No</td></tr>
+<tr><td>C</td><td>2</td><td>1</td><td>$1,000</td><td>Yes</td></tr>
+<tr><td>D</td><td>4</td><td>3</td><td>$1,000</td><td>No</td></tr>
+<tr><td>E</td><td>4</td><td>2</td><td>$1,000</td><td>Yes</td></tr>
+<tr><td>F</td><td>3</td><td>2</td><td>$500</td><td>No</td></tr>
+<tr><td>G</td><td>5</td><td>2</td><td>$1,500</td><td>Yes</td></tr>
+<tr><td>H</td><td>2</td><td>1</td><td>$3,000</td><td>Yes</td></tr>
+</tbody>
+</table>
+
+<ul>
+<li>15 → 14 weeks: crash <b>A</b> ($750, the cheapest critical activity). Now two critical paths: A → C → E → G → H and B → D → G → H.</li>
+</ul>
+
+<h2>Crashing the Project by Multiple Time Periods</h2>
+
+<ul>
+<li>Crash <b>one period at a time</b> and redo both passes, since the critical path can change.</li>
+<li>14 → 13 weeks: A is used up. Options: G ($1,500) or H ($3,000), common to both paths; or one on each path: C + D or E + D ($2,000), C + B or E + B ($3,000). Crash <b>G</b>; both paths stay critical at 13 weeks.</li>
+</ul>
+
+<h1>Advantages and Disadvantages of PERT and CPM</h1>
+
+<table>
+<thead><tr><th>Advantages</th><th>Limitations</th></tr></thead>
+<tbody>
+<tr><td>Useful for large projects; simple math</td><td>Activities must be clearly defined, independent, and stable</td></tr>
+<tr><td>Networks anyone can read</td><td>Precedence relationships must be specified and networked</td></tr>
+<tr><td>Show which activities to watch (critical path)</td><td>Time estimates are subjective and often padded</td></tr>
+<tr><td>Document who is responsible for what; track schedule and cost</td><td>Too much focus on the critical path can neglect near-critical activities</td></tr>
+</tbody>
+</table>
+
+<h2>Glossary</h2>
+
+<table>
+<thead><tr><th>Term</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td><b>Project</b></td><td>Related tasks aimed at a major output, with a distinct start, end, and budget</td></tr>
+<tr><td><b>Work breakdown structure</b></td><td>Division of a project into tasks, subtasks, and activities small enough to estimate</td></tr>
+<tr><td><b>Gantt chart</b></td><td>Bars showing when each activity starts and finishes</td></tr>
+<tr><td><b>CPM</b></td><td>Critical Path Method; network scheduling with known activity times</td></tr>
+<tr><td><b>PERT</b></td><td>Program Evaluation and Review Technique; network scheduling with variable activity times</td></tr>
+<tr><td><b>Activity-on-node (AON)</b></td><td>Network in which nodes are activities and arrows are precedence</td></tr>
+<tr><td><b>Activity-on-arrow (AOA)</b></td><td>Network in which arrows are activities; may need dummy activities</td></tr>
+<tr><td><b>Forward pass</b></td><td>Left-to-right calculation of early start and early finish</td></tr>
+<tr><td><b>Backward pass</b></td><td>Right-to-left calculation of late finish and late start</td></tr>
+<tr><td><b>Slack</b></td><td>LS − ES: how long an activity can slip without delaying the project</td></tr>
+<tr><td><b>Critical path</b></td><td>Longest path through the network; zero slack; sets the project's length</td></tr>
+<tr><td><b>Crashing</b></td><td>Shortening a project by spending more on critical activities</td></tr>
+</tbody>
+</table>
+
+<h2>Key Takeaways</h2>
+
+<ul>
+<li>Client satisfaction is the top measure of project success.</li>
+<li>Forward pass: ES = largest EF of the predecessors; EF = ES + duration.</li>
+<li>Backward pass: LF = smallest LS of the followers; LS = LF − duration.</li>
+<li>Slack = LS − ES; zero-slack activities form the critical path, the longest path and the shortest project time (15 weeks in the example).</li>
+<li>PERT: t = (a + 4m + b)/6 and v = ((b − a)/6)²; add t and v along the critical path only, never standard deviations.</li>
+<li>z = (due date − μ)/σ<sub>p</sub>; 16 weeks gives a 71.57% chance, and 99% needs 19.10 weeks.</li>
+<li>Crash the cheapest critical activity one period at a time, and re-check the critical paths after each.</li>
+</ul>
+
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg', uid = 0;
+  function E(tag, a, p) { var e = document.createElementNS(NS, tag); if (a) for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function T(p, x, y, s, c) { var t = E('text', { x: x, y: y, 'class': c }, p); t.textContent = s; return t; }
+  function H(tag, c, p, html) { var e = document.createElement(tag); if (c) e.className = c; if (html != null) e.innerHTML = html; if (p) p.appendChild(e); return e; }
+  function f1(n) { return Math.round(n * 10) / 10; }
+
+  /* ---------- controls ---------- */
+  function caps(body, list) {
+    var box = H('div', 'pm-caps', body); box.setAttribute('aria-live', 'polite');
+    var items = list.map(function (h) { return H('div', 'pm-cap', box, h); });
+    return function (i) { items.forEach(function (d, j) { d.classList.toggle('on', i === j); }); };
+  }
+  function stepper(body, n, go) {
+    var bar = H('div', 'pm-bar', body);
+    var back = H('button', 'pm-back', bar, '&#9664; Back'), cnt = H('span', 'pm-count', bar), next = H('button', 'pm-next', bar, 'Next &#9654;');
+    back.type = next.type = 'button';
+    var dots = H('div', 'pm-dots'); dots.setAttribute('aria-hidden', 'true');
+    for (var k = 0; k < n; k++) H('span', '', dots);
+    var i = 0;
+    function set(j) {
+      i = j; back.disabled = i === 0; next.disabled = i === n - 1; cnt.textContent = 'Step ' + (i + 1) + ' of ' + n;
+      Array.prototype.forEach.call(dots.children, function (d, m) { d.classList.toggle('on', m <= i); });
+      go(i);
+    }
+    back.onclick = function () { if (i > 0) set(i - 1); };
+    next.onclick = function () { if (i < n - 1) set(i + 1); };
+    return { set: set, dots: dots };
+  }
+  function views(body, labels, go, cls) {
+    var bar = H('div', 'pm-bar pm-views ' + (cls || ''), body); bar.setAttribute('role', 'group');
+    var bs = labels.map(function (l, i) { var b = H('button', '', bar, l); b.type = 'button'; b.onclick = function () { set(i); }; return b; });
+    function set(i) { bs.forEach(function (b, j) { b.setAttribute('aria-pressed', i === j ? 'true' : 'false'); }); go(i); }
+    return { set: set, buttons: bs };
+  }
+
+  /* ---------- graph drawing ---------- */
+  function arrow(g, x1, y1, x2, y2, r1, r2, cls, label, side, dashed) {
+    var dx = x2 - x1, dy = y2 - y1, L = Math.sqrt(dx * dx + dy * dy), ux = dx / L, uy = dy / L;
+    var big = /crit|path/.test(cls), hl = big ? 11 : 9, hw = big ? 5.5 : 4.4;
+    var sx = x1 + ux * (r1 + 3), sy = y1 + uy * (r1 + 3), tx = x2 - ux * (r2 + 3), ty = y2 - uy * (r2 + 3);
+    var bx = tx - ux * hl, by = ty - uy * hl;
+    var gg = E('g', { 'class': 'e ' + (cls || '') }, g);
+    E('line', { x1: f1(sx), y1: f1(sy), x2: f1(bx + ux), y2: f1(by + uy), 'class': 'e-l' + (dashed ? ' dash' : '') }, gg);
+    E('polygon', { points: [f1(tx) + ',' + f1(ty), f1(bx - uy * hw) + ',' + f1(by + ux * hw), f1(bx + uy * hw) + ',' + f1(by - ux * hw)].join(' '), 'class': 'e-h' }, gg);
+    if (label) {
+      var off = dashed ? 22 : 13, mx = (sx + tx) / 2 + (-uy) * off * (side || -1), my = (sy + ty) / 2 + ux * off * (side || -1);
+      if (dashed) { var t = T(gg, f1(mx), f1(my - 6), 'Dummy', 'e-t dm'); T(gg, f1(mx), f1(my + 7), 'activity', 'e-t dm'); }
+      else T(gg, f1(mx), f1(my), label, 'e-t');
+    }
+    return gg;
+  }
+
+  var GEO = { full: { R: 36, SX: 130, SY: 114, M: 46, VX: 96, VY: 106 }, plain: { R: 21, SX: 104, SY: 64, M: 30 }, aoa: { R: 14, SX: 112, SY: 62, M: 30 } };
+
+  function fullNode(g, clip, R, id, d, vals, ns, crashed) {
+    var gr = E('g', { 'class': 'n ' + (ns.cls || '') }, g);
+    var v = ns.v || [], has = function (k) { return v.indexOf(k) >= 0; };
+    if (/cur-/.test(ns.cls || '')) E('circle', { r: R + 5, 'class': 'n-halo' }, gr);
+    E('circle', { r: R, 'class': 'n-bg' }, gr);
+    var xl = R * 0.34, yl = Math.sqrt(R * R - xl * xl), w = R - xl;
+    var cg = E('g', { 'clip-path': 'url(#' + clip + ')' }, gr);
+    if (has('es')) { E('rect', { x: -R, y: -R, width: w, height: R, 'class': 'cf' }, cg); E('rect', { x: xl, y: -R, width: w, height: R, 'class': 'cf' }, cg); }
+    if (has('ls')) { E('rect', { x: -R, y: 0, width: w, height: R, 'class': 'cb' }, cg); E('rect', { x: xl, y: 0, width: w, height: R, 'class': 'cb' }, cg); }
+    (ns.use || []).forEach(function (k) {
+      E('rect', { x: (k === 'es' || k === 'ls') ? -R : xl, y: (k === 'es' || k === 'ef') ? -R : 0, width: w, height: R, 'class': 'cu' }, cg);
+    });
+    E('line', { x1: -xl, y1: -yl, x2: -xl, y2: yl, 'class': 'n-div' }, gr);
+    E('line', { x1: xl, y1: -yl, x2: xl, y2: yl, 'class': 'n-div' }, gr);
+    E('line', { x1: -R, y1: 0, x2: -xl, y2: 0, 'class': 'n-div' }, gr);
+    E('line', { x1: xl, y1: 0, x2: R, y2: 0, 'class': 'n-div' }, gr);
+    E('circle', { r: R, 'class': 'n-c' }, gr);
+    T(gr, 0, f1(-R * 0.36), id, 'n-l' + (id === 'Start' ? ' n-ls' : ''));
+    T(gr, 0, f1(R * 0.6), String(d), 'n-d' + (crashed ? ' n-x' : ''));
+    var cx = R * 0.61, cy = R * 0.37, at = { es: [-cx, -cy, 'vf', 0], ef: [cx, -cy, 'vf', 1], ls: [-cx, cy, 'vb', 2], lf: [cx, cy, 'vb', 3] };
+    v.forEach(function (k) { var p = at[k]; T(gr, f1(p[0]), f1(p[1]), String(vals[p[3]]), 'n-v ' + p[2]); });
+    return gr;
+  }
+  function plainNode(g, R, id, ns, kind) {
+    var gr = E('g', { 'class': 'n ' + kind + ' ' + (ns.cls || '') }, g);
+    E('circle', { r: R, 'class': 'n-bg' }, gr); E('circle', { r: R, 'class': 'n-c' }, gr);
+    if (kind === 'plain') T(gr, 0, 0, id, 'n-l' + (id === 'Start' ? ' n-ls' : ''));
+    return gr;
+  }
+
+  /* a network in (column,row) units, laid out across, or down on a narrow screen */
+  function network(holder, net, st, style, aoa, reserve) {
+    var g = GEO[style], vertical = style === 'full' && holder.clientWidth < 560;
+    var nodes = aoa ? aoa.nodes : null, P = {}, W = 0, Hh = 0, id, PS = {}, maxc = 0;
+    var src = aoa ? nodes : net.nodes, room = st.slack || reserve, side = vertical && room ? 100 : g.M;
+    for (id in src) {
+      var pos = aoa ? src[id] : src[id].pos, x, y;
+      if (vertical) { x = side + pos[1] * g.VY; y = g.M + pos[0] * g.VX; } else { x = g.M + pos[0] * g.SX; y = g.M + pos[1] * g.SY; }
+      P[id] = [x, y]; PS[id] = pos; maxc = Math.max(maxc, pos[0]); W = Math.max(W, x + side); Hh = Math.max(Hh, y + g.M);
+    }
+    if (style === 'full' && (!vertical || room)) Hh += vertical ? 16 : 10;
+    holder.innerHTML = '';
+    var svg = E('svg', { viewBox: '0 0 ' + W + ' ' + Hh, 'class': 'pm-fig', role: 'img', 'aria-label': 'Project network' }, holder);
+    svg.style.width = '100%'; svg.style.maxWidth = Math.round(W * 1.3) + 'px'; svg.style.margin = '0 auto';
+    var clip = 'pmclip' + (++uid), defs = E('defs', {}, svg), cp = E('clipPath', { id: clip }, defs); E('circle', { r: g.R }, cp);
+    var ge = E('g', {}, svg), gn = E('g', {}, svg);
+    if (aoa) {
+      aoa.edges.forEach(function (e) { var a = P[e[0]], b = P[e[1]]; arrow(ge, a[0], a[1], b[0], b[1], g.R, g.R, '', e[2], e[3], e[4]); });
+      for (id in P) { var q = plainNode(gn, g.R, id, {}, 'aoa'); q.setAttribute('transform', 'translate(' + P[id][0] + ',' + P[id][1] + ')'); }
+      return;
+    }
+    var en = st.e || {}, segs = [];
+    net.edges.forEach(function (e) {
+      var k = e[0] + '>' + e[1], c = en[k] || '';
+      if (c === 'hide') return;
+      var a = P[e[0]], b = P[e[1]];
+      arrow(ge, a[0], a[1], b[0], b[1], g.R, g.R, c); segs.push([a[0], a[1], b[0], b[1]]);
+    });
+    function clear(x, y, w, h) {   /* does a w x h box centred at x,y stay inside the panel and off every arrow? */
+      if (x - w / 2 < 1 || x + w / 2 > W - 1 || y + h / 2 > Hh - 1) return false;
+      for (var nid in P) { var dx = Math.max(Math.abs(P[nid][0] - x) - w / 2, 0), dy = Math.max(Math.abs(P[nid][1] - y) - h / 2, 0); if (Math.sqrt(dx * dx + dy * dy) < g.R + 2) return false; }
+      return segs.every(function (q) {
+        for (var k = 0; k <= 60; k++) {
+          var px = q[0] + (q[2] - q[0]) * k / 60, py = q[1] + (q[3] - q[1]) * k / 60;
+          if (Math.abs(px - x) < w / 2 + 2 && Math.abs(py - y) < h / 2 + 2) return false;
+        }
+        return true;
+      });
+    }
+    for (id in P) {
+      var ns = st.n ? st.n[id] : {}, gr;
+      if (ns && ns.cls === 'hide') continue;
+      if (style === 'full') {
+        var vals = (st.vals || net.vals)[id], d = st.dur ? st.dur[id] : net.nodes[id].d;
+        gr = fullNode(gn, clip, g.R, id, d, vals, ns || {}, st.crashed && st.crashed.indexOf(id) >= 0);
+      } else gr = plainNode(gn, g.R, id, ns || {}, 'plain');
+      gr.setAttribute('transform', 'translate(' + P[id][0] + ',' + P[id][1] + ')');
+      if (st.slack && id in st.slack) {
+        var s = st.slack[id], bw = 54, bh = 17, sx, sy;
+        if (vertical) {   /* beside the node on its outer side, or under the last one */
+          if (PS[id][1] === 2) { sx = g.R + bw / 2 + 4; sy = 0; }
+          else if (PS[id][0] === maxc) { sx = 0; sy = g.R + 13; }
+          else { sx = -g.R - bw / 2 - 4; sy = 0; }
+        }
+        else { sx = 0; sy = g.R + 13; }
+        var tries = [[sx, sy], [sx - 16, sy], [sx + 16, sy], [sx - 30, sy], [sx + 30, sy], [sx, sy + 8], [sx - 24, sy + 6]];
+        for (var q = 0; q < tries.length; q++) if (clear(P[id][0] + tries[q][0], P[id][1] + tries[q][1], bw, bh)) { sx = tries[q][0]; sy = tries[q][1]; break; }
+        var sg = E('g', { 'class': 'sl' + (s === 0 ? ' z' : ''), transform: 'translate(' + f1(P[id][0] + sx) + ',' + f1(P[id][1] + sy) + ')' }, gn);
+        E('rect', { x: -bw / 2, y: -bh / 2, width: bw, height: bh, rx: 8 }, sg);
+        T(sg, 0, 0, 'Slack ' + s, '');
+      }
+    }
+  }
+
+  function small(holder, spec, kind) {
+    var R = kind === 'aon' ? 20 : 13;
+    var svg = E('svg', { viewBox: '0 0 300 160', 'class': 'pm-fig', role: 'img', 'aria-label': kind === 'aon' ? 'Activity-on-node drawing' : 'Activity-on-arrow drawing' }, holder);
+    svg.style.width = '100%'; svg.style.maxWidth = '420px'; svg.style.margin = '0 auto';
+    var ge = E('g', {}, svg), gn = E('g', {}, svg), P = spec.nodes;
+    spec.edges.forEach(function (e) { var a = P[e[0]], b = P[e[1]]; arrow(ge, a[0], a[1], b[0], b[1], R, R, '', kind === 'aoa' ? e[2] : null, e[3], e[4]); });
+    for (var id in P) { var q = plainNode(gn, R, id, {}, kind === 'aon' ? 'plain' : 'aoa'); q.setAttribute('transform', 'translate(' + P[id][0] + ',' + P[id][1] + ')'); }
+  }
+
+  function key(body, items) {
+    var k = H('div', 'pm-key', body);
+    items.forEach(function (it) { H('span', '', k, it); });
+  }
+  var K = {
+    f: '<span class="sw" style="background:var(--fwd-bg);border:1px solid var(--fwd)"></span>Forward pass (ES, EF)',
+    b: '<span class="sw" style="background:var(--bwd-bg);border:1px solid var(--bwd)"></span>Backward pass (LS, LF)',
+    u: '<span class="sw" style="background:var(--use)"></span>Value used in this step',
+    c: '<i style="color:var(--crit)"></i>Critical path',
+    p: '<i style="color:var(--path)"></i>Selected path',
+    s: '<span class="sw" style="background:var(--slack-bg);border:1px solid var(--slack-rule)"></span>Slack'
+  };
+
+  /* ---------- widgets ---------- */
+  var W = {};
+  W.net = function (body, M) {
+    var list = M.steps || M.views, fig = H('div', 'pm-figwrap'), cur = 0, anyS = list.some(function (s) { return s.slack; });
+    var capHtml = list.map(function (s) { return s.cap + (s.calc ? '<div class="pm-calc">' + s.calc + '</div>' : ''); });
+    var ctl = M.steps ? stepper(body, list.length, show) : views(body, list.map(function (s) { return s.label; }), show);
+    var setCap = caps(body, capHtml);
+    body.appendChild(fig);
+    if (M.style === 'full') key(body, M.steps ? [K.f, K.b, K.u] : (list.some(function (s) { return s.slack; }) ? [K.c, K.s].concat(M.views && M.views.length > 2 ? [K.p] : []) : []));
+    if (ctl.dots) body.appendChild(ctl.dots);
+    function show(i) { cur = i; setCap(i); network(fig, M.net, list[i], M.style, null, anyS); }
+    ctl.set(0);
+    var lastW = fig.clientWidth;
+    if (window.ResizeObserver) new ResizeObserver(function () { if (Math.abs(fig.clientWidth - lastW) > 4) { lastW = fig.clientWidth; network(fig, M.net, list[cur], M.style, null, anyS); } }).observe(fig);
+  };
+  W.both = function (body, M) {
+    var fig = H('div', 'pm-figwrap');
+    var ctl = views(body, M.views.map(function (v) { return v.label; }), function (i) {
+      var st = { n: {}, e: {} };
+      if (M.views[i].kind === 'aon') network(fig, M.net, st, 'plain'); else network(fig, M.net, st, 'aoa', M.aoa);
+    });
+    body.appendChild(fig); ctl.set(0);
+  };
+  W.conv = function (body, M) {
+    var setCap = caps(body, M.cases.map(function (c, i) { return '<span class="pm-rule">' + (i + 1) + ') ' + c.rule + '</span>'; }));
+    var grid = H('div', 'pm-conv'), l = H('div', '', grid), r = H('div', '', grid);
+    var ctl = views(body, M.cases.map(function (c, i) { return 'Case ' + (i + 1); }), function (i) {
+      setCap(i); l.innerHTML = '<p class="pm-sub">Activity-on-Node (AON)</p>'; r.innerHTML = '<p class="pm-sub aoa">Activity-on-Arrow (AOA)</p>';
+      small(l, M.cases[i].aon, 'aon'); small(r, M.cases[i].aoa, 'aoa');
+    });
+    body.insertBefore(ctl.buttons[0].parentNode, body.firstChild);
+    body.appendChild(grid); ctl.set(0);
+  };
+  W.gantt = function (body, M) {
+    var setCap = caps(body, M.views.map(function (v) { return v.cap; }));
+    var sc = H('div', 'pg-scroll', body), grid = H('div', 'pg-grid pg-rows', sc), bars = [];
+    M.rows.forEach(function (r) {
+      var row = H('div', 'pg-row', grid);
+      H('span', 'pg-lab', row, r.id + ' <small>(' + r.d + ' wk)</small>');
+      var tr = H('div', 'pg-track', row), sl = r.ls - r.es;
+      var s = sl ? H('span', 'pg-s', tr, sl + ' wk') : null, b = H('span', 'pg-b' + (r.crit ? ' crit' : ''), tr);
+      b.style.width = (r.d / M.end * 100) + '%'; if (s) s.style.width = (sl / M.end * 100) + '%';
+      bars.push({ r: r, b: b, s: s });
+    });
+    var ax = H('div', 'pg-row pg-axis', grid); H('span', 'pg-lab', ax, 'Week'); var at = H('div', 'pg-track', ax);
+    for (var w = 0; w <= M.end; w++) { var t = H('span', '', at, String(w)); t.style.left = (w / M.end * 100) + '%'; }
+    key(body, ['<span class="sw" style="background:var(--crit)"></span>Critical activity', '<span class="sw" style="background:var(--fwd)"></span>Activity with slack', K.s]);
+    var ctl = views(body, M.views.map(function (v) { return v.label; }), function (i) {
+      setCap(i); var k = M.views[i].key;
+      bars.forEach(function (o) {
+        var st = k === 'es' ? o.r.es : o.r.ls, fin = st + o.r.d;
+        o.b.style.left = (st / M.end * 100) + '%'; o.b.textContent = st + '–' + fin;
+        if (o.s) o.s.style.left = ((k === 'es' ? o.r.ef : o.r.es) / M.end * 100) + '%';
+      });
+    });
+    body.insertBefore(ctl.buttons[0].parentNode, body.firstChild);
+    ctl.set(0);
+  };
+
+  /* ---------- curves ---------- */
+  var PDF0 = 1 / Math.sqrt(2 * Math.PI);
+  function pdf(z) { return Math.exp(-z * z / 2) * PDF0; }
+  function bellSVG(holder, o) {
+    var Wd = 600, Hd = 214, L = 22, Rr = 22, B = 166, Tp = 14, zmin = -3.6, zmax = 3.6;
+    function X(z) { return L + (z - zmin) / (zmax - zmin) * (Wd - L - Rr); }
+    function Y(p) { return B - p / PDF0 * (B - Tp); }
+    holder.innerHTML = '';
+    var svg = E('svg', { viewBox: '0 0 ' + Wd + ' ' + Hd, 'class': 'pm-fig', role: 'img', 'aria-label': o.aria || 'Normal curve' }, holder);
+    svg.style.width = '100%'; svg.style.maxWidth = '780px'; svg.style.margin = '0 auto';
+    function area(a, b) {
+      var d = 'M' + f1(X(a)) + ',' + B, n = 60;
+      for (var i = 0; i <= n; i++) { var z = a + (b - a) * i / n; d += ' L' + f1(X(z)) + ',' + f1(Y(pdf(z))); }
+      return d + ' L' + f1(X(b)) + ',' + B + ' Z';
+    }
+    if (o.shade) E('path', { d: area(o.shade[0], o.shade[1]), 'class': 'crv-fill' }, svg);
+    if (o.tail) E('path', { d: area(o.tail[0], zmax), 'class': 'crv-tail' }, svg);
+    var d = '', n = 160;
+    for (var i = 0; i <= n; i++) { var z = zmin + (zmax - zmin) * i / n; d += (i ? ' L' : 'M') + f1(X(z)) + ',' + f1(Y(pdf(z))); }
+    E('line', { x1: L - 10, y1: B, x2: Wd - Rr + 10, y2: B, 'class': 'ax' }, svg);
+    (o.lines || []).forEach(function (l) {   /* a marked deadline stands at least 60px tall, wherever the curve is */
+      var top = l.cls ? Math.min(Y(pdf(l.z)), B - 60) : Y(pdf(l.z));
+      E('line', { x1: f1(X(l.z)), y1: f1(top), x2: f1(X(l.z)), y2: B, 'class': 'gd' + (l.cls ? ' ' + l.cls : '') }, svg);
+    });
+    (o.ticks || []).forEach(function (z) { E('line', { x1: f1(X(z)), y1: B, x2: f1(X(z)), y2: B + 5, 'class': 'tk' }, svg); });
+    E('path', { d: d, 'class': 'crv' }, svg);
+    (o.labels || []).forEach(function (l) {
+      T(svg, f1(Math.min(Math.max(X(l.z), 40), Wd - 50)), B + 21, l.t, 'tl');
+      if (l.s) T(svg, f1(Math.min(Math.max(X(l.z), 40), Wd - 50)), B + 39, l.s, 'tl sm');
+    });
+    if (o.big) T(svg, f1(X(o.big[0])), f1(o.big[1]), o.big[2], 'big halo');
+    if (o.tail && o.tail[1]) {   /* the tail's own name, off to the right with a leader into it */
+      var tz = o.tail[0] + 0.35, tyy = B - (B - Y(pdf(tz))) * 0.4;
+      E('line', { x1: f1(X(3.05)), y1: f1(B - 58), x2: f1(X(tz)), y2: f1(tyy), 'class': 'lead tail' }, svg);
+      T(svg, f1(X(3.05)), f1(B - 64), o.tail[1], 'mk tailtxt');
+    }
+    if (o.dim) {   /* a dimension arrow between two z values, named above */
+      var x0 = X(o.dim[0]) + 2, x1 = X(o.dim[1]) - 2, yy = B - 6;
+      E('line', { x1: f1(x0 + 6), y1: yy, x2: f1(x1 - 6), y2: yy, 'class': 'dimline' }, svg);
+      E('polygon', { points: f1(x0) + ',' + yy + ' ' + f1(x0 + 8) + ',' + (yy - 4) + ' ' + f1(x0 + 8) + ',' + (yy + 4), 'class': 'dimhead' }, svg);
+      E('polygon', { points: f1(x1) + ',' + yy + ' ' + f1(x1 - 8) + ',' + (yy - 4) + ' ' + f1(x1 - 8) + ',' + (yy + 4), 'class': 'dimhead' }, svg);
+      /* the name sits in the tall part of the shaded area, two lines, clear of the curve */
+      T(svg, f1(X(0.82)), yy - 30, o.dim[2][0], 'mk dimtxt big2');
+      T(svg, f1(X(0.82)), yy - 13, o.dim[2][1], 'mk dimtxt');
+    }
+    if (o.call) {
+      var zt = Math.max(-3.2, o.call[1]), ty = (B + Y(pdf(zt))) / 2, tx = X(-2.55);
+      E('line', { x1: f1(tx + 14), y1: 54, x2: f1(X(zt)), y2: f1(ty), 'class': 'lead' }, svg);
+      T(svg, f1(tx), 44, o.call[0], 'big');
+    }
+  }
+  function zlab(z) { return (z < 0 ? '−' : '') + Math.abs(z).toFixed(2); }
+
+  W.bands = function (body, M) {
+    var fig = H('div', 'pm-figwrap'), setCap;
+    var ctl = views(body, M.views.map(function (v) { return v.label + ' · ' + v.pct; }), function (i) {
+      var v = M.views[i], k = v.k, labels = [], lines = [];
+      for (var j = -3; j <= 3; j++) { lines.push({ z: j }); labels.push({ z: j, t: j === 0 ? 'μ' : 'μ ' + (j < 0 ? '−' : '+') + ' ' + Math.abs(j) + 'σ' }); }
+      bellSVG(fig, { shade: [-k, k], lines: lines, labels: labels, big: [0, 112, v.pct], aria: 'Normal curve with ' + v.pct + ' of the area within ' + k + ' standard deviations of the mean' });
+      setCap(i);
+    });
+    setCap = caps(body, M.views.map(function (v) { return v.cap; }));
+    body.appendChild(fig); ctl.set(0);
+  };
+  W.deadline = function (body, M) {
+    var S = M.states, row = H('div', 'pm-slider', body);
+    H('label', '', row, 'Deadline');
+    var inp = H('input', '', row); inp.type = 'range'; inp.min = 0; inp.max = S.length - 1; inp.step = 1; inp.value = M.start;
+    var out = H('output', '', row);
+    inp.setAttribute('aria-label', 'Deadline in weeks');
+    var cap = H('div', 'pm-caps', body), c1 = H('div', 'pm-cap on', cap); cap.setAttribute('aria-live', 'polite');
+    var fig = H('div', 'pm-figwrap', body);
+    function show() {
+      var s = S[+inp.value], x = s.x, xs = (x % 1 ? x.toFixed(1) : String(x)), z = s.z;
+      out.textContent = xs + ' weeks';
+      inp.setAttribute('aria-valuetext', xs + ' weeks');
+      c1.innerHTML = '<b class="pm-h">' + (+s.p * 100).toFixed(3) + '% chance of finishing within ' + xs + ' weeks</b>' +
+        'z = (' + xs + ' − 15) ÷ 1.76 = ' + zlab(z) + ', and the normal table gives P(z ≤ ' + zlab(z) + ') = <b>' + s.p + '</b>.';
+      var lab = [{ z: 0, t: 'μ', s: '15 weeks' }];
+      if (Math.abs(z) > 0.6) lab.push({ z: z, t: 'μ ' + (z < 0 ? '−' : '+') + ' ' + Math.abs(z).toFixed(2) + 'σ', s: xs + ' weeks' });
+      else if (z !== 0) { lab[0] = { z: 0, t: 'μ', s: '' }; lab.push({ z: z + (z > 0 ? 0.55 : -0.55), t: 'μ ' + (z < 0 ? '−' : '+') + ' ' + Math.abs(z).toFixed(2) + 'σ', s: xs + ' weeks' }); }
+      var bx = Math.max(-3.6, Math.min(z, 3.6));
+      bellSVG(fig, { shade: [-3.6, bx], lines: [{ z: 0 }, { z: bx }], labels: lab, call: [s.p, Math.min(bx - 0.45, -0.9)],
+        aria: 'Normal curve shaded to the left of ' + xs + ' weeks: probability ' + s.p });
+    }
+    inp.addEventListener('input', show); show();
+  };
+  W.ninety = function (body, M) {
+    var fig = H('div', 'pm-figwrap'), setCap;
+    var ctl = stepper(body, M.steps.length, function (i) {
+      setCap(i); var s = M.steps[i], z = s.z, o = { shade: [-3.6, z], call: ['0.99', -0.9] };
+      if (i === 0) {          /* the area we want: the deadline is still unknown */
+        o.lines = [{ z: 0 }, { z: z, cls: 'q' }];
+        o.labels = [{ z: 0, t: 'μ', s: '15 weeks' }, { z: z, t: '?', s: 'deadline' }];
+        o.aria = 'Normal curve with 0.99 of the area shaded up to an unknown deadline';
+      } else if (i === 1) {   /* find z: the 0.01 left over, and the axis in z units */
+        o.lines = [{ z: 0 }, { z: z, cls: 'b' }]; o.tail = [z, '0.01']; o.ticks = [1, 2, 3];
+        o.labels = [{ z: 0, t: 'z = 0' }, { z: 1, t: '1' }, { z: z, t: 'z = 2.33', s: 'P = 0.9901' }];
+        o.aria = 'Normal curve: 0.99 to the left of z = 2.33 and 0.01 to its right';
+      } else {                /* convert to weeks: 2.33 standard deviations above the mean */
+        o.lines = [{ z: 0 }, { z: z, cls: 'b' }]; o.tail = [z, ''];
+        o.labels = [{ z: 0, t: 'μ = 15 weeks' }, { z: z, t: 'x = 19.10 weeks' }];
+        o.dim = [0, z, ['4.10 weeks', '2.33 × 1.76']];
+        o.aria = 'Normal curve: the deadline 19.10 weeks lies 4.10 weeks above the 15-week mean';
+      }
+      bellSVG(fig, o);
+    });
+    setCap = caps(body, M.steps.map(function (s) { return s.cap; }));
+    body.appendChild(fig); body.appendChild(ctl.dots); ctl.set(0);
+  };
+  W.pert = function (body, M) {
+    var fig = H('div', 'pm-figwrap'), setCap;
+    var ctl = views(body, M.acts.map(function (a) { return a.id; }), function (i) {
+      setCap(i); var a = M.acts[i], Wd = 600, Hd = 196, L = 30, Rr = 20, B = 140, Tp = 26;
+      function X(x) { return L + x / M.xmax * (Wd - L - Rr); } function Y(y) { return B - y * (B - Tp); }
+      fig.innerHTML = '';
+      var svg = E('svg', { viewBox: '0 0 ' + Wd + ' ' + Hd, 'class': 'pm-fig', role: 'img', 'aria-label': 'Activity ' + a.id + ': a = ' + a.a + ', m = ' + a.m + ', b = ' + a.b + ', expected time ' + a.t + ' weeks' }, fig);
+      svg.style.width = '100%'; svg.style.maxWidth = '780px'; svg.style.margin = '0 auto';
+      var d = 'M' + f1(X(a.a)) + ',' + B;
+      a.pts.forEach(function (p) { d += ' L' + f1(X(p[0])) + ',' + f1(Y(p[1])); });
+      E('path', { d: d + ' L' + f1(X(a.b)) + ',' + B + ' Z', 'class': 'crv-fill' }, svg);
+      E('path', { d: 'M' + a.pts.map(function (p) { return f1(X(p[0])) + ',' + f1(Y(p[1])); }).join(' L'), 'class': 'crv' }, svg);
+      E('line', { x1: L - 8, y1: B, x2: Wd - Rr + 6, y2: B, 'class': 'ax' }, svg);
+      for (var w = 0; w <= M.xmax; w++) { E('line', { x1: f1(X(w)), y1: B, x2: f1(X(w)), y2: B + 5, 'class': 'tk' }, svg); T(svg, f1(X(w)), B + 20, String(w), 'tl sm'); }
+      T(svg, Wd - Rr, B + 40, 'weeks', 'tl sm');
+      E('line', { x1: f1(X(a.m)), y1: Tp, x2: f1(X(a.m)), y2: B, 'class': 'gd' }, svg);
+      E('line', { x1: f1(X(a.t)), y1: Tp - 6, x2: f1(X(a.t)), y2: B, 'class': 'gd t' }, svg);
+      T(svg, f1(X(a.t)), Tp - 12, a.t === a.m ? 't = m = ' + a.t : 't = ' + a.t, 'mk t');
+      [['a', a.a], ['m', a.m], ['b', a.b]].forEach(function (p) { T(svg, f1(X(p[1])), B + 40, p[0] + ' = ' + p[1], 'mk'); });
+    }, 'pm-acts');
+    ctl.buttons.forEach(function (b, i) { if (M.acts[i].crit) { b.classList.add('crit'); b.title = 'On the critical path'; } });
+    setCap = caps(body, M.acts.map(function (a) {
+      return '<b class="pm-h">Activity ' + a.id + (a.crit ? '<span class="pm-crit-tag">critical path</span>' : '') + '</b>' +
+        '<div class="pm-calc" style="border:0;margin:0;padding:0">' + a.tcalc + '<br>' + a.vcalc + '</div>';
+    }));
+    body.appendChild(fig);
+    key(body, ['<i style="color:var(--fwd)"></i>Expected time t', '<i style="color:var(--ink);border-top-style:dashed"></i>Most likely time m', '<span class="sw" style="background:var(--crit-bg);border:1px solid var(--crit)"></span>Critical-path activity']);
+    ctl.set(0);
+  };
+
+  function boot() {
+    Array.prototype.forEach.call(document.querySelectorAll('.pmw[data-pm]'), function (w) {
+      if (w.dataset.ready) return; w.dataset.ready = '1';
+      var M = JSON.parse(w.querySelector('script[type="application/json"]').textContent), body = w.querySelector('.pm-body');
+      try { W[w.dataset.pm](body, M); } catch (err) { body.textContent = ''; if (window.console) console.error(err); }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
+<style>
+/* Motion for the MAN4504 widgets. Everything here is an entry or change animation that ends on the widget's own
+   normal drawing, so a browser that skips it (reduced motion, no script) shows exactly the page as it was.
+   html.mv  = the script is running and the reader has not asked for reduced motion
+   .mv-wait = widget still below the screen: its figure is held back so the entry plays when it is first seen
+   .mv-in   = widget has been seen */
+html.mv .mv-wait .pm-figwrap, html.mv .mv-wait .pg-scroll, html.mv .mv-wait .pm-conv, html.mv .mv-wait > svg, html.mv .mv-wait .tp-scroll { opacity:0; }
+html.mv .mv-in .pm-figwrap, html.mv .mv-in .pm-conv, html.mv .mv-in .tp-scroll { animation:mv-fade .35s ease-out; }
+
+/* ---------- captions and progress dots ---------- */
+html.mv .pmw .pm-cap.on { animation:mv-cap .32s ease-out; }
+html.mv .tpw div.tp-cap.mv-chg > b { display:block; animation:mv-cap .32s ease-out; }
+html.mv .pmw .pm-dots span, html.mv .tpw .tp-dots span { transition:background-color .3s, transform .3s; }
+html.mv .pmw .pm-dots span.on, html.mv .tpw .tp-dots span.on { transform:scale(1.15); }
+
+/* ---------- networks: the step being worked (forward and backward pass) ---------- */
+html.mv .pmw.mv-in .n.cur-f .n-halo, html.mv .pmw.mv-in .n.cur-b .n-halo { transform-box:fill-box; transform-origin:center; animation:mv-pulse 1.1s ease-out 2; }
+html.mv .pmw.mv-in .n .cu { animation:mv-flash .9s ease-in-out 1; }
+html.mv .pmw.mv-in .n.cur-f .n-v.vf, html.mv .pmw.mv-in .n.cur-b .n-v.vb { transform-box:fill-box; transform-origin:center; animation:mv-num .5s .45s cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in .n.cur-f .cf, html.mv .pmw.mv-in .n.cur-b .cb { animation:mv-fade .4s .25s ease-out backwards; }
+html.mv .pmw.mv-in .e.f .e-l, html.mv .pmw.mv-in .e.b .e-l { animation:mv-draw .55s ease-out backwards; }
+html.mv .pmw.mv-in .e.f .e-h, html.mv .pmw.mv-in .e.b .e-h { animation:mv-fade .25s .45s ease-out backwards; }
+
+/* ---------- networks: nodes and arrows that have just been added (drawing the network) ---------- */
+html.mv .pmw.mv-in .n.new .n-bg, html.mv .pmw.mv-in .n.new .n-c { transform-box:fill-box; transform-origin:center; animation:mv-pop .45s calc(.25s + var(--i, 0) * 60ms) cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in .n.new .n-l { animation:mv-fade .3s calc(.45s + var(--i, 0) * 60ms) ease-out backwards; }
+html.mv .pmw.mv-in .e.new .e-l { animation:mv-draw .5s ease-out backwards; }
+html.mv .pmw.mv-in .e.new .e-h { animation:mv-fade .2s .4s ease-out backwards; }
+
+/* ---------- small networks that appear whole (AON / AOA conventions) ---------- */
+html.mv .pmw.mv-in .pm-conv .n .n-bg, html.mv .pmw.mv-in .pm-conv .n .n-c, html.mv .pmw.mv-in[data-pm="both"] .n .n-bg, html.mv .pmw.mv-in[data-pm="both"] .n .n-c {
+  transform-box:fill-box; transform-origin:center; animation:mv-pop .4s calc(var(--i, 0) * 110ms) cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in .pm-conv .n .n-l, html.mv .pmw.mv-in[data-pm="both"] .n .n-l { animation:mv-fade .25s calc(.15s + var(--i, 0) * 110ms) ease-out backwards; }
+html.mv .pmw.mv-in .pm-conv .e .e-l:not(.dash), html.mv .pmw.mv-in[data-pm="both"] .e .e-l:not(.dash) { animation:mv-draw .45s calc(.2s + var(--i, 0) * 110ms) ease-out backwards; }
+html.mv .pmw.mv-in .pm-conv .e .e-l.dash, html.mv .pmw.mv-in[data-pm="both"] .e .e-l.dash, html.mv .pmw.mv-in .pm-conv .e .e-h, html.mv .pmw.mv-in[data-pm="both"] .e .e-h,
+html.mv .pmw.mv-in .pm-conv .e .e-t, html.mv .pmw.mv-in[data-pm="both"] .e .e-t { animation:mv-fade .25s calc(.55s + var(--i, 0) * 110ms) ease-out backwards; }
+
+/* ---------- networks: the critical path, or a chosen path, traced from start to finish ---------- */
+html.mv .pmw.mv-in[data-pm="net"] .e.crit .e-l, html.mv .pmw.mv-in[data-pm="net"] .e.path .e-l { animation:mv-draw .4s calc(var(--i, 0) * 170ms) ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="net"] .e.crit .e-h, html.mv .pmw.mv-in[data-pm="net"] .e.path .e-h { animation:mv-fade .15s calc(.3s + var(--i, 0) * 170ms) ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="net"] .n.crit .n-c, html.mv .pmw.mv-in[data-pm="net"] .n.path .n-c { animation:mv-ring .5s calc(var(--i, 0) * 170ms) ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="net"] .sl rect, html.mv .pmw.mv-in[data-pm="net"] .sl text { transform-box:fill-box; transform-origin:center; animation:mv-num .4s calc(.5s + var(--i, 0) * 170ms) cubic-bezier(.3,1.5,.5,1) backwards; }
+.pmw .e .e-flow { fill:none; stroke:#fff; stroke-width:1.7; stroke-dasharray:3 13; stroke-linecap:round; opacity:.95; }
+html.mv .pmw.mv-in[data-pm="net"] .e .e-flow { animation:mv-flow .8s linear infinite, mv-fade95 .4s calc(.5s + var(--i, 0) * 170ms) ease-out backwards; }
+
+/* ---------- Gantt charts ---------- */
+html.mv .pmw .pg-row:nth-child(1) { --r:0; } html.mv .pmw .pg-row:nth-child(2) { --r:1; } html.mv .pmw .pg-row:nth-child(3) { --r:2; }
+html.mv .pmw .pg-row:nth-child(4) { --r:3; } html.mv .pmw .pg-row:nth-child(5) { --r:4; } html.mv .pmw .pg-row:nth-child(6) { --r:5; }
+html.mv .pmw .pg-row:nth-child(7) { --r:6; } html.mv .pmw .pg-row:nth-child(8) { --r:7; } html.mv .pmw .pg-row:nth-child(9) { --r:8; }
+html.mv .pmw.mv-in .pg-bar, html.mv .pmw.mv-in .pg-b { transform-origin:left center; animation:mv-growx .55s calc(.1s + var(--r, 0) * 90ms) cubic-bezier(.2,.9,.3,1) backwards; }
+html.mv .pmw.mv-in .pg-s { animation:mv-fade .4s calc(.5s + var(--r, 0) * 90ms) ease-out backwards; }
+html.mv .pmw .pg-b, html.mv .pmw .pg-s { transition:left .55s calc(var(--r, 0) * 45ms) cubic-bezier(.3,1.2,.5,1); }
+
+/* ---------- curves ---------- */
+html.mv .pmw.mv-in[data-pm="bands"] .crv-fill { animation:mv-open .6s cubic-bezier(.2,.9,.3,1) backwards; }
+html.mv .pmw.mv-in[data-pm="bands"] .big { transform-box:fill-box; transform-origin:center; animation:mv-num .45s .35s cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in[data-pm="pert"] .crv-fill, html.mv .pmw.mv-in[data-pm="pert"] .crv { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .55s cubic-bezier(.2,.9,.3,1) backwards; }
+html.mv .pmw.mv-in[data-pm="pert"] .gd { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .4s .4s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="pert"] .mk { animation:mv-fade .3s .6s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="ninety"] .crv-tail { animation:mv-fade .5s .2s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="ninety"] .gd.q, html.mv .pmw.mv-in[data-pm="ninety"] .gd.b { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .45s .1s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="ninety"] .gd.q { animation:mv-rise .45s .1s ease-out backwards, mv-blink 1.4s 1s ease-in-out 3; }
+html.mv .pmw.mv-in[data-pm="ninety"] .dimline, html.mv .pmw.mv-in[data-pm="ninety"] .dimhead, html.mv .pmw.mv-in[data-pm="ninety"] .dimtxt,
+html.mv .pmw.mv-in[data-pm="ninety"] .tailtxt, html.mv .pmw.mv-in[data-pm="ninety"] .lead.tail { animation:mv-fade .4s .5s ease-out backwards; }
+
+/* the two drawn-once figures: the beta curve and the node legend */
+html.mv .pm-beta.mv-in .curve { animation:mv-draw1 1.5s .1s ease-in-out backwards; }
+html.mv .pm-beta.mv-in .tail { animation:mv-fade .5s 1.4s ease-out backwards; }
+html.mv .pm-beta.mv-in .mline { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .5s .9s ease-out backwards; }
+html.mv .pm-beta.mv-in .tick, html.mv .pm-beta.mv-in .xl { animation:mv-fade .4s 1.1s ease-out backwards; }
+html.mv .pm-beta.mv-in .lead, html.mv .pm-beta.mv-in .note { animation:mv-fade .5s 1.8s ease-out backwards; }
+html.mv .pm-legend.mv-in .ring { transform-box:fill-box; transform-origin:center; animation:mv-pop .5s cubic-bezier(.3,1.4,.5,1) backwards; }
+html.mv .pm-legend.mv-in .div, html.mv .pm-legend.mv-in .lab, html.mv .pm-legend.mv-in .dur { animation:mv-fade .3s .35s ease-out backwards; }
+html.mv .pm-legend.mv-in .cf, html.mv .pm-legend.mv-in .vf, html.mv .pm-legend.mv-in .lead.f, html.mv .pm-legend.mv-in .dot.f, html.mv .pm-legend.mv-in .call.f { animation:mv-fade .45s .7s ease-out backwards; }
+html.mv .pm-legend.mv-in .cb, html.mv .pm-legend.mv-in .vb, html.mv .pm-legend.mv-in .lead.b, html.mv .pm-legend.mv-in .dot.b, html.mv .pm-legend.mv-in .call.b { animation:mv-fade .45s 1.25s ease-out backwards; }
+html.mv .pm-legend.mv-in .lead.k, html.mv .pm-legend.mv-in .dot.k, html.mv .pm-legend.mv-in .call.k { animation:mv-fade .45s 1.8s ease-out backwards; }
+
+/* ---------- transportation table ---------- */
+html.mv .tpw td.tp-c .tp-q.mv-pop { transform-origin:left bottom; animation:mv-num .45s cubic-bezier(.3,1.5,.5,1); }
+html.mv .tpw td.tp-c.hi { animation:mv-cell .9s ease-out; }
+html.mv .tpw td.tp-c .tp-u:not(.off) { animation:mv-fade .35s ease-out; }
+html.mv .tpw td.mv-chg { animation:mv-flash .8s ease-in-out; }
+html.mv .tpw table.tp td.tp-c { transition:background .35s; }
+
+@keyframes mv-fade { from { opacity:0; } to { opacity:1; } }
+@keyframes mv-fade95 { from { opacity:0; } to { opacity:.95; } }
+@keyframes mv-cap { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
+@keyframes mv-pulse { from { transform:scale(.8); opacity:.6; } to { transform:scale(1.25); opacity:0; } }
+@keyframes mv-flash { 0%, 100% { opacity:1; } 35% { opacity:.25; } 70% { opacity:1; } 85% { opacity:.5; } }
+@keyframes mv-num { from { transform:scale(2.4); opacity:0; } to { transform:scale(1); opacity:1; } }
+@keyframes mv-pop { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
+/* the dash pattern lives only inside the animation, so a line that is not animating is always drawn whole */
+@keyframes mv-draw { from { stroke-dasharray:420; stroke-dashoffset:420; } to { stroke-dasharray:420; stroke-dashoffset:0; } }
+@keyframes mv-draw1 { from { stroke-dasharray:1; stroke-dashoffset:1; } to { stroke-dasharray:1; stroke-dashoffset:0; } }
+@keyframes mv-flow { from { stroke-dashoffset:16; } to { stroke-dashoffset:0; } }
+@keyframes mv-ring { 0% { stroke-width:1.6; } 55% { stroke-width:8; } 100% { stroke-width:3.2; } }
+@keyframes mv-growx { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+@keyframes mv-rise { from { transform:scaleY(0); } to { transform:scaleY(1); } }
+@keyframes mv-open { from { clip-path:inset(0 50% 0 50%); } to { clip-path:inset(0 0 0 0); } }
+@keyframes mv-blink { 0%, 100% { opacity:1; } 50% { opacity:.25; } }
+@keyframes mv-cell { 0% { outline:3px solid #e3b23c; outline-offset:-3px; } 100% { outline:3px solid rgba(227,178,60,0); outline-offset:-3px; } }
+</style>
+<script>
+/* Motion for the MAN4504 widgets (see motion.css). An add-on: it reads the widgets' drawings and never changes their code.
+   It does four things CSS alone cannot: starts a widget's entry when the widget is first seen, numbers nodes and arrows
+   in the order work flows so a path is traced start to finish, notices which table cells changed, and sweeps the
+   deadline slider once so the reader sees it can be moved. */
+(function () {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.IntersectionObserver || !window.MutationObserver) return;
+  document.documentElement.classList.add('mv');
+  var each = function (list, fn) { Array.prototype.forEach.call(list, fn); };
+
+  /* ---- the order of flow: --i on every node and arrow, left to right (top to bottom on a phone) ---- */
+  function decorate(svg, flow) {
+    if (svg.dataset.mv) return; svg.dataset.mv = '1';
+    var vb = (svg.getAttribute('viewBox') || '0 0 2 1').split(/\s+/), down = +vb[3] > +vb[2] * 1.15, keys = [], items = [];
+    each(svg.querySelectorAll('g.n'), function (g) {
+      var m = /translate\(([-\d.]+)[ ,]+([-\d.]+)\)/.exec(g.getAttribute('transform') || ''); if (!m) return;
+      items.push([g, down ? +m[2] : +m[1]]);
+    });
+    each(svg.querySelectorAll('g.e'), function (g) {
+      var l = g.querySelector('.e-l'); if (!l) return;
+      items.push([g, +(down ? l.getAttribute('y1') : l.getAttribute('x1')) - 30]);   /* an arrow goes with the node it leaves */
+      if (flow && /\b(crit|path)\b/.test(g.getAttribute('class')) && !g.querySelector('.e-flow')) {
+        var f = l.cloneNode(false); f.setAttribute('class', 'e-flow'); g.appendChild(f);   /* dashes that run along the path */
+      }
+    });
+    items.forEach(function (it) { var k = Math.round(it[1] / 40); if (keys.indexOf(k) < 0) keys.push(k); });
+    keys.sort(function (a, b) { return a - b; });
+    items.forEach(function (it) { it[0].style.setProperty('--i', keys.indexOf(Math.round(it[1] / 40))); });
+  }
+  each(document.querySelectorAll('.pmw[data-pm]'), function (w) {
+    if (w.dataset.pm === 'lab') return;            /* the what-if lab animates itself */
+    var body = w.querySelector('.pm-body'); if (!body) return;
+    var run = function () { each(body.querySelectorAll('svg'), function (s) { decorate(s, w.dataset.pm === 'net'); }); };
+    run(); new MutationObserver(run).observe(body, { childList: true, subtree: true });
+  });
+  each(document.querySelectorAll('.pm-beta-svg .curve'), function (p) { p.setAttribute('pathLength', '1'); });
+
+  /* ---- transportation table: pop a quantity when it is written, flash a total when it changes ---- */
+  each(document.querySelectorAll('.tpw'), function (w) {
+    var last = new WeakMap(), sc = w.querySelector('.tp-scroll'), cap = w.querySelector('div.tp-cap'), ready = false;
+    function kick(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+    function scan() {
+      each(w.querySelectorAll('.tp-q, td.tp-cap, td.tp-dem'), function (el) {
+        var now = el.textContent, was = last.get(el); last.set(el, now);
+        if (!ready || was === undefined || was === now || !now) return;
+        kick(el, el.classList.contains('tp-q') ? 'mv-pop' : 'mv-chg');
+      });
+      ready = true;
+    }
+    if (sc) { scan(); new MutationObserver(scan).observe(sc, { childList: true, subtree: true, characterData: true }); }
+    if (cap) new MutationObserver(function () { kick(cap, 'mv-chg'); }).observe(cap, { childList: true });
+  });
+
+  /* ---- the deadline slider moves by itself once, from the left to where it starts ---- */
+  function sweep(w) {
+    var inp = w.querySelector('input[type=range]'); if (!inp || inp.dataset.mv) return; inp.dataset.mv = '1';
+    var to = +inp.value, from = +inp.min || 0, t0 = null, stop = false;
+    if (to - from < 2) return;
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { inp.addEventListener(ev, function () { stop = true; }, { once: true }); });
+    function put(v) { inp.value = v; inp.dispatchEvent(new Event('input', { bubbles: true })); }
+    put(from);
+    setTimeout(function () {
+      requestAnimationFrame(function step(ts) {
+        if (stop) return; if (t0 === null) t0 = ts;
+        var k = Math.min((ts - t0) / 1600, 1), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2, v = Math.round(from + (to - from) * e);
+        if (+inp.value !== v) put(v);
+        if (k < 1) requestAnimationFrame(step); else if (+inp.value !== to) put(to);
+      });
+    }, 350);
+  }
+
+  /* ---- a widget's entry plays when it is first seen, not while it is still below the screen ---- */
+  var widgets = document.querySelectorAll('.pmw, .tpw');
+  function seen(w) { w.classList.remove('mv-wait'); w.classList.add('mv-in'); if (w.dataset.pm === 'deadline') sweep(w); }
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); seen(e.target); } });
+  }, { threshold: 0.2 });
+  each(widgets, function (w) {
+    if (w.dataset.pm === 'lab') return;
+    if (w.getBoundingClientRect().top > window.innerHeight) w.classList.add('mv-wait');
+    io.observe(w);
+  });
+  function all() { each(widgets, function (w) { if (w.classList.contains('mv-wait')) seen(w); }); }
+  window.addEventListener('beforeprint', all);
+  window.__mv = { showAll: all };
+})();
+</script>
+</body>
+</html>

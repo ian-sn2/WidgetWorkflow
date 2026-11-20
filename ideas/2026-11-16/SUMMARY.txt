@@ -1,0 +1,40 @@
+Study guide upgrades: five working ideas
+
+We tested five ways to add video, animation and audio to the study guides without making the pages longer. All five are working demos built on this exam's own pages (MAN4504 Project Management, MAN4504 Aggregate Planning, MAR3023 Chapter 22). None of them is a quiz. Each one is produced by a script from files we already make, so it can be repeated every semester.
+
+1. What-if lab (our pick)
+What: Students tap an activity on the project network to delay it or crash it. The times, slack, critical path, finish date and cost update with an animation and a one-line explanation.
+Why: Struggling students learn a method by changing the problem and seeing what happens. Exam questions are usually a twist on the worked example, and this lets them try the twists.
+Page length: one line until opened.
+
+2. Play: narrated walkthroughs and automatic videos
+What: A Play button on our step-by-step widgets advances the steps while a voice explains each one. The same page can film itself into an MP4.
+Why: A student can sit back and watch a method being worked, like having a tutor, and replay it as often as needed. The videos also give us YouTube and social content with no production work.
+Page length: none added.
+
+3. Listen: the chapter as audio, with follow-along highlighting
+What: A Listen button speaks the chapter in a natural voice. Tables and charts are introduced and explained, not just read out. The line being discussed is highlighted and the page scrolls with it. Tapping any line jumps the audio there.
+Why: Students can study when they cannot look at a screen: driving, at the gym, walking to class. Following the highlight while listening also helps students who lose their place in dense text.
+Page length: none added (a bar pinned to the bottom of the screen). Listening time: about 8 to 10 minutes for a Concise chapter, shown on the button.
+
+4. Tap-to-define
+What: Every glossary term in the text is tappable and shows its definition in a small pop-up.
+Why: A student who has forgotten a term does not have to scroll to the glossary and lose their place. We also do not need to re-explain terms in the text, which keeps pages short.
+Page length: none added. Works on every page of every course.
+
+5. Animated widgets
+What: Every MAN4504 widget now moves. Networks draw themselves, the critical path flows, Gantt bars slide, curves build.
+Why: Motion shows what changed and in what order, which a still picture cannot. The pages feel like video without the file size or the scrolling.
+Page length: none added.
+
+Cost
+The voice is free and open-source and runs on our own computer, and uses a pronunciation dictionary so terms like "subcontract" are said correctly. The narration is not the page read aloud: Claude writes a spoken script for each chapter. The build checks that nothing on the page is skipped and that every number spoken appears on the page.
+
+Decisions needed
+- Voice: keep the free voice, or pay for a studio voice with more expression (roughly $0.15 to $1 per chapter).
+- The what-if lab shows calculated numbers that the notes do not print.
+- Pages with audio are 2 to 7 MB until the audio is hosted separately.
+
+Checking and what is left
+- Listen narration is written for two chapters. Each new chapter needs its script generated.
+- Nobody has to listen to a whole recording to check it. An automatic listener transcribes the audio and compares it with the script. All 173 recorded passages now match, and it caught two real errors on the way (a dropped word and a phrase that sounded like a different number), both fixed. It cannot judge tone, so a person should still sample a minute per chapter.

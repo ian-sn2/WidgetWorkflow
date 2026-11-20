@@ -1,0 +1,100 @@
+/* Motion for the MAN4504 widgets. Everything here is an entry or change animation that ends on the widget's own
+   normal drawing, so a browser that skips it (reduced motion, no script) shows exactly the page as it was.
+   html.mv  = the script is running and the reader has not asked for reduced motion
+   .mv-wait = widget still below the screen: its figure is held back so the entry plays when it is first seen
+   .mv-in   = widget has been seen */
+html.mv .mv-wait .pm-figwrap, html.mv .mv-wait .pg-scroll, html.mv .mv-wait .pm-conv, html.mv .mv-wait > svg, html.mv .mv-wait .tp-scroll { opacity:0; }
+html.mv .mv-in .pm-figwrap, html.mv .mv-in .pm-conv, html.mv .mv-in .tp-scroll { animation:mv-fade .35s ease-out; }
+
+/* ---------- captions and progress dots ---------- */
+html.mv .pmw .pm-cap.on { animation:mv-cap .32s ease-out; }
+html.mv .tpw div.tp-cap.mv-chg > b { display:block; animation:mv-cap .32s ease-out; }
+html.mv .pmw .pm-dots span, html.mv .tpw .tp-dots span { transition:background-color .3s, transform .3s; }
+html.mv .pmw .pm-dots span.on, html.mv .tpw .tp-dots span.on { transform:scale(1.15); }
+
+/* ---------- networks: the step being worked (forward and backward pass) ---------- */
+html.mv .pmw.mv-in .n.cur-f .n-halo, html.mv .pmw.mv-in .n.cur-b .n-halo { transform-box:fill-box; transform-origin:center; animation:mv-pulse 1.1s ease-out 2; }
+html.mv .pmw.mv-in .n .cu { animation:mv-flash .9s ease-in-out 1; }
+html.mv .pmw.mv-in .n.cur-f .n-v.vf, html.mv .pmw.mv-in .n.cur-b .n-v.vb { transform-box:fill-box; transform-origin:center; animation:mv-num .5s .45s cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in .n.cur-f .cf, html.mv .pmw.mv-in .n.cur-b .cb { animation:mv-fade .4s .25s ease-out backwards; }
+html.mv .pmw.mv-in .e.f .e-l, html.mv .pmw.mv-in .e.b .e-l { animation:mv-draw .55s ease-out backwards; }
+html.mv .pmw.mv-in .e.f .e-h, html.mv .pmw.mv-in .e.b .e-h { animation:mv-fade .25s .45s ease-out backwards; }
+
+/* ---------- networks: nodes and arrows that have just been added (drawing the network) ---------- */
+html.mv .pmw.mv-in .n.new .n-bg, html.mv .pmw.mv-in .n.new .n-c { transform-box:fill-box; transform-origin:center; animation:mv-pop .45s calc(.25s + var(--i, 0) * 60ms) cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in .n.new .n-l { animation:mv-fade .3s calc(.45s + var(--i, 0) * 60ms) ease-out backwards; }
+html.mv .pmw.mv-in .e.new .e-l { animation:mv-draw .5s ease-out backwards; }
+html.mv .pmw.mv-in .e.new .e-h { animation:mv-fade .2s .4s ease-out backwards; }
+
+/* ---------- small networks that appear whole (AON / AOA conventions) ---------- */
+html.mv .pmw.mv-in .pm-conv .n .n-bg, html.mv .pmw.mv-in .pm-conv .n .n-c, html.mv .pmw.mv-in[data-pm="both"] .n .n-bg, html.mv .pmw.mv-in[data-pm="both"] .n .n-c {
+  transform-box:fill-box; transform-origin:center; animation:mv-pop .4s calc(var(--i, 0) * 110ms) cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in .pm-conv .n .n-l, html.mv .pmw.mv-in[data-pm="both"] .n .n-l { animation:mv-fade .25s calc(.15s + var(--i, 0) * 110ms) ease-out backwards; }
+html.mv .pmw.mv-in .pm-conv .e .e-l:not(.dash), html.mv .pmw.mv-in[data-pm="both"] .e .e-l:not(.dash) { animation:mv-draw .45s calc(.2s + var(--i, 0) * 110ms) ease-out backwards; }
+html.mv .pmw.mv-in .pm-conv .e .e-l.dash, html.mv .pmw.mv-in[data-pm="both"] .e .e-l.dash, html.mv .pmw.mv-in .pm-conv .e .e-h, html.mv .pmw.mv-in[data-pm="both"] .e .e-h,
+html.mv .pmw.mv-in .pm-conv .e .e-t, html.mv .pmw.mv-in[data-pm="both"] .e .e-t { animation:mv-fade .25s calc(.55s + var(--i, 0) * 110ms) ease-out backwards; }
+
+/* ---------- networks: the critical path, or a chosen path, traced from start to finish ---------- */
+html.mv .pmw.mv-in[data-pm="net"] .e.crit .e-l, html.mv .pmw.mv-in[data-pm="net"] .e.path .e-l { animation:mv-draw .4s calc(var(--i, 0) * 170ms) ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="net"] .e.crit .e-h, html.mv .pmw.mv-in[data-pm="net"] .e.path .e-h { animation:mv-fade .15s calc(.3s + var(--i, 0) * 170ms) ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="net"] .n.crit .n-c, html.mv .pmw.mv-in[data-pm="net"] .n.path .n-c { animation:mv-ring .5s calc(var(--i, 0) * 170ms) ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="net"] .sl rect, html.mv .pmw.mv-in[data-pm="net"] .sl text { transform-box:fill-box; transform-origin:center; animation:mv-num .4s calc(.5s + var(--i, 0) * 170ms) cubic-bezier(.3,1.5,.5,1) backwards; }
+.pmw .e .e-flow { fill:none; stroke:#fff; stroke-width:1.7; stroke-dasharray:3 13; stroke-linecap:round; opacity:.95; }
+html.mv .pmw.mv-in[data-pm="net"] .e .e-flow { animation:mv-flow .8s linear infinite, mv-fade95 .4s calc(.5s + var(--i, 0) * 170ms) ease-out backwards; }
+
+/* ---------- Gantt charts ---------- */
+html.mv .pmw .pg-row:nth-child(1) { --r:0; } html.mv .pmw .pg-row:nth-child(2) { --r:1; } html.mv .pmw .pg-row:nth-child(3) { --r:2; }
+html.mv .pmw .pg-row:nth-child(4) { --r:3; } html.mv .pmw .pg-row:nth-child(5) { --r:4; } html.mv .pmw .pg-row:nth-child(6) { --r:5; }
+html.mv .pmw .pg-row:nth-child(7) { --r:6; } html.mv .pmw .pg-row:nth-child(8) { --r:7; } html.mv .pmw .pg-row:nth-child(9) { --r:8; }
+html.mv .pmw.mv-in .pg-bar, html.mv .pmw.mv-in .pg-b { transform-origin:left center; animation:mv-growx .55s calc(.1s + var(--r, 0) * 90ms) cubic-bezier(.2,.9,.3,1) backwards; }
+html.mv .pmw.mv-in .pg-s { animation:mv-fade .4s calc(.5s + var(--r, 0) * 90ms) ease-out backwards; }
+html.mv .pmw .pg-b, html.mv .pmw .pg-s { transition:left .55s calc(var(--r, 0) * 45ms) cubic-bezier(.3,1.2,.5,1); }
+
+/* ---------- curves ---------- */
+html.mv .pmw.mv-in[data-pm="bands"] .crv-fill { animation:mv-open .6s cubic-bezier(.2,.9,.3,1) backwards; }
+html.mv .pmw.mv-in[data-pm="bands"] .big { transform-box:fill-box; transform-origin:center; animation:mv-num .45s .35s cubic-bezier(.3,1.5,.5,1) backwards; }
+html.mv .pmw.mv-in[data-pm="pert"] .crv-fill, html.mv .pmw.mv-in[data-pm="pert"] .crv { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .55s cubic-bezier(.2,.9,.3,1) backwards; }
+html.mv .pmw.mv-in[data-pm="pert"] .gd { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .4s .4s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="pert"] .mk { animation:mv-fade .3s .6s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="ninety"] .crv-tail { animation:mv-fade .5s .2s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="ninety"] .gd.q, html.mv .pmw.mv-in[data-pm="ninety"] .gd.b { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .45s .1s ease-out backwards; }
+html.mv .pmw.mv-in[data-pm="ninety"] .gd.q { animation:mv-rise .45s .1s ease-out backwards, mv-blink 1.4s 1s ease-in-out 3; }
+html.mv .pmw.mv-in[data-pm="ninety"] .dimline, html.mv .pmw.mv-in[data-pm="ninety"] .dimhead, html.mv .pmw.mv-in[data-pm="ninety"] .dimtxt,
+html.mv .pmw.mv-in[data-pm="ninety"] .tailtxt, html.mv .pmw.mv-in[data-pm="ninety"] .lead.tail { animation:mv-fade .4s .5s ease-out backwards; }
+
+/* the two drawn-once figures: the beta curve and the node legend */
+html.mv .pm-beta.mv-in .curve { animation:mv-draw1 1.5s .1s ease-in-out backwards; }
+html.mv .pm-beta.mv-in .tail { animation:mv-fade .5s 1.4s ease-out backwards; }
+html.mv .pm-beta.mv-in .mline { transform-box:fill-box; transform-origin:center bottom; animation:mv-rise .5s .9s ease-out backwards; }
+html.mv .pm-beta.mv-in .tick, html.mv .pm-beta.mv-in .xl { animation:mv-fade .4s 1.1s ease-out backwards; }
+html.mv .pm-beta.mv-in .lead, html.mv .pm-beta.mv-in .note { animation:mv-fade .5s 1.8s ease-out backwards; }
+html.mv .pm-legend.mv-in .ring { transform-box:fill-box; transform-origin:center; animation:mv-pop .5s cubic-bezier(.3,1.4,.5,1) backwards; }
+html.mv .pm-legend.mv-in .div, html.mv .pm-legend.mv-in .lab, html.mv .pm-legend.mv-in .dur { animation:mv-fade .3s .35s ease-out backwards; }
+html.mv .pm-legend.mv-in .cf, html.mv .pm-legend.mv-in .vf, html.mv .pm-legend.mv-in .lead.f, html.mv .pm-legend.mv-in .dot.f, html.mv .pm-legend.mv-in .call.f { animation:mv-fade .45s .7s ease-out backwards; }
+html.mv .pm-legend.mv-in .cb, html.mv .pm-legend.mv-in .vb, html.mv .pm-legend.mv-in .lead.b, html.mv .pm-legend.mv-in .dot.b, html.mv .pm-legend.mv-in .call.b { animation:mv-fade .45s 1.25s ease-out backwards; }
+html.mv .pm-legend.mv-in .lead.k, html.mv .pm-legend.mv-in .dot.k, html.mv .pm-legend.mv-in .call.k { animation:mv-fade .45s 1.8s ease-out backwards; }
+
+/* ---------- transportation table ---------- */
+html.mv .tpw td.tp-c .tp-q.mv-pop { transform-origin:left bottom; animation:mv-num .45s cubic-bezier(.3,1.5,.5,1); }
+html.mv .tpw td.tp-c.hi { animation:mv-cell .9s ease-out; }
+html.mv .tpw td.tp-c .tp-u:not(.off) { animation:mv-fade .35s ease-out; }
+html.mv .tpw td.mv-chg { animation:mv-flash .8s ease-in-out; }
+html.mv .tpw table.tp td.tp-c { transition:background .35s; }
+
+@keyframes mv-fade { from { opacity:0; } to { opacity:1; } }
+@keyframes mv-fade95 { from { opacity:0; } to { opacity:.95; } }
+@keyframes mv-cap { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
+@keyframes mv-pulse { from { transform:scale(.8); opacity:.6; } to { transform:scale(1.25); opacity:0; } }
+@keyframes mv-flash { 0%, 100% { opacity:1; } 35% { opacity:.25; } 70% { opacity:1; } 85% { opacity:.5; } }
+@keyframes mv-num { from { transform:scale(2.4); opacity:0; } to { transform:scale(1); opacity:1; } }
+@keyframes mv-pop { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
+/* the dash pattern lives only inside the animation, so a line that is not animating is always drawn whole */
+@keyframes mv-draw { from { stroke-dasharray:420; stroke-dashoffset:420; } to { stroke-dasharray:420; stroke-dashoffset:0; } }
+@keyframes mv-draw1 { from { stroke-dasharray:1; stroke-dashoffset:1; } to { stroke-dasharray:1; stroke-dashoffset:0; } }
+@keyframes mv-flow { from { stroke-dashoffset:16; } to { stroke-dashoffset:0; } }
+@keyframes mv-ring { 0% { stroke-width:1.6; } 55% { stroke-width:8; } 100% { stroke-width:3.2; } }
+@keyframes mv-growx { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+@keyframes mv-rise { from { transform:scaleY(0); } to { transform:scaleY(1); } }
+@keyframes mv-open { from { clip-path:inset(0 50% 0 50%); } to { clip-path:inset(0 0 0 0); } }
+@keyframes mv-blink { 0%, 100% { opacity:1; } 50% { opacity:.25; } }
+@keyframes mv-cell { 0% { outline:3px solid #e3b23c; outline-offset:-3px; } 100% { outline:3px solid rgba(227,178,60,0); outline-offset:-3px; } }

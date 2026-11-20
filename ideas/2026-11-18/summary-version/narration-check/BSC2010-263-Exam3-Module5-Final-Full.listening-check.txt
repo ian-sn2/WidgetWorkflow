@@ -1,0 +1,81 @@
+Automatic listening check: BSC2010-263-Exam3-Module5-Final-Full.html
+
+76 takes recorded (14.6 minutes). 57 were heard exactly as written.
+6 have a word or number that may be wrong. 13 names or technical terms were spelled differently by the listener.
+To listen to: 1.7 minutes, in BSC2010-263-Exam3-Module5-Final-Full.listen-to-these.mp3 (one sentence for each item below, in this order).
+
+WORDS OR NUMBERS THAT MAY BE WRONG
+
+1. The Definition of a Species
+   written: The Definition of a Species.
+   heard:   The definition of species
+   differs: "a" heard as "(nothing)"
+
+2. Allopatric Speciation
+   written: Allopatric speciation happens when a geographic barrier divides a population, or when part of a population crosses a barrier and founds a new one. The word means other country, and it is the most common form of speciation, especially in animals.
+   heard:   Allopatric speciation happens when a geographic barrier divides a population, or when part of a population crosses a barrier and finds a new one. The word means "other country," and it is the most common form of speciation, especially in animals.
+   differs: "found" heard as "find"
+
+3. The Tempo of Speciation
+   written: The Tempo of Speciation.
+   heard:   The Temple of Speciation.
+   differs: "tempo" heard as "temple"
+
+4. Exaptation
+   written: Natural selection can only work with structures that already exist. An exaptation is a structure that evolved for one purpose and came to be used for another.
+   heard:   Natural selection can only work with structures that already exist. An acceptation is a structure that evolved for one purpose and came to be used for another.
+   differs: "exaptation" heard as "acceptation"
+
+5. Causes of Rapid Speciation
+   written: Allometric heterochrony is a change in the rate of growth or development. Most domesticated dogs reach maturity, and their full size, earlier than wolves do, which is why adult dogs are smaller.
+   heard:   Allometric heterochrony is a change in the rate of growth or development. Most domesticated dogs reach maturity and they're full size earlier than wolves do, which is why adult dogs are smaller.
+   differs: "their" heard as "theyre"
+
+6. The Tempo of Extinction
+   written: The Tempo of Extinction.
+   heard:   The Temple of Extinction
+   differs: "tempo" heard as "temple"
+
+NAMES AND TECHNICAL TERMS (the listener cannot spell these; hear each once and judge the pronunciation)
+
+7. meadowlark: heard as "metallark"
+8. prezygotic: heard as "presygotic"
+9. gametic: heard as "gumatic"
+10. postzygotic: heard as "post psychotic"
+11. dobzhansky: heard as "dubjonsky"
+12. rhogeessa: heard as "rhogsa"
+13. mistake in: heard as "mistaken"
+14. hyla versicolor: heard as "hyloversocolor"
+15. sockeye: heard as "sakai"
+16. divided: heard as "divide it"
+17. eldredge: heard as "eldridge"
+18. cichlid: heard as "cyclia"
+19. gillooly: heard as "ghululi"
+
+HARD WORDS: LOOKED UP AND TAUGHT TO THE VOICE
+
+Every rare word was looked up before recording and the voice was told how to say it.
+49 came from the built-in dictionary. 14 came from Wiktionary, were built from a prefix and a known word, or were entered by hand:
+hear those once in BSC2010-263-Exam3-Module5-Final-Full.hard-words.mp3 (each word said alone, in this order). A wrong one is corrected in
+scripts/ideas/narration/pronounce.json and is then right in every chapter.
+
+   allometric         a-luh-MEH-trihk            /ˌæləmˈɛtɹɪk/   allo- + metric (dictionary)
+   allopolyploidy     a-luh-PAH-lee-ploy-dee     /ˌæləpˈɑliplˌɔɪdi/   allo- + polyploidy (dictionary)
+   autopolyploidy     aw-toh-PAH-lee-ploy-dee    /ˌɔtoʊpˈɑliplˌɔɪdi/   auto- + polyploidy (dictionary)
+   dobzhansky         duhb-ZHAHN-skee            /dəbˈʒɑnski/   surname; entered by hand, 2026-11-18: confirm by ear
+   eldredge           EHL-drehj                  /ˈɛldɹɛdʒ/   surname; entered by hand, 2026-11-18: confirm by ear
+   exaptation         ehk-sap-TAY-shuhn          /ˌɛksæpˈteɪʃən/   Wiktionary
+   gillooly           gih-LOO-lee                /ɡɪˈluli/   surname; entered by hand, 2026-11-18: confirm by ear against how it is said in class
+   hasler             HA-sler                    /ˈhæslɚ/   surname; entered by hand, 2026-11-18: confirm by ear
+   heterochrony       heh-tuh-RAH-kruh-nee       /ˌhɛtəˈɹɑkɹəni/   Wiktionary lists no pronunciation; entered by hand, 2026-11-18: confirm by ear
+   hyla versicolor    HY-luh VER-sih-kuh-ler     /ˈhaɪlə ˈvɝsɪˌkʌlɚ/   species name; entered by hand, 2026-11-18: confirm by ear
+   lystrosaurus       lih-stroh-SAW-ruhs         /ˌlɪstɹoʊˈsɔɹəs/   genus name; entered by hand, 2026-11-18: confirm by ear
+   postzygotic        pohst-zy-GAH-tihk          /ˌpoʊstzaɪɡˈɑtɪk/   post- + zygotic (dictionary)
+   prezygotic         pree-zy-GAH-tihk           /ˌpɹizaɪɡˈɑtɪk/   pre- + zygotic (dictionary)
+   rhogeessa          roh-jee-EH-suh             /ˌɹoʊdʒiˈɛsə/   genus name, uncertain; entered by hand, 2026-11-18: confirm by ear
+
+   from the dictionary: allopatric (a-luh-PA-trihk), anagenesis (a-nuh-JEH-nuh-sihs), anthropocene (AN-thruh-puh-seen), archaeopteryx (ahr-kee-AHP-ter-ihks), asexually (ay-SEHK-shuh-wuh-lee), axolotl (AK-suh-lah-tuhl), centromere (SEHN-truh-mihr), chytrid (KIH-truhd), cichlid (SIH-kluhd), cladogenesis (kla-duh-JEH-nuh-sihs), coevolution (koh-eh-vuh-LOO-shuhn), coevolve (koh-uh-VAHLV), diploid (DIH-ployd), ectotherm (EHK-tuh-therm), extinction (ihk-STIHNGK-shuhn), fertilize (FER-tuh-lyz), finch (FIHNCH), found (FOWND), gamete (GA-meet), gametic (guh-MEH-tihk), genotype (JEE-nuh-typ), gradualism (GRA-juh-wuh-lih-zuhm), haploid (HA-ployd), hawthorn (HAW-thawrn), herbivore (HER-buh-vawr), interbreed (ihn-ter-BREED), latitudinal (la-tuh-TOO-duh-nuhl), macroevolution (ma-kroh-eh-vuh-LOO-shuhn), meadowlark (MEH-doh-lahrk), meiosis (my-OH-sihs), microevolution (my-kroh-eh-vuh-LOO-shuhn), mutate (MYOO-tayt), neoteny (nee-AH-tuh-nee), newt (NOOT), pollinate (PAH-luh-nayt), polyploidy (PAH-lee-ploy-dee), reproductively (ree-pruh-DUHK-tihv-lee), ribosomal (ry-BAH-suh-muhl), salamander (SA-luh-man-der), silversword (SIHL-ver-sawrd), sockeye (SAH-ky), speciate (SPEE-shee-ayt), speciation (spee-shee-AY-shuhn), survivorship (ser-VY-ver-shihp), sycamore (SIH-kuh-mawr), sympatric (sihm-PA-trihk), tetraploid (TEH-truh-ployd), triploid (TRIH-ployd), zygote (ZY-goht)
+
+NO PRONUNCIATION FOUND: the voice guessed these. They are at the end of the same clip. Add the ones it gets wrong to pronounce.json.
+
+   yucatan

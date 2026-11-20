@@ -1,0 +1,8 @@
+/* Tap to define: a dotted underline on the term, and one small card that floats over the page */
+.df-term { border-bottom:1.5px dotted #1f62b8; cursor:help; }
+.df-term:hover, .df-term[aria-expanded="true"] { background:#eaf2fd; }
+.df-term:focus-visible { outline:2px solid #2a78d6; outline-offset:2px; border-radius:2px; }
+.df-pop { position:absolute; z-index:70; box-sizing:border-box; padding:10px 13px 11px; background:#1c2a44; color:#fff; border-radius:8px;
+  box-shadow:0 6px 22px rgba(28,42,68,.32); font-family:"Red Hat Display", system-ui, sans-serif; font-size:.9rem; font-weight:500; line-height:1.4; }
+.df-pop[hidden] { display:none; }
+.df-pop b { display:block; margin-bottom:3px; font-size:.78rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:#ffd95a; }

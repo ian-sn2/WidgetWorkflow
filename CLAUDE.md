@@ -1175,6 +1175,35 @@ Ian changed this rule on 2026-09-17, and the change applies **here only**:
   h1/h2 headings exactly, plus Glossary and Key Takeaways; the edition
   scripts assert it.
 
+### Listen: chapter audio (2026-11-16 to 11-20)
+
+A notes page can be read aloud from a bar pinned to the bottom of the screen. The code is `scripts/ideas/`
+(`narrate.py` builds, `voice_google.py` records, `pronounce.py` looks up hard words, `hear.py` checks a recording
+by transcribing it, `listen.js` + `.css` are the bar); the output so far is `ideas/`. **Read
+`scripts/ideas/GOOGLE-VOICE-SETUP.md` and `scripts/ideas/narration/README.md` before touching any of it.**
+Nothing here changes a widget engine. What Ian has settled:
+
+* **The voice is Google's Chirp 3: HD** (2026-11-18), inside its free million characters a month; the builder
+  stops itself at 900,000. Which voice is still open: his boss wants a woman's voice and has 14 samples
+  (`ideas/2026-11-18/female-voice-samples/`). The key lives only as the cloud environment's network secret for
+  `texttospeech.googleapis.com`: never in chat, a file or a page.
+* **The audio lives in the Google Cloud Storage bucket `sntext2speech`, under `listen-audio/`** (2026-11-19),
+  not S3 and not Drive. The builder writes the files; Ian drags the `listen-audio` folder onto the bucket's top
+  level. The public listing shows what is there, so check it rather than asking.
+* **Two versions, chosen on the bar** (2026-11-20): the page read in full, which is what it opens on, and a
+  summary written for the ear, which his boss prefers to a straight read. One reader button holds Version and
+  Voice. A summary is a script per chapter in `narration/`, written from the Full edition.
+* **Sections are the `<h1>`s.** A heading's words are highlighted while it is read; its box is never restyled
+  ("dont change the style of the h1").
+* **Every time on the bar says what it measures**, and "Whole Chapter" is capitalised: a bare "34:52 left"
+  beside a section's name was read as that section's length.
+* **A number with a thousands separator goes to the voice in words**: in digits "4,712 units" was read
+  "four, seven twelve". `narrate.say()` and `narration/say.json` hold the other swaps;
+  `python scripts/ideas/test_narration.py` checks them (it is not part of `ci_check.py`).
+* **Nobody has to listen to a whole chapter.** Each build writes a listening report and a short clip of only
+  the sentences the automatic listener doubts. Names entered by hand in `narration/pronounce.json` are marked
+  "confirm by ear" until Ian has heard them.
+
 ### Reviewing Ian's work
 
 When Ian asks for a check of files he has written or edited (a chapter, a

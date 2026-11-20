@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAN4504 Exam 3 - Aggregate Planning</title>
+<link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v6.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<script>
+MathJax = {
+tex: {
+displayMath: [['\\[','\\]']],
+inlineMath: [['\\(','\\)']]
+}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>
+<style>@media (max-width:600px){table:not(.tp){display:block;overflow-x:auto !important;-webkit-overflow-scrolling:touch} mjx-container{display:inline-block !important;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:middle}}</style>
+</head>
+<body>
+
+<h1>The Nature of Aggregate Planning</h1>
+
+<p><strong>Aggregate planning</strong> (more commonly referred to as <em>sales and production planning</em>) refers to planning intermediate-term production requirements in <em>aggregate</em> terms. In the intermediate run, we plan in <em>aggregate</em> terms because the demand for individual items is uncertain, whereas overall aggregate forecasts tend to be more accurate. Most companies produce a number of products with a common input. Once aggregate planning prescribes aggregate requirements, those resources can be allocated to individual items and products in the short term. For example, aggregate planning would determine how many cars to produce this year, not how many blue sedans to produce.</p>
+
+<p>Snapper, a maker of lawn and garden equipment, illustrates why aggregate forecasts are more dependable. The company sells roughly 180 different models, ranging from backyard mowers to golf course equipment, and it cannot say with confidence which model will be the hot seller. It is, however, quite good at forecasting totals: for example, about 150,000 units in January, which is roughly 25% more than February, with March sales slipping a little under 10% from February's level.</p>
+
+<p>In industry, this activity is usually called S&amp;P planning rather than aggregate planning. The name describes what it does: it brings the sales side (how many units marketing expects customers to buy) together with the production side (how many units the firm can make). Neither side alone sets the plan, because a firm can sell only the lower of what customers want and what it is able to produce. The aim is to line the two up, and to do so at a low cost.</p>
+
+<p>At its core, the goal of aggregate planning is to meet forecasted demand at a minimum cost over the planning period. This requires operations managers to determine the aggregate quantity and timing of production in the intermediate future and to minimize cost over the planning period by adjusting controllable variables, which include production rates, labor levels, inventory levels, overtime work, and subcontracting rates. The following are the requirements for aggregate planning:</p>
+
+<ul>
+<li><em>A logical aggregate unit for measuring sales and output.</em> For example, this could be pounds of product or number of units. An aggregate plan for an automobile manufacturer might specify how many automobiles to make overall. Likewise, a candy manufacturer might plan in pounds of candy and a potato chip maker in total chips, without regard to flavors or package sizes. An automaker with separate plants might go only as far as splitting SUVs from sedans.</li>
+<li><em>A demand forecast for the intermediate planning period.</em> This demand forecast must be in aggregate terms, in the units selected above.</li>
+<li><em>A method for determining costs.</em> These include the cost of labor, holding inventory, overtime, subcontracting, and production.</li>
+<li><em>A model that combines forecasts and costs.</em> This allows you to make scheduling decisions for the planning period to minimize costs. We will discuss some crude models for combining forecasts and costs.</li>
+</ul>
+
+<p>Information about demand forecasts, inventory on hand, the workforce, supply chain support, and external capacity (subcontractors) goes into producing an aggregate plan, which is then an input into later planning with the master production schedule and MRP systems. These disaggregate the aggregate plan into individual plans for each of the products the organization produces.</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-01-aggregate-planning-flowchart.png" alt="Flowchart showing inputs to aggregate planning including demand forecasts, workforce, inventory on hand, supply chain support, and subcontractors feeding into aggregate planning, which then flows to master production schedule and MRP systems, then to detailed work schedules" class="image-wide-95 content-image" loading="lazy" width="auto" height="auto" />
+
+<p>We discussed many of the inputs to aggregate planning earlier in the course, when we discussed product decision, process and capacity planning, and demand forecasting. We will not get to cover master production schedules and MRP systems in this course.</p>
+
+<p>These inputs build on one another. What customers want and what the firm is capable of producing determine which products it offers. The process chosen to make those products (e.g., an automated line versus manual labor) determines capacity, such as 20 skateboard decks or 96 sandwiches per hour at each facility. Marketing then forecasts how much customers will want. When the two do not line up (say customers want 5,000 units in the first quarter and the firm can make only 2,000), planners look for other sources of supply, such as subcontracting or producing early and stockpiling. Apple, for example, often has new phones packaged a couple of weeks before a launch to absorb the initial spike in demand. Planners must also confirm that raw materials and a large enough workforce will be in place, because any one of these inputs could become the bottleneck.</p>
+
+<p>The resulting aggregate plan works like a budget authorization. It tells plant and line managers how much to produce in the period and which resources they are approved to use, such as regular-time production with no overtime, roughly 20% overtime paid at time and a half, or hiring ahead of a need expected in a later period.</p>
+
+<p>The master production schedule then disaggregates the plan. If the aggregate plan calls for 1,000 units this month, the master production schedule might specify 250 units per week and state which flavors or colors to make, so that the right materials can be delivered. Detailed work schedules, which assign individuals to specific activities, come after that.</p>
+
+<p>The 3 major planning horizons are as follows:</p>
+
+<ul>
+<li><em>Top executives</em> make <strong>long-range plans</strong> (over a year). Examples include research and development, new product plans, capital investments, and facility location or expansion decisions.</li>
+<li><em>Operations managers</em> make <strong>intermediate-range plans</strong> (3 to 18 months). Examples include sales planning; production planning and budgeting; setting employment, inventory, and subcontracting levels; and analyzing operating plans.</li>
+<li><em>Operations managers, supervisors, and foremen</em> make <strong>short-range plans</strong> (less than 3 months). Examples include job assignments, ordering, job scheduling, dispatching, and deciding how much overtime and part-time help to use.</li>
+</ul>
+
+<p>Aggregate planning involves intermediate-range plans. Most other topics in this course sit at one of two extremes: either strategic decisions (e.g., approving a budget to expand a plant's capacity by 20% and leaving the details to engineers) or short-term operational details (e.g., how many seconds it takes to drill a skateboard deck). Aggregate planning is the course's main example of planning in the middle, where directors and a vice president of operations plan several months to a year ahead.</p>
+
+<h1>Aggregate Planning Strategies</h1>
+
+<p>There are generally two categories of aggregate planning strategies: capacity options and demand options. <em>Capacity options</em> involve planning around capacity (i.e., the supply side), whereas <em>demand options</em> involve changing prices or other factors to influence demand.</p>
+
+<h2>Capacity Options</h2>
+
+<p>Several capacity options for matching supply with demand, are as follows:</p>
+
+<ul>
+<li><em>Change inventory levels to absorb changes in demand</em> – Absorb changes in demand by increasing inventory in low-demand periods to meet high demand in the future. This option is not available to services (a surgery cannot be stored), and it is most practical when holding costs are low. For example, a maker of vitamins or powdered supplements might produce a full year's supply in a two-week run and use the freed-up time to make other products. Building inventory has multiple problems:
+<ul>
+<li>It means that you have to keep inventory, which means that there will be increased costs due to storage, insurance, handling, obsolescence, and capital investment. These are all non-value-added steps.</li>
+<li>Demand may still be too high at the end of the period. If you do not have enough inventory stored up to meet the high demand, there is nothing that you can do. Shortages can cause lost sales due to long lead times and poor customer service, and it may create resentment.</li>
+</ul>
+</li>
+<li><em>Change workforce size through hiring or layoffs</em> – Adjust the workforce levels from month to month, based on demand. This helps to match the production rate to demand. Reducing the workforce does not have to mean layoffs. A large employer that loses about 1% of its people each month to resignations and retirements can trim its workforce by around 4% simply by freezing hiring and not replacing those who leave. Varying the workforce decreases inventory and thus decreases holding costs, but it also has some disadvantages:
+<ul>
+<li>Training and separation costs for hiring and laying off workers are high.</li>
+<li>New workers may have lower productivity due to lack of training and experience.</li>
+<li>Laying off workers may lower the morale and productivity of existing workers.</li>
+<li>Laying off workers might result in bad press or a negative backlash from the local community. Layoffs are more common (and acceptable) in some industries than others. For example, layoffs and "flexing" the labor force are common in the construction industry, but they are far less common in the manufacturing industry.</li>
+</ul>
+</li>
+<li><em>Use overtime or idle time to vary the production rate</em> – Use a constant workforce, but adjust the hours of those workers such that their labor combined matches demand. That is, workers work overtime when demand is high, and they work less than full-time (idle time) when demand is low. This works for small adjustments (e.g., asking one person to take on a little extra work), but once the change needed becomes large, the firm needs a different workforce size. Some disadvantages of this strategy are as follows:
+<ul>
+<li>It may be difficult to meet large increases in demand with overtime because of issues such as governmental regulations or union rules.</li>
+<li>Overtime is costly and can drive down productivity.</li>
+<li>It may be difficult to absorb idle time. Companies can keep workers productive and busy during idle time by engaging them in other productive activities.</li>
+</ul>
+</li>
+<li><em>Use subcontracting to meet demand requirements and even out capacity</em> – Temporarily use subcontracting. When demand exceeds capacity, the firm might allow another manufacturer to fulfill demand requirements. When demand is less than capacity, however, the firm might bring in work from other firms so that utilization remains high. Subcontracting is common in industries where the product's value lies in its design or brand and not in the specifics of manufacturing. Many clothing brands have their designs sewn to specification by outside shops, and Apple subcontracts the manufacturing of its phones. The brand still stands behind the quality, which requires close relationships with the suppliers. Some disadvantages of this strategy are as follows:
+<ul>
+<li>It may be costly. If it isn't costly, you may want to consider sending <em>all</em> of your work to the subcontractor and letting them fulfill your customers' needs.</li>
+<li>It may be difficult to assure quality and timely delivery if you are relying on a third-party subcontractor.</li>
+<li>It exposes your customers to a potential competitor. They may decide to get their requirements fulfilled directly from the subcontractor, at a cost savings.</li>
+</ul>
+</li>
+<li><em>Use part-time workers to meet demand</em> – Part-time workers are particularly useful in the service industry. This strategy is best used with low-skilled labor. However, it is <em>not</em> a good strategy when the labor is highly skilled. (It is hard to find part-time cardiac surgeons or part-time lawyers with the right experience.) Retail stores commonly hire part-time workers around the holidays when demand is high.</li>
+</ul>
+
+<p>In general, adjusting capacity by flexing the workforce through overtime, idle time, subcontracting or part-time workers is less useful when dealing with high-skilled labor.</p>
+
+<h2>Demand Options</h2>
+
+<p>Capacity options deal with adjusting production capacity to match demand or to fulfill customer requirements. Demand options, on the other hand, involve influencing factors that are traditionally thought to be under the control of the customer. The following are some demand options for aggregate planning strategies:</p>
+
+<ul>
+<li><em>Influencing demand</em> – Shift demand to slow periods by using advertising or promotions (e.g., discount pricing). For example, airlines offer discounts for less popular flights that leave early in the morning or late at night. Likewise, Subway used to offer discounts for people who bought sandwiches early in the day. At lunchtime, Subway cannot make sandwiches fast enough, and customers with a short lunch break leave when the line is long. A discount of about a dollar for buying before 10 a.m. moves some of those customers to a slow period, so the store sells more sandwiches overall. Similarly, Disney sells discounted passes to Florida residents with blackout dates on its most popular days.
+<p>The downside of this approach is that it may be insufficient to balance demand and capacity. Firms must constantly engage in advertising and promotions.</p>
+</li>
+<li><em>Back-ordering during high-demand periods</em> – When faced with high-demand, the firm can take backorders and expedite shipping to customers who have to wait for the product to arrive. The downside of this tactic is that customers still wait, which can result in a loss of goodwill and a loss of sales.
+<p>Backorders are more common with big-ticket items that people would only buy every few years than for small-ticket items that people buy regularly. Because the largest problem is that customers may not want to wait for the item, this strategy is most effective when there are few or no substitutes for the product or services that the firm offers. Toothpaste shows the opposite case. If a shopper's usual brand is out of stock, the shopper buys another brand that day. For the company, the best outcome is one lost sale, and the worst is that the shopper prefers the competitor's product and never returns. Because holding costs for such items are low and the penalty for running out is high, firms deliberately overstock them. Back-ordering makes sense only when customers do not penalize the firm for making them wait.</p>
+</li>
+<li><em>Mixing products and service counter-seasonally</em> – The firm could develop a product mix of counter-seasonal items. For example, a firm might produce jet-ski engines during the summer and snowmobile engines during the winter. The technology involved in producing these two products is similar, but the demand for these products is seasonal. The downside is that it may cause the company to venture outside of its area of expertise to fight seasonal trends in demand.</li>
+</ul>
+
+<p>Note that, with each of these strategies, options are "opposite sides of the same coin." For example, you could hire workers to increase capacity or fire them to decrease capacity. Inventory buildup is done in periods of low demand, whereas back-ordering is done in times of high demand. We can compare the advantages and disadvantages of these different options in a table:</p>
+
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Advantages</th>
+<th>Disadvantages</th>
+<th>Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Part-time Workers</strong></td>
+<td>Cheaper and more flexible than full-time workers.</td>
+<td>High training costs and turnover; quality suffers; scheduling is difficult.</td>
+<td>Best for unskilled jobs with large, temporary labor pools.</td>
+</tr>
+<tr>
+<td><strong>Influencing Demand</strong></td>
+<td>Uses excess capacity; attracts new customers.</td>
+<td>Creates uncertain demand; hard to exactly match supply and demand.</td>
+<td>Generates marketing ideas.</td>
+</tr>
+<tr>
+<td><strong>Back-Ordering</strong></td>
+<td>Avoids overtime and keeps constant capacity.</td>
+<td>Customer has to wait, and goodwill may be lost.</td>
+<td>Allows for flexibility within the aggregate plan. Many companies back-order.</td>
+</tr>
+<tr>
+<td><strong>Counter-Seasonal Product and Service Mixing</strong></td>
+<td>Allows for full utilization of resources and a stable workforce.</td>
+<td>May have to bring in skills and equipment from outside of firm's area of expertise.</td>
+<td>It is hard and risky to find products with opposite demand patterns.</td>
+</tr>
+<tr>
+<td><strong>Changing Inventory Levels</strong></td>
+<td>There are no abrupt production changes, and changes in personnel are gradual or nonexistent.</td>
+<td>High inventory holding costs; shortages cause lost sales.</td>
+<td>Best used for production operations (not service operations).</td>
+</tr>
+<tr>
+<td><strong>Hiring / Layoffs</strong></td>
+<td>Avoids the costs of other alternatives.</td>
+<td>High layoff, hiring, and training costs.</td>
+<td>Best used when there is a large labor pool.</td>
+</tr>
+<tr>
+<td><strong>Overtime / Idle Time</strong></td>
+<td>No hiring or training costs.</td>
+<td>Workers must be paid premiums for overtime. They may become tired, and they may not meet demand.</td>
+<td>Allows for flexibility within the aggregate plan.</td>
+</tr>
+<tr>
+<td><strong>Subcontracting</strong></td>
+<td>Flexibility and smoothing of output.</td>
+<td>Potential loss of quality, profits, and future business.</td>
+<td>Best applied to production settings.</td>
+</tr>
+</tbody>
+</table>
+
+<h1>Methods of Aggregate Planning</h1>
+
+<p>No single option above is likely to be optimal by itself, in part because company policies limit how far each one can be pushed. For example, the stockroom may hold only 200 units, the firm may be unwilling to lay anyone off and so can shrink only through attrition, and hiring and firing are both expensive. Planners therefore piece several options together, looking for a plan that complies with all company policies and produces at a low cost.</p>
+
+<div class="exam-tip">
+<h4>EXAM TIP: Work Many Practice Problems</h4>
+<p>These problems are routine but have small rules that are easy to miss (e.g., how to handle inventory carried in from a previous period, or whether to charge for a workforce change at the start of the plan). Dr. Munson said the exam will have no such wrinkle that is not also in the practice questions.</p>
+
+</div>
+
+<p class="date">Thursday, 11/12/26</p>
+
+<p>At a very basic level, there are two major categories of strategies for aggregate planning:</p>
+
+<ul>
+<li><em>Chase strategy</em> – A <strong>chase strategy</strong> involves attempting to match output rates to the demand forecast for each period. Therefore, the firm would vary workforce levels and production rates to match demand. This requires the firm to either have a very flexible workforce or put up with a lot of idle time. This is a popular strategy in many types of service organizations. In fact, it is often the <em>only</em> choice for a service organization, because it cannot store inventory.</li>
+<li><em>Level strategy</em> – A <strong>level strategy</strong> involves uniform, daily production and using inventory or idle time as a buffer. A stable production over time leads to better quality and consistency, and it is usually only possible for manufacturing or for service industries with constant demand.</li>
+</ul>
+
+<p>In most cases, a <strong>mixed strategy</strong> that utilizes a combination of the options listed above is usually best. There are many possible mixed strategies, and determining which achieves the lowest costs requires trial-and-error. Finding the optimal plan is not always possible.</p>
+
+<h2>Graphical Approaches (Trial and Error)</h2>
+
+<p>One approach to finding the plan that involves the minimum cost is to use graphical and charting methods. <strong>Graphical methods</strong> are aggregate planning techniques that work with a few variables at a time to allow planners to compare projected demand with existing capacity. However, these are trial-and-error approaches that do not guarantee an optimal solution. The steps involved in graphical and charting methods are generally as follows:</p>
+
+<ol>
+<li>Determine the demand for each period.</li>
+<li>Determine capacity for regular time, overtime, and subcontracting for each period.</li>
+<li>Determine labor, hiring, layoff, and inventory holding costs.</li>
+<li>Consider company policy on workers and stock levels (i.e., policies on maximum overtime and maximum allowable inventory levels).</li>
+<li>Develop alternative plans and compare total costs.</li>
+</ol>
+
+<h2>Example: Applying Aggregate Planning Strategies</h2>
+
+<p><strong>A company faces the following expected demand for roofing shingles in the first half of the year. It has calculated the number of production days in each month, and it has divided its monthly expected demand by the number of production days to get the demand per day.</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Expected Demand</th>
+<th>Production Days</th>
+<th>Demand per Day</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td>900</td>
+<td>22</td>
+<td>41</td>
+</tr>
+<tr>
+<td>February</td>
+<td>700</td>
+<td>18</td>
+<td>39</td>
+</tr>
+<tr>
+<td>March</td>
+<td>800</td>
+<td>21</td>
+<td>38</td>
+</tr>
+<tr>
+<td>April</td>
+<td>1,200</td>
+<td>21</td>
+<td>57</td>
+</tr>
+<tr>
+<td>May</td>
+<td>1,500</td>
+<td>22</td>
+<td>68</td>
+</tr>
+<tr>
+<td>June</td>
+<td>1,100</td>
+<td>20</td>
+<td>55</td>
+</tr>
+<tr>
+<td><em>Total</em></td>
+<td><strong>6,200</strong></td>
+<td><strong>124</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>The company has found the following relevant costs:</strong></p>
+
+<table>
+<tbody>
+<tr>
+<td><strong>Inventory Carrying Cost</strong></td>
+<td>$5 per unit per month</td>
+</tr>
+<tr>
+<td><strong>Subcontracting Cost Per Unit</strong></td>
+<td>$20 per unit</td>
+</tr>
+<tr>
+<td><strong>Average Pay Rate</strong></td>
+<td>$10 per hour ($80 per day)</td>
+</tr>
+<tr>
+<td><strong>Overtime Pay Rate</strong></td>
+<td>$17 per hour (above 8 hours per day)</td>
+</tr>
+<tr>
+<td><strong>Labor-Hours to Produce One Unit</strong></td>
+<td>1.6 hours per unit</td>
+</tr>
+<tr>
+<td><strong>Cost of Increasing Daily Production Rate (Hiring and Training)</strong></td>
+<td>$300 per unit</td>
+</tr>
+<tr>
+<td><strong>Cost of Decreasing Daily Production Rate (Layoffs)</strong></td>
+<td>$600 per unit</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>The company has to choose among three options for its production strategy, so it will calculate the cost of each strategy and then compare them.</strong></p>
+
+<ul>
+<li><strong>A "pure" level strategy, with production level at the average requirement.</strong></li>
+<li><strong>A level strategy, with production level at the minimum requirement.</strong></li>
+<li><strong>A chase strategy, with production at the expected demand in each period.</strong></li>
+</ul>
+
+<h2>Method 1: Pure Level Strategy</h2>
+
+<p>The average requirement over the six periods is the expected demand divided by the number of production days, or 6,200 ÷ 124 =  <u><strong>50 units per day</strong></u>. This is the level of production, or quantity of units, that must be produced each day under a pure level strategy. If the company produces 50 units per day, it will have some inventory carrying costs, and it will have regular-time labor costs. To calculate carrying costs, we must determine the monthly inventory change and the ending inventory, given demand predictions:</p>
+
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Production Days</th>
+<th>Production at 50 Units per Day</th>
+<th>Demand Forecast</th>
+<th>Monthly Inventory Change</th>
+<th>Ending Inventory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td>22</td>
+<td>1,100</td>
+<td>900</td>
+<td>+200</td>
+<td>200</td>
+</tr>
+<tr>
+<td>February</td>
+<td>18</td>
+<td>900</td>
+<td>700</td>
+<td>+200</td>
+<td>400</td>
+</tr>
+<tr>
+<td>March</td>
+<td>21</td>
+<td>1,050</td>
+<td>800</td>
+<td>+250</td>
+<td>650</td>
+</tr>
+<tr>
+<td>April</td>
+<td>21</td>
+<td>1,050</td>
+<td>1,200</td>
+<td>−150</td>
+<td>500</td>
+</tr>
+<tr>
+<td>May</td>
+<td>22</td>
+<td>1,100</td>
+<td>1,500</td>
+<td>−400</td>
+<td>100</td>
+</tr>
+<tr>
+<td>June</td>
+<td>20</td>
+<td>1,000</td>
+<td>1,100</td>
+<td>−100</td>
+<td>0</td>
+</tr>
+<tr>
+<td><em>Total</em></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>1,850</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p>By adding up ending inventory levels at the end of each month, we get a total of 1,850 units in ending inventory. (Note that some units are carried over the course of multiple months and are thus counted multiple times.) At a cost of $5 per unit per month, this results in an inventory carrying cost of $9,250. We can calculate how many workers it takes to produce 50 units per day as follows:</p>
+
+<p>\[
+\text{# of Workers} = \frac{50 \text{ units per day} \times 1.6 \text{ hours per unit}}{8 \text{ hours per day, per worker}} = \text{10 workers}
+\]</p>
+
+<p>Hiring 10 workers at $80 per day for 124 days would cost $99,200.</p>
+
+<p>The total cost of this method would be the inventory carrying costs ($9,250) plus the labor cost ($99,200), or <strong><u>$108,450</u></strong>.</p>
+
+<h2>Method 2: Level Strategy (Production at the Minimum Requirement and Use of Subcontracting)</h2>
+
+<p>Suppose your boss wanted you to meet demand every month with a level workforce, no overtime, and no end-of-month inventory. We could look at the demand forecast and identify the fact that the minimum daily demand occurs in March, at 38 units.</p>
+
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Expected Demand</th>
+<th>Production Days</th>
+<th>Demand per Day</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td>900</td>
+<td>22</td>
+<td>41</td>
+</tr>
+<tr>
+<td>February</td>
+<td>700</td>
+<td>18</td>
+<td>39</td>
+</tr>
+<tr>
+<td>March</td>
+<td>800</td>
+<td>21</td>
+<td><strong>38</strong></td>
+</tr>
+<tr>
+<td>April</td>
+<td>1,200</td>
+<td>21</td>
+<td>57</td>
+</tr>
+<tr>
+<td>May</td>
+<td>1,500</td>
+<td>22</td>
+<td>68</td>
+</tr>
+<tr>
+<td>June</td>
+<td>1,100</td>
+<td>20</td>
+<td>55</td>
+</tr>
+<tr>
+<td><em>Total</em></td>
+<td><strong>6,200</strong></td>
+<td><strong>124</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>Using the lowest monthly forecast, we will never have any inventory to carry over to the next month, so there are no holding costs. However, we will have to subcontract some units out to a third-party subcontractor. Therefore, our costs will be divided between regular-time labor (used for in-house production) and subcontracting.</p>
+
+<p>In-house production will account for 38 units per day over the 124 production days, or 4,712 units. Total demand over the six-month period is 6,200 units, so the remaining 1,488 units will have to be subcontracted out. We can calculate how many workers it takes to produce 38 units per day as follows:</p>
+
+<p>\[
+\text{# of Workers} = \frac{38 \text{ units per day} \times 1.6 \text{ hours per unit}}{8 \text{ hours per day, per worker}} = \text{7.6 workers}
+\]</p>
+
+<p>We obviously cannot hire 7.6 workers, but we can hire 7 workers and then hire another worker to work 60% of the time. Hiring 7.6 workers at $80 per day for 124 days would cost us $75,392. The cost of subcontracting is $20 per unit, so it would cost $29,760 to subcontract out 1,488 units.</p>
+
+<p>The total cost of this method would be the subcontracting costs ($29,760) plus the in-house labor cost ($75,392), or <strong><u>$105,152</u></strong>. While this strategy is cheaper, there may be other considerations. For example, the subcontractor might turn out to be a competitor later or lead to brand image problems.</p>
+
+<h2>Method 3: Pure Chase Strategy (Using Hiring and Layoffs)</h2>
+
+<p>Finally, we could try to chase demand by ramping up production to meet forecasted demand in each period. This obviously eliminates inventory carrying costs and subcontracting costs, but it involves the cost of hiring, training, and layoffs.</p>
+
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Forecast</th>
+<th>Daily Production Rate</th>
+<th>Basic Production Cost</th>
+<th>Hiring Cost</th>
+<th>Layoff Cost</th>
+<th>Total Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td>900</td>
+<td>41</td>
+<td>$14,400</td>
+<td>---</td>
+<td>---</td>
+<td>$14,400</td>
+</tr>
+<tr>
+<td>February</td>
+<td>700</td>
+<td>39</td>
+<td>$11,200</td>
+<td>---</td>
+<td>$1,200</td>
+<td>$12,400</td>
+</tr>
+<tr>
+<td>March</td>
+<td>800</td>
+<td>38</td>
+<td>$12,800</td>
+<td>---</td>
+<td>$ 600</td>
+<td>$13,400</td>
+</tr>
+<tr>
+<td>April</td>
+<td>1,200</td>
+<td>57</td>
+<td>$19,200</td>
+<td>$5,700</td>
+<td>---</td>
+<td>$24,900</td>
+</tr>
+<tr>
+<td>May</td>
+<td>1,500</td>
+<td>68</td>
+<td>$24,000</td>
+<td>$3,300</td>
+<td>---</td>
+<td>$27,300</td>
+</tr>
+<tr>
+<td>June</td>
+<td>1,100</td>
+<td>55</td>
+<td>$17,600</td>
+<td>---</td>
+<td>$7,800</td>
+<td>$25,400</td>
+</tr>
+<tr>
+<td><em>Total</em></td>
+<td></td>
+<td></td>
+<td><strong>$99,200</strong></td>
+<td><strong>$9,000</strong></td>
+<td><strong>$9,600</strong></td>
+<td><strong>$117,800</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p>The total cost of this option would be <strong><u>$117,800</u></strong>.</p>
+
+<p>Among the 3 options, Method 2 (a level strategy with production at the minimum demand) is the most cost-effective. That is, it is the lowest-cost method. Therefore, the company should choose that method, assuming that it has to choose among these 3 plans.</p>
+
+<p>Note that there are many other alternative plans that we did not consider. Additionally, deciding on a plan depends on many other, often industry-specific factors, such as how accurate we believe a company's demand forecasts are. (For example, none of these plans involved the use of overtime labor.) Moreover, firms should think about the nonmonetary costs of certain plans. For example, laying workers off takes a psychological toll on the remaining workers.</p>
+
+<h2>Transportation Method of Linear Programming</h2>
+
+<p>The methods discussed above are trial-and-error methods that do not generate optimal solutions. For optimal solutions, you must resort to mathematical approaches. One such approach involves setting up a problem as a transportation problem and using either the transportation model or linear programming software to solve it.</p>
+
+<p>Another approach is the <em>management coefficients model</em>, which is built around managers' experience and performance. We will discuss the transportation method of linear programming, but we will not talk in detail about the management coefficients model method. Consider the following example, which illustrates how to frame a problem as a transportation problem, and solve it with the transportation method:</p>
+
+<h2>Example: Transportation Method</h2>
+
+<p><strong>A tire company can produce tires using regular labor, overtime labor, or subcontracted labor. The costs with various kinds of labor are as follows:</strong></p>
+
+<ul>
+<li><strong>Regular time = $40 per tire</strong></li>
+<li><strong>Overtime = $50 per tire</strong></li>
+<li><strong>Subcontractor time = $70 per tire</strong></li>
+</ul>
+
+<p><strong>The tire company begins with 100 tires in inventory, and its carrying cost is $2 per tire per month. The estimated demand and capacity in March, April, and May are as follows:</strong></p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>March</th>
+<th>April</th>
+<th>May</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Demand</strong></td>
+<td>800</td>
+<td>1,000</td>
+<td>750</td>
+</tr>
+<tr>
+<td><strong>Capacity</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Regular Hours</strong></td>
+<td>700</td>
+<td>700</td>
+<td>700</td>
+</tr>
+<tr>
+<td><strong>Overtime</strong></td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td><strong>Subcontracting</strong></td>
+<td>150</td>
+<td>150</td>
+<td>130</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Use the transportation method of linear programming to develop an optimal aggregate plan that minimizes total costs. Assume that there is no back-ordering.</strong></p>
+
+<h2>Setting Up and Solving the Table</h2>
+
+<p>We set the problem up as a table: demand periods across the top, sources of supply down the side, and the cost of each pairing in the corner of its cell. Then we fill each month's demand from its cheapest available sources. The widget below builds the table and the plan one step at a time.</p>
+
+<style>
+.tpw { --ink:#1c2a44; --muted:#5b6474; --rule:#cfd6e2; --soft:#f1f4f9; --hi:#fff4c2; --blue:#1d4f94; max-width:760px; margin:20px auto; padding:16px 16px 14px; background:#fff; border:1px solid #dfe3ea; border-radius:10px; box-sizing:border-box; font-family:"Red Hat Display", system-ui, sans-serif; color:var(--ink); clear:both; }
+.tpw * { box-sizing:border-box; }
+.tpw .tp-title { font-weight:800; font-size:1.02rem; margin:0 0 2px; text-align:center; }
+.tpw .tp-lede { font-size:.85rem; color:var(--muted); margin:0 0 10px; text-align:center; }
+.tpw .tp-bar { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px; margin:0 0 8px; }
+.tpw button { font:inherit; font-size:.85rem; font-weight:700; min-height:40px; padding:6px 14px; border:1px solid var(--rule); border-radius:999px; background:#fff; color:var(--ink); cursor:pointer; }
+.tpw button[aria-pressed="true"], .tpw button.tp-next { background:var(--ink); border-color:var(--ink); color:#fff; }
+.tpw button:disabled { opacity:.4; cursor:default; }
+.tpw button:focus-visible { outline:3px solid #2a78d6; outline-offset:2px; }
+.tpw .tp-count { font-size:.8rem; color:var(--muted); min-width:6.5em; text-align:center; }
+.tpw .tp-cap { margin:0 0 10px; padding:8px 12px; border-left:4px solid var(--blue); background:var(--soft); border-radius:0 6px 6px 0; font-size:.9rem; line-height:1.45; min-height:4.4em; }
+.tpw .tp-cap b.tp-h { display:block; font-size:.92rem; margin-bottom:2px; }
+.tpw .tp-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.tpw table.tp { border-collapse:separate; border-spacing:0; margin:0 auto; font-size:.82rem; font-variant-numeric:tabular-nums; width:100%; min-width:430px; background:transparent; }
+.tpw table.tp th, .tpw table.tp td, .tpw table.tp tr { padding:0 !important; border:0 !important; background:transparent !important; color:var(--ink) !important; text-align:center; vertical-align:middle; box-shadow:none !important; }
+.tpw table.tp tr:nth-child(even) td, .tpw table.tp tr:nth-child(odd) td, .tpw table.tp td:first-child, .tpw table.tp th:first-child { background:transparent !important; font-weight:inherit; }
+.tpw table.tp thead th { font-weight:800 !important; font-size:.8rem; padding:4px 2px 6px !important; line-height:1.15; }
+.tpw table.tp thead th.tp-sub { font-weight:600 !important; font-size:.72rem; color:var(--muted) !important; }
+.tpw table.tp .tp-rl { text-align:left !important; padding:0 6px 0 0 !important; white-space:nowrap; font-weight:600 !important; font-size:.8rem; }
+.tpw .tp-per { display:inline-block; min-width:3.1em; margin-right:4px; padding:1px 5px; border-radius:4px; font-size:.68rem; font-weight:800; color:#fff; background:#5b6474; text-align:center; }
+.tpw .tp-per.p0 { background:#1c2a44; } .tpw .tp-per.p1 { background:#2f6fbf; } .tpw .tp-per.p2 { background:#5b6474; }
+.tpw table.tp td.tp-c { position:relative; height:44px; min-width:62px; border:1px solid var(--rule) !important; background:#fff !important; transition:background .2s; }
+.tpw td.tp-c .tp-u { position:absolute; top:0; right:0; min-width:24px; padding:1px 4px; border-left:1px solid var(--rule); border-bottom:1px solid var(--rule); font-size:.7rem; font-weight:700; color:var(--ink); background:#fff; line-height:1.3; }
+.tpw td.tp-c .tp-u.off { visibility:hidden; }
+.tpw td.tp-c .tp-q { position:absolute; left:6px; bottom:3px; font-size:.95rem; font-weight:800; }
+.tpw td.tp-c .tp-q.dash { color:#aab3c2; font-weight:600; }
+.tpw table.tp tr td.tp-x.tp-x { background:#2b343c !important; border:1px solid #2b343c !important; }
+.tpw table.tp tr td.tp-x.tp-note { color:#fff !important; font-size:.68rem; font-weight:600; line-height:1.25; padding:6px !important; }
+.tpw table.tp td.tp-c.col { background:#eef4fd !important; }
+.tpw table.tp tr.rowhi td.tp-c { background:#eef4fd !important; }
+.tpw table.tp td.tp-c.hi { background:var(--hi) !important; }
+.tpw table.tp td.tp-cap, .tpw table.tp td.tp-dem { font-weight:800 !important; font-size:.86rem; padding:0 4px !important; white-space:nowrap; }
+.tpw table.tp td.tp-dem { padding-top:6px !important; }
+.tpw s { color:#9aa3b2; font-weight:600; margin-right:3px; }
+.tpw .tp-done { color:#9aa3b2; text-decoration:line-through; font-weight:600; }
+.tpw .tp-dots { display:flex; justify-content:center; gap:4px; margin:10px 0 0; flex-wrap:wrap; }
+.tpw .tp-dots span { width:7px; height:7px; border-radius:50%; background:#d5dbe5; }
+.tpw .tp-dots span.on { background:var(--blue); }
+.tpw .tp-list { margin:6px 0 0; padding:0; list-style:none; counter-reset:tp; }
+.tpw .tp-list li { counter-increment:tp; display:grid; grid-template-columns:1.6em 1fr auto auto; gap:8px; align-items:center; padding:3px 0; font-size:.86rem; border-bottom:1px dashed #e3e7ee; }
+.tpw .tp-list li::before { content:counter(tp) "."; color:var(--muted); font-weight:700; }
+.tpw .tp-list .tp-cost { color:var(--muted); font-variant-numeric:tabular-nums; }
+.tpw .tp-list .tp-take { font-weight:800; font-variant-numeric:tabular-nums; text-align:right; }
+.tpw [data-r], .tpw [data-colhead], .tpw td.tp-c[data-k] { cursor:pointer; }
+.tpw.tp-read td.tp-c[data-k], .tpw.tp-cost td.tp-c[data-k] { cursor:pointer; }
+@media (max-width:600px) { .tpw { padding:12px 8px; } .tpw .tp-cap { font-size:.85rem; } .tpw table.tp { font-size:.76rem; } .tpw td.tp-c { min-width:54px; height:40px; } }
+@media (prefers-reduced-motion: reduce) { .tpw * { transition:none !important; } }
+</style>
+<div class="tpw" data-mode="stepper" tabindex="-1">
+<p class="tp-title">The Transportation Method, Step by Step</p>
+<p class="tp-lede">Press Next to build the table and the plan one step at a time.</p>
+<div class="tp-bar"><button type="button" class="tp-back">◀ Back</button><span class="tp-count"></span><button type="button" class="tp-next">Next ▶</button></div>
+<div class="tp-cap" aria-live="polite"></div>
+<div class="tp-scroll"></div>
+<div class="tp-dots" aria-hidden="true"></div>
+<noscript><img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-10-transportation-final-solution.png" alt="Complete transportation table with all allocations" class="image-wide-75 content-image"></noscript>
+<script type="application/json">{"rows": [{"id": "inv", "per": "", "src": "Beginning inv.", "cap": 100, "t": 0}, {"id": "mR", "per": "March", "src": "Regular", "cap": 700, "t": 0}, {"id": "mO", "per": "March", "src": "Overtime", "cap": 50, "t": 0}, {"id": "mS", "per": "March", "src": "Subcontract", "cap": 150, "t": 0}, {"id": "aR", "per": "April", "src": "Regular", "cap": 700, "t": 1}, {"id": "aO", "per": "April", "src": "Overtime", "cap": 50, "t": 1}, {"id": "aS", "per": "April", "src": "Subcontract", "cap": 150, "t": 1}, {"id": "yR", "per": "May", "src": "Regular", "cap": 700, "t": 2}, {"id": "yO", "per": "May", "src": "Overtime", "cap": 50, "t": 2}, {"id": "yS", "per": "May", "src": "Subcontract", "cap": 130, "t": 2}], "cols": [{"id": "mar", "label": "March", "dem": 800}, {"id": "apr", "label": "April", "dem": 1000}, {"id": "may", "label": "May", "dem": 750}, {"id": "dum", "label": "Unused (dummy)", "dem": 230}], "cost": {"inv|mar": 0, "inv|apr": 2, "inv|may": 4, "inv|dum": 0, "mR|mar": 40, "mR|apr": 42, "mR|may": 44, "mR|dum": 0, "mO|mar": 50, "mO|apr": 52, "mO|may": 54, "mO|dum": 0, "mS|mar": 70, "mS|apr": 72, "mS|may": 74, "mS|dum": 0, "aR|mar": null, "aR|apr": 40, "aR|may": 42, "aR|dum": 0, "aO|mar": null, "aO|apr": 50, "aO|may": 52, "aO|dum": 0, "aS|mar": null, "aS|apr": 70, "aS|may": 72, "aS|dum": 0, "yR|mar": null, "yR|apr": null, "yR|may": 40, "yR|dum": 0, "yO|mar": null, "yO|apr": null, "yO|may": 50, "yO|dum": 0, "yS|mar": null, "yS|apr": null, "yS|may": 70, "yS|dum": 0}, "final": {"alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700, "yO|may": 50, "mS|dum": 100, "yS|dum": 130}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 0, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 0, "yS": 0}, "dleft": {"mar": 0, "apr": 0, "may": 0, "dum": 0}}, "steps": [{"title": "Set up the table", "text": "Demand periods run across the top and sources of supply down the side. Total demand is 800 + 1,000 + 750 = <b>2,550<\/b>. Capacity is (700 + 50 + 150) + (700 + 50 + 150) + (700 + 50 + 130) = <b>2,680<\/b>, plus <b>100<\/b> units of beginning inventory. A dummy column for unused capacity takes the <b>230<\/b> extra units so that supply equals demand. With no back-ordering, a period's production cannot meet an earlier period's demand, so those cells are blacked out.", "costs": [], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["dum"]}, {"title": "Costs: March demand", "text": "Meeting March demand costs only the source's own price: <b>$0<\/b> from beginning inventory, <b>$40<\/b> on regular time, <b>$50<\/b> on overtime, <b>$70<\/b> subcontracted.", "costs": ["mar"], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["mar"]}, {"title": "Costs: April demand", "text": "April production meeting April demand costs the same base prices. Beginning inventory and March production held until April add the <b>$2<\/b> carrying cost: $2, $42, $52 and $72.", "costs": ["apr", "mar"], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["apr"]}, {"title": "Costs: May demand and unused capacity", "text": "May production costs its base price; April production held one month adds <b>$2<\/b>; inventory and March production held two months add <b>$4<\/b>. The dummy column costs <b>$0<\/b>: unused capacity is never produced.", "costs": ["apr", "dum", "mar", "may"], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["may", "dum"]}, {"title": "March: Beginning inventory", "text": "Fill each demand column from left to right, always from the cheapest source with capacity left. Sources that can still supply March, cheapest first, including earlier months' production held in inventory: Beginning inventory $0, March regular $40, March overtime $50, March subcontract $70. Next cheapest source with units left: <b>Beginning inventory<\/b> at <b>$0<\/b>. Take <b>100<\/b> units. <b>700<\/b> units of March demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100}, "left": {"inv": 0, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 700, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": ["inv|mar"], "hirows": ["inv"], "hicols": ["mar"]}, {"title": "March: March regular", "text": "Next cheapest source with units left: <b>March regular<\/b> at <b>$40<\/b>. Take <b>700<\/b> units. March demand is met.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700}, "left": {"inv": 0, "mR": 0, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": ["mR|mar"], "hirows": ["mR"], "hicols": ["mar"]}, {"title": "April: April regular", "text": "Sources that can still supply April, cheapest first, including earlier months' production held in inventory: April regular $40, April overtime $50, March overtime (held 1 month) $52, April subcontract $70, March subcontract (held 1 month) $72. Next cheapest source with units left: <b>April regular<\/b> at <b>$40<\/b>. Take <b>700<\/b> units. <b>300<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700}, "left": {"inv": 0, "mR": 0, "mO": 50, "mS": 150, "aR": 0, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 300, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["aR|apr"], "hirows": ["aR"], "hicols": ["apr"]}, {"title": "April: April overtime", "text": "Next cheapest source with units left: <b>April overtime<\/b> at <b>$50<\/b>. Take <b>50<\/b> units. <b>250<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50}, "left": {"inv": 0, "mR": 0, "mO": 50, "mS": 150, "aR": 0, "aO": 0, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 250, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["aO|apr"], "hirows": ["aO"], "hicols": ["apr"]}, {"title": "April: March overtime (held 1 month)", "text": "Next cheapest source with units left: <b>March overtime (held 1 month)<\/b> at <b>$52<\/b>. Take <b>50<\/b> units. <b>200<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 150, "aR": 0, "aO": 0, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 200, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["mO|apr"], "hirows": ["mO"], "hicols": ["apr"]}, {"title": "April: April subcontract", "text": "Next cheapest source with units left: <b>April subcontract<\/b> at <b>$70<\/b>. Take <b>150<\/b> units. <b>50<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 150, "aR": 0, "aO": 0, "aS": 0, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 50, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["aS|apr"], "hirows": ["aS"], "hicols": ["apr"]}, {"title": "April: March subcontract (held 1 month)", "text": "Next cheapest source with units left: <b>March subcontract (held 1 month)<\/b> at <b>$72<\/b>. Take <b>50<\/b> units. Only 50 of its 150 units are needed, so 100 stay available. April demand is met.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 100, "aR": 0, "aO": 0, "aS": 0, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 0, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["mS|apr"], "hirows": ["mS"], "hicols": ["apr"]}, {"title": "May: May regular", "text": "Sources that can still supply May, cheapest first, including earlier months' production held in inventory: May regular $40, May overtime $50, May subcontract $70, March subcontract (held 2 months) $74. Next cheapest source with units left: <b>May regular<\/b> at <b>$40<\/b>. Take <b>700<\/b> units. <b>50<\/b> units of May demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 100, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 0, "may": 50, "dum": 230}, "done": ["apr", "mar"], "hi": ["yR|may"], "hirows": ["yR"], "hicols": ["may"]}, {"title": "May: May overtime", "text": "Next cheapest source with units left: <b>May overtime<\/b> at <b>$50<\/b>. Take <b>50<\/b> units. May demand is met.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700, "yO|may": 50}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 100, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 0, "yS": 130}, "dleft": {"mar": 0, "apr": 0, "may": 0, "dum": 230}, "done": ["apr", "mar"], "hi": ["yO|may"], "hirows": ["yO"], "hicols": ["may"]}, {"title": "Unused capacity", "text": "Every month's demand is met. The capacity nobody used goes to the dummy column: <b>100<\/b> units of March subcontracting and <b>130<\/b> of May subcontracting, 230 in all. Supply and demand now balance.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700, "yO|may": 50, "mS|dum": 100, "yS|dum": 130}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 0, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 0, "yS": 0}, "dleft": {"mar": 0, "apr": 0, "may": 0, "dum": 0}, "done": ["apr", "dum", "mar", "may"], "hi": ["mS|dum", "yS|dum"], "hirows": [], "hicols": ["dum"]}]}</script>
+</div>
+
+<p>This table depicts a possible aggregate production plan. In words, it says the following:</p>
+
+<ul>
+<li>Satisfy March's demand by supplying 100 units of inventory and 700 units of regular labor.</li>
+<li>Satisfy April's demand by supplying 50 units of overtime labor and 50 units of subcontracted labor in March. Hold that inventory until April. Then, in April, produce 700 units with regular labor, 50 units with overtime, and 150 units through subcontracting.</li>
+<li>Satisfy May's demand by supplying 700 units of regular labor and 50 units of overtime labor in May.</li>
+</ul>
+
+<p>We could calculate the total cost of this plan as follows:</p>
+
+<p style="text-align: center;"><b>Total Cost</b> \(= 100(0)+700(40)+50(52)+50(72)+700(40)+50(50)+150(70)+700(40)+50(50)\)</p>
+
+<p style="text-align: center;"><b>Total Cost</b> \(= \$0+\$28,000+\$2,600+\$3,600+\$28,000+\$2,500+\$10,500+\$28,000+\$2,500\)</p>
+
+<p style="text-align: center;"><b>Total Cost</b> \(= \) <strong><u>$105,700</u></strong></p>
+
+<p>Note that this plan may or may not be optimal, meaning there may be other plans that yield a lower cost. We would have to apply the stepping-stone method to identify ways to improve this plan. Another option is to set this problem up as a linear programming problem as we have done before and to use a software program (such as Excel's Solver) to find the optimal solution.</p>
+<p>Understanding how to read the aggregate production plan is important because these questions are commonly missed on exams. Remember that if an exam question asks only about the period of production (i.e., when units are produced, made, delivered, ordered, etc.), you should look at the relevant <em>row</em>. Alternatively, if an exam question asks only about the period of demand (i.e., when units are used to satisfy demand, used for meeting demand, sold, etc.), you should look at the relevant <em>column</em>.</p>
+<div class="exam-tip">
+<h4>EXAM TIP: Reading Aggregate Production Plans</h4>
+<p>If a question asks only about the <em>period of production</em>, look at the relevant <b>row</b>. If a question asks only about the <em>period of demand</em>, look at the relevant <b>column</b>. </p>
+
+</div>
+<p>For example, if you're asked how many units of subcontracting were used to satisfy April demand, you'd get 50 + 150 = 200 from the April column. Another way an exam question could ask this is, "How many units of April demand are met with subcontracting?" Alternatively, you might be asked a question like, "How much overtime does the company pay for in March?" To answer this, you sum the March overtime row, which totals 50 units. Another way an exam question could ask this is, "How many units of overtime do we order for March delivery?"</p>
+<h2>Management Coefficients Model</h2>
+
+<p>The <strong>management coefficients model</strong> is a formal planning model built around a manager's experience and performance. When there is historical data, a regression analysis can be used on managements' best practices to project into the future. This model offers objectivity and consistency in decision making, but it relies on the assumption that trends in past data will extend into the future. It also assumes that managers in the past have made good decisions.</p>
+
+<h2>Summary of Aggregate Planning Methods</h2>
+
+<p>As a summary, we have talked about three methods for aggregate planning:</p>
+
+<ul>
+<li><em>Graphical methods</em> – These are trial-and-error approaches that are easy to use, and you can easily incorporate constraints and company policies, but they usually don't produce optimal solutions.</li>
+<li><em>Transportation method (linear programming)</em> – This is an optimization method that can be used to find the optimal solution. However, this method can only be used when relationships are linear. Software programs make this method much easier than solving problems by hand.</li>
+<li><em>Management coefficients model</em> – This is a heuristic model that relies on a regression of past data. This is an easy-to-use model that imposes objectivity on the decision-making process, but the quality of the model is only as good as the quality of the data used to build it.</li>
+</ul>
+
+<p>In aggregate planning in the services sector, controlling the cost of labor is critical. In service-based industries, it is important to accurately schedule labor-hours to ensure quick response to customer demand. Unlike manufacturing, services often need an on-call labor resource to cover unexpected demand. Moreover, aggregate planning in services is different in that there is flexibility in individual workers' skills, in rate of output, and in hours of work.</p>
+
+<script>
+(function () {
+  function table(root, M) {
+    var t = '<table class="tp financial"><thead><tr><th class="tp-rl"></th>';
+    M.cols.forEach(function (c) { t += '<th data-colhead="' + c.id + '">' + c.label + '</th>'; });
+    t += '<th class="tp-sub">Total<br>available</th></tr></thead><tbody>';
+    var blocked = {};
+    M.rows.forEach(function (r, ri) {
+      t += '<tr data-row="' + r.id + '"><th class="tp-rl" data-r="' + r.id + '">' + (r.per ? '<span class="tp-per p' + r.t + '">' + r.per.slice(0, 3) + '</span>' : '') + r.src + '</th>';
+      M.cols.forEach(function (c) {
+        var k = r.id + '|' + c.id, u = M.cost[k];
+        if (u === null) {
+          if (!blocked[c.id]) {   // one black block per column, spanning every row that cannot serve it
+            var span = M.rows.filter(function (q) { return M.cost[q.id + '|' + c.id] === null; }).length;
+            t += '<td class="tp-x' + (c.id === 'mar' ? ' tp-note' : '') + '" rowspan="' + span + '">' + (c.id === 'mar' ? 'No back-ordering' : '') + '</td>';
+            blocked[c.id] = 1;
+          }
+        } else {
+          t += '<td class="tp-c" data-k="' + k + '"><span class="tp-u">' + (r.id === 'inv' && c.id === 'dum' ? '&nbsp;' : u) + '</span><span class="tp-q"></span></td>';
+        }
+      });
+      t += '<td class="tp-cap" data-cap="' + r.id + '"></td></tr>';
+    });
+    t += '<tr><th class="tp-rl">Total demand</th>';
+    M.cols.forEach(function (c) { t += '<td class="tp-dem" data-dem="' + c.id + '"></td>'; });
+    t += '<td></td></tr></tbody></table>';
+    root.querySelector('.tp-scroll').innerHTML = t;
+  }
+  function paint(root, M, S) {
+    root.querySelectorAll('td.tp-c').forEach(function (td) {
+      var k = td.dataset.k, col = k.split('|')[1], q = S.alloc[k], u = td.querySelector('.tp-u'), qq = td.querySelector('.tp-q');
+      u.classList.toggle('off', S.costs.indexOf(col) < 0);
+      if (q) { qq.textContent = q.toLocaleString('en-US'); qq.className = 'tp-q'; }
+      else if (S.done.indexOf(col) >= 0) { qq.textContent = '--'; qq.className = 'tp-q dash'; }
+      else { qq.textContent = ''; qq.className = 'tp-q'; }
+      td.classList.toggle('hi', S.hi.indexOf(k) >= 0);
+      td.classList.toggle('col', S.hicols.indexOf(col) >= 0);
+    });
+    root.querySelectorAll('tr[data-row]').forEach(function (tr) { tr.classList.toggle('rowhi', S.hirows.indexOf(tr.dataset.row) >= 0 && S.hi.length === 0); });
+    M.rows.forEach(function (r) {
+      var left = S.left[r.id], cell = root.querySelector('[data-cap="' + r.id + '"]');
+      cell.innerHTML = left === r.cap ? r.cap.toLocaleString('en-US') : (left === 0 ? '<span class="tp-done">' + r.cap.toLocaleString('en-US') + '</span>' : '<s>' + r.cap.toLocaleString('en-US') + '</s>' + left.toLocaleString('en-US'));
+    });
+    M.cols.forEach(function (c) {
+      var left = S.dleft[c.id], cell = root.querySelector('[data-dem="' + c.id + '"]');
+      cell.innerHTML = left === 0 ? '<span class="tp-done">' + c.dem.toLocaleString('en-US') + '</span>' : (left === c.dem ? c.dem.toLocaleString('en-US') : '<s>' + c.dem.toLocaleString('en-US') + '</s>' + left.toLocaleString('en-US'));
+    });
+  }
+  function stepper(root, M) {
+    table(root, M);
+    var i = 0, cap = root.querySelector('.tp-cap'), back = root.querySelector('.tp-back'), next = root.querySelector('.tp-next'), count = root.querySelector('.tp-count'), dots = root.querySelector('.tp-dots');
+    dots.innerHTML = M.steps.map(function () { return '<span></span>'; }).join('');
+    function go(k) {
+      i = Math.max(0, Math.min(M.steps.length - 1, k)); var S = M.steps[i];
+      paint(root, M, S);
+      cap.innerHTML = '<b class="tp-h">' + S.title + '</b>' + S.text;
+      count.textContent = 'Step ' + (i + 1) + ' of ' + M.steps.length;
+      back.disabled = i === 0; next.disabled = i === M.steps.length - 1;
+      dots.querySelectorAll('span').forEach(function (d, j) { d.classList.toggle('on', j <= i); });
+    }
+    back.addEventListener('click', function () { go(i - 1); });
+    next.addEventListener('click', function () { go(i + 1); });
+    root.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') go(i + 1); if (e.key === 'ArrowLeft') go(i - 1); });
+    go(0);
+  }
+  function explorer(root, M) {
+    table(root, M);
+    var cap = root.querySelector('.tp-cap'), tabs = root.querySelectorAll('.tp-bar button'), mode = 'costs', final = M.final;
+    function base(extra) {
+      var S = { costs: ['mar', 'apr', 'may', 'dum'], alloc: {}, left: {}, dleft: {}, done: [], hi: [], hirows: [], hicols: [] };
+      M.rows.forEach(function (r) { S.left[r.id] = r.cap; }); M.cols.forEach(function (c) { S.dleft[c.id] = c.dem; });
+      return Object.assign(S, extra || {});
+    }
+    function full(extra) { return Object.assign(base({ alloc: final.alloc, left: final.left, dleft: final.dleft, done: ['mar', 'apr', 'may', 'dum'] }), extra || {}); }
+    function fill(colId) {
+      var label = M.cols.filter(function (c) { return c.id === colId; })[0].label, alloc = {}, done = [], left = {}, dleft = {}, order = ['mar', 'apr', 'may', 'dum'];
+      M.rows.forEach(function (r) { left[r.id] = r.cap; }); M.cols.forEach(function (c) { dleft[c.id] = c.dem; });
+      for (var j = 0; j <= order.indexOf(colId); j++) {   // the plan as it stands once this column is filled
+        Object.keys(final.alloc).forEach(function (k) { var p = k.split('|'); if (p[1] === order[j]) { alloc[k] = final.alloc[k]; left[p[0]] -= final.alloc[k]; dleft[p[1]] -= final.alloc[k]; } });
+        done.push(order[j]);
+      }
+      var hi = Object.keys(alloc).filter(function (k) { return k.split('|')[1] === colId; });
+      paint(root, M, base({ alloc: alloc, left: left, dleft: dleft, done: done, hi: hi, hicols: [colId] }));
+      if (colId === 'dum') {
+        cap.innerHTML = '<b class="tp-h">Unused capacity</b>Once every month is filled, what is left goes to the dummy column at $0:<ol class="tp-list">' +
+          M.dummyRows.map(function (x) { return '<li><span>' + x[0] + '</span><span class="tp-cost">$0</span><span class="tp-take">' + x[1] + '</span></li>'; }).join('') + '</ol>';
+        return;
+      }
+      cap.innerHTML = '<b class="tp-h">Filling ' + label + ' demand (' + M.cols.filter(function (c) { return c.id === colId; })[0].dem.toLocaleString('en-US') + ' units), cheapest source first</b>Earlier months\' leftover production counts as a source too, at its cost plus $2 a month held.<ol class="tp-list">' +
+        M.fills[colId].map(function (x) { return '<li><span>' + x[0] + '</span><span class="tp-cost">$' + x[1] + '</span><span class="tp-take">' + x[2].toLocaleString('en-US') + '</span></li>'; }).join('') + '</ol>';
+    }
+    function setMode(m) {
+      mode = m; tabs.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.mode === m ? 'true' : 'false'); });
+      root.classList.toggle('tp-read', m === 'read'); root.classList.toggle('tp-cost', m === 'costs');
+      if (m === 'costs') { paint(root, M, base({ done: [] })); cap.innerHTML = '<b class="tp-h">How each cost is built</b>Each cell is the source\'s price plus $2 for every month the tire is held. Tap any cell to see its sum.'; }
+      else if (m === 'read') { paint(root, M, full()); cap.innerHTML = '<b class="tp-h">Reading the plan</b>Tap a <b>row</b> name for everything produced by one source in one period, or a <b>column</b> name for everything that meets one month\'s demand.'; }
+      else if (m === 'total') { paint(root, M, full({ hi: Object.keys(final.alloc).filter(function (k) { return k.split('|')[1] !== 'dum'; }) })); cap.innerHTML = '<b class="tp-h">Total cost</b>' + M.totalText; }
+      else fill(m);
+    }
+    tabs.forEach(function (b) { b.addEventListener('click', function () { setMode(b.dataset.mode); }); });
+    root.querySelector('.tp-scroll').addEventListener('click', function (e) {
+      if (mode === 'costs') {
+        var td = e.target.closest('td.tp-c'); if (!td) return;
+        paint(root, M, base({ done: [], hi: [td.dataset.k] })); cap.innerHTML = M.why[td.dataset.k];
+      } else if (mode === 'read') {
+        var rh = e.target.closest('[data-r]'), ch = e.target.closest('[data-colhead]');
+        if (rh) {
+          var id = rh.dataset.r, r = M.rows.filter(function (x) { return x.id === id; })[0], ks = Object.keys(final.alloc).filter(function (k) { return k.split('|')[0] === id && k.split('|')[1] !== 'dum'; });
+          var used = ks.reduce(function (s, k) { return s + final.alloc[k]; }, 0);
+          paint(root, M, full({ hi: ks, hirows: [id] }));
+          cap.innerHTML = '<b class="tp-h">Row: ' + (r.per ? r.per + ' ' + r.src.toLowerCase() : r.src) + '</b>A period of <b>production</b>: read across the row. ' + used.toLocaleString('en-US') + ' units are used' +
+            (ks.length ? ' (' + ks.map(function (k) { return final.alloc[k].toLocaleString('en-US') + ' for ' + M.cols.filter(function (c) { return c.id === k.split('|')[1]; })[0].label; }).join(', ') + ')' : '') + '.';
+        } else if (ch && ch.dataset.colhead !== 'dum') {
+          var cid = ch.dataset.colhead, c = M.cols.filter(function (x) { return x.id === cid; })[0], ks2 = Object.keys(final.alloc).filter(function (k) { return k.split('|')[1] === cid; });
+          paint(root, M, full({ hi: ks2, hicols: [cid] }));
+          cap.innerHTML = '<b class="tp-h">Column: ' + c.label + ' demand</b>A period of <b>demand</b>: read down the column. ' + ks2.map(function (k) {
+            var r = M.rows.filter(function (x) { return x.id === k.split('|')[0]; })[0]; return final.alloc[k].toLocaleString('en-US') + ' from ' + (r.per ? r.per + ' ' + r.src.toLowerCase() : r.src.toLowerCase()); }).join(', ') + ' = ' + c.dem.toLocaleString('en-US') + '.';
+        }
+      }
+    });
+    setMode('costs');
+  }
+  document.querySelectorAll('.tpw[data-mode]').forEach(function (root) {
+    try { var M = JSON.parse(root.querySelector('script[type="application/json"]').textContent); (root.dataset.mode === 'stepper' ? stepper : explorer)(root, M); }
+    catch (e) { if (window.console) console.error('transportation widget', e); }
+  });
+})();
+</script>
+<script type="application/json" id="df-terms">[["Aggregate planning", "Intermediate-term planning of total production to meet demand at minimum cost."], ["Chase strategy", "Matching output to each period's demand."], ["Level strategy", "Uniform production, buffered by inventory or idle time."], ["Mixed strategy", "A combination of capacity and demand options."], ["Graphical methods", "Trial-and-error comparison of demand with capacity."], ["Transportation method", "Linear-programming table of supply sources against demand periods."], ["Dummy column", "Column that absorbs unused capacity at zero cost."], ["Management coefficients model", "Regression model built on managers' past decisions."]]</script>
+<style>
+/* Tap to define: a dotted underline on the term, and one small card that floats over the page */
+.df-term { border-bottom:1.5px dotted #1f62b8; cursor:help; }
+.df-term:hover, .df-term[aria-expanded="true"] { background:#eaf2fd; }
+.df-term:focus-visible { outline:2px solid #2a78d6; outline-offset:2px; border-radius:2px; }
+.df-pop { position:absolute; z-index:70; box-sizing:border-box; padding:10px 13px 11px; background:#1c2a44; color:#fff; border-radius:8px;
+  box-shadow:0 6px 22px rgba(28,42,68,.32); font-family:"Red Hat Display", system-ui, sans-serif; font-size:.9rem; font-weight:500; line-height:1.4; }
+.df-pop[hidden] { display:none; }
+.df-pop b { display:block; margin-bottom:3px; font-size:.78rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:#ffd95a; }
+</style>
+<script>
+/* Tap to define: every glossary term in the running text becomes tappable and shows its definition in a small card.
+   The terms come from the chapter's own Glossary (the builder copies them in as JSON), so it works on any edition of
+   any chapter and adds no height to the page. A term is marked once per section, never inside a heading, a table of
+   definitions, a widget, a link or a formula, and the text itself is not restyled beyond a dotted underline. */
+(function () {
+  var terms; try { terms = JSON.parse(document.getElementById('df-terms').textContent); } catch (e) { return; }
+  if (!terms || !terms.length) return;
+  function norm(s) { return s.toLowerCase().replace(/[\s -]+/g, ' ').trim(); }
+  function esc(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  var by = {}; terms.forEach(function (t) { by[norm(t[0])] = t; });
+  function find(word) { var k = norm(word); return by[k] || by[k.replace(/es$/, '')] || by[k.replace(/s$/, '')]; }
+  var alts = terms.map(function (t) { return t[0]; }).sort(function (a, b) { return b.length - a.length; })
+    .map(function (t) { return esc(t).replace(/[\s-]+/g, '[\\s\\u00a0-]+') + '(?:es|s)?'; });
+  var re = new RegExp('(^|[^A-Za-z0-9])(' + alts.join('|') + ')(?![A-Za-z0-9])', 'i');
+  var SKIP = 'h1,h2,h3,h4,h5,a,button,summary,script,style,noscript,code,pre,svg,input,textarea,select,label,mjx-container,' +
+    '.pmw,.tpw,.sdg,.pertw,.hp10,.toc-box,.ls-bar,.ls-pill,.df-pop,.df-term,.video-section,.dz-bar';
+
+  /* the text nodes of the page in reading order, each with the section it belongs to */
+  var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT), n, sec = 0, gloss = false, jobs = [];
+  while ((n = walker.nextNode())) {
+    if (n.nodeType === 1) { if (/^H[12]$/.test(n.tagName) && !n.closest('.toc-box')) { sec++; gloss = /^glossary$/i.test(n.textContent.trim()); } continue; }
+    if (gloss || !n.nodeValue || n.nodeValue.length < 3 || /\\[(\[]|\$/.test(n.nodeValue)) continue;
+    if (!n.parentNode || n.parentNode.closest(SKIP)) continue;
+    jobs.push([n, sec]);
+  }
+  var seen = {};
+  jobs.forEach(function (job) {
+    var node = job[0], s = job[1], m;
+    while (node && (m = re.exec(node.nodeValue))) {
+      var t = find(m[2]), start = m.index + m[1].length;
+      var rest = node.splitText(start), after = rest.splitText(m[2].length);
+      if (t && !seen[s + '|' + t[0]]) {
+        seen[s + '|' + t[0]] = 1;
+        var span = document.createElement('span'); span.className = 'df-term'; span.tabIndex = 0;
+        span.setAttribute('role', 'button'); span.setAttribute('aria-expanded', 'false'); span.dataset.term = t[0];
+        rest.parentNode.replaceChild(span, rest); span.appendChild(rest);
+      }
+      node = after;
+    }
+  });
+
+  var pop = document.createElement('div'); pop.className = 'df-pop'; pop.hidden = true; pop.setAttribute('role', 'tooltip'); pop.id = 'df-pop';
+  document.body.appendChild(pop);
+  var shown = null;
+  function hide() { if (shown) shown.setAttribute('aria-expanded', 'false'); shown = null; pop.hidden = true; }
+  function show(el) {
+    var t = by[norm(el.dataset.term)]; if (!t) return;
+    if (shown === el) { hide(); return; }
+    hide(); shown = el; el.setAttribute('aria-expanded', 'true'); el.setAttribute('aria-describedby', 'df-pop');
+    pop.textContent = ''; var b = document.createElement('b'); b.textContent = t[0]; pop.appendChild(b); pop.appendChild(document.createTextNode(t[1]));
+    pop.hidden = false;
+    var r = el.getBoundingClientRect(), w = Math.min(340, window.innerWidth - 24); pop.style.width = w + 'px';
+    var left = Math.max(12, Math.min(r.left + r.width / 2 - w / 2, window.innerWidth - w - 12)), h = pop.offsetHeight;
+    var below = r.bottom + 8 + h < window.innerHeight - 8 || r.top - 8 - h < 8;
+    pop.style.left = (left + window.scrollX) + 'px';
+    pop.style.top = ((below ? r.bottom + 8 : r.top - 8 - h) + window.scrollY) + 'px';
+  }
+  document.addEventListener('click', function (ev) {
+    var el = ev.target.closest && ev.target.closest('.df-term');
+    if (el) { ev.stopPropagation(); show(el); } else if (!ev.target.closest || !ev.target.closest('.df-pop')) hide();
+  }, true);
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape') hide();
+    else if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.classList && ev.target.classList.contains('df-term')) { ev.preventDefault(); show(ev.target); }
+  });
+  window.addEventListener('resize', hide);
+  window.__df = { count: document.querySelectorAll('.df-term').length };
+})();
+</script>
+</body>
+</html>

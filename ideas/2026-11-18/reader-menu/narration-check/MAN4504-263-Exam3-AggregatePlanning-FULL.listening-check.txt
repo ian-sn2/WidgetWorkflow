@@ -1,0 +1,67 @@
+Automatic listening check: MAN4504-263-Exam3-AggregatePlanning-FULL.html
+
+373 takes recorded (71.1 minutes). 359 were heard exactly as written.
+7 have a word or number that may be wrong. 6 names or technical terms were spelled differently by the listener.
+To listen to: 2.0 minutes, in MAN4504-263-Exam3-AggregatePlanning-FULL.listen-to-these.mp3 (one sentence for each item below, in this order).
+
+WORDS OR NUMBERS THAT MAY BE WRONG
+
+1. The Nature of Aggregate Planning [full, Charon]
+   written: Snapper, a maker of lawn and garden equipment, illustrates why aggregate forecasts are more dependable. The company sells roughly 180 different models, ranging from backyard mowers to golf course equipment, and it cannot say with confidence which model will be the hot seller.
+   heard:   Snapper, a maker of lawn and garden equipment, illustrates why aggregate forecasts are more dependable. The company sells roughly 180 different models, ranging from backyard moors to golf course equipment, and it cannot say with confidence which model will be the hot seller.
+   differs: "mower" heard as "moor"
+
+2. The Nature of Aggregate Planning [full, Charon]
+   written: Aggregate planning involves intermediate-range plans. Most other topics in this course sit at one of two extremes: either strategic decisions (for example, approving a budget to expand a plant's capacity by 20 percent and leaving the details to engineers) or short-term operational details (for example, how many seconds it takes to drill a skateboard deck).
+   heard:   Aggregate planning involves intermediate range plans. Most other topics in this course sit at one of two extremes, either strategic decisions, for example, approving a budget to expand a plan's capacity by 20% and leaving the details to engineers, or short-term operational details, for example, how many seconds it takes to drill a skateboard deck.
+   differs: "plant" heard as "plan"
+
+3. Methods of Aggregate Planning [full, Charon]
+   written: January. Expected Demand: 900. Production Days: 22. Demand per Day: 41.
+   heard:   January. Expected demand, 900. Production days, 22. Demand for day, 41.
+   differs: "per" heard as "for"
+
+4. Methods of Aggregate Planning [full, Charon]
+   written: January. Expected Demand: 900. Production Days: 22. Demand per Day: 41.
+   heard:   January. Expected demand, 900. Production days, 22. Demand for day, 41.
+   differs: "per" heard as "for"
+
+5. Methods of Aggregate Planning [full, Charon]
+   written: In aggregate planning in the services sector, controlling the cost of labor is critical. In service-based industries, it is important to accurately schedule labor-hours to ensure quick response to customer demand. Unlike manufacturing, services often need an on-call labor resource to cover unexpected demand. Moreover, aggregate planning in services is different in that there is flexibility in individual workers' skills, in rate of output, and in hours of work.
+   heard:   In aggregate planning in the services sector, controlling the cost of labor is critical. In service-based industries, it is important to accurately schedule labor hours to ensure a quick response to customer demand. Unlike manufacturing, services often need an on-call labor resource to cover unexpected demand. Moreover, aggregate planning in services is different in that there is flexibility in individual workers, skills, in rate of output, and in hours of work.
+   differs: "(nothing)" heard as "a"
+
+6. The Nature of Aggregate Planning [summary, Aoede]
+   written: Four things are needed. A sensible unit to plan in, such as pounds of candy or number of automobiles. A demand forecast in that unit. A way to work out the costs. And a model that puts forecasts and costs together.
+   heard:   Four things are needed. A sensible unit to plan in, such as pounds of candy or a number of automobiles. A demand forecast in that unit. A way to work out the costs. And a model that puts forecasts and costs together.
+   differs: "(nothing)" heard as "a"
+
+7. Method 2: Level Strategy (Production at the Minimum Requirement and Use of Subcontracting) [summary, Aoede]
+   written: In-house production is 38 units a day for 124 days, or 4,712 units. Demand is 6,200, so 1,488 units go to the subcontractor.
+   heard:   In-house production is 38 units a day for 124 days or 4,712 units. Demand is 6,200, so 1,408 units go to the subcontractor.
+   differs: "1488" heard as "1408"
+
+NAMES AND TECHNICAL TERMS (the listener cannot spell these; hear each once and judge the pronunciation)
+
+8. expected: heard as "expect to" (2 times)
+9. involved: heard as "involve"
+10. subcontracted: heard as "subcontractive"
+11. damaged: heard as "damage" (2 times)
+12. though: heard as "the"
+13. carrying: heard as "caring"
+
+HARD WORDS: LOOKED UP AND TAUGHT TO THE VOICE
+
+Every rare word was looked up before recording and the voice was told how to say it.
+13 came from the built-in dictionary. 2 came from Wiktionary, were built from a prefix and a known word, or were entered by hand:
+hear those once in MAN4504-263-Exam3-AggregatePlanning-FULL.hard-words.mp3 (each word said alone, in this order). A wrong one is corrected in
+scripts/ideas/narration/pronounce.json and is then right in every chapter.
+
+   foremen            FAWR-muhn                  /ˈfɔɹmən/   Wiktionary
+   nonmonetary        nahn-MAH-nuh-teh-ree       /ˌnɑnmˈɑnətˌɛɹi/   non- + monetary (dictionary)
+
+   from the dictionary: automaker (AW-toh-may-ker), cost (KAWST), disaggregate (dih-SA-gruh-gayt), forecast (FAWR-kast), management (MA-nihj-muhnt), mower (MOH-er), obsolescence (ahb-suh-LEH-suhns), overstock (oh-ver-STAHK), stockroom (STAH-kroom), subcontract (suhb-KAHN-trakt), subcontracted (suhb-KAHN-trak-tihd), subcontracting (suhb-KAHN-trak-tihng), subcontracts (suhb-KAHN-trakts)
+
+NO PRONUNCIATION FOUND: the voice guessed these. They are at the end of the same clip. Add the ones it gets wrong to pronounce.json.
+
+   backorders

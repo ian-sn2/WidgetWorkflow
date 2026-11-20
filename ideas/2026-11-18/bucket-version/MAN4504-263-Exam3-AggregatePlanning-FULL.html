@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAN4504 Exam 3 - Aggregate Planning</title>
+<link rel="stylesheet" href="https://smokinnotes.s3.us-east-1.amazonaws.com/content/sn25-v6.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<script>
+MathJax = {
+tex: {
+displayMath: [['\\[','\\]']],
+inlineMath: [['\\(','\\)']]
+}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="https://smokinnotes.s3.us-east-1.amazonaws.com/studyguide/sn25-v2.js"></script>
+<style>@media (max-width:600px){table:not(.tp){display:block;overflow-x:auto !important;-webkit-overflow-scrolling:touch} mjx-container{display:inline-block !important;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:middle}}</style>
+</head>
+<body>
+
+<h1 data-ls="0">The Nature of Aggregate Planning</h1>
+
+<p data-ls="1"><strong>Aggregate planning</strong> (more commonly referred to as <em>sales and production planning</em>) refers to planning intermediate-term production requirements in <em>aggregate</em> terms. In the intermediate run, we plan in <em>aggregate</em> terms because the demand for individual items is uncertain, whereas overall aggregate forecasts tend to be more accurate. Most companies produce a number of products with a common input. Once aggregate planning prescribes aggregate requirements, those resources can be allocated to individual items and products in the short term. For example, aggregate planning would determine how many cars to produce this year, not how many blue sedans to produce.</p>
+
+<p data-ls="2">Snapper, a maker of lawn and garden equipment, illustrates why aggregate forecasts are more dependable. The company sells roughly 180 different models, ranging from backyard mowers to golf course equipment, and it cannot say with confidence which model will be the hot seller. It is, however, quite good at forecasting totals: for example, about 150,000 units in January, which is roughly 25% more than February, with March sales slipping a little under 10% from February's level.</p>
+
+<p data-ls="3">In industry, this activity is usually called S&amp;P planning rather than aggregate planning. The name describes what it does: it brings the sales side (how many units marketing expects customers to buy) together with the production side (how many units the firm can make). Neither side alone sets the plan, because a firm can sell only the lower of what customers want and what it is able to produce. The aim is to line the two up, and to do so at a low cost.</p>
+
+<p data-ls="4">At its core, the goal of aggregate planning is to meet forecasted demand at a minimum cost over the planning period. This requires operations managers to determine the aggregate quantity and timing of production in the intermediate future and to minimize cost over the planning period by adjusting controllable variables, which include production rates, labor levels, inventory levels, overtime work, and subcontracting rates. The following are the requirements for aggregate planning:</p>
+
+<ul>
+<li data-ls="5"><em>A logical aggregate unit for measuring sales and output.</em> For example, this could be pounds of product or number of units. An aggregate plan for an automobile manufacturer might specify how many automobiles to make overall. Likewise, a candy manufacturer might plan in pounds of candy and a potato chip maker in total chips, without regard to flavors or package sizes. An automaker with separate plants might go only as far as splitting SUVs from sedans.</li>
+<li data-ls="6"><em>A demand forecast for the intermediate planning period.</em> This demand forecast must be in aggregate terms, in the units selected above.</li>
+<li data-ls="7"><em>A method for determining costs.</em> These include the cost of labor, holding inventory, overtime, subcontracting, and production.</li>
+<li data-ls="8"><em>A model that combines forecasts and costs.</em> This allows you to make scheduling decisions for the planning period to minimize costs. We will discuss some crude models for combining forecasts and costs.</li>
+</ul>
+
+<p data-ls="9">Information about demand forecasts, inventory on hand, the workforce, supply chain support, and external capacity (subcontractors) goes into producing an aggregate plan, which is then an input into later planning with the master production schedule and MRP systems. These disaggregate the aggregate plan into individual plans for each of the products the organization produces.</p>
+
+<img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-01-aggregate-planning-flowchart.png" alt="Flowchart showing inputs to aggregate planning including demand forecasts, workforce, inventory on hand, supply chain support, and subcontractors feeding into aggregate planning, which then flows to master production schedule and MRP systems, then to detailed work schedules" class="image-wide-95 content-image" loading="lazy" width="auto" height="auto" />
+
+<p data-ls="10">We discussed many of the inputs to aggregate planning earlier in the course, when we discussed product decision, process and capacity planning, and demand forecasting. We will not get to cover master production schedules and MRP systems in this course.</p>
+
+<p data-ls="11">These inputs build on one another. What customers want and what the firm is capable of producing determine which products it offers. The process chosen to make those products (e.g., an automated line versus manual labor) determines capacity, such as 20 skateboard decks or 96 sandwiches per hour at each facility. Marketing then forecasts how much customers will want. When the two do not line up (say customers want 5,000 units in the first quarter and the firm can make only 2,000), planners look for other sources of supply, such as subcontracting or producing early and stockpiling. Apple, for example, often has new phones packaged a couple of weeks before a launch to absorb the initial spike in demand. Planners must also confirm that raw materials and a large enough workforce will be in place, because any one of these inputs could become the bottleneck.</p>
+
+<p data-ls="12">The resulting aggregate plan works like a budget authorization. It tells plant and line managers how much to produce in the period and which resources they are approved to use, such as regular-time production with no overtime, roughly 20% overtime paid at time and a half, or hiring ahead of a need expected in a later period.</p>
+
+<p data-ls="13">The master production schedule then disaggregates the plan. If the aggregate plan calls for 1,000 units this month, the master production schedule might specify 250 units per week and state which flavors or colors to make, so that the right materials can be delivered. Detailed work schedules, which assign individuals to specific activities, come after that.</p>
+
+<p data-ls="14">The 3 major planning horizons are as follows:</p>
+
+<ul>
+<li data-ls="15"><em>Top executives</em> make <strong>long-range plans</strong> (over a year). Examples include research and development, new product plans, capital investments, and facility location or expansion decisions.</li>
+<li data-ls="16"><em>Operations managers</em> make <strong>intermediate-range plans</strong> (3 to 18 months). Examples include sales planning; production planning and budgeting; setting employment, inventory, and subcontracting levels; and analyzing operating plans.</li>
+<li data-ls="17"><em>Operations managers, supervisors, and foremen</em> make <strong>short-range plans</strong> (less than 3 months). Examples include job assignments, ordering, job scheduling, dispatching, and deciding how much overtime and part-time help to use.</li>
+</ul>
+
+<p data-ls="18">Aggregate planning involves intermediate-range plans. Most other topics in this course sit at one of two extremes: either strategic decisions (e.g., approving a budget to expand a plant's capacity by 20% and leaving the details to engineers) or short-term operational details (e.g., how many seconds it takes to drill a skateboard deck). Aggregate planning is the course's main example of planning in the middle, where directors and a vice president of operations plan several months to a year ahead.</p>
+
+<h1 data-ls="19">Aggregate Planning Strategies</h1>
+
+<p data-ls="20">There are generally two categories of aggregate planning strategies: capacity options and demand options. <em>Capacity options</em> involve planning around capacity (i.e., the supply side), whereas <em>demand options</em> involve changing prices or other factors to influence demand.</p>
+
+<h2 data-ls="21">Capacity Options</h2>
+
+<p data-ls="22">Several capacity options for matching supply with demand, are as follows:</p>
+
+<ul>
+<li data-ls="23"><em>Change inventory levels to absorb changes in demand</em> – Absorb changes in demand by increasing inventory in low-demand periods to meet high demand in the future. This option is not available to services (a surgery cannot be stored), and it is most practical when holding costs are low. For example, a maker of vitamins or powdered supplements might produce a full year's supply in a two-week run and use the freed-up time to make other products. Building inventory has multiple problems:
+<ul>
+<li data-ls="24">It means that you have to keep inventory, which means that there will be increased costs due to storage, insurance, handling, obsolescence, and capital investment. These are all non-value-added steps.</li>
+<li data-ls="25">Demand may still be too high at the end of the period. If you do not have enough inventory stored up to meet the high demand, there is nothing that you can do. Shortages can cause lost sales due to long lead times and poor customer service, and it may create resentment.</li>
+</ul>
+</li>
+<li data-ls="26"><em>Change workforce size through hiring or layoffs</em> – Adjust the workforce levels from month to month, based on demand. This helps to match the production rate to demand. Reducing the workforce does not have to mean layoffs. A large employer that loses about 1% of its people each month to resignations and retirements can trim its workforce by around 4% simply by freezing hiring and not replacing those who leave. Varying the workforce decreases inventory and thus decreases holding costs, but it also has some disadvantages:
+<ul>
+<li data-ls="27">Training and separation costs for hiring and laying off workers are high.</li>
+<li data-ls="28">New workers may have lower productivity due to lack of training and experience.</li>
+<li data-ls="29">Laying off workers may lower the morale and productivity of existing workers.</li>
+<li data-ls="30">Laying off workers might result in bad press or a negative backlash from the local community. Layoffs are more common (and acceptable) in some industries than others. For example, layoffs and "flexing" the labor force are common in the construction industry, but they are far less common in the manufacturing industry.</li>
+</ul>
+</li>
+<li data-ls="31"><em>Use overtime or idle time to vary the production rate</em> – Use a constant workforce, but adjust the hours of those workers such that their labor combined matches demand. That is, workers work overtime when demand is high, and they work less than full-time (idle time) when demand is low. This works for small adjustments (e.g., asking one person to take on a little extra work), but once the change needed becomes large, the firm needs a different workforce size. Some disadvantages of this strategy are as follows:
+<ul>
+<li data-ls="32">It may be difficult to meet large increases in demand with overtime because of issues such as governmental regulations or union rules.</li>
+<li data-ls="33">Overtime is costly and can drive down productivity.</li>
+<li data-ls="34">It may be difficult to absorb idle time. Companies can keep workers productive and busy during idle time by engaging them in other productive activities.</li>
+</ul>
+</li>
+<li data-ls="35"><em>Use subcontracting to meet demand requirements and even out capacity</em> – Temporarily use subcontracting. When demand exceeds capacity, the firm might allow another manufacturer to fulfill demand requirements. When demand is less than capacity, however, the firm might bring in work from other firms so that utilization remains high. Subcontracting is common in industries where the product's value lies in its design or brand and not in the specifics of manufacturing. Many clothing brands have their designs sewn to specification by outside shops, and Apple subcontracts the manufacturing of its phones. The brand still stands behind the quality, which requires close relationships with the suppliers. Some disadvantages of this strategy are as follows:
+<ul>
+<li data-ls="36">It may be costly. If it isn't costly, you may want to consider sending <em>all</em> of your work to the subcontractor and letting them fulfill your customers' needs.</li>
+<li data-ls="37">It may be difficult to assure quality and timely delivery if you are relying on a third-party subcontractor.</li>
+<li data-ls="38">It exposes your customers to a potential competitor. They may decide to get their requirements fulfilled directly from the subcontractor, at a cost savings.</li>
+</ul>
+</li>
+<li data-ls="39"><em>Use part-time workers to meet demand</em> – Part-time workers are particularly useful in the service industry. This strategy is best used with low-skilled labor. However, it is <em>not</em> a good strategy when the labor is highly skilled. (It is hard to find part-time cardiac surgeons or part-time lawyers with the right experience.) Retail stores commonly hire part-time workers around the holidays when demand is high.</li>
+</ul>
+
+<p data-ls="40">In general, adjusting capacity by flexing the workforce through overtime, idle time, subcontracting or part-time workers is less useful when dealing with high-skilled labor.</p>
+
+<h2 data-ls="41">Demand Options</h2>
+
+<p data-ls="42">Capacity options deal with adjusting production capacity to match demand or to fulfill customer requirements. Demand options, on the other hand, involve influencing factors that are traditionally thought to be under the control of the customer. The following are some demand options for aggregate planning strategies:</p>
+
+<ul>
+<li data-ls="43"><em>Influencing demand</em> – Shift demand to slow periods by using advertising or promotions (e.g., discount pricing). For example, airlines offer discounts for less popular flights that leave early in the morning or late at night. Likewise, Subway used to offer discounts for people who bought sandwiches early in the day. At lunchtime, Subway cannot make sandwiches fast enough, and customers with a short lunch break leave when the line is long. A discount of about a dollar for buying before 10 a.m. moves some of those customers to a slow period, so the store sells more sandwiches overall. Similarly, Disney sells discounted passes to Florida residents with blackout dates on its most popular days.
+<p>The downside of this approach is that it may be insufficient to balance demand and capacity. Firms must constantly engage in advertising and promotions.</p>
+</li>
+<li data-ls="44"><em>Back-ordering during high-demand periods</em> – When faced with high-demand, the firm can take backorders and expedite shipping to customers who have to wait for the product to arrive. The downside of this tactic is that customers still wait, which can result in a loss of goodwill and a loss of sales.
+<p>Backorders are more common with big-ticket items that people would only buy every few years than for small-ticket items that people buy regularly. Because the largest problem is that customers may not want to wait for the item, this strategy is most effective when there are few or no substitutes for the product or services that the firm offers. Toothpaste shows the opposite case. If a shopper's usual brand is out of stock, the shopper buys another brand that day. For the company, the best outcome is one lost sale, and the worst is that the shopper prefers the competitor's product and never returns. Because holding costs for such items are low and the penalty for running out is high, firms deliberately overstock them. Back-ordering makes sense only when customers do not penalize the firm for making them wait.</p>
+</li>
+<li data-ls="45"><em>Mixing products and service counter-seasonally</em> – The firm could develop a product mix of counter-seasonal items. For example, a firm might produce jet-ski engines during the summer and snowmobile engines during the winter. The technology involved in producing these two products is similar, but the demand for these products is seasonal. The downside is that it may cause the company to venture outside of its area of expertise to fight seasonal trends in demand.</li>
+</ul>
+
+<p data-ls="46">Note that, with each of these strategies, options are "opposite sides of the same coin." For example, you could hire workers to increase capacity or fire them to decrease capacity. Inventory buildup is done in periods of low demand, whereas back-ordering is done in times of high demand. We can compare the advantages and disadvantages of these different options in a table:</p>
+
+<table>
+<thead>
+<tr data-ls="47">
+<th>Option</th>
+<th>Advantages</th>
+<th>Disadvantages</th>
+<th>Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr data-ls="48">
+<td><strong>Part-time Workers</strong></td>
+<td>Cheaper and more flexible than full-time workers.</td>
+<td>High training costs and turnover; quality suffers; scheduling is difficult.</td>
+<td>Best for unskilled jobs with large, temporary labor pools.</td>
+</tr>
+<tr data-ls="49">
+<td><strong>Influencing Demand</strong></td>
+<td>Uses excess capacity; attracts new customers.</td>
+<td>Creates uncertain demand; hard to exactly match supply and demand.</td>
+<td>Generates marketing ideas.</td>
+</tr>
+<tr data-ls="50">
+<td><strong>Back-Ordering</strong></td>
+<td>Avoids overtime and keeps constant capacity.</td>
+<td>Customer has to wait, and goodwill may be lost.</td>
+<td>Allows for flexibility within the aggregate plan. Many companies back-order.</td>
+</tr>
+<tr data-ls="51">
+<td><strong>Counter-Seasonal Product and Service Mixing</strong></td>
+<td>Allows for full utilization of resources and a stable workforce.</td>
+<td>May have to bring in skills and equipment from outside of firm's area of expertise.</td>
+<td>It is hard and risky to find products with opposite demand patterns.</td>
+</tr>
+<tr data-ls="52">
+<td><strong>Changing Inventory Levels</strong></td>
+<td>There are no abrupt production changes, and changes in personnel are gradual or nonexistent.</td>
+<td>High inventory holding costs; shortages cause lost sales.</td>
+<td>Best used for production operations (not service operations).</td>
+</tr>
+<tr data-ls="53">
+<td><strong>Hiring / Layoffs</strong></td>
+<td>Avoids the costs of other alternatives.</td>
+<td>High layoff, hiring, and training costs.</td>
+<td>Best used when there is a large labor pool.</td>
+</tr>
+<tr data-ls="54">
+<td><strong>Overtime / Idle Time</strong></td>
+<td>No hiring or training costs.</td>
+<td>Workers must be paid premiums for overtime. They may become tired, and they may not meet demand.</td>
+<td>Allows for flexibility within the aggregate plan.</td>
+</tr>
+<tr data-ls="55">
+<td><strong>Subcontracting</strong></td>
+<td>Flexibility and smoothing of output.</td>
+<td>Potential loss of quality, profits, and future business.</td>
+<td>Best applied to production settings.</td>
+</tr>
+</tbody>
+</table>
+
+<h1 data-ls="56">Methods of Aggregate Planning</h1>
+
+<p data-ls="57">No single option above is likely to be optimal by itself, in part because company policies limit how far each one can be pushed. For example, the stockroom may hold only 200 units, the firm may be unwilling to lay anyone off and so can shrink only through attrition, and hiring and firing are both expensive. Planners therefore piece several options together, looking for a plan that complies with all company policies and produces at a low cost.</p>
+
+<div class="exam-tip">
+<h4 data-ls="58">EXAM TIP: Work Many Practice Problems</h4>
+<p data-ls="59">These problems are routine but have small rules that are easy to miss (e.g., how to handle inventory carried in from a previous period, or whether to charge for a workforce change at the start of the plan). Dr. Munson said the exam will have no such wrinkle that is not also in the practice questions.</p>
+
+</div>
+
+<p class="date">Thursday, 11/12/26</p>
+
+<p data-ls="60">At a very basic level, there are two major categories of strategies for aggregate planning:</p>
+
+<ul>
+<li data-ls="61"><em>Chase strategy</em> – A <strong>chase strategy</strong> involves attempting to match output rates to the demand forecast for each period. Therefore, the firm would vary workforce levels and production rates to match demand. This requires the firm to either have a very flexible workforce or put up with a lot of idle time. This is a popular strategy in many types of service organizations. In fact, it is often the <em>only</em> choice for a service organization, because it cannot store inventory.</li>
+<li data-ls="62"><em>Level strategy</em> – A <strong>level strategy</strong> involves uniform, daily production and using inventory or idle time as a buffer. A stable production over time leads to better quality and consistency, and it is usually only possible for manufacturing or for service industries with constant demand.</li>
+</ul>
+
+<p data-ls="63">In most cases, a <strong>mixed strategy</strong> that utilizes a combination of the options listed above is usually best. There are many possible mixed strategies, and determining which achieves the lowest costs requires trial-and-error. Finding the optimal plan is not always possible.</p>
+
+<h2 data-ls="64">Graphical Approaches (Trial and Error)</h2>
+
+<p data-ls="65">One approach to finding the plan that involves the minimum cost is to use graphical and charting methods. <strong>Graphical methods</strong> are aggregate planning techniques that work with a few variables at a time to allow planners to compare projected demand with existing capacity. However, these are trial-and-error approaches that do not guarantee an optimal solution. The steps involved in graphical and charting methods are generally as follows:</p>
+
+<ol>
+<li data-ls="66">Determine the demand for each period.</li>
+<li data-ls="67">Determine capacity for regular time, overtime, and subcontracting for each period.</li>
+<li data-ls="68">Determine labor, hiring, layoff, and inventory holding costs.</li>
+<li data-ls="69">Consider company policy on workers and stock levels (i.e., policies on maximum overtime and maximum allowable inventory levels).</li>
+<li data-ls="70">Develop alternative plans and compare total costs.</li>
+</ol>
+
+<h2 data-ls="71">Example: Applying Aggregate Planning Strategies</h2>
+
+<p data-ls="72"><strong>A company faces the following expected demand for roofing shingles in the first half of the year. It has calculated the number of production days in each month, and it has divided its monthly expected demand by the number of production days to get the demand per day.</strong></p>
+
+<table>
+<thead>
+<tr data-ls="73">
+<th>Month</th>
+<th>Expected Demand</th>
+<th>Production Days</th>
+<th>Demand per Day</th>
+</tr>
+</thead>
+<tbody>
+<tr data-ls="74">
+<td>January</td>
+<td>900</td>
+<td>22</td>
+<td>41</td>
+</tr>
+<tr data-ls="75">
+<td>February</td>
+<td>700</td>
+<td>18</td>
+<td>39</td>
+</tr>
+<tr data-ls="76">
+<td>March</td>
+<td>800</td>
+<td>21</td>
+<td>38</td>
+</tr>
+<tr data-ls="77">
+<td>April</td>
+<td>1,200</td>
+<td>21</td>
+<td>57</td>
+</tr>
+<tr data-ls="78">
+<td>May</td>
+<td>1,500</td>
+<td>22</td>
+<td>68</td>
+</tr>
+<tr data-ls="79">
+<td>June</td>
+<td>1,100</td>
+<td>20</td>
+<td>55</td>
+</tr>
+<tr data-ls="80">
+<td><em>Total</em></td>
+<td><strong>6,200</strong></td>
+<td><strong>124</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p data-ls="81"><strong>The company has found the following relevant costs:</strong></p>
+
+<table>
+<tbody>
+<tr data-ls="82">
+<td><strong>Inventory Carrying Cost</strong></td>
+<td>$5 per unit per month</td>
+</tr>
+<tr data-ls="83">
+<td><strong>Subcontracting Cost Per Unit</strong></td>
+<td>$20 per unit</td>
+</tr>
+<tr data-ls="84">
+<td><strong>Average Pay Rate</strong></td>
+<td>$10 per hour ($80 per day)</td>
+</tr>
+<tr data-ls="85">
+<td><strong>Overtime Pay Rate</strong></td>
+<td>$17 per hour (above 8 hours per day)</td>
+</tr>
+<tr data-ls="86">
+<td><strong>Labor-Hours to Produce One Unit</strong></td>
+<td>1.6 hours per unit</td>
+</tr>
+<tr data-ls="87">
+<td><strong>Cost of Increasing Daily Production Rate (Hiring and Training)</strong></td>
+<td>$300 per unit</td>
+</tr>
+<tr data-ls="88">
+<td><strong>Cost of Decreasing Daily Production Rate (Layoffs)</strong></td>
+<td>$600 per unit</td>
+</tr>
+</tbody>
+</table>
+
+<p data-ls="89"><strong>The company has to choose among three options for its production strategy, so it will calculate the cost of each strategy and then compare them.</strong></p>
+
+<ul>
+<li data-ls="90"><strong>A "pure" level strategy, with production level at the average requirement.</strong></li>
+<li data-ls="91"><strong>A level strategy, with production level at the minimum requirement.</strong></li>
+<li data-ls="92"><strong>A chase strategy, with production at the expected demand in each period.</strong></li>
+</ul>
+
+<h2 data-ls="93">Method 1: Pure Level Strategy</h2>
+
+<p data-ls="94">The average requirement over the six periods is the expected demand divided by the number of production days, or 6,200 ÷ 124 =  <u><strong>50 units per day</strong></u>. This is the level of production, or quantity of units, that must be produced each day under a pure level strategy. If the company produces 50 units per day, it will have some inventory carrying costs, and it will have regular-time labor costs. To calculate carrying costs, we must determine the monthly inventory change and the ending inventory, given demand predictions:</p>
+
+<table>
+<thead>
+<tr data-ls="95">
+<th>Month</th>
+<th>Production Days</th>
+<th>Production at 50 Units per Day</th>
+<th>Demand Forecast</th>
+<th>Monthly Inventory Change</th>
+<th>Ending Inventory</th>
+</tr>
+</thead>
+<tbody>
+<tr data-ls="96">
+<td>January</td>
+<td>22</td>
+<td>1,100</td>
+<td>900</td>
+<td>+200</td>
+<td>200</td>
+</tr>
+<tr data-ls="97">
+<td>February</td>
+<td>18</td>
+<td>900</td>
+<td>700</td>
+<td>+200</td>
+<td>400</td>
+</tr>
+<tr data-ls="98">
+<td>March</td>
+<td>21</td>
+<td>1,050</td>
+<td>800</td>
+<td>+250</td>
+<td>650</td>
+</tr>
+<tr data-ls="99">
+<td>April</td>
+<td>21</td>
+<td>1,050</td>
+<td>1,200</td>
+<td>−150</td>
+<td>500</td>
+</tr>
+<tr data-ls="100">
+<td>May</td>
+<td>22</td>
+<td>1,100</td>
+<td>1,500</td>
+<td>−400</td>
+<td>100</td>
+</tr>
+<tr data-ls="101">
+<td>June</td>
+<td>20</td>
+<td>1,000</td>
+<td>1,100</td>
+<td>−100</td>
+<td>0</td>
+</tr>
+<tr data-ls="102">
+<td><em>Total</em></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>1,850</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p data-ls="103">By adding up ending inventory levels at the end of each month, we get a total of 1,850 units in ending inventory. (Note that some units are carried over the course of multiple months and are thus counted multiple times.) At a cost of $5 per unit per month, this results in an inventory carrying cost of $9,250. We can calculate how many workers it takes to produce 50 units per day as follows:</p>
+
+<p data-ls="104">\[
+\text{# of Workers} = \frac{50 \text{ units per day} \times 1.6 \text{ hours per unit}}{8 \text{ hours per day, per worker}} = \text{10 workers}
+\]</p>
+
+<p data-ls="105">Hiring 10 workers at $80 per day for 124 days would cost $99,200.</p>
+
+<p data-ls="106">The total cost of this method would be the inventory carrying costs ($9,250) plus the labor cost ($99,200), or <strong><u>$108,450</u></strong>.</p>
+
+<h2 data-ls="107">Method 2: Level Strategy (Production at the Minimum Requirement and Use of Subcontracting)</h2>
+
+<p data-ls="108">Suppose your boss wanted you to meet demand every month with a level workforce, no overtime, and no end-of-month inventory. We could look at the demand forecast and identify the fact that the minimum daily demand occurs in March, at 38 units.</p>
+
+<table>
+<thead>
+<tr data-ls="109">
+<th>Month</th>
+<th>Expected Demand</th>
+<th>Production Days</th>
+<th>Demand per Day</th>
+</tr>
+</thead>
+<tbody>
+<tr data-ls="110">
+<td>January</td>
+<td>900</td>
+<td>22</td>
+<td>41</td>
+</tr>
+<tr data-ls="111">
+<td>February</td>
+<td>700</td>
+<td>18</td>
+<td>39</td>
+</tr>
+<tr data-ls="112">
+<td>March</td>
+<td>800</td>
+<td>21</td>
+<td><strong>38</strong></td>
+</tr>
+<tr data-ls="113">
+<td>April</td>
+<td>1,200</td>
+<td>21</td>
+<td>57</td>
+</tr>
+<tr data-ls="114">
+<td>May</td>
+<td>1,500</td>
+<td>22</td>
+<td>68</td>
+</tr>
+<tr data-ls="115">
+<td>June</td>
+<td>1,100</td>
+<td>20</td>
+<td>55</td>
+</tr>
+<tr data-ls="116">
+<td><em>Total</em></td>
+<td><strong>6,200</strong></td>
+<td><strong>124</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p data-ls="117">Using the lowest monthly forecast, we will never have any inventory to carry over to the next month, so there are no holding costs. However, we will have to subcontract some units out to a third-party subcontractor. Therefore, our costs will be divided between regular-time labor (used for in-house production) and subcontracting.</p>
+
+<p data-ls="118">In-house production will account for 38 units per day over the 124 production days, or 4,712 units. Total demand over the six-month period is 6,200 units, so the remaining 1,488 units will have to be subcontracted out. We can calculate how many workers it takes to produce 38 units per day as follows:</p>
+
+<p data-ls="119">\[
+\text{# of Workers} = \frac{38 \text{ units per day} \times 1.6 \text{ hours per unit}}{8 \text{ hours per day, per worker}} = \text{7.6 workers}
+\]</p>
+
+<p data-ls="120">We obviously cannot hire 7.6 workers, but we can hire 7 workers and then hire another worker to work 60% of the time. Hiring 7.6 workers at $80 per day for 124 days would cost us $75,392. The cost of subcontracting is $20 per unit, so it would cost $29,760 to subcontract out 1,488 units.</p>
+
+<p data-ls="121">The total cost of this method would be the subcontracting costs ($29,760) plus the in-house labor cost ($75,392), or <strong><u>$105,152</u></strong>. While this strategy is cheaper, there may be other considerations. For example, the subcontractor might turn out to be a competitor later or lead to brand image problems.</p>
+
+<h2 data-ls="122">Method 3: Pure Chase Strategy (Using Hiring and Layoffs)</h2>
+
+<p data-ls="123">Finally, we could try to chase demand by ramping up production to meet forecasted demand in each period. This obviously eliminates inventory carrying costs and subcontracting costs, but it involves the cost of hiring, training, and layoffs.</p>
+
+<table>
+<thead>
+<tr data-ls="124">
+<th>Month</th>
+<th>Forecast</th>
+<th>Daily Production Rate</th>
+<th>Basic Production Cost</th>
+<th>Hiring Cost</th>
+<th>Layoff Cost</th>
+<th>Total Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr data-ls="125">
+<td>January</td>
+<td>900</td>
+<td>41</td>
+<td>$14,400</td>
+<td>---</td>
+<td>---</td>
+<td>$14,400</td>
+</tr>
+<tr data-ls="126">
+<td>February</td>
+<td>700</td>
+<td>39</td>
+<td>$11,200</td>
+<td>---</td>
+<td>$1,200</td>
+<td>$12,400</td>
+</tr>
+<tr data-ls="127">
+<td>March</td>
+<td>800</td>
+<td>38</td>
+<td>$12,800</td>
+<td>---</td>
+<td>$ 600</td>
+<td>$13,400</td>
+</tr>
+<tr data-ls="128">
+<td>April</td>
+<td>1,200</td>
+<td>57</td>
+<td>$19,200</td>
+<td>$5,700</td>
+<td>---</td>
+<td>$24,900</td>
+</tr>
+<tr data-ls="129">
+<td>May</td>
+<td>1,500</td>
+<td>68</td>
+<td>$24,000</td>
+<td>$3,300</td>
+<td>---</td>
+<td>$27,300</td>
+</tr>
+<tr data-ls="130">
+<td>June</td>
+<td>1,100</td>
+<td>55</td>
+<td>$17,600</td>
+<td>---</td>
+<td>$7,800</td>
+<td>$25,400</td>
+</tr>
+<tr data-ls="131">
+<td><em>Total</em></td>
+<td></td>
+<td></td>
+<td><strong>$99,200</strong></td>
+<td><strong>$9,000</strong></td>
+<td><strong>$9,600</strong></td>
+<td><strong>$117,800</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p data-ls="132">The total cost of this option would be <strong><u>$117,800</u></strong>.</p>
+
+<p data-ls="133">Among the 3 options, Method 2 (a level strategy with production at the minimum demand) is the most cost-effective. That is, it is the lowest-cost method. Therefore, the company should choose that method, assuming that it has to choose among these 3 plans.</p>
+
+<p data-ls="134">Note that there are many other alternative plans that we did not consider. Additionally, deciding on a plan depends on many other, often industry-specific factors, such as how accurate we believe a company's demand forecasts are. (For example, none of these plans involved the use of overtime labor.) Moreover, firms should think about the nonmonetary costs of certain plans. For example, laying workers off takes a psychological toll on the remaining workers.</p>
+
+<h2 data-ls="135">Transportation Method of Linear Programming</h2>
+
+<p data-ls="136">The methods discussed above are trial-and-error methods that do not generate optimal solutions. For optimal solutions, you must resort to mathematical approaches. One such approach involves setting up a problem as a transportation problem and using either the transportation model or linear programming software to solve it.</p>
+
+<p data-ls="137">Another approach is the <em>management coefficients model</em>, which is built around managers' experience and performance. We will discuss the transportation method of linear programming, but we will not talk in detail about the management coefficients model method. Consider the following example, which illustrates how to frame a problem as a transportation problem, and solve it with the transportation method:</p>
+
+<h2 data-ls="138">Example: Transportation Method</h2>
+
+<p data-ls="139"><strong>A tire company can produce tires using regular labor, overtime labor, or subcontracted labor. The costs with various kinds of labor are as follows:</strong></p>
+
+<ul>
+<li data-ls="140"><strong>Regular time = $40 per tire</strong></li>
+<li data-ls="141"><strong>Overtime = $50 per tire</strong></li>
+<li data-ls="142"><strong>Subcontractor time = $70 per tire</strong></li>
+</ul>
+
+<p data-ls="143"><strong>The tire company begins with 100 tires in inventory, and its carrying cost is $2 per tire per month. The estimated demand and capacity in March, April, and May are as follows:</strong></p>
+
+<table>
+<thead>
+<tr data-ls="144">
+<th></th>
+<th>March</th>
+<th>April</th>
+<th>May</th>
+</tr>
+</thead>
+<tbody>
+<tr data-ls="145">
+<td><strong>Demand</strong></td>
+<td>800</td>
+<td>1,000</td>
+<td>750</td>
+</tr>
+<tr data-ls="146">
+<td><strong>Capacity</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr data-ls="147">
+<td><strong>Regular Hours</strong></td>
+<td>700</td>
+<td>700</td>
+<td>700</td>
+</tr>
+<tr data-ls="148">
+<td><strong>Overtime</strong></td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr data-ls="149">
+<td><strong>Subcontracting</strong></td>
+<td>150</td>
+<td>150</td>
+<td>130</td>
+</tr>
+</tbody>
+</table>
+
+<p data-ls="150"><strong>Use the transportation method of linear programming to develop an optimal aggregate plan that minimizes total costs. Assume that there is no back-ordering.</strong></p>
+
+<h2 data-ls="151">Setting Up and Solving the Table</h2>
+
+<p data-ls="152">We set the problem up as a table: demand periods across the top, sources of supply down the side, and the cost of each pairing in the corner of its cell. Then we fill each month's demand from its cheapest available sources. The widget below builds the table and the plan one step at a time.</p>
+
+<style>
+.tpw { --ink:#1c2a44; --muted:#5b6474; --rule:#cfd6e2; --soft:#f1f4f9; --hi:#fff4c2; --blue:#1d4f94; max-width:760px; margin:20px auto; padding:16px 16px 14px; background:#fff; border:1px solid #dfe3ea; border-radius:10px; box-sizing:border-box; font-family:"Red Hat Display", system-ui, sans-serif; color:var(--ink); clear:both; }
+.tpw * { box-sizing:border-box; }
+.tpw .tp-title { font-weight:800; font-size:1.02rem; margin:0 0 2px; text-align:center; }
+.tpw .tp-lede { font-size:.85rem; color:var(--muted); margin:0 0 10px; text-align:center; }
+.tpw .tp-bar { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px; margin:0 0 8px; }
+.tpw button { font:inherit; font-size:.85rem; font-weight:700; min-height:40px; padding:6px 14px; border:1px solid var(--rule); border-radius:999px; background:#fff; color:var(--ink); cursor:pointer; }
+.tpw button[aria-pressed="true"], .tpw button.tp-next { background:var(--ink); border-color:var(--ink); color:#fff; }
+.tpw button:disabled { opacity:.4; cursor:default; }
+.tpw button:focus-visible { outline:3px solid #2a78d6; outline-offset:2px; }
+.tpw .tp-count { font-size:.8rem; color:var(--muted); min-width:6.5em; text-align:center; }
+.tpw .tp-cap { margin:0 0 10px; padding:8px 12px; border-left:4px solid var(--blue); background:var(--soft); border-radius:0 6px 6px 0; font-size:.9rem; line-height:1.45; min-height:4.4em; }
+.tpw .tp-cap b.tp-h { display:block; font-size:.92rem; margin-bottom:2px; }
+.tpw .tp-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.tpw table.tp { border-collapse:separate; border-spacing:0; margin:0 auto; font-size:.82rem; font-variant-numeric:tabular-nums; width:100%; min-width:430px; background:transparent; }
+.tpw table.tp th, .tpw table.tp td, .tpw table.tp tr { padding:0 !important; border:0 !important; background:transparent !important; color:var(--ink) !important; text-align:center; vertical-align:middle; box-shadow:none !important; }
+.tpw table.tp tr:nth-child(even) td, .tpw table.tp tr:nth-child(odd) td, .tpw table.tp td:first-child, .tpw table.tp th:first-child { background:transparent !important; font-weight:inherit; }
+.tpw table.tp thead th { font-weight:800 !important; font-size:.8rem; padding:4px 2px 6px !important; line-height:1.15; }
+.tpw table.tp thead th.tp-sub { font-weight:600 !important; font-size:.72rem; color:var(--muted) !important; }
+.tpw table.tp .tp-rl { text-align:left !important; padding:0 6px 0 0 !important; white-space:nowrap; font-weight:600 !important; font-size:.8rem; }
+.tpw .tp-per { display:inline-block; min-width:3.1em; margin-right:4px; padding:1px 5px; border-radius:4px; font-size:.68rem; font-weight:800; color:#fff; background:#5b6474; text-align:center; }
+.tpw .tp-per.p0 { background:#1c2a44; } .tpw .tp-per.p1 { background:#2f6fbf; } .tpw .tp-per.p2 { background:#5b6474; }
+.tpw table.tp td.tp-c { position:relative; height:44px; min-width:62px; border:1px solid var(--rule) !important; background:#fff !important; transition:background .2s; }
+.tpw td.tp-c .tp-u { position:absolute; top:0; right:0; min-width:24px; padding:1px 4px; border-left:1px solid var(--rule); border-bottom:1px solid var(--rule); font-size:.7rem; font-weight:700; color:var(--ink); background:#fff; line-height:1.3; }
+.tpw td.tp-c .tp-u.off { visibility:hidden; }
+.tpw td.tp-c .tp-q { position:absolute; left:6px; bottom:3px; font-size:.95rem; font-weight:800; }
+.tpw td.tp-c .tp-q.dash { color:#aab3c2; font-weight:600; }
+.tpw table.tp tr td.tp-x.tp-x { background:#2b343c !important; border:1px solid #2b343c !important; }
+.tpw table.tp tr td.tp-x.tp-note { color:#fff !important; font-size:.68rem; font-weight:600; line-height:1.25; padding:6px !important; }
+.tpw table.tp td.tp-c.col { background:#eef4fd !important; }
+.tpw table.tp tr.rowhi td.tp-c { background:#eef4fd !important; }
+.tpw table.tp td.tp-c.hi { background:var(--hi) !important; }
+.tpw table.tp td.tp-cap, .tpw table.tp td.tp-dem { font-weight:800 !important; font-size:.86rem; padding:0 4px !important; white-space:nowrap; }
+.tpw table.tp td.tp-dem { padding-top:6px !important; }
+.tpw s { color:#9aa3b2; font-weight:600; margin-right:3px; }
+.tpw .tp-done { color:#9aa3b2; text-decoration:line-through; font-weight:600; }
+.tpw .tp-dots { display:flex; justify-content:center; gap:4px; margin:10px 0 0; flex-wrap:wrap; }
+.tpw .tp-dots span { width:7px; height:7px; border-radius:50%; background:#d5dbe5; }
+.tpw .tp-dots span.on { background:var(--blue); }
+.tpw .tp-list { margin:6px 0 0; padding:0; list-style:none; counter-reset:tp; }
+.tpw .tp-list li { counter-increment:tp; display:grid; grid-template-columns:1.6em 1fr auto auto; gap:8px; align-items:center; padding:3px 0; font-size:.86rem; border-bottom:1px dashed #e3e7ee; }
+.tpw .tp-list li::before { content:counter(tp) "."; color:var(--muted); font-weight:700; }
+.tpw .tp-list .tp-cost { color:var(--muted); font-variant-numeric:tabular-nums; }
+.tpw .tp-list .tp-take { font-weight:800; font-variant-numeric:tabular-nums; text-align:right; }
+.tpw [data-r], .tpw [data-colhead], .tpw td.tp-c[data-k] { cursor:pointer; }
+.tpw.tp-read td.tp-c[data-k], .tpw.tp-cost td.tp-c[data-k] { cursor:pointer; }
+@media (max-width:600px) { .tpw { padding:12px 8px; } .tpw .tp-cap { font-size:.85rem; } .tpw table.tp { font-size:.76rem; } .tpw td.tp-c { min-width:54px; height:40px; } }
+@media (prefers-reduced-motion: reduce) { .tpw * { transition:none !important; } }
+</style>
+<div class="tpw" data-mode="stepper" tabindex="-1" data-ls="174">
+<p class="tp-title">The Transportation Method, Step by Step</p>
+<p class="tp-lede">Press Next to build the table and the plan one step at a time.</p>
+<div class="tp-bar"><button type="button" class="tp-back">◀ Back</button><span class="tp-count"></span><button type="button" class="tp-next">Next ▶</button></div>
+<div class="tp-cap" aria-live="polite"></div>
+<div class="tp-scroll"></div>
+<div class="tp-dots" aria-hidden="true"></div>
+<noscript><img src="https://smokinnotes.s3.us-east-1.amazonaws.com/public/man4504-253-exam3-chapter12-10-transportation-final-solution.png" alt="Complete transportation table with all allocations" class="image-wide-75 content-image"></noscript>
+<script type="application/json">{"rows": [{"id": "inv", "per": "", "src": "Beginning inv.", "cap": 100, "t": 0}, {"id": "mR", "per": "March", "src": "Regular", "cap": 700, "t": 0}, {"id": "mO", "per": "March", "src": "Overtime", "cap": 50, "t": 0}, {"id": "mS", "per": "March", "src": "Subcontract", "cap": 150, "t": 0}, {"id": "aR", "per": "April", "src": "Regular", "cap": 700, "t": 1}, {"id": "aO", "per": "April", "src": "Overtime", "cap": 50, "t": 1}, {"id": "aS", "per": "April", "src": "Subcontract", "cap": 150, "t": 1}, {"id": "yR", "per": "May", "src": "Regular", "cap": 700, "t": 2}, {"id": "yO", "per": "May", "src": "Overtime", "cap": 50, "t": 2}, {"id": "yS", "per": "May", "src": "Subcontract", "cap": 130, "t": 2}], "cols": [{"id": "mar", "label": "March", "dem": 800}, {"id": "apr", "label": "April", "dem": 1000}, {"id": "may", "label": "May", "dem": 750}, {"id": "dum", "label": "Unused (dummy)", "dem": 230}], "cost": {"inv|mar": 0, "inv|apr": 2, "inv|may": 4, "inv|dum": 0, "mR|mar": 40, "mR|apr": 42, "mR|may": 44, "mR|dum": 0, "mO|mar": 50, "mO|apr": 52, "mO|may": 54, "mO|dum": 0, "mS|mar": 70, "mS|apr": 72, "mS|may": 74, "mS|dum": 0, "aR|mar": null, "aR|apr": 40, "aR|may": 42, "aR|dum": 0, "aO|mar": null, "aO|apr": 50, "aO|may": 52, "aO|dum": 0, "aS|mar": null, "aS|apr": 70, "aS|may": 72, "aS|dum": 0, "yR|mar": null, "yR|apr": null, "yR|may": 40, "yR|dum": 0, "yO|mar": null, "yO|apr": null, "yO|may": 50, "yO|dum": 0, "yS|mar": null, "yS|apr": null, "yS|may": 70, "yS|dum": 0}, "final": {"alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700, "yO|may": 50, "mS|dum": 100, "yS|dum": 130}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 0, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 0, "yS": 0}, "dleft": {"mar": 0, "apr": 0, "may": 0, "dum": 0}}, "steps": [{"title": "Set up the table", "text": "Demand periods run across the top and sources of supply down the side. Total demand is 800 + 1,000 + 750 = <b>2,550<\/b>. Capacity is (700 + 50 + 150) + (700 + 50 + 150) + (700 + 50 + 130) = <b>2,680<\/b>, plus <b>100<\/b> units of beginning inventory. A dummy column for unused capacity takes the <b>230<\/b> extra units so that supply equals demand. With no back-ordering, a period's production cannot meet an earlier period's demand, so those cells are blacked out.", "costs": [], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["dum"]}, {"title": "Costs: March demand", "text": "Meeting March demand costs only the source's own price: <b>$0<\/b> from beginning inventory, <b>$40<\/b> on regular time, <b>$50<\/b> on overtime, <b>$70<\/b> subcontracted.", "costs": ["mar"], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["mar"]}, {"title": "Costs: April demand", "text": "April production meeting April demand costs the same base prices. Beginning inventory and March production held until April add the <b>$2<\/b> carrying cost: $2, $42, $52 and $72.", "costs": ["apr", "mar"], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["apr"]}, {"title": "Costs: May demand and unused capacity", "text": "May production costs its base price; April production held one month adds <b>$2<\/b>; inventory and March production held two months add <b>$4<\/b>. The dummy column costs <b>$0<\/b>: unused capacity is never produced.", "costs": ["apr", "dum", "mar", "may"], "alloc": {}, "left": {"inv": 100, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 800, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": [], "hirows": [], "hicols": ["may", "dum"]}, {"title": "March: Beginning inventory", "text": "Fill each demand column from left to right, always from the cheapest source with capacity left. Sources that can still supply March, cheapest first, including earlier months' production held in inventory: Beginning inventory $0, March regular $40, March overtime $50, March subcontract $70. Next cheapest source with units left: <b>Beginning inventory<\/b> at <b>$0<\/b>. Take <b>100<\/b> units. <b>700<\/b> units of March demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100}, "left": {"inv": 0, "mR": 700, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 700, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": ["inv|mar"], "hirows": ["inv"], "hicols": ["mar"]}, {"title": "March: March regular", "text": "Next cheapest source with units left: <b>March regular<\/b> at <b>$40<\/b>. Take <b>700<\/b> units. March demand is met.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700}, "left": {"inv": 0, "mR": 0, "mO": 50, "mS": 150, "aR": 700, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 1000, "may": 750, "dum": 230}, "done": [], "hi": ["mR|mar"], "hirows": ["mR"], "hicols": ["mar"]}, {"title": "April: April regular", "text": "Sources that can still supply April, cheapest first, including earlier months' production held in inventory: April regular $40, April overtime $50, March overtime (held 1 month) $52, April subcontract $70, March subcontract (held 1 month) $72. Next cheapest source with units left: <b>April regular<\/b> at <b>$40<\/b>. Take <b>700<\/b> units. <b>300<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700}, "left": {"inv": 0, "mR": 0, "mO": 50, "mS": 150, "aR": 0, "aO": 50, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 300, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["aR|apr"], "hirows": ["aR"], "hicols": ["apr"]}, {"title": "April: April overtime", "text": "Next cheapest source with units left: <b>April overtime<\/b> at <b>$50<\/b>. Take <b>50<\/b> units. <b>250<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50}, "left": {"inv": 0, "mR": 0, "mO": 50, "mS": 150, "aR": 0, "aO": 0, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 250, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["aO|apr"], "hirows": ["aO"], "hicols": ["apr"]}, {"title": "April: March overtime (held 1 month)", "text": "Next cheapest source with units left: <b>March overtime (held 1 month)<\/b> at <b>$52<\/b>. Take <b>50<\/b> units. <b>200<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 150, "aR": 0, "aO": 0, "aS": 150, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 200, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["mO|apr"], "hirows": ["mO"], "hicols": ["apr"]}, {"title": "April: April subcontract", "text": "Next cheapest source with units left: <b>April subcontract<\/b> at <b>$70<\/b>. Take <b>150<\/b> units. <b>50<\/b> units of April demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 150, "aR": 0, "aO": 0, "aS": 0, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 50, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["aS|apr"], "hirows": ["aS"], "hicols": ["apr"]}, {"title": "April: March subcontract (held 1 month)", "text": "Next cheapest source with units left: <b>March subcontract (held 1 month)<\/b> at <b>$72<\/b>. Take <b>50<\/b> units. Only 50 of its 150 units are needed, so 100 stay available. April demand is met.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 100, "aR": 0, "aO": 0, "aS": 0, "yR": 700, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 0, "may": 750, "dum": 230}, "done": ["mar"], "hi": ["mS|apr"], "hirows": ["mS"], "hicols": ["apr"]}, {"title": "May: May regular", "text": "Sources that can still supply May, cheapest first, including earlier months' production held in inventory: May regular $40, May overtime $50, May subcontract $70, March subcontract (held 2 months) $74. Next cheapest source with units left: <b>May regular<\/b> at <b>$40<\/b>. Take <b>700<\/b> units. <b>50<\/b> units of May demand still to fill.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 100, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 50, "yS": 130}, "dleft": {"mar": 0, "apr": 0, "may": 50, "dum": 230}, "done": ["apr", "mar"], "hi": ["yR|may"], "hirows": ["yR"], "hicols": ["may"]}, {"title": "May: May overtime", "text": "Next cheapest source with units left: <b>May overtime<\/b> at <b>$50<\/b>. Take <b>50<\/b> units. May demand is met.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700, "yO|may": 50}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 100, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 0, "yS": 130}, "dleft": {"mar": 0, "apr": 0, "may": 0, "dum": 230}, "done": ["apr", "mar"], "hi": ["yO|may"], "hirows": ["yO"], "hicols": ["may"]}, {"title": "Unused capacity", "text": "Every month's demand is met. The capacity nobody used goes to the dummy column: <b>100<\/b> units of March subcontracting and <b>130<\/b> of May subcontracting, 230 in all. Supply and demand now balance.", "costs": ["apr", "dum", "mar", "may"], "alloc": {"inv|mar": 100, "mR|mar": 700, "aR|apr": 700, "aO|apr": 50, "mO|apr": 50, "aS|apr": 150, "mS|apr": 50, "yR|may": 700, "yO|may": 50, "mS|dum": 100, "yS|dum": 130}, "left": {"inv": 0, "mR": 0, "mO": 0, "mS": 0, "aR": 0, "aO": 0, "aS": 0, "yR": 0, "yO": 0, "yS": 0}, "dleft": {"mar": 0, "apr": 0, "may": 0, "dum": 0}, "done": ["apr", "dum", "mar", "may"], "hi": ["mS|dum", "yS|dum"], "hirows": [], "hicols": ["dum"]}]}</script>
+</div>
+
+<p data-ls="153">This table depicts a possible aggregate production plan. In words, it says the following:</p>
+
+<ul>
+<li data-ls="154">Satisfy March's demand by supplying 100 units of inventory and 700 units of regular labor.</li>
+<li data-ls="155">Satisfy April's demand by supplying 50 units of overtime labor and 50 units of subcontracted labor in March. Hold that inventory until April. Then, in April, produce 700 units with regular labor, 50 units with overtime, and 150 units through subcontracting.</li>
+<li data-ls="156">Satisfy May's demand by supplying 700 units of regular labor and 50 units of overtime labor in May.</li>
+</ul>
+
+<p data-ls="157">We could calculate the total cost of this plan as follows:</p>
+
+<p style="text-align: center;" data-ls="158"><b>Total Cost</b> \(= 100(0)+700(40)+50(52)+50(72)+700(40)+50(50)+150(70)+700(40)+50(50)\)</p>
+
+<p style="text-align: center;" data-ls="159"><b>Total Cost</b> \(= \$0+\$28,000+\$2,600+\$3,600+\$28,000+\$2,500+\$10,500+\$28,000+\$2,500\)</p>
+
+<p style="text-align: center;" data-ls="160"><b>Total Cost</b> \(= \) <strong><u>$105,700</u></strong></p>
+
+<p data-ls="161">Note that this plan may or may not be optimal, meaning there may be other plans that yield a lower cost. We would have to apply the stepping-stone method to identify ways to improve this plan. Another option is to set this problem up as a linear programming problem as we have done before and to use a software program (such as Excel's Solver) to find the optimal solution.</p>
+<p data-ls="162">Understanding how to read the aggregate production plan is important because these questions are commonly missed on exams. Remember that if an exam question asks only about the period of production (i.e., when units are produced, made, delivered, ordered, etc.), you should look at the relevant <em>row</em>. Alternatively, if an exam question asks only about the period of demand (i.e., when units are used to satisfy demand, used for meeting demand, sold, etc.), you should look at the relevant <em>column</em>.</p>
+<div class="exam-tip">
+<h4 data-ls="163">EXAM TIP: Reading Aggregate Production Plans</h4>
+<p data-ls="164">If a question asks only about the <em>period of production</em>, look at the relevant <b>row</b>. If a question asks only about the <em>period of demand</em>, look at the relevant <b>column</b>. </p>
+
+</div>
+<p data-ls="165">For example, if you're asked how many units of subcontracting were used to satisfy April demand, you'd get 50 + 150 = 200 from the April column. Another way an exam question could ask this is, "How many units of April demand are met with subcontracting?" Alternatively, you might be asked a question like, "How much overtime does the company pay for in March?" To answer this, you sum the March overtime row, which totals 50 units. Another way an exam question could ask this is, "How many units of overtime do we order for March delivery?"</p>
+<h2 data-ls="166">Management Coefficients Model</h2>
+
+<p data-ls="167">The <strong>management coefficients model</strong> is a formal planning model built around a manager's experience and performance. When there is historical data, a regression analysis can be used on managements' best practices to project into the future. This model offers objectivity and consistency in decision making, but it relies on the assumption that trends in past data will extend into the future. It also assumes that managers in the past have made good decisions.</p>
+
+<h2 data-ls="168">Summary of Aggregate Planning Methods</h2>
+
+<p data-ls="169">As a summary, we have talked about three methods for aggregate planning:</p>
+
+<ul>
+<li data-ls="170"><em>Graphical methods</em> – These are trial-and-error approaches that are easy to use, and you can easily incorporate constraints and company policies, but they usually don't produce optimal solutions.</li>
+<li data-ls="171"><em>Transportation method (linear programming)</em> – This is an optimization method that can be used to find the optimal solution. However, this method can only be used when relationships are linear. Software programs make this method much easier than solving problems by hand.</li>
+<li data-ls="172"><em>Management coefficients model</em> – This is a heuristic model that relies on a regression of past data. This is an easy-to-use model that imposes objectivity on the decision-making process, but the quality of the model is only as good as the quality of the data used to build it.</li>
+</ul>
+
+<p data-ls="173">In aggregate planning in the services sector, controlling the cost of labor is critical. In service-based industries, it is important to accurately schedule labor-hours to ensure quick response to customer demand. Unlike manufacturing, services often need an on-call labor resource to cover unexpected demand. Moreover, aggregate planning in services is different in that there is flexibility in individual workers' skills, in rate of output, and in hours of work.</p>
+
+<script>
+(function () {
+  function table(root, M) {
+    var t = '<table class="tp financial"><thead><tr><th class="tp-rl"></th>';
+    M.cols.forEach(function (c) { t += '<th data-colhead="' + c.id + '">' + c.label + '</th>'; });
+    t += '<th class="tp-sub">Total<br>available</th></tr></thead><tbody>';
+    var blocked = {};
+    M.rows.forEach(function (r, ri) {
+      t += '<tr data-row="' + r.id + '"><th class="tp-rl" data-r="' + r.id + '">' + (r.per ? '<span class="tp-per p' + r.t + '">' + r.per.slice(0, 3) + '</span>' : '') + r.src + '</th>';
+      M.cols.forEach(function (c) {
+        var k = r.id + '|' + c.id, u = M.cost[k];
+        if (u === null) {
+          if (!blocked[c.id]) {   // one black block per column, spanning every row that cannot serve it
+            var span = M.rows.filter(function (q) { return M.cost[q.id + '|' + c.id] === null; }).length;
+            t += '<td class="tp-x' + (c.id === 'mar' ? ' tp-note' : '') + '" rowspan="' + span + '">' + (c.id === 'mar' ? 'No back-ordering' : '') + '</td>';
+            blocked[c.id] = 1;
+          }
+        } else {
+          t += '<td class="tp-c" data-k="' + k + '"><span class="tp-u">' + (r.id === 'inv' && c.id === 'dum' ? '&nbsp;' : u) + '</span><span class="tp-q"></span></td>';
+        }
+      });
+      t += '<td class="tp-cap" data-cap="' + r.id + '"></td></tr>';
+    });
+    t += '<tr><th class="tp-rl">Total demand</th>';
+    M.cols.forEach(function (c) { t += '<td class="tp-dem" data-dem="' + c.id + '"></td>'; });
+    t += '<td></td></tr></tbody></table>';
+    root.querySelector('.tp-scroll').innerHTML = t;
+  }
+  function paint(root, M, S) {
+    root.querySelectorAll('td.tp-c').forEach(function (td) {
+      var k = td.dataset.k, col = k.split('|')[1], q = S.alloc[k], u = td.querySelector('.tp-u'), qq = td.querySelector('.tp-q');
+      u.classList.toggle('off', S.costs.indexOf(col) < 0);
+      if (q) { qq.textContent = q.toLocaleString('en-US'); qq.className = 'tp-q'; }
+      else if (S.done.indexOf(col) >= 0) { qq.textContent = '--'; qq.className = 'tp-q dash'; }
+      else { qq.textContent = ''; qq.className = 'tp-q'; }
+      td.classList.toggle('hi', S.hi.indexOf(k) >= 0);
+      td.classList.toggle('col', S.hicols.indexOf(col) >= 0);
+    });
+    root.querySelectorAll('tr[data-row]').forEach(function (tr) { tr.classList.toggle('rowhi', S.hirows.indexOf(tr.dataset.row) >= 0 && S.hi.length === 0); });
+    M.rows.forEach(function (r) {
+      var left = S.left[r.id], cell = root.querySelector('[data-cap="' + r.id + '"]');
+      cell.innerHTML = left === r.cap ? r.cap.toLocaleString('en-US') : (left === 0 ? '<span class="tp-done">' + r.cap.toLocaleString('en-US') + '</span>' : '<s>' + r.cap.toLocaleString('en-US') + '</s>' + left.toLocaleString('en-US'));
+    });
+    M.cols.forEach(function (c) {
+      var left = S.dleft[c.id], cell = root.querySelector('[data-dem="' + c.id + '"]');
+      cell.innerHTML = left === 0 ? '<span class="tp-done">' + c.dem.toLocaleString('en-US') + '</span>' : (left === c.dem ? c.dem.toLocaleString('en-US') : '<s>' + c.dem.toLocaleString('en-US') + '</s>' + left.toLocaleString('en-US'));
+    });
+  }
+  function stepper(root, M) {
+    table(root, M);
+    var i = 0, cap = root.querySelector('.tp-cap'), back = root.querySelector('.tp-back'), next = root.querySelector('.tp-next'), count = root.querySelector('.tp-count'), dots = root.querySelector('.tp-dots');
+    dots.innerHTML = M.steps.map(function () { return '<span></span>'; }).join('');
+    function go(k) {
+      i = Math.max(0, Math.min(M.steps.length - 1, k)); var S = M.steps[i];
+      paint(root, M, S);
+      cap.innerHTML = '<b class="tp-h">' + S.title + '</b>' + S.text;
+      count.textContent = 'Step ' + (i + 1) + ' of ' + M.steps.length;
+      back.disabled = i === 0; next.disabled = i === M.steps.length - 1;
+      dots.querySelectorAll('span').forEach(function (d, j) { d.classList.toggle('on', j <= i); });
+    }
+    back.addEventListener('click', function () { go(i - 1); });
+    next.addEventListener('click', function () { go(i + 1); });
+    root.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') go(i + 1); if (e.key === 'ArrowLeft') go(i - 1); });
+    go(0);
+  }
+  function explorer(root, M) {
+    table(root, M);
+    var cap = root.querySelector('.tp-cap'), tabs = root.querySelectorAll('.tp-bar button'), mode = 'costs', final = M.final;
+    function base(extra) {
+      var S = { costs: ['mar', 'apr', 'may', 'dum'], alloc: {}, left: {}, dleft: {}, done: [], hi: [], hirows: [], hicols: [] };
+      M.rows.forEach(function (r) { S.left[r.id] = r.cap; }); M.cols.forEach(function (c) { S.dleft[c.id] = c.dem; });
+      return Object.assign(S, extra || {});
+    }
+    function full(extra) { return Object.assign(base({ alloc: final.alloc, left: final.left, dleft: final.dleft, done: ['mar', 'apr', 'may', 'dum'] }), extra || {}); }
+    function fill(colId) {
+      var label = M.cols.filter(function (c) { return c.id === colId; })[0].label, alloc = {}, done = [], left = {}, dleft = {}, order = ['mar', 'apr', 'may', 'dum'];
+      M.rows.forEach(function (r) { left[r.id] = r.cap; }); M.cols.forEach(function (c) { dleft[c.id] = c.dem; });
+      for (var j = 0; j <= order.indexOf(colId); j++) {   // the plan as it stands once this column is filled
+        Object.keys(final.alloc).forEach(function (k) { var p = k.split('|'); if (p[1] === order[j]) { alloc[k] = final.alloc[k]; left[p[0]] -= final.alloc[k]; dleft[p[1]] -= final.alloc[k]; } });
+        done.push(order[j]);
+      }
+      var hi = Object.keys(alloc).filter(function (k) { return k.split('|')[1] === colId; });
+      paint(root, M, base({ alloc: alloc, left: left, dleft: dleft, done: done, hi: hi, hicols: [colId] }));
+      if (colId === 'dum') {
+        cap.innerHTML = '<b class="tp-h">Unused capacity</b>Once every month is filled, what is left goes to the dummy column at $0:<ol class="tp-list">' +
+          M.dummyRows.map(function (x) { return '<li><span>' + x[0] + '</span><span class="tp-cost">$0</span><span class="tp-take">' + x[1] + '</span></li>'; }).join('') + '</ol>';
+        return;
+      }
+      cap.innerHTML = '<b class="tp-h">Filling ' + label + ' demand (' + M.cols.filter(function (c) { return c.id === colId; })[0].dem.toLocaleString('en-US') + ' units), cheapest source first</b>Earlier months\' leftover production counts as a source too, at its cost plus $2 a month held.<ol class="tp-list">' +
+        M.fills[colId].map(function (x) { return '<li><span>' + x[0] + '</span><span class="tp-cost">$' + x[1] + '</span><span class="tp-take">' + x[2].toLocaleString('en-US') + '</span></li>'; }).join('') + '</ol>';
+    }
+    function setMode(m) {
+      mode = m; tabs.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.mode === m ? 'true' : 'false'); });
+      root.classList.toggle('tp-read', m === 'read'); root.classList.toggle('tp-cost', m === 'costs');
+      if (m === 'costs') { paint(root, M, base({ done: [] })); cap.innerHTML = '<b class="tp-h">How each cost is built</b>Each cell is the source\'s price plus $2 for every month the tire is held. Tap any cell to see its sum.'; }
+      else if (m === 'read') { paint(root, M, full()); cap.innerHTML = '<b class="tp-h">Reading the plan</b>Tap a <b>row</b> name for everything produced by one source in one period, or a <b>column</b> name for everything that meets one month\'s demand.'; }
+      else if (m === 'total') { paint(root, M, full({ hi: Object.keys(final.alloc).filter(function (k) { return k.split('|')[1] !== 'dum'; }) })); cap.innerHTML = '<b class="tp-h">Total cost</b>' + M.totalText; }
+      else fill(m);
+    }
+    tabs.forEach(function (b) { b.addEventListener('click', function () { setMode(b.dataset.mode); }); });
+    root.querySelector('.tp-scroll').addEventListener('click', function (e) {
+      if (mode === 'costs') {
+        var td = e.target.closest('td.tp-c'); if (!td) return;
+        paint(root, M, base({ done: [], hi: [td.dataset.k] })); cap.innerHTML = M.why[td.dataset.k];
+      } else if (mode === 'read') {
+        var rh = e.target.closest('[data-r]'), ch = e.target.closest('[data-colhead]');
+        if (rh) {
+          var id = rh.dataset.r, r = M.rows.filter(function (x) { return x.id === id; })[0], ks = Object.keys(final.alloc).filter(function (k) { return k.split('|')[0] === id && k.split('|')[1] !== 'dum'; });
+          var used = ks.reduce(function (s, k) { return s + final.alloc[k]; }, 0);
+          paint(root, M, full({ hi: ks, hirows: [id] }));
+          cap.innerHTML = '<b class="tp-h">Row: ' + (r.per ? r.per + ' ' + r.src.toLowerCase() : r.src) + '</b>A period of <b>production</b>: read across the row. ' + used.toLocaleString('en-US') + ' units are used' +
+            (ks.length ? ' (' + ks.map(function (k) { return final.alloc[k].toLocaleString('en-US') + ' for ' + M.cols.filter(function (c) { return c.id === k.split('|')[1]; })[0].label; }).join(', ') + ')' : '') + '.';
+        } else if (ch && ch.dataset.colhead !== 'dum') {
+          var cid = ch.dataset.colhead, c = M.cols.filter(function (x) { return x.id === cid; })[0], ks2 = Object.keys(final.alloc).filter(function (k) { return k.split('|')[1] === cid; });
+          paint(root, M, full({ hi: ks2, hicols: [cid] }));
+          cap.innerHTML = '<b class="tp-h">Column: ' + c.label + ' demand</b>A period of <b>demand</b>: read down the column. ' + ks2.map(function (k) {
+            var r = M.rows.filter(function (x) { return x.id === k.split('|')[0]; })[0]; return final.alloc[k].toLocaleString('en-US') + ' from ' + (r.per ? r.per + ' ' + r.src.toLowerCase() : r.src.toLowerCase()); }).join(', ') + ' = ' + c.dem.toLocaleString('en-US') + '.';
+        }
+      }
+    });
+    setMode('costs');
+  }
+  document.querySelectorAll('.tpw[data-mode]').forEach(function (root) {
+    try { var M = JSON.parse(root.querySelector('script[type="application/json"]').textContent); (root.dataset.mode === 'stepper' ? stepper : explorer)(root, M); }
+    catch (e) { if (window.console) console.error('transportation widget', e); }
+  });
+})();
+</script>
+<script type="application/json" id="ls-audio" data-heads="h1">{"tracks": [{"style": "full", "styleLabel": "Full read", "voice": "Charon", "note": "a man's voice", "clips": [{"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-full-Charon-1-827b68d2.mp3", "d": 343.4, "h": 0, "t": "The Nature of Aggregate Planning", "seg": [[0.0, [0], [[0.0, 0, 32]], 32], [1.87, [1], [[1.87, 0, 160], [9.96, 161, 328], [18.63, 329, 393], [21.44, 394, 537], [28.88, 538, 658]], 658], [34.95, [2], [[34.95, 0, 103], [41.1, 104, 276], [49.66, 277, 480]], 480], [61.44, [3], [[61.44, 0, 89], [66.5, 90, 269], [75.71, 270, 397], [82.17, 398, 456]], 456], [85.77, [4], [[85.77, 0, 116], [92.35, 117, 426], [109.31, 427, 485]], 485], [112.26, [5], [[112.26, 0, 56], [115.92, 57, 121], [119.63, 122, 222], [125.34, 223, 367], [133.01, 368, 453]], 453], [137.75, [6], [[137.75, 0, 55], [140.97, 56, 133]], 133], [145.31, [7], [[145.31, 0, 31], [147.54, 32, 125]], 125], [153.19, [8], [[153.19, 0, 42], [156.27, 43, 130], [160.37, 131, 199]], 199], [164.59, [9], [[164.59, 0, 265], [179.01, 266, 377]], 377], [184.25, [10], [[184.25, 0, 167], [192.28, 168, 252]], 252], [196.86, [11], [[196.86, 0, 34], [198.69, 35, 132], [203.23, 133, 313], [213.8, 314, 368], [216.5, 369, 586], [226.83, 587, 709], [232.74, 710, 863]], 863], [240.69, [12], [[240.69, 0, 63], [244.08, 64, 326]], 326], [256.89, [13], [[256.89, 0, 59], [260.1, 60, 268], [270.67, 269, 359]], 359], [275.4, [14], [[275.4, 0, 45]], 45], [278.28, [15], [[278.28, 0, 51], [281.27, 52, 180]], 180], [287.96, [16], [[287.96, 0, 67], [292.96, 68, 224]], 224], [301.79, [17], [[301.79, 0, 90], [308.68, 91, 221]], 221], [316.71, [18], [[316.71, 0, 53], [320.09, 54, 337], [335.71, 338, 500]], 500]]}, {"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-full-Charon-2-0f5b6715.mp3", "d": 557.63, "h": 1, "t": "Aggregate Planning Strategies", "seg": [[0.0, [19], [[0.0, 0, 29]], 29], [2.38, [20], [[2.38, 0, 105], [8.89, 106, 265]], 265], [18.19, [21], [[18.19, 0, 16]], 16], [20.25, [22], [[20.25, 0, 73]], 73], [24.68, [23], [[24.68, 0, 159], [32.75, 160, 283], [39.01, 284, 443], [46.87, 444, 485]], 485], [49.89, [24], [[49.89, 0, 163], [58.11, 164, 200]], 200], [60.52, [25], [[60.52, 0, 54], [62.91, 55, 159], [67.36, 160, 270]], 270], [73.4, [26], [[73.4, 0, 115], [76.68, 116, 166], [82.27, 167, 220], [84.81, 221, 411], [94.76, 412, 523]], 523], [100.98, [27], [[100.98, 0, 73]], 73], [105.02, [28], [[105.02, 0, 79]], 79], [109.44, [29], [[109.44, 0, 77]], 77], [113.87, [30], [[113.87, 0, 93], [119.18, 94, 166], [123.28, 167, 318]], 318], [130.58, [31], [[130.58, 0, 166], [139.26, 167, 284], [145.88, 285, 460], [155.34, 461, 512]], 512], [158.61, [32], [[158.61, 0, 134]], 134], [166.11, [33], [[166.11, 0, 51]], 51], [169.32, [34], [[169.32, 0, 40], [172.26, 41, 153]], 153], [178.1, [35], [[178.1, 0, 102], [185.27, 103, 206], [191.34, 207, 330], [197.43, 331, 466], [204.9, 467, 602], [213.01, 603, 700], [218.34, 701, 752]], 752], [221.48, [36], [[221.48, 0, 17], [223.4, 18, 156]], 156], [229.88, [37], [[229.88, 0, 108]], 108], [235.97, [38], [[235.97, 0, 52], [238.65, 53, 156]], 156], [243.98, [39], [[243.98, 0, 105], [250.37, 106, 156], [253.03, 157, 225], [256.33, 226, 408]], 408], [265.49, [40], [[265.49, 0, 173]], 173], [274.65, [41], [[274.65, 0, 14]], 14], [276.32, [42], [[276.32, 0, 109], [282.56, 110, 244], [288.61, 245, 317]], 317], [291.63, [43], [[291.63, 0, 110], [299.22, 111, 223], [305.23, 224, 315], [310.2, 316, 440], [316.19, 441, 587], [323.7, 588, 696], [330.19, 697, 789], [335.18, 790, 849]], 849], [339.05, [44], [[339.05, 0, 179], [349.05, 180, 297], [354.95, 298, 444], [361.63, 445, 644], [372.1, 645, 680], [374.2, 681, 765], [376.35, 766, 903], [383.25, 904, 1024], [389.36, 1025, 1117]], 1117], [393.37, [45], [[393.37, 0, 112], [399.1, 113, 222], [404.6, 223, 337], [409.83, 338, 463]], 463], [415.91, [46], [[415.91, 0, 87], [420.7, 89, 180], [426.11, 181, 287], [431.24, 288, 374]], 374], [435.76, [47]], [441.33, [48]], [454.46, [49]], [467.98, [50]], [483.67, [51]], [500.96, [52]], [518.88, [53]], [529.84, [54]], [545.91, [55]]]}, {"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-full-Charon-3-37c9d39b.mp3", "d": 1192.17, "h": 2, "t": "Methods of Aggregate Planning", "seg": [[0.0, [56], [[0.0, 0, 29]], 29], [2.12, [57], [[2.12, 0, 128], [9.21, 129, 308], [19.18, 309, 446]], 446], [26.58, [58], [[26.58, 0, 37]], 37], [29.72, [59], [[29.72, 0, 206], [40.11, 207, 301]], 301], [44.97, [60], [[44.97, 0, 91]], 91], [50.22, [61], [[50.22, 0, 115], [57.92, 116, 201], [62.62, 202, 300], [68.06, 301, 367], [71.56, 368, 467]], 467], [76.98, [62], [[76.98, 0, 114], [85.44, 115, 283]], 283], [94.91, [63], [[94.91, 0, 104], [100.79, 105, 220], [106.94, 221, 269]], 269], [109.58, [64], [[109.58, 0, 38]], 38], [113.11, [65], [[113.11, 0, 105], [119.77, 106, 268], [127.8, 269, 357], [132.55, 358, 436]], 436], [136.67, [66], [[136.67, 0, 37]], 37], [139.17, [67], [[139.17, 0, 82]], 82], [145.07, [68], [[145.07, 0, 61]], 61], [149.43, [69], [[149.43, 0, 128]], 128], [157.44, [70], [[157.44, 0, 50]], 50], [161.1, [71], [[161.1, 0, 47]], 47], [164.18, [72], [[164.18, 0, 97], [169.3, 98, 267]], 267], [177.18, [73]], [182.7, [74]], [190.26, [75]], [197.75, [76]], [204.04, [77]], [211.15, [78]], [218.2, [79]], [226.08, [80]], [232.36, [81], [[232.36, 0, 51]], 51], [235.25, [82]], [238.72, [83]], [242.57, [84]], [246.41, [85]], [251.74, [86]], [255.97, [87]], [261.55, [88]], [266.74, [89], [[266.74, 0, 144]], 144], [274.43, [90], [[274.43, 0, 74]], 74], [278.92, [91], [[278.92, 0, 67]], 67], [282.64, [92], [[282.64, 0, 72]], 72], [287.39, [93], [[287.39, 0, 29]], 29], [290.27, [94], [[290.27, 0, 144], [300.45, 145, 259], [306.34, 260, 388], [312.66, 389, 516]], 516], [319.78, [95]], [328.68, [96]], [341.55, [97]], [354.36, [98]], [367.17, [99]], [381.9, [100]], [396.57, [101]], [409.63, [102]], [413.48, [103], [[413.48, 0, 113], [420.29, 114, 310], [431.18, 311, 393]], 393], [435.44, [104], [[435.44, 5, 150]], 150], [443.2, [105], [[443.2, 0, 65]], 65], [449.99, [106], [[449.99, 0, 120]], 120], [462.35, [107], [[462.35, 0, 90]], 90], [468.82, [108], [[468.82, 0, 123], [476.59, 124, 242]], 242], [483.17, [109]], [488.68, [110]], [496.24, [111]], [503.74, [112]], [510.02, [113]], [517.14, [114]], [524.19, [115]], [532.07, [116]], [538.35, [117], [[538.35, 0, 131], [544.67, 132, 215], [549.62, 216, 330]], 330], [555.83, [118], [[555.83, 0, 99], [563.13, 100, 218], [570.92, 219, 301]], 301], [575.62, [119], [[575.62, 5, 151]], 151], [585.42, [120], [[585.42, 0, 117], [592.38, 118, 187], [599.34, 188, 288]], 288], [608.4, [121], [[608.4, 0, 126], [621.84, 127, 193], [623.46, 194, 297]], 297], [628.7, [122], [[628.7, 0, 56]], 56], [633.12, [123], [[633.12, 0, 104], [638.94, 105, 240]], 240], [646.45, [124]], [654.58, [125]], [668.1, [126]], [683.79, [127]], [698.96, [128]], [714.78, [129]], [729.51, [130]], [746.35, [131]], [758.58, [132], [[758.58, 0, 48]], 48], [763.2, [133], [[763.2, 0, 114], [769.64, 115, 153], [772.11, 154, 255]], 255], [777.93, [134], [[777.93, 0, 74], [781.29, 75, 229], [790.16, 230, 375], [797.2, 376, 460]], 460], [802.84, [135], [[802.84, 0, 43]], 43], [805.47, [136], [[805.47, 0, 95], [810.59, 96, 162], [814.33, 163, 324]], 324], [822.5, [137], [[822.5, 0, 114], [828.79, 115, 258], [835.16, 259, 405]], 405], [842.16, [138], [[842.16, 0, 30]], 30], [844.79, [139], [[844.79, 0, 93], [850.15, 94, 147]], 147], [852.87, [140], [[852.87, 0, 27]], 27], [855.82, [141], [[855.82, 0, 23]], 23], [858.84, [142], [[858.84, 0, 33]], 33], [862.88, [143], [[862.88, 0, 100], [869.16, 101, 175]], 175], [873.77, [144]], [877.81, [145]], [884.22, [146]], [885.83, [147]], [892.3, [148]], [897.56, [149]], [904.16, [150], [[904.16, 0, 116], [910.77, 117, 155]], 155], [913.32, [151], [[913.32, 0, 32]], 32], [915.44, [152], [[915.44, 0, 153], [924.91, 154, 223], [926.67, 224, 290]], 290], [930.68, [153], [[930.68, 0, 56], [933.97, 57, 89]], 89], [936.13, [154], [[936.13, 0, 90]], 90], [942.03, [155], [[942.03, 0, 108], [950.47, 109, 141], [951.05, 142, 257]], 257], [958.3, [156], [[958.3, 0, 99]], 99], [964.58, [157], [[964.58, 0, 58]], 58], [967.66, [158], [[967.66, 0, 83]], 83], [984.88, [159], [[984.88, 0, 88]], 88], [1002.05, [160], [[1002.05, 0, 26]], 26], [1005.9, [161], [[1005.9, 0, 104], [1011.23, 105, 192], [1015.83, 193, 373]], 373], [1025.17, [162], [[1025.17, 0, 122], [1031.88, 123, 299], [1041.28, 300, 495]], 495], [1053.77, [163], [[1053.77, 0, 44]], 44], [1056.85, [164], [[1056.85, 0, 81], [1061.66, 82, 162]], 162], [1066.02, [165], [[1066.02, 0, 144], [1075.13, 145, 253], [1080.78, 255, 359], [1085.49, 361, 431], [1089.36, 432, 539]], 540], [1095.13, [166], [[1095.13, 0, 29]], 29], [1097.32, [167], [[1097.32, 0, 113], [1103.33, 114, 237], [1110.18, 238, 389], [1118.11, 390, 457]], 457], [1121.9, [168], [[1121.9, 0, 37]], 37], [1124.54, [169], [[1124.54, 0, 72]], 72], [1128.83, [170], [[1128.83, 0, 193]], 193], [1138.38, [171], [[1138.38, 0, 122], [1144.16, 123, 191], [1147.3, 192, 269]], 269], [1150.87, [172], [[1150.87, 0, 99], [1157.23, 100, 275]], 275], [1166.62, [173], [[1166.62, 0, 88], [1171.42, 89, 213], [1177.42, 214, 309], [1182.96, 310, 464]], 464]]}]}, {"style": "summary", "styleLabel": "Summary", "voice": "Aoede", "note": "a woman's voice", "clips": [{"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-summary-Aoede-1-e28791f5.mp3", "d": 129.68, "h": 0, "t": "The Nature of Aggregate Planning", "seg": [[0.0, [0]], [2.51, [1]], [20.95, [2]], [30.36, [3]], [44.33, [4]], [57.01, [5, 6, 7, 8]], [69.3, [11]], [89.86, [12, 13]], [105.16, [15, 16, 17, 18]]]}, {"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-summary-Aoede-2-782b7a46.mp3", "d": 171.32, "h": 1, "t": "Aggregate Planning Strategies", "seg": [[0.0, [19]], [2.25, [20]], [10.39, [21]], [12.19, [23, 24, 25]], [33.0, [26, 27, 28, 29, 30]], [60.91, [31, 32, 33, 34]], [79.42, [35, 36, 37, 38]], [100.42, [39, 40]], [115.08, [41]], [116.95, [43]], [133.34, [44]], [148.07, [45]], [156.4, [46, 47]]]}, {"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-summary-Aoede-3-f03056ec.mp3", "d": 479.92, "h": 2, "t": "Methods of Aggregate Planning", "seg": [[0.0, [56]], [1.87, [57]], [16.4, [59]], [31.26, [61, 62, 63]], [55.08, [64]], [57.78, [65]], [65.72, [66, 67, 68, 69, 70]], [81.79, [71]], [84.94, [72, 73, 76, 78, 80]], [99.92, [81, 82, 83, 84, 86, 87, 88]], [122.39, [89, 90, 91, 92]], [131.05, [93]], [133.56, [94]], [141.12, [95, 98, 101, 102, 103]], [162.89, [104, 105, 106]], [178.76, [107]], [185.43, [108, 117]], [201.11, [118]], [214.24, [119, 120, 121]], [242.55, [122]], [247.3, [123]], [260.81, [124, 128, 130, 131, 132]], [277.07, [133, 134]], [293.85, [135]], [296.16, [136, 137]], [313.77, [138]], [316.21, [139, 140, 141, 142]], [324.48, [143, 145, 147, 148, 149]], [342.85, [150]], [347.15, [151]], [348.95, [174, 152]], [363.17, [153, 154, 155, 156]], [385.96, [157, 161]], [407.16, [162, 164, 165]], [431.23, [166]], [432.97, [167]], [445.58, [168]], [447.96, [169, 170, 171, 172]], [464.03, [173]]]}]}, {"style": "summary", "styleLabel": "Summary", "voice": "Kore", "note": "a woman's voice", "clips": [{"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-summary-Kore-1-c28b5554.mp3", "d": 126.55, "h": 0, "t": "The Nature of Aggregate Planning", "seg": [[0.0, [0]], [1.93, [1]], [21.46, [2]], [31.0, [3]], [43.81, [4]], [56.24, [5, 6, 7, 8]], [69.88, [11]], [89.99, [12, 13]], [103.31, [15, 16, 17, 18]]]}, {"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-summary-Kore-2-395da38f.mp3", "d": 172.99, "h": 1, "t": "Aggregate Planning Strategies", "seg": [[0.0, [19]], [2.25, [20]], [10.96, [21]], [12.83, [23, 24, 25]], [32.93, [26, 27, 28, 29, 30]], [59.88, [31, 32, 33, 34]], [77.37, [35, 36, 37, 38]], [100.41, [39, 40]], [114.25, [41]], [115.67, [43]], [133.92, [44]], [148.52, [45]], [157.49, [46, 47]]]}, {"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-summary-Kore-3-39c296bd.mp3", "d": 491.76, "h": 2, "t": "Methods of Aggregate Planning", "seg": [[0.0, [56]], [2.38, [57]], [17.75, [59]], [31.96, [61, 62, 63]], [55.01, [64]], [59.05, [65]], [67.06, [66, 67, 68, 69, 70]], [85.7, [71]], [89.36, [72, 73, 76, 78, 80]], [104.6, [81, 82, 83, 84, 86, 87, 88]], [125.98, [89, 90, 91, 92]], [134.82, [93]], [137.58, [94]], [145.59, [95, 98, 101, 102, 103]], [166.91, [104, 105, 106]], [182.41, [107]], [188.12, [108, 117]], [204.44, [118]], [217.51, [119, 120, 121]], [244.15, [122]], [249.28, [123]], [263.75, [124, 128, 130, 131, 132]], [280.59, [133, 134]], [297.62, [135]], [300.64, [136, 137]], [315.11, [138]], [317.94, [139, 140, 141, 142]], [325.94, [143, 145, 147, 148, 149]], [346.56, [150]], [351.89, [151]], [353.82, [174, 152]], [368.87, [153, 154, 155, 156]], [391.98, [157, 161]], [413.69, [162, 164, 165]], [438.08, [166]], [440.27, [167]], [455.12, [168]], [457.56, [169, 170, 171, 172]], [474.72, [173]]]}]}, {"style": "summary", "styleLabel": "Summary", "voice": "Charon", "note": "a man's voice", "clips": [{"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-summary-Charon-1-9a272a85.mp3", "d": 121.68, "h": 0, "t": "The Nature of Aggregate Planning", "seg": [[0.0, [0]], [1.87, [1]], [20.24, [2]], [29.02, [3]], [41.19, [4]], [54.19, [5, 6, 7, 8]], [67.19, [11]], [86.91, [12, 13]], [100.43, [15, 16, 17, 18]]]}, {"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-summary-Charon-2-6024f504.mp3", "d": 169.08, "h": 1, "t": "Aggregate Planning Strategies", "seg": [[0.0, [19]], [2.38, [20]], [11.15, [21]], [13.21, [23, 24, 25]], [33.5, [26, 27, 28, 29, 30]], [57.39, [31, 32, 33, 34]], [74.61, [35, 36, 37, 38]], [97.53, [39, 40]], [112.84, [41]], [114.51, [43]], [130.84, [44]], [146.28, [45]], [155.57, [46, 47]]]}, {"s": "https://storage.googleapis.com/sntext2speech/listen-audio/MAN4504-263-Exam3-AggregatePlanning-FULL/MAN4504-263-Exam3-AggregatePlanning-FULL-summary-Charon-3-a1eb1297.mp3", "d": 457.9, "h": 2, "t": "Methods of Aggregate Planning", "seg": [[0.0, [56]], [2.12, [57]], [15.89, [59]], [29.72, [61, 62, 63]], [53.16, [64]], [56.69, [65]], [63.8, [66, 67, 68, 69, 70]], [78.72, [71]], [81.8, [72, 73, 76, 78, 80]], [95.95, [81, 82, 83, 84, 86, 87, 88]], [115.74, [89, 90, 91, 92]], [124.33, [93]], [127.22, [94]], [134.84, [95, 98, 101, 102, 103]], [154.63, [104, 105, 106]], [169.93, [107]], [176.4, [108, 117]], [191.13, [118]], [202.66, [119, 120, 121]], [226.35, [122]], [230.78, [123]], [244.42, [124, 128, 130, 131, 132]], [259.15, [133, 134]], [273.62, [135]], [276.25, [136, 137]], [291.37, [138]], [294.0, [139, 140, 141, 142]], [300.86, [143, 145, 147, 148, 149]], [318.34, [150]], [323.66, [151]], [325.78, [174, 152]], [341.53, [153, 154, 155, 156]], [363.94, [157, 161]], [383.73, [162, 164, 165]], [406.01, [166]], [408.2, [167]], [422.16, [168]], [424.79, [169, 170, 171, 172]], [441.51, [173]]]}]}]}</script>
+<style>
+/* Listen: a pill in the corner until opened, then one bar pinned to the bottom. Neither takes page height. */
+.ls-pill, .ls-bar, .ls-bar button { font-family:"Red Hat Display", system-ui, sans-serif; }
+.ls-pill { position:fixed; right:14px; bottom:calc(14px + env(safe-area-inset-bottom, 0px)); z-index:60; min-height:44px; padding:8px 16px; border:0; border-radius:999px;
+  background:#1c2a44; color:#fff; font-size:.9rem; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(28,42,68,.3); }
+.ls-bar { position:fixed; left:0; right:0; bottom:0; z-index:60; display:flex; align-items:center; gap:6px; padding:8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+  background:#1c2a44; color:#fff; box-shadow:0 -4px 14px rgba(28,42,68,.25); }
+.ls-bar[hidden], .ls-pill[hidden] { display:none; }
+.ls-bar button { flex:none; min-width:44px; min-height:44px; border:0; border-radius:999px; background:rgba(255,255,255,.12); color:#fff; font-size:1rem; font-weight:800; cursor:pointer; }
+.ls-bar button.ls-play { background:#c8302a; }
+.ls-bar button.ls-speed { font-size:.8rem; min-width:52px; }
+.ls-bar button:disabled { opacity:.35; cursor:default; }
+.ls-bar button:focus-visible, .ls-pill:focus-visible { outline:3px solid #7fb2ff; outline-offset:2px; }
+.ls-mid { flex:1; min-width:0; }
+.ls-title { display:flex; gap:10px; align-items:baseline; font-size:.8rem; font-weight:700; white-space:nowrap; margin-bottom:5px; }
+.ls-name { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; }             /* the section's name gives way; the clocks never do */
+.ls-time { flex:none; font-variant-numeric:tabular-nums; font-weight:600; color:#d5dcea; }
+@media (max-width:760px) { .ls-all { display:none; } }      /* on a phone the whole-chapter time is at the top of the section list */
+.ls-track { height:14px; padding:5px 0; cursor:pointer; background:linear-gradient(rgba(255,255,255,.25), rgba(255,255,255,.25)) center / 100% 4px no-repeat; }
+.ls-track i { display:block; height:4px; width:0; background:#fff; border-radius:2px; }
+body.ls-open { padding-bottom:calc(var(--ls-bar, 60px) + 16px); }      /* --ls-bar: the bar's height, measured when it opens */
+/* what is being spoken about: a soft highlight on the bullet, row or paragraph. Headings are never restyled. */
+.ls-hi:not(tr):not(h1):not(h2):not(h3):not(h4) { background:#fff3bf; box-shadow:0 0 0 5px #fff3bf; border-radius:3px; }
+tr.ls-hi > td, tr.ls-hi > th { background:#fff3bf !important; }
+body.ls-open [data-ls] { cursor:pointer; transition:background-color .25s, box-shadow .25s; }
+body.ls-open tr[data-ls] > td { transition:background-color .25s; }
+/* the two lists that open above the bar: sections and speeds */
+.ls-bar button.ls-list { font-size:1.15rem; }
+.ls-bar button.ls-voice { display:inline-flex; align-items:center; justify-content:center; padding:0; }      /* the reader: shown only when a page has more than one voice */
+.ls-menu { box-sizing:border-box; position:fixed; left:10px; bottom:calc(var(--ls-bar, 60px) + 6px); z-index:61; width:min(430px, calc(100vw - 20px)); max-height:60vh; overflow-y:auto;
+  padding:6px; background:#1c2a44; color:#fff; border-radius:12px; box-shadow:0 8px 28px rgba(28,42,68,.4); font-family:"Red Hat Display", system-ui, sans-serif; }
+.ls-menu.ls-speed { left:auto; right:10px; width:min(250px, calc(100vw - 20px)); }
+.ls-menu[hidden] { display:none; }
+.ls-menu-h { padding:6px 10px 4px; font-size:.7rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#b9c4d8; }
+.ls-menu button { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:44px; padding:8px 10px; border:0; border-radius:8px;
+  background:none; color:#fff; font:inherit; font-size:.9rem; text-align:left; cursor:pointer; }
+.ls-menu button b { font-weight:700; } .ls-menu button span { flex:none; font-size:.78rem; color:#b9c4d8; font-variant-numeric:tabular-nums; }
+.ls-menu button:hover { background:rgba(255,255,255,.1); }
+.ls-menu button[aria-checked="true"] { background:#c8302a; } .ls-menu button[aria-checked="true"] span { color:#fff; }
+.ls-menu button:focus-visible { outline:3px solid #7fb2ff; outline-offset:-3px; }
+@media (max-width:600px) { .ls-bar button.ls-skip { display:none; } }     /* on a phone the section list replaces the two skip buttons */
+/* on a phone the title has a line of its own above the buttons: a section's name and its clock do not fit beside five buttons */
+@media (max-width:430px) {
+  .ls-bar { flex-wrap:wrap; row-gap:4px; padding-top:6px; }
+  .ls-bar .ls-mid { order:-1; flex:0 0 100%; }
+  .ls-bar .ls-play { margin-right:auto; }
+}
+/* following the words: the sentence being spoken, and the word inside it. With these on, the paragraph tint is lighter. */
+/* Translucent on purpose: a highlight is painted piece by piece, and a solid one covers the part of an italic letter that leans
+   into the next piece (the a of "Rhogeessa" lost its edge, Ian 2026-11-18). Through a translucent one the letter shows. */
+::highlight(ls-sent) { background-color:rgba(255, 205, 20, .5); color:inherit; }
+::highlight(ls-word) { background-color:rgba(255, 130, 0, .62); color:#1c2a44; }
+html.ls-fine .ls-hi:not(tr):not(h1):not(h2):not(h3):not(h4) { background:#fff9e3; box-shadow:0 0 0 5px #fff9e3; }
+</style>
+<script>
+/* Listen: any notes page spoken aloud, section by section, from a bar pinned to the bottom of the screen.
+   While it talks, the bullet, table row or paragraph it is talking about is highlighted, and the page scrolls to keep
+   it in view. Tapping a block that has narration jumps the audio to it. Headings are never restyled.
+   The clips and their timings come from narrate.py: [{s: audio, d: seconds, h: heading index, t: title,
+   seg: [[start second, block numbers], ...]}], and each block carries data-ls="<number>". The bar has a list of the
+   sections to jump between, and a list of speeds from 0.85x to 2x; the speed chosen is remembered.
+   A page with more than one recording carries {tracks: [{style, styleLabel, voice, note, clips}]} instead of one list of
+   clips: a version (a summary, or the page read in full) in a voice. The bar then has a reader button beside the skip
+   buttons, with the versions and the voices to choose from. Changing either keeps the listener's place: the same
+   sentence or passage in another voice, the same paragraph or section in another version. Both choices are remembered. */
+(function () {
+  var src = document.getElementById('ls-audio'), clips, TRACKS = null, ti = 0;
+  try { clips = JSON.parse(src.textContent); } catch (e) { return; }
+  if (clips && clips.tracks) { TRACKS = clips.tracks; clips = TRACKS[0].clips; }
+  if (!clips || !clips.length) return;
+  function trackOf(style, voice) {        /* the recording of this version in this voice, or in the first voice it has */
+    var hit = -1, any = -1;
+    TRACKS.forEach(function (t, j) { if (t.style === style) { if (any < 0) any = j; if (t.voice === voice) hit = j; } });
+    return hit >= 0 ? hit : any;
+  }
+  try { if (TRACKS) { var kept = trackOf(localStorage.getItem('ls-version') || TRACKS[0].style, localStorage.getItem('ls-reader') || TRACKS[0].voice); if (kept >= 0) { ti = kept; clips = TRACKS[ti].clips; } } } catch (e) {}
+  var HSEL = src.getAttribute('data-heads') || 'h1, h2';     /* which headings the audio is divided at */
+  var RATES = [0.85, 1, 1.25, 1.5, 1.75, 2], rate = 1, i = 0, aud = new Audio(), open = false, lit = null, cur = -2, userAt = 0, where = {};
+  function ids(s) { return [].concat(s[1]).filter(function (b) { return b >= 0; }); }   /* a passage speaks for no block, one, or several */
+  function index() { where = {}; clips.forEach(function (c, ci) { (c.seg || []).forEach(function (s, si) { ids(s).forEach(function (b) { if (!(b in where)) where[b] = [ci, si]; }); }); }); }
+  index();
+  try { i = Math.min(+localStorage.getItem('ls-at:' + location.pathname) || 0, clips.length - 1); } catch (e) {}
+  try { var saved = RATES.indexOf(+localStorage.getItem('ls-rate')); if (saved >= 0) rate = saved; } catch (e) {}
+  function heads() { return Array.prototype.filter.call(document.querySelectorAll(HSEL), function (h) { return !h.closest('.toc-box, .ls-bar'); }); }
+  function el(tag, cls, html, parent) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; if (parent) parent.appendChild(e); return e; }
+  function btn(cls, html, label, parent) { var b = el('button', cls, html, parent); b.type = 'button'; b.setAttribute('aria-label', label); return b; }
+
+  var pill = btn('ls-pill', '&#127911; Listen', 'Listen to this chapter', document.body);
+  var bar = el('div', 'ls-bar', null, document.body); bar.hidden = true; bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', 'Chapter audio');
+  var list = btn('ls-list', '&#9776;', 'Choose a section', bar);
+  var prev = btn('ls-skip', '&#9198;', 'Previous section', bar), play = btn('ls-play', '&#9654;', 'Play', bar), next = btn('ls-skip', '&#9197;', 'Next section', bar);
+  var PERSON = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="9" cy="8" r="3.6" fill="currentColor"/><path d="M2.5 20c0-3.9 2.9-6.4 6.5-6.4s6.5 2.5 6.5 6.4z" fill="currentColor"/>'
+    + '<path d="M16.5 6.2a4.6 4.6 0 0 1 0 5.6M19.3 3.9a8.2 8.2 0 0 1 0 10.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  var voice = TRACKS && TRACKS.length > 1 ? btn('ls-voice', PERSON, 'Choose the version and the voice', bar) : null;
+  if (voice) bar.classList.add('ls-many');
+  function measure() { if (open) document.documentElement.style.setProperty('--ls-bar', bar.offsetHeight + 'px'); }      /* the page and the pop-up keep clear of the bar, however tall */
+  window.addEventListener('resize', measure);
+  var mid = el('div', 'ls-mid', null, bar), title = el('div', 'ls-title', '', mid), track = el('div', 'ls-track', '<i></i>', mid);
+  var name = el('span', 'ls-name', '', title), clock = el('span', 'ls-time', '', title);      /* which section, and how far through it and the chapter */
+  var speed = btn('ls-speed', RATES[rate] + '×', 'Playback speed', bar), close = btn('', '&#10005;', 'Close the audio bar', bar);
+  var menu = el('div', 'ls-menu', null, document.body); menu.hidden = true; menu.setAttribute('role', 'menu');
+  var total = clips.reduce(function (a, c) { return a + c.d; }, 0);
+
+  function fmt(s) { s = Math.round(s); return Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2); }
+  function calm() { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  /* follow along: bring el into the middle of the screen, unless the reader has just scrolled somewhere themselves */
+  function follow(e) {            /* e: an element, or a range of text */
+    if (!e || Date.now() - userAt < 4000) return;
+    var r = e.getBoundingClientRect(), top = 70, bottom = window.innerHeight - (bar.offsetHeight || 60) - 50;
+    if (!r.height || (r.top >= top && r.bottom <= bottom)) return;
+    var to = r.height > bottom - top ? r.top - top : (r.top + r.bottom) / 2 - (top + bottom) / 2;
+    window.scrollBy({ top: to, behavior: calm() ? 'auto' : 'smooth' });
+  }
+  ['wheel', 'touchmove', 'keydown'].forEach(function (ev) {
+    window.addEventListener(ev, function (e) { if (!e.target.closest || !e.target.closest('.ls-bar')) userAt = Date.now(); }, { passive: true });
+  });
+  function light(blocks) {
+    (lit || []).forEach(function (b) { b.classList.remove('ls-hi'); });
+    lit = blocks && blocks.length ? blocks : null;
+    (lit || []).forEach(function (b) { b.classList.add('ls-hi'); });
+  }
+
+  /* ---- following the words: the sentence being spoken is marked, and a marker moves through it word by word ----
+     Marks are drawn with the browser's highlight ranges, so the page's own markup is never touched. Where the browser
+     has no such ranges, or a paragraph's text is not what was recorded (a formula redrawn by MathJax), the paragraph
+     highlight alone is shown. */
+  var HL = (window.CSS && CSS.highlights && window.Highlight) ? { sent: new Highlight(), word: new Highlight() } : null, maps = {}, fine = null, raf = 0;
+  if (HL) { CSS.highlights.set('ls-sent', HL.sent); CSS.highlights.set('ls-word', HL.word); document.documentElement.classList.add('ls-fine'); }
+  function charmap(id, block) {       /* the block's text as the recorder saw it: spaces collapsed, nested lists left out */
+    if (id in maps) return maps[id];
+    var w = document.createTreeWalker(block, NodeFilter.SHOW_TEXT), n, nodes = [], offs = [], text = '', space = false;
+    while ((n = w.nextNode())) {
+      var inner = n.parentNode.closest('ul, ol');
+      if (inner && inner !== block && block.contains(inner)) continue;
+      for (var k = 0, v = n.nodeValue; k < v.length; k++) {
+        if (/\s/.test(v[k])) { space = text.length > 0; continue; }
+        if (space) { text += ' '; nodes.push(n); offs.push(k - 1 >= 0 ? k - 1 : 0); space = false; }
+        text += v[k]; nodes.push(n); offs.push(k);
+      }
+    }
+    return (maps[id] = { text: text, nodes: nodes, offs: offs });
+  }
+  function span(m, a, b) {
+    a = Math.max(0, Math.min(a, m.text.length - 1)); b = Math.max(a + 1, Math.min(b, m.text.length));
+    var r = document.createRange(); r.setStart(m.nodes[a], m.offs[a]); r.setEnd(m.nodes[b - 1], m.offs[b - 1] + 1); return r;
+  }
+  function unmark() { if (HL) { HL.sent.clear(); HL.word.clear(); } }
+  function words(m, c0, c1) {         /* each word of the sentence with a weight for how long it takes to say */
+    var out = [], re = /[^\s\u2014]+\u2014?/g, x, t = m.text.slice(c0, c1), sum = 0;
+    while ((x = re.exec(t))) {
+      var wd = x[0], wt = wd.replace(/[^A-Za-z]/g, '').length + 2.5 * wd.replace(/\D/g, '').length + (/[,;:)]$/.test(wd) ? 2.5 : 0) + 1;
+      sum += wt; out.push([c0 + x.index, c0 + x.index + wd.length, sum]);
+    }
+    return out;
+  }
+  function tick() {
+    raf = 0; if (!fine) return;
+    var t = aud.currentTime || 0, S = fine.sents, j = 0;
+    for (var q = 0; q < S.length; q++) if (S[q][0] <= t + 0.02) j = q;
+    if (j !== fine.j) {
+      fine.j = j; fine.w = -1; fine.words = words(fine.m, S[j][1], S[j][2]);
+      HL.sent.clear(); var r = span(fine.m, S[j][1], S[j][2]); HL.sent.add(r); follow(r);
+    }
+    var W = fine.words, end = (j + 1 < S.length ? S[j + 1][0] : fine.end) - 0.25, len = Math.max(end - S[j][0], 0.4);
+    if (W.length) {
+      var at = Math.min(Math.max((t - S[j][0]) / len, 0), 0.999) * W[W.length - 1][2], k = 0;
+      while (k < W.length - 1 && W[k][2] <= at) k++;
+      if (k !== fine.w) { fine.w = k; HL.word.clear(); HL.word.add(span(fine.m, W[k][0], W[k][1])); }
+    }
+    if (!aud.paused) raf = requestAnimationFrame(tick);
+  }
+  function passage(force) {            /* which passage of this section is being spoken, and what it is about */
+    var seg = clips[i].seg; if (!seg) return;
+    var t = aud.currentTime || 0, k = 0;
+    for (var j = 0; j < seg.length; j++) if (seg[j][0] <= t + 0.05) k = j;
+    if (k === cur && !force) { if (fine && !raf) tick(); return; }
+    cur = k;
+    var blocks = ids(seg[k]).map(function (b) { return document.querySelector('[data-ls="' + b + '"]'); }).filter(Boolean);
+    light(blocks); unmark(); fine = null;
+    if (HL && seg[k][2] && blocks.length === 1) {
+      var m = charmap(ids(seg[k])[0], blocks[0]);
+      if (m.text.length === seg[k][3]) fine = { m: m, sents: seg[k][2], end: k + 1 < seg.length ? seg[k + 1][0] : clips[i].d, j: -1, w: -1, words: [] };
+    }
+    if (!fine && HL && blocks.length === 1 && /^H[1-4]$/.test(blocks[0].tagName)) {      /* a heading is always marked while it is read: its words, never its box */
+      var all = document.createRange(); all.selectNodeContents(blocks[0]); HL.sent.add(all);
+    }
+    if (fine) tick(); else follow(blocks[0] || (k === 0 ? heads()[clips[i].h] : null));
+  }
+  function status() {
+    var left = clips.slice(i).reduce(function (a, c) { return a + c.d; }, 0) - (aud.currentTime || 0);
+    /* Two clocks, each saying what it measures. "34:52 left" alone, after a section's name, was read as the time left in
+       that section, which made a 35-minute chapter look like two hours (Ian, 2026-11-20). */
+    name.textContent = (styles().length > 1 ? TRACKS[ti].styleLabel + ' · ' : '') + 'Section ' + (i + 1) + ' of ' + clips.length + ' · ' + clips[i].t;
+    clock.innerHTML = fmt((aud.currentTime || 0) / RATES[rate]) + ' / ' + fmt((aud.duration || clips[i].d) / RATES[rate])
+      + '<span class="ls-all"> &middot; Whole Chapter: ' + fmt(Math.max(left, 0) / RATES[rate]) + ' left</span>';
+    prev.disabled = i === 0; next.disabled = i === clips.length - 1;
+  }
+  function load(j, go, at) {
+    i = j; cur = -2; aud.preload = 'metadata'; aud.src = clips[i].s; aud.defaultPlaybackRate = aud.playbackRate = RATES[rate];
+    if (at) {            /* audio fetched from a server is not there yet: ask now, and ask again once its length is known */
+      var want = at, again = function () { aud.removeEventListener('loadedmetadata', again); if (Math.abs(aud.currentTime - want) > 1) aud.currentTime = want; };
+      try { aud.currentTime = at; } catch (e) {}
+      aud.addEventListener('loadedmetadata', again);
+    }
+    status(); measure(); if (!clips[i].seg) follow(heads()[clips[i].h]);
+    try { localStorage.setItem('ls-at:' + location.pathname, i); } catch (e) {}
+    if (go) { var p = aud.play(); if (p && p.catch) p.catch(function () {}); }
+  }
+  function label() { var on = !aud.paused; play.innerHTML = on ? '&#10074;&#10074;' : '&#9654;'; play.setAttribute('aria-label', on ? 'Pause' : 'Play'); }
+  aud.addEventListener('play', function () { label(); if (fine && !raf) tick(); }); aud.addEventListener('pause', label);
+  aud.addEventListener('error', function () { name.textContent = 'The audio could not be loaded. Check the connection and press play again.'; clock.textContent = ''; });
+  aud.addEventListener('timeupdate', function () { track.firstChild.style.width = (aud.currentTime / (aud.duration || clips[i].d) * 100) + '%'; status(); passage(false); });
+  aud.addEventListener('ended', function () { if (i < clips.length - 1) load(i + 1, true); else { label(); light(null); unmark(); fine = null; } });
+  play.onclick = function () { if (aud.paused) { var p = aud.play(); if (p && p.catch) p.catch(function () {}); } else aud.pause(); };
+  prev.onclick = function () { userAt = 0; load(Math.max(i - 1, 0), !aud.paused); };
+  next.onclick = function () { userAt = 0; load(Math.min(i + 1, clips.length - 1), !aud.paused); };
+  /* one pop-up above the bar, used for both lists: the sections of the chapter, and the playback speeds */
+  function shut() { menu.hidden = true; menu.dataset.kind = ''; [list, speed, voice].forEach(function (b) { if (b) b.setAttribute('aria-expanded', 'false'); }); }
+  function pop(kind, opener, groups) {           /* groups: [[heading, [row html], which row is chosen, what choosing one does]] */
+    if (!menu.hidden && menu.dataset.kind === kind) { shut(); return; }
+    shut(); menu.textContent = ''; menu.dataset.kind = kind; menu.className = 'ls-menu ls-' + kind;
+    groups.forEach(function (g) {
+      el('div', 'ls-menu-h', g[0], menu);
+      g[1].forEach(function (r, j) {
+        var b = btn('', r, '', menu); b.removeAttribute('aria-label'); b.setAttribute('role', 'menuitemradio'); b.setAttribute('aria-checked', j === g[2] ? 'true' : 'false');
+        b.onclick = function () { shut(); g[3](j); };
+      });
+    });
+    measure(); menu.hidden = false; opener.setAttribute('aria-expanded', 'true');
+  }
+  function setRate(j) { rate = j; aud.defaultPlaybackRate = aud.playbackRate = RATES[rate]; speed.textContent = RATES[rate] + '×'; status(); try { localStorage.setItem('ls-rate', RATES[rate]); } catch (e) {} }
+  speed.onclick = function () {
+    pop('speed', speed, [['Speed', RATES.map(function (r) { return '<b>' + r + '×</b><span>' + (r === 1 ? 'normal' : fmt(total / r) + ' in all') + '</span>'; }), rate, setRate]]);
+  };
+  list.onclick = function () {
+    pop('sections', list, [['Sections &middot; Whole Chapter ' + fmt(total / RATES[rate]), clips.map(function (c, j) { return '<b>' + (j + 1) + '. ' + c.t.replace(/</g, '&lt;') + '</b><span>' + fmt(c.d / RATES[rate]) + '</span>'; }), i,
+      function (j) { userAt = 0; load(j, true); }]]);
+  };
+  /* another recording of the same page. Every recording has its own timings, so the place is carried over by what is
+     being said: in another voice, the same sentence (or as far through the same passage); in another version, the
+     paragraph on screen if that version speaks about it, and otherwise the start of the same section. */
+  function styles() { var out = []; (TRACKS || []).forEach(function (t) { if (out.indexOf(t.style) < 0) out.push(t.style); }); return out; }
+  function voicesOf(style) { return (TRACKS || []).filter(function (t) { return t.style === style; }); }
+  function minutes(t) { return Math.max(1, Math.round(t.clips.reduce(function (a, c) { return a + c.d; }, 0) / 60)) + ' min'; }
+  function setTrack(j) {
+    if (j < 0 || j === ti) return;
+    var was = !aud.paused, t = aud.currentTime || 0, seg = clips[i].seg || [], k = Math.max(cur, 0), old = TRACKS[ti], to = TRACKS[j], ni = i, at = 0;
+    if (to.style === old.style) {
+      var nseg = (to.clips[i] || {}).seg || [];
+      if (seg[k] && nseg[k]) {
+        var a0 = seg[k][0], a1 = k + 1 < seg.length ? seg[k + 1][0] : clips[i].d, b0 = nseg[k][0], b1 = k + 1 < nseg.length ? nseg[k + 1][0] : to.clips[i].d;
+        at = b0 + Math.min(Math.max((t - a0) / Math.max(a1 - a0, 0.1), 0), 0.98) * (b1 - b0);
+        if (fine && fine.j >= 0 && nseg[k][2] && nseg[k][2][fine.j]) at = nseg[k][2][fine.j][0];
+      }
+    } else {
+      var here = seg[k] ? ids(seg[k]) : [], found = null;
+      to.clips.forEach(function (c, ci) { (c.seg || []).forEach(function (sg, si) { if (!found && ids(sg).some(function (b) { return here.indexOf(b) >= 0; })) found = [ci, sg[0]]; }); });
+      if (found) { ni = found[0]; at = found[1]; } else ni = Math.min(i, to.clips.length - 1);
+    }
+    ti = j; clips = to.clips; index(); total = clips.reduce(function (a, c) { return a + c.d; }, 0);
+    try { localStorage.setItem('ls-version', to.style); localStorage.setItem('ls-reader', to.voice); } catch (e) {}
+    userAt = 0; load(ni, was, at); if (!was) passage(true);
+  }
+  if (voice) voice.onclick = function () {
+    var st = styles(), now = TRACKS[ti], vs = voicesOf(now.style), groups = [];
+    if (st.length > 1) groups.push(['Version', st.map(function (x) { var tr = TRACKS[trackOf(x, now.voice)]; return '<b>' + tr.styleLabel + '</b><span>' + minutes(tr) + '</span>'; }),
+      st.indexOf(now.style), function (n) { setTrack(trackOf(st[n], now.voice)); }]);
+    if (vs.length > 1) groups.push(['Voice', vs.map(function (v) { return '<b>' + v.voice + '</b><span>' + (v.note || '') + '</span>'; }),
+      vs.indexOf(now), function (n) { setTrack(TRACKS.indexOf(vs[n])); }]);
+    else if (st.length > 1) groups.push(['Voice', ['<b>' + now.voice + '</b><span>the only voice for this version</span>'], 0, function () {}]);
+    pop('voice', voice, groups);
+  };
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') shut(); });
+  document.addEventListener('click', function (ev) { if (!menu.hidden && ev.target.closest && !ev.target.closest('.ls-menu, .ls-list, .ls-speed, .ls-voice')) shut(); }, true);
+  track.onclick = function (ev) { var r = track.getBoundingClientRect(); userAt = 0; aud.currentTime = (ev.clientX - r.left) / r.width * (aud.duration || clips[i].d); };
+  /* tap a narrated block to hear it from there */
+  document.addEventListener('click', function (ev) {
+    if (!open || !ev.target.closest) return;
+    if (ev.target.closest('a, button, summary, input, .df-term, .ls-bar, .ls-menu, .pmw, .tpw, .sdg, .pertw')) return;
+    var b = ev.target.closest('[data-ls]'); if (!b) return;
+    var w = where[b.getAttribute('data-ls')]; if (!w) return;
+    userAt = 0;
+    if (w[0] === i) { aud.currentTime = clips[i].seg[w[1]][0]; if (aud.paused) play.onclick(); passage(true); }
+    else load(w[0], true, clips[w[0]].seg[w[1]][0]);
+  });
+  pill.onclick = function () {
+    open = true; bar.hidden = false; pill.hidden = true; document.body.classList.add('ls-open'); measure();
+    /* start from the section on screen, not from the top */
+    var hs = heads(), best = i, y = 1e9;
+    clips.forEach(function (c, j) { var h = hs[c.h]; if (!h) return; var t = h.getBoundingClientRect().top; if (t > -40 && t < y) { y = t; best = j; } });
+    if (y < window.innerHeight) i = best;
+    userAt = 0; load(i, true);
+  };
+  close.onclick = function () { shut(); aud.pause(); open = false; bar.hidden = true; pill.hidden = false; document.body.classList.remove('ls-open'); light(null); unmark(); fine = null; };
+  pill.innerHTML = '&#127911; Listen &middot; Whole Chapter ' + Math.max(1, Math.round(total / 60 / RATES[rate])) + ' min';     /* how long, and of what, before anyone presses it */
+  window.__ls = { get clips() { return clips; }, tracks: TRACKS, track: function () { return ti; }, audio: aud, lit: function () { return lit && lit[0]; }, fine: function () { return fine; }, marks: function () { return HL ? [HL.sent.size, HL.word.size] : null; } };
+})();
+</script>
+</body>
+</html>

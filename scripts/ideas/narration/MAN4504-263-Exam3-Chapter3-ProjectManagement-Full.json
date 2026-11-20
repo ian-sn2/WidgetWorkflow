@@ -1,0 +1,35 @@
+{
+  "steps": {
+    "Drawing the Network": [
+      "Every network needs somewhere to begin. So we add a dummy node, called Start, and ask one question: which activities have nothing in front of them? That's A and B. Draw an arrow from Start to each one.",
+      "Now, what does A lead to? Two things: C and D. So A gets two arrows. And B? B only leads to D. Notice that D now has two arrows coming in. It's waiting on both A and B.",
+      "From here it's the same move, again and again, until every activity is connected. And that's it — the finished network."
+    ],
+    "The Forward Pass": [
+      "Let's do the forward pass. We're asking one thing about every activity: how early can it start, and how early can it finish? The Start node is easy. Everything about it is 0. And look at the bottom of each node. That's its duration, which we already know.",
+      "First up, A. Nothing comes before it except Start, so A can begin right away, at 0. How long does it take? 2 weeks. So A's early finish is 0 plus 2, which is 2.",
+      "B is the same story. It also follows Start, so it begins at 0 as well. B takes 3 weeks, so its early finish is 3.",
+      "Now C. C has to wait for A, and only A. When does A finish? Week 2. So that's C's early start. Add C's 2 weeks, and C finishes at 4.",
+      "Here's the first tricky one. D has two predecessors, A and B, and it can't start until both of them are done. A finishes at 2. B finishes at 3. So which number do we use? The bigger one — 3. D has to wait for the slower of the two. Then 3 plus 4 gives an early finish of 7.",
+      "E is a quick one. It follows C, and C finishes at week 4, so E starts at 4. It takes 4 weeks, so it finishes at 8.",
+      "F follows C as well, so it can also start at week 4, right alongside E. F only needs 3 weeks, so it's done by week 7.",
+      "Now G, and it's the same trap as before. G needs both D and E. D finishes at 7. E finishes at 8. Remember the rule? Take the later one. So G starts at 8, runs for 5 weeks, and finishes at 13.",
+      "Last one: H. It needs both F and G. F is done at 7, but G isn't done until 13. So H has to wait until 13. Add 2 weeks for H, and we land on 15. And that answers the big question: the earliest this whole project can finish is 15 weeks."
+    ],
+    "The Backward Pass": [
+      "Now we turn around and work backward. This time the question is different: how late can each activity run, without delaying the project? We start at the end, with H. The project finishes at week 15, so H's late finish is 15. Take away H's 2 weeks, and its late start is 13.",
+      "Next, F. Only one activity comes after F, and that's H. So F just has to be done by the time H needs to start. That's week 13. F takes 3 weeks, so the latest it can start is week 10.",
+      "G is in the same position. Only H follows it, so G's late finish is also 13. But G takes 5 weeks. So it has to start by week 8.",
+      "Now E. E feeds into G, and G must start by week 8. So E has to be finished by 8. Subtract E's 4 weeks, and its late start is 4.",
+      "Here's the tricky one going backward. Two activities follow C: E and F. E has to start by week 4. F doesn't need to start until week 10. So which deadline does C have to meet? The earlier one — 4. If C ran any later, E would be late. Take away C's 2 weeks, and C must start by week 2.",
+      "D is simple again. Only G follows it, and G must start by 8. So D finishes by 8 at the latest. With 4 weeks of work, it has to start by 4.",
+      "B comes right before D, and D's late start is 4. So B must finish by 4. B takes 3 weeks, which means it can start as late as week 1.",
+      "And finally, A. Two activities follow it: C and D. C must start by week 2, and D by week 4. Same rule as before. Take the earlier one. So A has to finish by week 2. It takes 2 weeks, so its late start is 0. And with that, the backward pass is done."
+    ],
+    "The Deadline for a 99% Chance": [
+      "Let's flip the question around. Instead of picking a deadline and asking about the chance, we pick the chance first. We want to be 99 percent sure. So where does the deadline have to sit, so that 0.99 of the curve is to its left?",
+      "To find it, we go to the normal table and look for 0.99. The closest value in there is 0.9901, and it sits at a z of 2.33. What does that tell us? The deadline is 2.33 standard deviations above the mean.",
+      "Now turn that into weeks. One standard deviation is 1.76 weeks, so 2.33 of them comes to 4.10 weeks. Add that to the mean of 15, and we get 19.10 weeks. That's the date to promise, if you want to be almost certain of keeping it."
+    ]
+  }
+}

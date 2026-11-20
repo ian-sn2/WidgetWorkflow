@@ -1,0 +1,101 @@
+{
+  "steps_from": "MAN4504-263-Exam3-AggregatePlanning-FULL",
+  "sections": {
+    "The Nature of Aggregate Planning": [
+      ["blue sedans", "Aggregate planning, also called sales and production planning, or S and P, plans intermediate-term production in aggregate units. That means how many cars, not how many blue sedans, because totals forecast better than individual items."],
+      ["meet forecast demand", "The goal is to meet forecast demand at minimum cost, by adjusting production rates, labor, inventory, overtime, and subcontracting."],
+      ["Requirements", "It requires a logical aggregate unit, an aggregate demand forecast, a way to determine costs, and a model combining forecasts and costs."],
+      ["budget authorization", "The plan works like a budget authorization, and feeds the master production schedule and MRP, which break it down by product."],
+      ["Horizon |", "The table shows three planning horizons, with who plans each, and examples."],
+      ["Long range", "Long range is over 1 year. Top executives plan research and development, new products, capital investment, and facility location."],
+      ["Intermediate", "Intermediate is 3 to 18 months. Operations managers plan sales and production, employment, inventory, and subcontracting. This is aggregate planning."],
+      ["Short range", "Short range is under 3 months. Managers, supervisors, and foremen plan job assignments, ordering, scheduling, and overtime."]
+    ],
+    "Aggregate Planning Strategies": [
+      ["Capacity options", "Capacity options change supply, and demand options change demand. Each comes in opposite pairs: hire or lay off, build inventory or back-order."]
+    ],
+    "Capacity Options": [
+      ["Option |", "There are five capacity options, each with its drawbacks."],
+      ["Change inventory levels", "Change inventory levels by building stock in slow periods. The drawbacks are holding costs, shortages if demand runs high, and that it is not possible for services."],
+      ["Hire or lay off", "Hire or lay off to match the workforce to demand. The drawbacks are hiring, training, and separation costs, and lower productivity and morale."],
+      ["Overtime or idle time", "Use overtime or idle time to vary the hours of a constant workforce. The drawbacks are overtime premiums and fatigue, idle time to absorb, and that only small changes are possible."],
+      ["Subcontract |", "Subcontract. The drawbacks are cost, quality and delivery risk, and exposing customers to a competitor."],
+      ["Part-time workers", "Or use part-time workers, which is best for low-skilled labor and a poor fit for skilled work."]
+    ],
+    "Demand Options": [
+      ["Option |", "There are three demand options, again with drawbacks."],
+      ["Influence demand", "Influence demand with promotions and off-peak discounts. The drawbacks are an uncertain response, and that it may not balance demand and capacity."],
+      ["Back-order in high-demand", "Back-order in high-demand periods. The drawbacks are that customers wait, goodwill and sales are lost, and it works only with few substitutes."],
+      ["Counter-seasonal mix", "Or offer a counter-seasonal mix, like jet-ski engines in summer and snowmobile engines in winter. The drawback is that it may take the firm outside its expertise."]
+    ],
+    "Methods of Aggregate Planning": [
+      ["No single option", "No single option is likely to be optimal, partly because company policies limit each one, so planners combine several."],
+      ["Chase strategy", "A chase strategy matches output to each period's demand. It is common in services, where it is often the only option."],
+      ["Level strategy", "A level strategy keeps daily production uniform, with inventory or idle time as the buffer."],
+      ["Mixed strategy", "A mixed strategy combines them. It is usually best, but finding it takes trial and error."],
+      ["The routine problems hide", "Exam tip: work many practice problems. They hide small rules, like inventory carried in, or charging for a workforce change at the start, and the exam has no wrinkle that is not in them."]
+    ],
+    "Graphical Approaches (Trial and Error)": [
+      ["Graphical methods", "Graphical methods compare demand with capacity a few variables at a time. They are easy, but not guaranteed optimal."],
+      ["Steps: demand per period", "The steps are to find demand per period, then capacity from regular time, overtime, and subcontracting, then labor, hiring, layoff, and holding costs, then company policies, and finally to compare the plans' total costs."]
+    ],
+    "Example: Applying Aggregate Planning Strategies": [
+      ["Month |", "The example covers six months. For each month, the table gives demand, production days, and demand per day."],
+      ["Jan |", "January has demand of 900 units, 22 production days, and 41 per day."],
+      ["Feb |", "February: 700 units, 18 days, 39 per day."],
+      ["Mar |", "March: 800 units, 21 days, 38 per day."],
+      ["Apr |", "April: 1,200 units, 21 days, 57 per day."],
+      ["May |", "May: 1,500 units, 22 days, 68 per day."],
+      ["Jun |", "June: 1,100 units, 20 days, 55 per day."],
+      ["Total |", "In total, that is 6,200 units over 124 days."],
+      ["Costs: carrying", "The costs are as follows. Carrying is 5 dollars per unit per month, and subcontracting is 20 dollars per unit. Labor is 80 dollars per day per worker, at 1.6 labor-hours per unit. Raising the daily rate costs 300 dollars per unit, and lowering it costs 600."]
+    ],
+    "Method 1: Pure Level Strategy": [
+      ["6,200 ÷ 124", "Method one is the pure level strategy. 6,200 units over 124 days is 50 per day, with 10 workers. Ending inventory of 1,850 units at 5 dollars costs 9,250 dollars. Labor, at 10 workers times 80 dollars times 124 days, is 99,200 dollars. The total is 108,450 dollars."]
+    ],
+    "Method 2: Level Strategy (Production at the Minimum Requirement and Use of Subcontracting)": [
+      ["38 units per day", "Method two is level production at the minimum, with subcontracting. That is 38 units per day, March's rate, with 7.6 workers. Labor, at 7.6 workers times 80 dollars times 124 days, is 75,392 dollars.\n6,200 minus 4,712 leaves 1,488 units to subcontract, and at 20 dollars each that is 29,760 dollars. The total is 105,152 dollars, the lowest of the three."]
+    ],
+    "Method 3: Pure Chase Strategy (Using Hiring and Layoffs)": [
+      ["Production $99,200", "Method three is the pure chase strategy, with hiring and layoffs. Production is 99,200 dollars, hiring is 9,000, and layoffs are 9,600. The total is 117,800 dollars."],
+      ["Other plans", "Other plans, such as overtime, were not tried, and nonmonetary costs like the effect of layoffs on morale also count."]
+    ],
+    "Transportation Method of Linear Programming": [
+      ["An optimizing method", "The transportation method is an optimizing method. Supply, by period and source, goes in the rows, demand periods go in the columns, and each cell holds the unit cost."]
+    ],
+    "Example: Transportation Method": [
+      ["A tire maker", "A tire maker has regular time at 40 dollars per tire, overtime at 50, and subcontracting at 70. It has 100 tires in beginning inventory, a carrying cost of 2 dollars per tire per month, and no back-ordering."],
+      ["March | April | May", "The table gives demand and capacity for March, April, and May."],
+      ["Demand |", "Demand is 800 in March, 1,000 in April, and 750 in May."],
+      ["Regular capacity", "Regular capacity is 700 each month."],
+      ["Overtime |", "Overtime is 50 each month."],
+      ["Subcontracting |", "Subcontracting is 150 in March, 150 in April, and 130 in May."]
+    ],
+    "Setting Up and Solving the Table": [
+      ["Capacity 2,680", "Capacity of 2,680, plus 100 in inventory, exceeds demand of 2,550, so a dummy column takes the 230 unused units at 0 dollars."],
+      ["Each cell costs", "Each cell costs the source's price plus 2 dollars for every month held, and cells that would need back-ordering are blocked."],
+      ["Fill each month's demand", "Fill each month's demand from the cheapest source with units left, earlier months' production included."],
+      ["@tpw", "In the step-by-step table, the columns are March, April, May, and the dummy column. The rows are the sources: beginning inventory, then regular time, overtime, and subcontracting for each month. The small number in a cell is its unit cost, and the large number is the units assigned."],
+      ["The plan", "In the finished plan, March takes 100 from inventory and 700 regular. April takes 700 regular, 50 overtime, and 150 subcontracted, plus 50 overtime and 50 subcontracted from March, held a month. May takes 700 regular and 50 overtime."],
+      ["Total cost", "The total cost is 100 at 0, 700 at 40, 50 at 52, 50 at 72, 700 at 40, 50 at 50, 150 at 70, 700 at 40, and 50 at 50, which comes to 105,700 dollars."],
+      ["stepping-stone", "This is a starting plan, which the stepping-stone method or Excel's Solver can confirm or improve."],
+      ["A question about the period of production", "Exam tip: a question about the period of production, meaning made, ordered, or delivered, reads a row. One about the period of demand, meaning sold or used, reads a column.\nSo April demand met by subcontracting is 50 plus 150, or 200, from the April column. And March overtime paid for is 50, from the March overtime row."]
+    ],
+    "Management Coefficients Model": [
+      ["Management coefficients model", "The management coefficients model is a regression on managers' past decisions. It is objective and consistent, but assumes past trends continue and past decisions were good."]
+    ],
+    "Summary of Aggregate Planning Methods": [
+      ["Method |", "To summarize the three methods, here is each method's strength and weakness."],
+      ["Graphical |", "The graphical method is easy and handles policies and constraints. Its weakness is that it is usually not optimal."],
+      ["Transportation (linear programming)", "The transportation method, which is linear programming, finds the optimum. Its weakness is that it handles linear relationships only."],
+      ["Management coefficients |", "The management coefficients model is objective and easy to use. Its weakness is that it is only as good as the past data."],
+      ["Services: controlling", "In services, controlling labor cost is critical, and an on-call labor resource covers unexpected demand."]
+    ],
+    "Glossary": [],
+    "Key Takeaways": [
+      [["Aggregate planning covers", "Capacity options change supply"], "To recap, aggregate planning covers 3 to 18 months, in aggregate units, at minimum cost. Capacity options change supply, and demand options shift or reshape demand."],
+      ["In the shingle example", "In the shingle example, the level plan at the minimum rate, with subcontracting, is cheapest at 105,152 dollars."],
+      [["Transportation method: carrying", "The tire plan costs", "Production period"], "In the transportation method, carrying cost grows with every month held, no back-ordering blocks later production from meeting earlier demand, and a dummy column balances supply and demand. The tire plan costs 105,700 dollars. And remember: a production period reads a row, and a demand period reads a column."]
+    ]
+  }
+}
