@@ -8,7 +8,7 @@ description: Make the Balanced and Concise editions of a chapter from its Full e
 | Edition | What it is | Widgets |
 |---|---|---|
 | **Full** | The chapter as converted | All |
-| **Balanced** | The Full trimmed (~75–90% of its words): repetition, side remarks and duplicated tables cut; every figure, table and number kept | All |
+| **Balanced** | The Full at **about 75% of its words** (Ian, 2026-11-20): repetition and side remarks cut, then long paragraphs condensed; every figure, table, box, exam tip, date and number kept | All |
 | **Concise** | Rewritten as bullets and tables (~20–30%), ending with `<h2>Glossary</h2>` and `<h2>Key Takeaways</h2>` | Only where the text is hard to grasp without it |
 
 ## Rules
@@ -19,6 +19,7 @@ description: Make the Balanced and Concise editions of a chapter from its Full e
 - Paraphrase in original wording. Don't name the professor in rewritten Concise text.
 - Every number in a Concise comes from the Full. Recompute and assert the totals in the build.
 - A Balanced is produced by checked `rep()` cuts on the Full, each asserting it matched once, so the edition rebuilds whenever the Full changes.
+- **Reach 75% by condensing, not only cutting.** Whole-sentence cuts stall near 90%. After the cuts, rewrite the longest paragraphs tighter with `para(t, opening, new)` (it replaces from a unique opening through the next `</p>`/`</li>`). Keep every fact and number, and never generalize a specific case into a rule. Assert `0.70 <= share <= 0.80` and that every number of the Full survives. Ian sends the Balanced files his API pipeline makes as a style reference (`docs/balanced-references/`). Those run nearer 45%, so take their tone, not their length. Copy `scripts/apk2100/chapter24.py` or `scripts/bsc2011/module6.py`.
 
 ## Existing builds to copy
 `scripts/man4504/project_mgmt_editions.py`, `scripts/man4504/transport_editions.py`, `scripts/ree3043/chapter17_editions.py`, `scripts/mar3023/concise2.py`, `scripts/mar3023/balanced2.py`, and `scripts/mar3023/chapter22_concise_headings.py` (fixes an existing Concise's headings).

@@ -1240,7 +1240,7 @@ this order, most costly first:
 5. Housekeeping.
 
 Three editions of a chapter exist. **Full** is the source as converted.
-**Balanced** is close to Full. **Concise** is produced by a pipeline that
+**Balanced** is about 75% of the Full's words (Ian, 2026-11-20), condensed rather than only cut, with every figure, box and number kept. **Concise** is produced by a pipeline that
 rewrites the prose: it usually carries no images, may use tables or widgets
 where Full has a figure, and is the one edition where `<h3>` is expected.
 Review each against what its edition is meant to be, not against Full.

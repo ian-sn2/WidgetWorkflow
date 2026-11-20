@@ -6,7 +6,8 @@
 * Full: formatting only, the wording untouched (asserted word for word): the live house script and
   head order, a doctype, the pipeline's AUDIT notes out, and lists made valid -- paragraphs and an
   image that sat directly inside a <ul>, outside any <li>, now stand as page text.
-* Balanced: the Full with checked cuts (each must match exactly once), every image, number and date kept.
+* Balanced: about 75% of the Full (Ian, 2026-11-20): checked cuts, then condensed paragraphs; every
+  image, exam tip, number and date kept.
 * Concise: bullets and tables on the Full's own h1/h2 headings, then Glossary and Key Takeaways.
 
 Ian, 2026-11-20.
@@ -106,12 +107,79 @@ def balanced(f):
     ]
     for a, b in cuts:
         t = rep(t, a, b)
-    assert t.count("<img") == f.count("<img")
+    for start, new in CONDENSE:
+        t = para(t, start, new)
+    assert t.count("<img") == f.count("<img") and t.count('class="exam-tip"') == f.count('class="exam-tip"')
+    for n in re.findall(r"\d[\d,.%-]*", re.sub(r"<[^>]+>", " ", f[f.index("<body"):])):
+        assert n.rstrip(".,") in t, ("number lost", n)
     assert headings(t) == headings(f)
     assert re.findall(r'class="date">([^<]*)', t) == re.findall(r'class="date">([^<]*)', f)
     share = len(words(t)) / len(words(f))
-    assert 0.75 <= share <= 0.95, share
+    assert 0.70 <= share <= 0.80, share   # about 75% (Ian, 2026-11-20)
     return t
+
+
+# ---- Balanced, second pass: condense paragraphs to about 75% of the Full (Ian, 2026-11-20) --------
+# Each entry replaces one paragraph or list item, found by its opening words, with a tighter version
+# that keeps every fact and number.
+
+def para(t, start, new):
+    i = t.find(start)
+    assert i >= 0 and t.count(start) == 1, ("condense: opening not found once", start[:70])
+    j = min(k for k in (t.find("</p>", i), t.find("</li>", i)) if k > 0)
+    return t[:i] + new + t[j:]
+
+
+CONDENSE = [
+    ("The <strong>urinary system</strong> is responsible for eliminating wastes",
+     "The <strong>urinary system</strong> eliminates wastes and regulates the chemical constancy and volume of the blood, and so of all the body's fluids. It maintains an appropriate balance of water, acids, electrolytes, and bases, and it plays an important role in regulating blood pressure."),
+    ("The most important organs of the urinary system are the <strong>kidneys</strong>.",
+     "The most important organs of the urinary system are the two <strong>kidneys</strong>. The right kidney sits lower than the left because the large liver pushes it down. (The <em>adrenal glands</em> sit on top of the kidneys but are not part of the urinary system.) The kidneys lie in the superior lumbar region of the posterior abdominal wall, deep to ribs 11 and 12. Because these are floating ribs rather than ribs connected to the sternum, they give only partial bony protection."),
+    ("While urine formation is an important function of the kidneys",
+     "Urine formation is only part of the kidneys' role. The water in urine comes directly from blood plasma, so as they filter the blood, the kidneys are constantly regulating solute concentrations and keeping blood volume stable."),
+    ("Just as you can live with one lung missing",
+     "You can live with one kidney but not without both, yet the kidneys are less protected than other vital organs: they are covered only by a thinner musculature and by bones that aren't even connected to the sternum."),
+    ("Kidney trauma can range from a simple surface bruise",
+     "Kidney trauma ranges from a surface bruise (a direct blow to the back) to a deeper laceration (a much stronger impact) to a torn vascular attachment, in which the vessels supplying the kidney are disrupted; that occurs only in major trauma, such as a car accident or a high fall."),
+    ("The kidneys do have some additional protections",
+     "The kidneys compensate with other protections: the <strong>renal capsule</strong> (also called the <em>fibrous capsule</em>), a thick capsule wrapped around each kidney; a layer of <strong>perirenal fat</strong>; and anterior and posterior bands of <strong>renal fascia</strong> that keep the kidney in place and protect it from damage."),
+    ("The renal pelvis, renal major calyces, blood vessels, nerves, and fat",
+     "The renal pelvis, major calyces, blood vessels, nerves, and fat lie in a cavity called the <strong>renal sinus</strong>, where perirenal fat fills the gaps on the medial surface. Blood vessels and nerves enter the kidney through the <strong>renal hilus</strong> (also called the <em>renal hilum</em>), which is similar to the hilum of the lung."),
+    ("When you look at the Bowman's capsule",
+     "The outside of Bowman's capsule is simple squamous epithelium. Near the base of the glomerulus, this epithelium folds in over the glomerular capillaries and changes into specialized cells called <strong>podocytes</strong>, found only at the glomerulus. Their interlocking branches act like a strainer, so fluid cannot simply rush out: filtered material escapes through the fenestrations and intercellular clefts of the capillary wall, then through the slits between podocyte processes."),
+    ("Since the glomerular capsule has two layers",
+     "The outer simple squamous epithelium is the capsule's <strong>parietal layer</strong>, and the podocytes, in contact with the glomerular capillaries, form its <strong>visceral layer</strong>, an arrangement that resembles a serous membrane. During filtration, material leaves the blood through the capillary wall, crosses the visceral layer, and lands in the capsular space, which is continuous with the proximal convoluted tubule, so anything in it is technically in the external environment. Whatever stays in the tubule lumen becomes urine; whatever is pulled back into the peritubular capillaries returns to the body."),
+    ("All nephrons have renal corpuscles in the cortex area.",
+     "All nephrons have renal corpuscles in the cortex. In <strong>juxtamedullary nephrons</strong>, the loops of Henle extend deep into the medulla; in <strong>cortical nephrons</strong>, they end near the junction of the cortex and the medulla. About 90-95% of nephrons are cortical, but we focus on juxtamedullary nephrons because they play a bigger role in producing urine. Either way, the corpuscle itself stays in the cortex; only the loop of Henle dips into the medulla."),
+    ("Blood enters the glomerulus through the <strong>afferent arteriole</strong>",
+     "Blood enters the glomerulus through the <strong>afferent arteriole</strong> and leaves through the <strong>efferent arteriole</strong>. No gas exchange happens in the glomerulus, so the blood leaving it is still arterial, which is why it exits through an arteriole; the efferent arteriole's smooth muscle lets the kidney regulate flow into the peritubular capillaries. The afferent arteriole is usually slightly wider, which helps tell the two apart in a diagram."),
+    ("The peritubular capillaries associated with cortical nephrons",
+     "The peritubular capillaries of cortical nephrons form a typical, tangled capillary bed, while the vasa recta of juxtamedullary nephrons are long, straight, ordered vessels running parallel to the nephron. That difference is why the vasa recta have their own name, even though they are a type of peritubular capillary."),
+    ("Movement of substances in the distal convoluted tubule",
+     "Because distal convoluted tubule cells carry many receptors, movement there is highly regulated: the DCT adjusts ion and water movement in response to signals from the blood, unlike the largely unregulated reabsorption in the proximal convoluted tubule."),
+    ("The <strong>juxtaglomerular apparatus</strong> (also called",
+     "The <strong>juxtaglomerular apparatus</strong> (also called the <em>juxtaglomerular complex</em>) helps the kidneys regulate blood pressure by adjusting blood flow through the glomerulus and releasing signaling molecules. Macula densa cells detect changes in filtrate flow through the distal tubule and signal the granular cells to adjust blood flow or release hormones."),
+    ("<strong>Macula densa cells</strong> are modified epithelial cells",
+     "<strong>Macula densa cells</strong> are modified epithelial cells in the wall of the distal tubule, which is simple cuboidal epithelium. They sense solutes, especially sodium and chloride. A lot of sodium chloride means a lot of filtration, so they release a messenger that constricts the afferent arteriole: less blood is filtered, less sodium chloride arrives, and the signal stops. Because solute load reflects blood volume, this regulates blood volume and therefore blood pressure."),
+    ("There is smooth muscle present in the walls of the ureters",
+     "Smooth muscle in the ureter walls moves urine to the bladder: urine stretches the wall, which triggers peristaltic waves that push it down. The muscle is arranged circularly, so it works as a pump. Gravity alone could fill an empty bladder, but because the ureters open at its base, urine arriving later must be pushed in against the pressure of the urine already there, so the ureter has to generate a higher pressure than the bladder."),
+    ("In class, Dr. Ahlgren described a case involving her father",
+     "Dr. Ahlgren described her father's case: very large kidney stones lodged in his renal pelvis could not be removed surgically, and although urine still passed around them, they repeatedly caused bacterial infections that led to kidney failure."),
+    ("Because the urinary bladder is made of smooth muscle",
+     "Because the detrusor is smooth muscle, it is not under voluntary control, and the autonomic nervous system controls the bladder's contraction. Urination can still be started or delayed voluntarily through the external urethral sphincter, which is skeletal muscle."),
+    ("When studying pelvic models, it is important",
+     "On pelvic models, 'sex the model' before identifying structures, because the male urinary bladder is often mistaken for a uterus. If a penis is present, the hollow muscular organ behind the pubic symphysis is the bladder."),
+    ("The <strong>external urethral sphincter</strong> consists of voluntary skeletal muscle",
+     "The <strong>external urethral sphincter</strong> is voluntary skeletal muscle formed by circular fibers within the <em>urogenital diaphragm</em>, part of the bowl-shaped pelvic floor, which has openings for the urethra (and, in females, the vagina)."),
+    ("One difference between the internal and external anal sphincters",
+     "In males, the internal and external urethral sphincters are separated by the prostatic urethra, whereas the internal and external anal sphincters lie right next to one another."),
+    ("The pelvic floor works together with the diaphragm",
+     "The pelvic floor works with the diaphragm to regulate pressure in the abdominopelvic cavity: when the diaphragm contracts and moves down, the pelvic floor contracts and lifts, raising internal pressure, stabilizing the core and supporting the spine during lifting, carrying and posture. In a superior view of the female pelvic floor, the openings from posterior to anterior are the anus (just in front of the tip of the coccyx), the vaginal orifice, and the urethral orifice; a male pelvic floor lacks the vaginal orifice. These skeletal muscles can be strengthened. A weak pelvic floor can cause leakage when running, coughing, laughing, or sneezing, and childbirth can stretch and damage it."),
+    ("At rest, sympathetic motor neurons keep the detrusor",
+     "At rest, sympathetic motor neurons keep the detrusor relaxed and the internal urethral sphincter closed. During urination, parasympathetic motor neurons contract the detrusor and relax the internal sphincter, while the somatic motor neurons to the external sphincter are inhibited in the spinal cord and stop releasing acetylcholine onto its skeletal muscle. Bladder contraction is parasympathetic because urination is a \"rest and digest\" function."),
+    ("<strong>Polycystic kidney disease</strong> is a genetic condition",
+     "<strong>Polycystic kidney disease</strong> is a genetic condition in which fluid-filled cysts develop throughout the kidneys, greatly enlarging them and impairing their function. In the case Dr. Ahlgren described, each diseased kidney weighed roughly 11 pounds; the donor kidney was implanted first, and the diseased kidneys were removed about six months later, once the transplant was functioning."),
+]
 
 
 # --------------------------------------------------------------- Concise --

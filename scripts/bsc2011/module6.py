@@ -104,18 +104,79 @@ CUTS = [
 ]
 
 
+# ---- Balanced, second pass: condense paragraphs to about 75% of the Full (Ian, 2026-11-20) --------
+# Each entry replaces one paragraph or list item, found by its opening words, with a tighter version
+# that keeps every fact and number.
+
+def para(t, start, new):
+    i = t.find(start)
+    assert i >= 0 and t.count(start) == 1, ("condense: opening not found once", start[:70])
+    j = min(k for k in (t.find("</p>", i), t.find("</li>", i)) if k > 0)
+    return t[:i] + new + t[j:]
+
+
+CONDENSE = [
+    ("<strong>Invasive and introduced species</strong> – Invasive",
+     "<strong>Invasive and introduced species</strong> – Invasive (introduced) species are moved by humans, intentionally or not, into regions where they did not previously exist. Often lacking natural predators there, they spread rapidly, outcompete native species, and disrupt food webs and ecosystem structure. Zebra mussels, for example, reached the Great Lakes by accident and now smother native mussels and encrust pipes, docks, and boats."),
+    ("A well-known example of an invasive species is the Burmese python",
+     "The Burmese python, introduced to the Florida Everglades through the pet trade, now has large wild populations; as an apex predator it has sharply reduced native small mammals and other species."),
+    ("The extinction of the dodo is often mistakenly attributed",
+     "The dodo was not wiped out for being unintelligent or poorly adapted: it was well suited to an island with no natural predators. Its extinction came mainly from invasive species that humans introduced (rats, pigs, and monkeys), which ate its eggs and competed for resources."),
+    ("<strong>Climate change</strong> – Human activities have also contributed",
+     "<strong>Climate change</strong> – Human activities have contributed to global warming, a problem for species that cannot shift their home range fast enough. Few extinctions can yet be attributed to it with certainty; the open question is whether species can adapt as quickly as temperatures climb."),
+    ("A key issue with modern climate change is not just",
+     "The key issue is the speed of the change. For the last ~10,000 years, climate was relatively stable, letting human civilization and many ecosystems develop under predictable conditions. Rising atmospheric carbon dioxide is now rapidly shifting temperature and precipitation, and because evolutionary adaptation usually takes far longer, many species may not adjust in time."),
+    ("<strong>A system-level approach</strong> – This approach does not limit",
+     "<strong>A system-level approach</strong> – This more recent strategy, adopted by The Nature Conservancy (TNC), tries to save all the species within an ecosystem, for example by preserving entire sections of the Everglades or the Afromontane forests."),
+    ("The benefit of this approach is that many species converge",
+     "Because many species converge in one place, it saves many at once. But it is hard to \"sell\" to the public, some biodiversity \"hotspots\" are in countries whose governments resist conservation, and its success is harder to gauge than a species-specific approach's."),
+    ("Conservationists are facing some tough choices.",
+     "Conservationists face tough choices. Dr. Dutton showed a magazine article entitled, \"It's Time to Let Certain Animals Go Extinct,\" arguing that we must decide which species to focus on and which to let die out, an approach called <strong>species triage</strong>. It has been used in Australia and New Zealand but not yet in the United States. Supporters say dropping expensive, losing battles would free money to recover more species; critics note that under triage no one would have attempted the successful rescue of the California condor."),
+    ("Global cheetah populations have low genetic diversity.",
+     "Global cheetah populations have low genetic diversity. (Researchers found this when skin transplanted between an East African and a South African cheetah was not rejected.) The cause is a bottleneck late in the Pleistocene, when a warmer, drier climate shrank the cheetah's range; numbers recovered, but the lost alleles did not. The result can be inbreeding depression, low sperm counts and motility, low female fertility, poor offspring survival, and less evolutionary potential to cope with environmental change."),
+    ("<strong>A species-specific approach</strong> – This approach attempts",
+     "<strong>A species-specific approach</strong> – This approach tries to save individual species from extinction, such as the black rhino, the manatee, and the black-footed ferret. The Endangered Species Act (ESA) and the Convention on International Trade in Endangered Species (CITES) embrace it."),
+    ("The species-specific approach to conservation is popular among donors",
+     "It is popular with donors, who feel connected to charismatic species such as cheetahs or koalas, but many of the species that need the most help are not charismatic."),
+    ("Genetic diversity comes down to <strong>alleles</strong>",
+     "Genetic diversity comes down to <strong>alleles</strong>, the alternative versions of a gene. The more a population holds, the better its odds that some individuals can withstand a new disease, climate shift, or altered habitat, and a lost allele returns only through a new mutation or an immigrant. Our food supply shows the danger: roughly 95% of the U.S. apple varieties grown in 1900 no longer exist, and in 1970 a single fungus devastated the U.S. corn crop because most fields were genetically too similar to resist it."),
+    ("Moving animals does not always rescue a population.",
+     "Moving animals does not always rescue a population. According to a study published in November 2026, a Eurasian lynx population started in northeastern Switzerland in the early 2000s from just 12 animals included three healthy carriers of a harmful recessive allele of the gene FGF23. Drift and inbreeding raised the share of carriers from roughly 10% in the source population to about half, and lynx with two copies die young as minerals build up in their organs."),
+    ("A well-known example of genetic rescue involves the Florida panther",
+     "A well-known example of genetic rescue is the Florida panther. By the 1990s only about 20–30 remained, and severe inbreeding was causing genetic defects and poor survival. In 1995, conservationists introduced eight female pumas from Texas; the added gene flow reduced inbreeding depression, and the population has rebounded to about 200."),
+    ("<strong>Pollution</strong> – As human populations have grown",
+     "<strong>Pollution</strong> – Exponential human population growth and fossil fuel use have caused heavy air pollution, which may disrupt nutrient cycles and drive extinctions at very high rates. The pesticide DDT polluted ecosystems and whole food webs and pushed the bald eagle toward extinction; Rachel Carson's book <em>Silent Spring</em> publicized the damage, and the public reaction helped lead to the creation of the U.S. Environmental Protection Agency (EPA). The drugs we take are also excreted and can pollute waterways."),
+    ("<strong>Biological diversity financially benefits humans.</strong>",
+     "<strong>Biological diversity financially benefits humans.</strong> It has yielded many commercial chemicals, foods, and medicines: 70% of the medicines developed in the last 25 years have come from nature. <strong>Bioprospecting</strong> is the search for organisms that can be commercialized for medical or industrial use; the rosy periwinkle, a threatened plant from Madagascar, produces compounds used to treat leukemia and Hodgkin's lymphoma."),
+    ("Many organisms live in habitat patches separated by unsuitable",
+     "Many organisms live in habitat patches separated by unsuitable environments, forming subpopulations linked by dispersal; together they make up a <strong>metapopulation</strong>. Southern Africa's 33 remaining cheetah subpopulations are an example: some are close enough for cheetahs to move between them, producing gene flow."),
+    ("Another problem facing cheetah populations is the \"supermom\"",
+     "Cheetahs also show the \"supermom\" phenomenon, in which a few females produce a disproportionate share of offspring; in the southern Serengeti, a single mother was responsible for 10% of all the cheetahs living there. This shrinks the effective population size below what the total suggests, lowering genetic diversity and raising the risk of inbreeding and drift."),
+    ("Removing old-growth forest reduces the ecosystem's ability",
+     "Removing old-growth forest reduces carbon storage, weakening the forest's role in regulating climate; disrupts food webs, often causing trophic downgrading as top predators and key species are lost; and weakens watershed regulation. Recovery is slow and dominated by early successional species, not a rapid return to the original community."),
+    ("In any given population, not all individuals will breed.",
+     "Not every individual breeds. In some species, a few highly territorial males breed with many females while many \"weaker\" males do not breed at all. Sex ratios may also be skewed: there are generally more female deer than male deer because hunters target large males."),
+    ("The rate of extinction in recent decades has been",
+     "Extinction in recent decades has run as much as 1,000 times the \"natural\" (background) rate seen over Earth's history, so many scientists call the current loss of species the \"sixth mass extinction.\""),
+    ("In the 1980s, Colombian drug lord Pablo Escobar",
+     "In the 1980s, Colombian drug lord Pablo Escobar illegally imported four hippos to his private zoo at Hacienda Nápoles. After his death in 1993, the other animals were mostly relocated, but the hippos were too hard to move; they escaped into nearby rivers and now number over 100."),
+]
+
+
 def balanced(f):
     t = f
     for a, b in CUTS:
         t = rep(t, a, b)
+    for start, new in CONDENSE:
+        t = para(t, start, new)
     assert t.count("<img") == f.count("<img")
     assert t.count('class="question-box"') == f.count('class="question-box"')
     assert t.count('class="other-box"') == f.count('class="other-box"')
     assert headings(t) == headings(f) and dates(t) == dates(f)
     for n in re.findall(r"\d[\d,.]*", re.sub(r"<[^>]+>", " ", f[f.index("<body"):])):
-        assert n in t, ("number lost", n)
+        assert n.rstrip(".,") in t, ("number lost", n)
     share = len(words(t)) / len(words(f))
-    assert 0.75 <= share <= 0.90, share
+    assert 0.70 <= share <= 0.80, share   # about 75% (Ian, 2026-11-20)
     return t
 
 
