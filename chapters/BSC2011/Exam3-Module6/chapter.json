@@ -1,0 +1,11 @@
+{
+  "note": "BSC2011 Exam 3, Module 6 (conservation biology). The source is Ian's Full with his quiz wording change of 2026-11-20 (\"shown here\"); the build reformats it and writes the Balanced and Concise.",
+  "steps": [
+    ["scripts/bsc2011/module6.py", "{source}/BSC2011-263-Exam3-Module6-Full.html", "{out}"]
+  ],
+  "outputs": [
+    "BSC2011-263-Exam3-Module6-Full.html",
+    "BSC2011-263-Exam3-Module6-Balanced.html",
+    "BSC2011-263-Exam3-Module6-Concise.html"
+  ]
+}
