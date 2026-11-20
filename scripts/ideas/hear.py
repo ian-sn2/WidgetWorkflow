@@ -49,12 +49,28 @@ def _decode(samples):
     return s.result.text.strip()
 
 
+def _thin(text, samples):
+    """far fewer words than the recording is long. The recognizer sometimes stops at a pause and returns only the first
+    sentence of a complete take: a 22-second paragraph came back as "The plan reads like this." """
+    secs = len(samples) / RATE
+    return secs > 6 and len(text) < 7 * secs            # speech at this pace is about 15 characters a second
+
+
+def _quietest(samples, lo, hi):
+    win = int(0.15 * RATE)
+    energy = np.convolve(samples[lo:hi] ** 2, np.ones(win) / win, mode='valid')
+    return lo + int(np.argmin(energy)) + win // 2
+
+
 def transcribe(samples):
-    """samples -> the words heard. Whisper takes 30 seconds at most, so a longer take is cut at its quietest moment."""
+    """samples -> the words heard. Whisper takes 30 seconds at most, so a longer take is cut at its quietest moment.
+    A transcript that is thin for its length is heard again in three pieces, and the fuller of the two is kept."""
     CACHE.mkdir(exist_ok=True)
     f = CACHE / ('asr-' + hashlib.sha1(samples.tobytes()).hexdigest()[:20] + '.json')
     if f.exists():
-        return json.loads(f.read_text())
+        kept = json.loads(f.read_text())
+        if not _thin(kept, samples):
+            return kept
     if len(samples) > 27 * RATE:
         lo, hi, win = len(samples) // 3, 2 * len(samples) // 3, int(0.15 * RATE)
         energy = np.convolve(samples[lo:hi] ** 2, np.ones(win) / win, mode='valid')
@@ -62,6 +78,11 @@ def transcribe(samples):
         text = transcribe(samples[:cut]) + ' ' + transcribe(samples[cut:])
     else:
         text = _decode(samples)
+        if _thin(text, samples):
+            n = len(samples)
+            a, b = _quietest(samples, int(n * 0.22), int(n * 0.45)), _quietest(samples, int(n * 0.55), int(n * 0.78))
+            again = ' '.join(_decode(p) for p in (samples[:a], samples[a:b], samples[b:]))
+            text = again if len(again) > len(text) else text
     f.write_text(json.dumps(text))
     return text
 
