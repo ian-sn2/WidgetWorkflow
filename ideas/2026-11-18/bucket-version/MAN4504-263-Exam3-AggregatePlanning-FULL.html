@@ -1048,7 +1048,7 @@ html.ls-fine .ls-hi:not(tr):not(h1):not(h2):not(h3):not(h4) { background:#fff9e3
        that section, which made a 35-minute chapter look like two hours (Ian, 2026-11-20). */
     name.textContent = (styles().length > 1 ? TRACKS[ti].styleLabel + ' · ' : '') + 'Section ' + (i + 1) + ' of ' + clips.length + ' · ' + clips[i].t;
     clock.innerHTML = fmt((aud.currentTime || 0) / RATES[rate]) + ' / ' + fmt((aud.duration || clips[i].d) / RATES[rate])
-      + '<span class="ls-all"> &middot; whole chapter: ' + fmt(Math.max(left, 0) / RATES[rate]) + ' left</span>';
+      + '<span class="ls-all"> &middot; Whole Chapter: ' + fmt(Math.max(left, 0) / RATES[rate]) + ' left</span>';
     prev.disabled = i === 0; next.disabled = i === clips.length - 1;
   }
   function load(j, go, at) {
@@ -1089,7 +1089,7 @@ html.ls-fine .ls-hi:not(tr):not(h1):not(h2):not(h3):not(h4) { background:#fff9e3
     pop('speed', speed, [['Speed', RATES.map(function (r) { return '<b>' + r + '×</b><span>' + (r === 1 ? 'normal' : fmt(total / r) + ' in all') + '</span>'; }), rate, setRate]]);
   };
   list.onclick = function () {
-    pop('sections', list, [['Sections &middot; whole chapter ' + fmt(total / RATES[rate]), clips.map(function (c, j) { return '<b>' + (j + 1) + '. ' + c.t.replace(/</g, '&lt;') + '</b><span>' + fmt(c.d / RATES[rate]) + '</span>'; }), i,
+    pop('sections', list, [['Sections &middot; Whole Chapter ' + fmt(total / RATES[rate]), clips.map(function (c, j) { return '<b>' + (j + 1) + '. ' + c.t.replace(/</g, '&lt;') + '</b><span>' + fmt(c.d / RATES[rate]) + '</span>'; }), i,
       function (j) { userAt = 0; load(j, true); }]]);
   };
   /* another recording of the same page. Every recording has its own timings, so the place is carried over by what is
@@ -1148,7 +1148,7 @@ html.ls-fine .ls-hi:not(tr):not(h1):not(h2):not(h3):not(h4) { background:#fff9e3
     userAt = 0; load(i, true);
   };
   close.onclick = function () { shut(); aud.pause(); open = false; bar.hidden = true; pill.hidden = false; document.body.classList.remove('ls-open'); light(null); unmark(); fine = null; };
-  pill.innerHTML = '&#127911; Listen &middot; whole chapter ' + Math.max(1, Math.round(total / 60 / RATES[rate])) + ' min';     /* how long, and of what, before anyone presses it */
+  pill.innerHTML = '&#127911; Listen &middot; Whole Chapter ' + Math.max(1, Math.round(total / 60 / RATES[rate])) + ' min';     /* how long, and of what, before anyone presses it */
   window.__ls = { get clips() { return clips; }, tracks: TRACKS, track: function () { return ti; }, audio: aud, lit: function () { return lit && lit[0]; }, fine: function () { return fine; }, marks: function () { return HL ? [HL.sent.size, HL.word.size] : null; } };
 })();
 </script>
