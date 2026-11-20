@@ -117,6 +117,9 @@ voices; changing either keeps the listener's place. The page always opens on the
 (`--default summary` opens it on the summary instead): the voice a listener chose is remembered on the device,
 the version only until the tab is closed.
 
+The menu lists each voice by its name alone. To show a few words beside a name, add
+`scripts/ideas/narration/voices.json`, for example `{"Aoede": "warm and steady"}`, and rebuild.
+
 Every recording is billed in full: characters cannot be shared between voices. A summary is about a third of a
 full read, so three voices of a summary cost about what one voice of the full read does. With `--audio-dir`, each
 file's name carries its version and voice.
