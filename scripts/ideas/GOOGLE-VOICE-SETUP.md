@@ -104,6 +104,21 @@ Free each month (Google's free-tier page, read 2026-11-18): 5 GB stored in a US 
 from North America, which is about 500 chapters stored and 10,000 complete listens. Past that, about $0.02 per
 GB-month stored and $0.12 per GB downloaded.
 
+## More than one voice, and a summary beside the full read
+
+```bash
+NARRATE_ENGINE=google python scripts/ideas/narrate.py listen <chapter>.html out/<chapter>.html --sections h1 --voices Aoede,Kore,Charon --also-read Charon
+```
+
+`--voices` records the page in each voice named (the first is what a listener hears until they choose another).
+`--also-read` adds, on a page that has a summary script, a read-as-written recording in the voices named. With
+more than one recording the bar gains a reader button beside the skip buttons, listing the versions and the
+voices; changing either keeps the listener's place, and both choices are remembered on the device.
+
+Every recording is billed in full: characters cannot be shared between voices. A summary is about a third of a
+full read, so three voices of a summary cost about what one voice of the full read does. With `--audio-dir`, each
+file's name carries its version and voice.
+
 ## Hard words
 
 Before a paragraph is recorded, every rare word in it is looked up and the voice is told how to say it

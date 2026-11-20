@@ -3,14 +3,27 @@
    it in view. Tapping a block that has narration jumps the audio to it. Headings are never restyled.
    The clips and their timings come from narrate.py: [{s: audio, d: seconds, h: heading index, t: title,
    seg: [[start second, block numbers], ...]}], and each block carries data-ls="<number>". The bar has a list of the
-   sections to jump between, and a list of speeds from 0.85x to 2x; the speed chosen is remembered. */
+   sections to jump between, and a list of speeds from 0.85x to 2x; the speed chosen is remembered.
+   A page with more than one recording carries {tracks: [{style, styleLabel, voice, note, clips}]} instead of one list of
+   clips: a version (a summary, or the page read in full) in a voice. The bar then has a reader button beside the skip
+   buttons, with the versions and the voices to choose from. Changing either keeps the listener's place: the same
+   sentence or passage in another voice, the same paragraph or section in another version. Both choices are remembered. */
 (function () {
-  var src = document.getElementById('ls-audio'), clips; try { clips = JSON.parse(src.textContent); } catch (e) { return; }
+  var src = document.getElementById('ls-audio'), clips, TRACKS = null, ti = 0;
+  try { clips = JSON.parse(src.textContent); } catch (e) { return; }
+  if (clips && clips.tracks) { TRACKS = clips.tracks; clips = TRACKS[0].clips; }
   if (!clips || !clips.length) return;
+  function trackOf(style, voice) {        /* the recording of this version in this voice, or in the first voice it has */
+    var hit = -1, any = -1;
+    TRACKS.forEach(function (t, j) { if (t.style === style) { if (any < 0) any = j; if (t.voice === voice) hit = j; } });
+    return hit >= 0 ? hit : any;
+  }
+  try { if (TRACKS) { var kept = trackOf(localStorage.getItem('ls-style') || TRACKS[0].style, localStorage.getItem('ls-voice') || TRACKS[0].voice); if (kept >= 0) { ti = kept; clips = TRACKS[ti].clips; } } } catch (e) {}
   var HSEL = src.getAttribute('data-heads') || 'h1, h2';     /* which headings the audio is divided at */
   var RATES = [0.85, 1, 1.25, 1.5, 1.75, 2], rate = 1, i = 0, aud = new Audio(), open = false, lit = null, cur = -2, userAt = 0, where = {};
   function ids(s) { return [].concat(s[1]).filter(function (b) { return b >= 0; }); }   /* a passage speaks for no block, one, or several */
-  clips.forEach(function (c, ci) { (c.seg || []).forEach(function (s, si) { ids(s).forEach(function (b) { if (!(b in where)) where[b] = [ci, si]; }); }); });
+  function index() { where = {}; clips.forEach(function (c, ci) { (c.seg || []).forEach(function (s, si) { ids(s).forEach(function (b) { if (!(b in where)) where[b] = [ci, si]; }); }); }); }
+  index();
   try { i = Math.min(+localStorage.getItem('ls-at:' + location.pathname) || 0, clips.length - 1); } catch (e) {}
   try { var saved = RATES.indexOf(+localStorage.getItem('ls-rate')); if (saved >= 0) rate = saved; } catch (e) {}
   function heads() { return Array.prototype.filter.call(document.querySelectorAll(HSEL), function (h) { return !h.closest('.toc-box, .ls-bar'); }); }
@@ -21,6 +34,12 @@
   var bar = el('div', 'ls-bar', null, document.body); bar.hidden = true; bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', 'Chapter audio');
   var list = btn('ls-list', '&#9776;', 'Choose a section', bar);
   var prev = btn('ls-skip', '&#9198;', 'Previous section', bar), play = btn('ls-play', '&#9654;', 'Play', bar), next = btn('ls-skip', '&#9197;', 'Next section', bar);
+  var PERSON = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="9" cy="8" r="3.6" fill="currentColor"/><path d="M2.5 20c0-3.9 2.9-6.4 6.5-6.4s6.5 2.5 6.5 6.4z" fill="currentColor"/>'
+    + '<path d="M16.5 6.2a4.6 4.6 0 0 1 0 5.6M19.3 3.9a8.2 8.2 0 0 1 0 10.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  var voice = TRACKS && TRACKS.length > 1 ? btn('ls-voice', PERSON, 'Choose the version and the voice', bar) : null;
+  if (voice) bar.classList.add('ls-many');
+  function measure() { if (open) document.documentElement.style.setProperty('--ls-bar', bar.offsetHeight + 'px'); }      /* the page and the pop-up keep clear of the bar, however tall */
+  window.addEventListener('resize', measure);
   var mid = el('div', 'ls-mid', null, bar), title = el('div', 'ls-title', '', mid), track = el('div', 'ls-track', '<i></i>', mid);
   var speed = btn('ls-speed', RATES[rate] + '×', 'Playback speed', bar), close = btn('', '&#10005;', 'Close the audio bar', bar);
   var menu = el('div', 'ls-menu', null, document.body); menu.hidden = true; menu.setAttribute('role', 'menu');
@@ -31,7 +50,7 @@
   /* follow along: bring el into the middle of the screen, unless the reader has just scrolled somewhere themselves */
   function follow(e) {            /* e: an element, or a range of text */
     if (!e || Date.now() - userAt < 4000) return;
-    var r = e.getBoundingClientRect(), top = 70, bottom = window.innerHeight - 110;
+    var r = e.getBoundingClientRect(), top = 70, bottom = window.innerHeight - (bar.offsetHeight || 60) - 50;
     if (!r.height || (r.top >= top && r.bottom <= bottom)) return;
     var to = r.height > bottom - top ? r.top - top : (r.top + r.bottom) / 2 - (top + bottom) / 2;
     window.scrollBy({ top: to, behavior: calm() ? 'auto' : 'smooth' });
@@ -113,7 +132,7 @@
   }
   function status() {
     var left = clips.slice(i).reduce(function (a, c) { return a + c.d; }, 0) - (aud.currentTime || 0);
-    title.textContent = (i + 1) + '/' + clips.length + ' · ' + clips[i].t + ' · ' + fmt(Math.max(left, 0) / RATES[rate]) + ' left';
+    title.textContent = (styles().length > 1 ? TRACKS[ti].styleLabel + ' · ' : '') + (i + 1) + '/' + clips.length + ' · ' + clips[i].t + ' · ' + fmt(Math.max(left, 0) / RATES[rate]) + ' left';
     prev.disabled = i === 0; next.disabled = i === clips.length - 1;
   }
   function load(j, go, at) {
@@ -123,7 +142,7 @@
       try { aud.currentTime = at; } catch (e) {}
       aud.addEventListener('loadedmetadata', again);
     }
-    status(); if (!clips[i].seg) follow(heads()[clips[i].h]);
+    status(); measure(); if (!clips[i].seg) follow(heads()[clips[i].h]);
     try { localStorage.setItem('ls-at:' + location.pathname, i); } catch (e) {}
     if (go) { var p = aud.play(); if (p && p.catch) p.catch(function () {}); }
   }
@@ -136,27 +155,63 @@
   prev.onclick = function () { userAt = 0; load(Math.max(i - 1, 0), !aud.paused); };
   next.onclick = function () { userAt = 0; load(Math.min(i + 1, clips.length - 1), !aud.paused); };
   /* one pop-up above the bar, used for both lists: the sections of the chapter, and the playback speeds */
-  function shut() { menu.hidden = true; menu.dataset.kind = ''; list.setAttribute('aria-expanded', 'false'); speed.setAttribute('aria-expanded', 'false'); }
-  function pop(kind, opener, rows, chosen, pick) {
+  function shut() { menu.hidden = true; menu.dataset.kind = ''; [list, speed, voice].forEach(function (b) { if (b) b.setAttribute('aria-expanded', 'false'); }); }
+  function pop(kind, opener, groups) {           /* groups: [[heading, [row html], which row is chosen, what choosing one does]] */
     if (!menu.hidden && menu.dataset.kind === kind) { shut(); return; }
     shut(); menu.textContent = ''; menu.dataset.kind = kind; menu.className = 'ls-menu ls-' + kind;
-    el('div', 'ls-menu-h', kind === 'speed' ? 'Speed' : 'Sections', menu);
-    rows.forEach(function (r, j) {
-      var b = btn('', r, '', menu); b.removeAttribute('aria-label'); b.setAttribute('role', 'menuitemradio'); b.setAttribute('aria-checked', j === chosen ? 'true' : 'false');
-      b.onclick = function () { shut(); pick(j); };
+    groups.forEach(function (g) {
+      el('div', 'ls-menu-h', g[0], menu);
+      g[1].forEach(function (r, j) {
+        var b = btn('', r, '', menu); b.removeAttribute('aria-label'); b.setAttribute('role', 'menuitemradio'); b.setAttribute('aria-checked', j === g[2] ? 'true' : 'false');
+        b.onclick = function () { shut(); g[3](j); };
+      });
     });
-    menu.hidden = false; opener.setAttribute('aria-expanded', 'true');
+    measure(); menu.hidden = false; opener.setAttribute('aria-expanded', 'true');
   }
   function setRate(j) { rate = j; aud.defaultPlaybackRate = aud.playbackRate = RATES[rate]; speed.textContent = RATES[rate] + '×'; status(); try { localStorage.setItem('ls-rate', RATES[rate]); } catch (e) {} }
   speed.onclick = function () {
-    pop('speed', speed, RATES.map(function (r) { return '<b>' + r + '×</b><span>' + (r === 1 ? 'normal' : fmt(total / r) + ' in all') + '</span>'; }), rate, setRate);
+    pop('speed', speed, [['Speed', RATES.map(function (r) { return '<b>' + r + '×</b><span>' + (r === 1 ? 'normal' : fmt(total / r) + ' in all') + '</span>'; }), rate, setRate]]);
   };
   list.onclick = function () {
-    pop('sections', list, clips.map(function (c, j) { return '<b>' + (j + 1) + '. ' + c.t.replace(/</g, '&lt;') + '</b><span>' + fmt(c.d / RATES[rate]) + '</span>'; }), i,
-      function (j) { userAt = 0; load(j, true); });
+    pop('sections', list, [['Sections', clips.map(function (c, j) { return '<b>' + (j + 1) + '. ' + c.t.replace(/</g, '&lt;') + '</b><span>' + fmt(c.d / RATES[rate]) + '</span>'; }), i,
+      function (j) { userAt = 0; load(j, true); }]]);
+  };
+  /* another recording of the same page. Every recording has its own timings, so the place is carried over by what is
+     being said: in another voice, the same sentence (or as far through the same passage); in another version, the
+     paragraph on screen if that version speaks about it, and otherwise the start of the same section. */
+  function styles() { var out = []; (TRACKS || []).forEach(function (t) { if (out.indexOf(t.style) < 0) out.push(t.style); }); return out; }
+  function voicesOf(style) { return (TRACKS || []).filter(function (t) { return t.style === style; }); }
+  function minutes(t) { return Math.max(1, Math.round(t.clips.reduce(function (a, c) { return a + c.d; }, 0) / 60)) + ' min'; }
+  function setTrack(j) {
+    if (j < 0 || j === ti) return;
+    var was = !aud.paused, t = aud.currentTime || 0, seg = clips[i].seg || [], k = Math.max(cur, 0), old = TRACKS[ti], to = TRACKS[j], ni = i, at = 0;
+    if (to.style === old.style) {
+      var nseg = (to.clips[i] || {}).seg || [];
+      if (seg[k] && nseg[k]) {
+        var a0 = seg[k][0], a1 = k + 1 < seg.length ? seg[k + 1][0] : clips[i].d, b0 = nseg[k][0], b1 = k + 1 < nseg.length ? nseg[k + 1][0] : to.clips[i].d;
+        at = b0 + Math.min(Math.max((t - a0) / Math.max(a1 - a0, 0.1), 0), 0.98) * (b1 - b0);
+        if (fine && fine.j >= 0 && nseg[k][2] && nseg[k][2][fine.j]) at = nseg[k][2][fine.j][0];
+      }
+    } else {
+      var here = seg[k] ? ids(seg[k]) : [], found = null;
+      to.clips.forEach(function (c, ci) { (c.seg || []).forEach(function (sg, si) { if (!found && ids(sg).some(function (b) { return here.indexOf(b) >= 0; })) found = [ci, sg[0]]; }); });
+      if (found) { ni = found[0]; at = found[1]; } else ni = Math.min(i, to.clips.length - 1);
+    }
+    ti = j; clips = to.clips; index(); total = clips.reduce(function (a, c) { return a + c.d; }, 0);
+    try { localStorage.setItem('ls-style', to.style); localStorage.setItem('ls-voice', to.voice); } catch (e) {}
+    userAt = 0; load(ni, was, at); if (!was) passage(true);
+  }
+  if (voice) voice.onclick = function () {
+    var st = styles(), now = TRACKS[ti], vs = voicesOf(now.style), groups = [];
+    if (st.length > 1) groups.push(['Version', st.map(function (x) { var tr = TRACKS[trackOf(x, now.voice)]; return '<b>' + tr.styleLabel + '</b><span>' + minutes(tr) + '</span>'; }),
+      st.indexOf(now.style), function (n) { setTrack(trackOf(st[n], now.voice)); }]);
+    if (vs.length > 1) groups.push(['Voice', vs.map(function (v) { return '<b>' + v.voice + '</b><span>' + (v.note || '') + '</span>'; }),
+      vs.indexOf(now), function (n) { setTrack(TRACKS.indexOf(vs[n])); }]);
+    else if (st.length > 1) groups.push(['Voice', ['<b>' + now.voice + '</b><span>the only voice for this version</span>'], 0, function () {}]);
+    pop('voice', voice, groups);
   };
   document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') shut(); });
-  document.addEventListener('click', function (ev) { if (!menu.hidden && ev.target.closest && !ev.target.closest('.ls-menu, .ls-list, .ls-speed')) shut(); }, true);
+  document.addEventListener('click', function (ev) { if (!menu.hidden && ev.target.closest && !ev.target.closest('.ls-menu, .ls-list, .ls-speed, .ls-voice')) shut(); }, true);
   track.onclick = function (ev) { var r = track.getBoundingClientRect(); userAt = 0; aud.currentTime = (ev.clientX - r.left) / r.width * (aud.duration || clips[i].d); };
   /* tap a narrated block to hear it from there */
   document.addEventListener('click', function (ev) {
@@ -169,7 +224,7 @@
     else load(w[0], true, clips[w[0]].seg[w[1]][0]);
   });
   pill.onclick = function () {
-    open = true; bar.hidden = false; pill.hidden = true; document.body.classList.add('ls-open');
+    open = true; bar.hidden = false; pill.hidden = true; document.body.classList.add('ls-open'); measure();
     /* start from the section on screen, not from the top */
     var hs = heads(), best = i, y = 1e9;
     clips.forEach(function (c, j) { var h = hs[c.h]; if (!h) return; var t = h.getBoundingClientRect().top; if (t > -40 && t < y) { y = t; best = j; } });
@@ -178,5 +233,5 @@
   };
   close.onclick = function () { shut(); aud.pause(); open = false; bar.hidden = true; pill.hidden = false; document.body.classList.remove('ls-open'); light(null); unmark(); fine = null; };
   pill.innerHTML = '&#127911; Listen &middot; ' + Math.max(1, Math.round(total / 60 / RATES[rate])) + ' min';     /* say how long before anyone presses it */
-  window.__ls = { clips: clips, audio: aud, lit: function () { return lit && lit[0]; }, fine: function () { return fine; }, marks: function () { return HL ? [HL.sent.size, HL.word.size] : null; } };
+  window.__ls = { get clips() { return clips; }, tracks: TRACKS, track: function () { return ti; }, audio: aud, lit: function () { return lit && lit[0]; }, fine: function () { return fine; }, marks: function () { return HL ? [HL.sent.size, HL.word.size] : null; } };
 })();

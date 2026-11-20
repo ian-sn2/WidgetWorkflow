@@ -34,7 +34,8 @@ said wrong, or a name no dictionary has, goes in narration/pronounce.json and is
 NARRATE_VOICE picks the voice (default af_heart).
 NARRATE_ENGINE=google records with Google Cloud's Chirp 3: HD voices instead (voice_google.py, GOOGLE-VOICE-SETUP.md).
 Either way every take is kept in ~/.cache/narrate, so a rebuild sends only the paragraphs whose script changed.
-Clips are embedded in the page as data URIs so a demo is one file. For a real page, `listen ... --audio-dir FOLDER
+A page can carry several recordings (`--voices`, `--also-read`): a summary and a full read, each in one or more
+voices, chosen from the bar. Clips are embedded in the page as data URIs so a demo is one file. For a real page, `listen ... --audio-dir FOLDER
 --audio-url ADDRESS` writes them as files to be served from a bucket instead (GOOGLE-VOICE-SETUP.md).
 """
 import base64
@@ -327,7 +328,7 @@ def encode(samples):
     return {'s': 'data:audio/mpeg;base64,' + base64.b64encode(data).decode(), 'd': round(len(samples) / RATE, 2)}
 
 
-def host_audio(data, page_name, folder, base_url):
+def host_audio(data, page_name, folder, base_url, tag='', clean=True):
     """take each section's audio out of the page and write it as a file, to be served from a bucket. The page then holds
     only the addresses, and is a few hundred KB instead of 13 MB. A file's name carries a fingerprint of its contents, so
     a re-recorded section gets a new address and no browser plays a stale copy. -> (files, bytes)"""
@@ -335,12 +336,13 @@ def host_audio(data, page_name, folder, base_url):
     stem = pathlib.Path(page_name).stem
     out = pathlib.Path(folder) / stem
     out.mkdir(parents=True, exist_ok=True)
-    for old in out.glob(stem + '-*.mp3'):               # this page's files from an earlier build
+    for old in out.glob(stem + '-*.mp3') if clean else ():     # this page's files from an earlier build
         old.unlink()
+    tag = '-' + tag if tag else ''                      # a page in several voices: the voice is part of each file's name
     total = 0
     for n, c in enumerate(data, 1):
         raw = base64.b64decode(c['s'].split(',', 1)[1])
-        name = '%s-%d-%s.mp3' % (stem, n, hashlib.sha1(raw).hexdigest()[:8])
+        name = '%s%s-%d-%s.mp3' % (stem, tag, n, hashlib.sha1(raw).hexdigest()[:8])
         (out / name).write_bytes(raw)
         c['s'] = '%s/%s/%s' % (base_url.rstrip('/'), urllib.parse.quote(stem), name)
         total += len(raw)
@@ -488,7 +490,7 @@ def coverage(block, said):
     return sum(1 for w in want if any(g.startswith(w[:4]) or w.startswith(g[:4]) for g in got)) / len(want)
 
 
-def listen_scripted(s, written, summary=False, group=None):
+def listen_scripted(s, written, summary=False, group=None, tags=None):
     """-> (the page with each spoken-about block tagged data-ls, the clips, a list of thin passages to review)
     summary=True is a declared condensed narration ("mode": "summary" in the script), for a Full edition that would run
     45 minutes if everything were spoken: a block may go unspoken and not every number is said. What is said must still
@@ -502,7 +504,7 @@ def listen_scripted(s, written, summary=False, group=None):
     titles = [plain(h.group(2)) for h in heads]
     assert set(titles) == set(written), 'headings without a script: %s; scripts without a heading: %s' % (
         sorted(set(titles) - set(written)), sorted(set(written) - set(titles)))
-    tags, data, thin, gap = {}, [], [], np.zeros(int(0.15 * RATE), dtype=np.float32)
+    tags, data, thin, gap = {} if tags is None else tags, [], [], np.zeros(int(0.15 * RATE), dtype=np.float32)
     spoken = on_page = seen = touched = 0
     for k, h in enumerate(heads):
         end = heads[k + 1].start() if k + 1 < len(heads) else masked.index('</body>')
@@ -574,10 +576,7 @@ def listen_scripted(s, written, summary=False, group=None):
             data.append(dict(encode(np.concatenate(audio)), h=n, t=titles[top], seg=seg))
     else:
         data = [dict(encode(samples), h=k, t=title, seg=seg) for k, title, samples, seg in parts]
-    for start in sorted(tags, reverse=True):                 # tag each block, last first so the offsets stay true
-        close = s.index('>', start)
-        s = s[:close] + ' data-ls="%d"' % tags[start] + s[close:]
-    return s, data, thin
+    return data, thin, tags
 
 
 def takes(text, limit=480):
@@ -667,7 +666,7 @@ def page_ranges(spoken, page, sents):
     return out
 
 
-def listen_read(s, levels=('h1', 'h2')):
+def listen_read(s, levels=('h1', 'h2'), tags=None):
     """The whole page read as written, with no script: every heading, paragraph, bullet and table row, in page order,
     each one highlighted while it is spoken. For a Full edition, whose text is already in sentences. A table row is read
     with its column names, so a cell is never heard without knowing what it is."""
@@ -675,7 +674,7 @@ def listen_read(s, levels=('h1', 'h2')):
     body = masked.index('<body')
     heads = [h for h in HEAD.finditer(masked) if h.start() > body and h.group(1) in levels]
     block = BLOCK if 'h2' in levels else BLOCK_H2            # an h2 inside an h1 section is read out as a title, and can be jumped to
-    tags, data, gap, spoken = {}, [], np.zeros(int(0.15 * RATE), dtype=np.float32), 0
+    tags, data, gap, spoken = {} if tags is None else tags, [], np.zeros(int(0.15 * RATE), dtype=np.float32), 0
 
     def said(blocks):
         cols, out, last = [], [], 0
@@ -728,33 +727,68 @@ def listen_read(s, levels=('h1', 'h2')):
             seg.append(entry)
             spoken += len(text)
         data.append(dict(encode(np.concatenate(audio)), h=k, t=title, seg=seg))
-    for start in sorted(tags, reverse=True):
+    print('          read as written: %d paragraphs, bullets and rows, %s characters spoken' % (len(tags), format(spoken, ',')))
+    return data, tags
+
+
+def tag_blocks(s, tags):
+    """write each narrated block's number into the page. tags: {where its opening tag starts: number}. One numbering
+    serves every recording of the page, so a summary and a full read can find each other's place."""
+    for start in sorted(tags, reverse=True):                 # last first, so the earlier offsets stay true
         close = s.index('>', start)
         s = s[:close] + ' data-ls="%d"' % tags[start] + s[close:]
-    print('          read as written: %d paragraphs, bullets and rows, %s characters spoken' % (len(tags), format(spoken, ',')))
-    return s, data
+    return s
 
 
-def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2'), audio=None, group=None):
-    s = pathlib.Path(src).read_text(encoding='utf8')
-    learn(s if read else json.dumps(script_for(pathlib.Path(src).name), ensure_ascii=False))
-    written = None if read else script_for(pathlib.Path(src).name).get('sections')
-    thin = []
-    if written:
-        s, data, thin = listen_scripted(s, written, summary=script_for(pathlib.Path(src).name).get('mode') == 'summary', group=group)
+def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2'), audio=None, group=None, voices=None, also_read=None):
+    """One page, one or more recordings of it ("tracks"), each a version in a voice.
+    voices: Google voice names to record in, the first being what a listener hears until they choose another.
+    also_read: on a scripted (summary) page, voices to add a read-as-written track in, so the bar can offer both.
+    Each track is a whole recording and is billed as one. With more than one, the bar gains a button to choose."""
+    global VOICE
+    name_of = pathlib.Path(out).name
+    page = pathlib.Path(src).read_text(encoding='utf8')
+    script = script_for(pathlib.Path(src).name)
+    learn(page if read or also_read else json.dumps(script, ensure_ascii=False))
+    written = None if read else script.get('sections')
+    plan = [('full' if not written else 'summary', v) for v in voices or [VOICE]] + [('full', v) for v in (also_read or []) if written]
+    tags, thin, built = {}, [], []
+    for style, voice in plan:
+        VOICE, mark = voice, len(TAKES)
+        if style == 'summary':
+            data, thin, _ = listen_scripted(page, written, summary=script.get('mode') == 'summary', group=group, tags=tags)
+        else:
+            data, _ = listen_read(page, group or levels, tags=tags)
+        if len(plan) > 1:                                   # the listening report says which recording a take is from
+            TAKES[mark:] = [('%s [%s, %s]' % (w, style, voice.split('-')[-1]), par, take) for w, par, take in TAKES[mark:]]
+        built.append((style, voice, data))
+    hosted = [0, 0]
+    for n, (style, voice, data) in enumerate(built):
+        if audio:
+            tag = '%s-%s' % (style, voice.split('-')[-1]) if len(built) > 1 else ''
+            files, size = host_audio(data, name_of, *audio, tag=tag, clean=n == 0)
+            hosted = [hosted[0] + files, hosted[1] + size]
+    if len(built) > 1:
+        import voice_google
+        try:
+            kind = {n: {'female': "a woman's voice", 'male': "a man's voice"}.get(g.lower(), '') for n, g in voice_google.voices()}
+        except RuntimeError:
+            kind = {}
+        payload = {'tracks': [dict(style=style, styleLabel={'summary': 'Summary', 'full': 'Full read'}[style], voice=voice.split('-')[-1],
+                                   note=kind.get(voice, ''), clips=data) for style, voice, data in built]}
     else:
-        s, data = listen_read(s, levels)
-    hosted = host_audio(data, pathlib.Path(out).name, *audio) if audio else None
+        payload = built[0][2]
+    data = built[0][2]
     extra = '<style>\n' + (HERE / 'listen.css').read_text() + '</style>\n<script>\n' + (HERE / 'listen.js').read_text() + '</script>\n'
-    heads_attr = ' data-heads="%s"' % ', '.join(levels if not written else group or ('h1', 'h2'))
-    pathlib.Path(out).write_text(inject(s, 'ls-audio', data, extra, heads_attr), encoding='utf8')
-    print('listen  ', pathlib.Path(out).name, len(data), 'sections,', sum(len(c.get('seg', [])) for c in data), 'passages,',
-          '%.1f min of audio' % (sum(c['d'] for c in data) / 60), '' if written else '(read as written)')
-    if hosted:
+    heads_attr = ' data-heads="%s"' % ', '.join(group or (levels if not written else ('h1', 'h2')))
+    pathlib.Path(out).write_text(inject(tag_blocks(page, tags), 'ls-audio', payload, extra, heads_attr), encoding='utf8')
+    print('listen  ', name_of, len(data), 'sections;', '; '.join('%s in %s: %d passages, %.1f min' % (st, v.split('-')[-1], sum(len(c.get('seg', [])) for c in d),
+          sum(c['d'] for c in d) / 60) for st, v, d in built))
+    if audio:
         print('          audio: %d files, %.1f MB, in %s; the page expects them at %s' % (hosted[0], hosted[1] / 1e6, pathlib.Path(audio[0]) / pathlib.Path(out).stem, audio[1]))
     for t in thin:
         print('          thin passage, worth a read:', t)
-    listening_check(pathlib.Path(out).name, report_dir)
+    listening_check(name_of, report_dir)
 
 
 if __name__ == '__main__':
@@ -775,4 +809,8 @@ if __name__ == '__main__':
         # --audio-dir FOLDER --audio-url ADDRESS: write the audio as files for a bucket instead of inside the page
         au = (sys.argv[sys.argv.index('--audio-dir') + 1], sys.argv[sys.argv.index('--audio-url') + 1]) if '--audio-dir' in sys.argv else None
         # for a scripted page, --sections is also what asks for one clip per heading of that level, headings spoken
-        narrate_listen(sys.argv[2], sys.argv[3], rep, read='--read' in sys.argv, levels=lv, audio=au, group=lv if '--sections' in sys.argv else None)
+        # --voices Kore,Aoede,Charon: record the page in each (the first is the default) and give the bar a voice button
+        vs = ['en-US-Chirp3-HD-' + v for v in sys.argv[sys.argv.index('--voices') + 1].split(',')] if '--voices' in sys.argv else None
+        # --also-read Charon: on a summary page, add a read-as-written track in that voice, so the bar offers both versions
+        ar = ['en-US-Chirp3-HD-' + v for v in sys.argv[sys.argv.index('--also-read') + 1].split(',')] if '--also-read' in sys.argv else None
+        narrate_listen(sys.argv[2], sys.argv[3], rep, read='--read' in sys.argv, levels=lv, audio=au, group=lv if '--sections' in sys.argv else None, voices=vs, also_read=ar)
