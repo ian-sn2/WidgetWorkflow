@@ -23,6 +23,7 @@ What the page does:
 | `female-voice-samples/` | The same passage in all 14 female Chirp voices (2026-11-20), as separate files and one combined clip in which each voice says its number first. |
 | `test-passages/` | Ian's five test passages (Roman numerals, Greek letters, a formula, table rows, a long paragraph) recorded in Charon, with what the voice was given and what the automatic listener heard. |
 | `bucket-version/` | The same pages with the audio taken out: each page is under 100 KB and plays from the `sntext2speech` bucket once its `listen-audio` folder (built beside it, not committed) has been dragged onto the bucket's top level. See `scripts/ideas/GOOGLE-VOICE-SETUP.md`. |
+| `summary-version/` | The biology chapter narrated from a summary script written for the ear (15 minutes against 41 for the full read; about 16,000 characters against 45,000). Built without `--read`, from `scripts/ideas/narration/BSC2010-263-Exam3-Module5-Final-Full.json`. Each heading is spoken and highlighted; the highlight then follows by paragraph or bullet, because the words spoken are not the words on the page. The page (5 MB, audio embedded) is not committed. |
 | `narration-check/` | The automatic listener's report, a clip of only the sentences it wants a person to hear, and a clip of each looked-up hard word said on its own. |
 
 Hard words (names, technical terms) are looked up before recording and the voice is told how to say them:

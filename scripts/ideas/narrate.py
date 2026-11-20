@@ -85,7 +85,7 @@ def prep(text):
     text = re.sub(r'[ \t]+', ' ', text).strip()
     for pat in LETTER_A:
         text = pat.sub(LETTER, text)
-    return text
+    return GROUPED.sub(grouped, text)       # 12,000 goes to the voice in words, in a script as well as in page text
 
 
 def phonemes(text, say_with):
@@ -172,6 +172,9 @@ def grouped(m):
     return words + (' point ' + ' '.join(DIGITS[int(c)] for c in m.group(2)) if m.group(2) else '')
 
 
+GROUPED = re.compile(r'(?<![\d.,])(\d{1,3}(?:,\d{3})+)(?:\.(\d+))?(?![\d,]*\d)')
+
+
 def swaps():
     f = HERE / 'narration' / 'say.json'
     return [(k, v) for k, v in json.loads(f.read_text(encoding='utf8')).items() if not k.startswith('_')] if f.exists() else []
@@ -201,7 +204,7 @@ def say(text):
     text = re.sub(r'(?<=\d)\s*lbs?\b\.?', ' pounds', text)
     for a, b in SAY:
         text = re.sub(a, b, text)
-    text = re.sub(r'(?<![\d.,])(\d{1,3}(?:,\d{3})+)(?:\.(\d+))?(?![\d,]*\d)', grouped, text)
+    text = GROUPED.sub(grouped, text)
     text = re.sub(r'\s+', ' ', text).strip()
     text = re.sub(r'\s+([,.;:)])', r'\1', text)
     return re.sub(r'\.\s*\.', '.', text)
@@ -485,14 +488,17 @@ def coverage(block, said):
     return sum(1 for w in want if any(g.startswith(w[:4]) or w.startswith(g[:4]) for g in got)) / len(want)
 
 
-def listen_scripted(s, written, summary=False):
+def listen_scripted(s, written, summary=False, group=None):
     """-> (the page with each spoken-about block tagged data-ls, the clips, a list of thin passages to review)
     summary=True is a declared condensed narration ("mode": "summary" in the script), for a Full edition that would run
     45 minutes if everything were spoken: a block may go unspoken and not every number is said. What is said must still
-    be on the page."""
+    be on the page.
+    group=('h1',) gives one clip per h1 with the h2 sections inside it, and each heading is spoken (and its words
+    highlighted) as the listener reaches it, so someone who is not looking at the page knows where they are."""
     masked = re.sub(r'<(script|style|noscript)\b.*?</\1>', lambda m: ' ' * len(m.group(0)), s, flags=re.S)
     body = masked.index('<body')
     heads = [h for h in HEAD.finditer(masked) if h.start() > body]
+    parts = []          # (index of the heading among those the audio is divided at, title, samples, seg) per narrated heading
     titles = [plain(h.group(2)) for h in heads]
     assert set(titles) == set(written), 'headings without a script: %s; scripts without a heading: %s' % (
         sorted(set(titles) - set(written)), sorted(set(written) - set(titles)))
@@ -510,6 +516,11 @@ def listen_scripted(s, written, summary=False):
         configs = ' '.join(re.findall(r'<script type="application/json">(.*?)</script>', s[h.end():end], flags=re.S))   # a widget's own numbers
         check(' '.join(p[1] for p in passages), plain(masked[h.end():end]) + ' ' + configs, title)
         audio, seg, at = [], [], 0
+        if group:
+            part = np.concatenate([speak(say(title).rstrip(':.') + '.', title, speed=LISTEN_SPEED, beat=0.25), gap])
+            seg.append([0, [tags.setdefault(h.start(), len(tags))]])
+            audio.append(part)
+            at += len(part)
         for anchors, text in passages:
             bids = []
             for anchor in ([anchors] if isinstance(anchors, str) else anchors):     # one passage may speak for several blocks
@@ -542,13 +553,27 @@ def listen_scripted(s, written, summary=False):
                 got = coverage(b['text'], b['said'])
                 if got < 0.5:
                     thin.append('%s | %d%% of its words | %s' % (title, round(got * 100), b['text'][:80]))
-        data.append(dict(encode(np.concatenate(audio)), h=k, t=title, seg=seg))
+        parts.append((k, title, np.concatenate(audio), seg))
         spoken += sum(len(p[1].split()) for p in passages)
         on_page += len(plain(masked[h.end():end]).split())
     # listening must not take longer than reading: the script may not outgrow the text it speaks for
     print('          %d words spoken for %d words on the page (%d%%)' % (spoken, on_page, round(100 * spoken / max(on_page, 1)))
           + ('; condensed narration, %d of %d paragraphs and bullets referenced' % (touched, seen) if summary else ''))
     assert spoken <= 1.2 * on_page, 'the script is %d words for %d words of page: over the 120%% budget, tighten it' % (spoken, on_page)
+    if group:                                               # one clip per heading of the chosen level, the sections under it joined on
+        tops = [k for k, h in enumerate(heads) if h.group(1) in group]
+        for n, top in enumerate(tops):
+            mine = [p for p in parts if top <= p[0] < (tops[n + 1] if n + 1 < len(tops) else len(heads))]
+            if not mine:
+                continue
+            audio, seg, at = [], [], 0
+            for _, _, samples, sg in mine:
+                seg += [[round(t + at / RATE, 2), bids] for t, bids in sg]
+                audio.append(samples)
+                at += len(samples)
+            data.append(dict(encode(np.concatenate(audio)), h=n, t=titles[top], seg=seg))
+    else:
+        data = [dict(encode(samples), h=k, t=title, seg=seg) for k, title, samples, seg in parts]
     for start in sorted(tags, reverse=True):                 # tag each block, last first so the offsets stay true
         close = s.index('>', start)
         s = s[:close] + ' data-ls="%d"' % tags[start] + s[close:]
@@ -710,18 +735,18 @@ def listen_read(s, levels=('h1', 'h2')):
     return s, data
 
 
-def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2'), audio=None):
+def narrate_listen(src, out, report_dir=None, read=False, levels=('h1', 'h2'), audio=None, group=None):
     s = pathlib.Path(src).read_text(encoding='utf8')
     learn(s if read else json.dumps(script_for(pathlib.Path(src).name), ensure_ascii=False))
     written = None if read else script_for(pathlib.Path(src).name).get('sections')
     thin = []
     if written:
-        s, data, thin = listen_scripted(s, written, summary=script_for(pathlib.Path(src).name).get('mode') == 'summary')
+        s, data, thin = listen_scripted(s, written, summary=script_for(pathlib.Path(src).name).get('mode') == 'summary', group=group)
     else:
         s, data = listen_read(s, levels)
     hosted = host_audio(data, pathlib.Path(out).name, *audio) if audio else None
     extra = '<style>\n' + (HERE / 'listen.css').read_text() + '</style>\n<script>\n' + (HERE / 'listen.js').read_text() + '</script>\n'
-    heads_attr = ' data-heads="%s"' % ', '.join(levels if not written else ('h1', 'h2'))
+    heads_attr = ' data-heads="%s"' % ', '.join(levels if not written else group or ('h1', 'h2'))
     pathlib.Path(out).write_text(inject(s, 'ls-audio', data, extra, heads_attr), encoding='utf8')
     print('listen  ', pathlib.Path(out).name, len(data), 'sections,', sum(len(c.get('seg', [])) for c in data), 'passages,',
           '%.1f min of audio' % (sum(c['d'] for c in data) / 60), '' if written else '(read as written)')
@@ -749,4 +774,5 @@ if __name__ == '__main__':
         lv = tuple(sys.argv[sys.argv.index('--sections') + 1].split(',')) if '--sections' in sys.argv else ('h1', 'h2')
         # --audio-dir FOLDER --audio-url ADDRESS: write the audio as files for a bucket instead of inside the page
         au = (sys.argv[sys.argv.index('--audio-dir') + 1], sys.argv[sys.argv.index('--audio-url') + 1]) if '--audio-dir' in sys.argv else None
-        narrate_listen(sys.argv[2], sys.argv[3], rep, read='--read' in sys.argv, levels=lv, audio=au)
+        # for a scripted page, --sections is also what asks for one clip per heading of that level, headings spoken
+        narrate_listen(sys.argv[2], sys.argv[3], rep, read='--read' in sys.argv, levels=lv, audio=au, group=lv if '--sections' in sys.argv else None)

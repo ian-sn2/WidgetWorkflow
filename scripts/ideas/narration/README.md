@@ -22,6 +22,11 @@ Hard words are looked up before recording and the voice is told how to say them 
 `"word": {"ipa": "...", "from": "where it came from"}`. `learned.json` is written by the builder: what it looked
 up on Wiktionary, so each word is asked for once. Both apply to every chapter.
 
+`"mode": "summary"` declares a condensed narration for a Full edition: a block may go unspoken and not every
+number is said, but what is said must still be on the page. Built with `--sections h1`, a scripted page gets one
+clip per `<h1>` and each heading is spoken as the listener reaches it. A summary is the preferred style (2026-11-20):
+about a third of the length and the characters of reading the page as written (`--read`).
+
 ## How to write one (this is the prompt for Claude each semester)
 
 Write for the ear, as a tutor talking one student through the page.
